@@ -4,14 +4,16 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191225214105_AddedCompaniesDbSet")]
+    partial class AddedCompaniesDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,38 +48,6 @@ namespace JobFinder.Data.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.RecruitmentOffer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Desription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Expiration")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(90)")
-                        .HasMaxLength(90);
-
-                    b.Property<DateTime>("PostedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PublisherId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PublisherId");
-
-                    b.ToTable("RecruitmentOffers");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.User", b =>
@@ -296,13 +266,6 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.User", "User")
                         .WithOne("Company")
                         .HasForeignKey("JobFinder.Data.Models.Company", "UserId");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.RecruitmentOffer", b =>
-                {
-                    b.HasOne("JobFinder.Data.Models.User", "Publisher")
-                        .WithMany("RecruitmentOffers")
-                        .HasForeignKey("PublisherId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

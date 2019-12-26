@@ -6,5 +6,7 @@
         public const string AdminUserName = "Administrator";
         public const string AdminEmail = "admin@job-finder.com";
         public const string DefaultAdminPassword = "AdminA123";
+
+        public const string CompanyRole = "Company";
     }
 }

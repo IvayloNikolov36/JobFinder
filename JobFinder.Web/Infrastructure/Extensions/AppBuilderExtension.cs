@@ -11,7 +11,8 @@ namespace JobFinder.Web.Infrastructure.Extensions
     {
         private static readonly IdentityRole[] roles =
         {
-            new IdentityRole(AdminRole)
+            new IdentityRole(AdminRole),
+            new IdentityRole(CompanyRole)
         };
 
         public static async void SeedDatabase(this IApplicationBuilder app)
@@ -42,6 +43,9 @@ namespace JobFinder.Web.Infrastructure.Extensions
                 {
                     UserName = userName,
                     Email = email,
+                    FirstName = AdminUserName,
+                    MiddleName = AdminUserName,
+                    LastName = AdminUserName
                 };
 
                 await userManager.CreateAsync(user, defaultPassword);
