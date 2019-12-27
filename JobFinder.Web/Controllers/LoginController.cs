@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +18,15 @@ namespace JobFinder.Web.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly SignInManager<User> signInManager;
+        private readonly UserManager<User> userManager;
 
         public LoginController(IConfiguration configuration,
-                               SignInManager<User> signInManager)
+                               SignInManager<User> signInManager,
+                               UserManager<User> userManager)
         {
             this.configuration = configuration;
             this.signInManager = signInManager;
+            this.userManager = userManager;
         }
 
         [HttpPost]
@@ -31,13 +36,21 @@ namespace JobFinder.Web.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+                return BadRequest(new LoginResult { Successful = false, Message = "Username and password are invalid." });
             }
 
-            var claims = new[]
+            var user = await this.userManager.FindByNameAsync(model.Username);
+            var roles = await this.userManager.GetRolesAsync(user);
+
+            List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, model.Username)
+                new Claim(ClaimTypes.Name, user.UserName)
             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -51,7 +64,14 @@ namespace JobFinder.Web.Controllers
                 signingCredentials: creds
             );
 
-            return Ok(new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+            return Ok(new LoginResult
+            {
+                Successful = true,
+                Message = "Successfully logged in!",
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Role = roles.Any() ? roles.First() : string.Empty,
+                Username = user.UserName
+            });
         }
     }
 }

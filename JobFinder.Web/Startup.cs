@@ -62,6 +62,16 @@ namespace JobFinder.Web
                     };
                 });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("JobFinderCORSPolicy",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader().WithMethods("GET", "POST", "DELETE", "PUT");
+                    });
+            });
+
             services.AddControllers();
         }
 
@@ -77,6 +87,8 @@ namespace JobFinder.Web
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("JobFinderCORSPolicy");
 
             app.UseAuthentication();
 

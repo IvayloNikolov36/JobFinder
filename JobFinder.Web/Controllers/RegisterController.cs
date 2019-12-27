@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JobFinder.Data;
 using static JobFinder.Web.Infrastructure.WebConstants;
+using System.Collections.Generic;
 
 namespace JobFinder.Web.Controllers
 {
@@ -41,11 +42,11 @@ namespace JobFinder.Web.Controllers
                 return BadRequest(new RegisterResult { Successful = false, Errors = errors });
             }
 
-            return Ok(new RegisterResult { Successful = true });
+            return Ok(new RegisterResult { Successful = true } );
         }
 
         [HttpPost("company")]
-        public async Task<IActionResult> RegisterCompany([FromBody]RegisterCompanyModel model)
+        public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyModel model)
         {
             var newCompany = new Company
             {
