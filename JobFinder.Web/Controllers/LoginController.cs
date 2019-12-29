@@ -36,7 +36,7 @@ namespace JobFinder.Web.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new LoginResult { Successful = false, Message = "Username and password are invalid." });
+                return BadRequest(new LoginResult { Message = "Username and password are invalid." });
             }
 
             var user = await this.userManager.FindByNameAsync(model.Username);
@@ -44,7 +44,7 @@ namespace JobFinder.Web.Controllers
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             foreach (var role in roles)
@@ -66,11 +66,11 @@ namespace JobFinder.Web.Controllers
 
             return Ok(new LoginResult
             {
-                Successful = true,
                 Message = "Successfully logged in!",
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Username = user.UserName,
+                Id = user.Id,
                 Role = roles.Any() ? roles.First() : string.Empty,
-                Username = user.UserName
             });
         }
     }

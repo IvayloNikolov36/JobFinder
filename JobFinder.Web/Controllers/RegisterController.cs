@@ -42,7 +42,7 @@ namespace JobFinder.Web.Controllers
                 return BadRequest(new RegisterResult { Successful = false, Errors = errors });
             }
 
-            return Ok(new RegisterResult { Successful = true } );
+            return Ok(new RegisterResult { Successful = true, Message = "Successfully registered!" } );
         }
 
         [HttpPost("company")]
@@ -81,7 +81,7 @@ namespace JobFinder.Web.Controllers
                 return BadRequest(new RegisterResult { Successful = false });
             }
 
-            return Ok(new RegisterResult { Successful = true });
+            return Ok(new RegisterResult { Successful = true, Message = "Successfully registered!" });
         }
     }
 }

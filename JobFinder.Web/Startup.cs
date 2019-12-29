@@ -1,4 +1,3 @@
-using System.Text;
 using JobFinder.Data;
 using JobFinder.Data.Models;
 using JobFinder.Web.Infrastructure.Extensions;
@@ -11,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace JobFinder.Web
 {
@@ -71,6 +71,8 @@ namespace JobFinder.Web
                         .AllowAnyHeader().WithMethods("GET", "POST", "DELETE", "PUT");
                     });
             });
+
+            services.AddDomainServices();
 
             services.AddControllers();
         }
