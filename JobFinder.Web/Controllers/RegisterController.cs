@@ -51,7 +51,8 @@ namespace JobFinder.Web.Controllers
             var newCompany = new Company
             {
                 CompanyName = model.CompanyName,
-                Bulstat = model.Bulstat
+                Bulstat = model.Bulstat,
+                CompanyLogo = model.CompanyLogo
             };
 
             await this.dbContext.AddAsync(newCompany);

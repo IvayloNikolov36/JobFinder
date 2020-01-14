@@ -20,7 +20,6 @@ namespace JobFinder.Data.Models
 
         public Company Company { get; set; }
 
-        public List<RecruitmentOffer> RecruitmentOffers { get; set; }
-
+        public List<JobAd> JobAds { get; set; }
     }
 }

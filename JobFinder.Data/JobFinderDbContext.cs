@@ -13,7 +13,11 @@ namespace JobFinder.Data
 
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<RecruitmentOffer> RecruitmentOffers { get; set; }
+        public DbSet<JobAd> JobAds { get; set; }
+
+        public DbSet<JobEngagement> JobEngagements { get; set; }
+
+        public DbSet<JobCategory> JobCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,7 +32,7 @@ namespace JobFinder.Data
 
             //one to many
             builder.Entity<User>()
-                .HasMany(u => u.RecruitmentOffers)
+                .HasMany(u => u.JobAds)
                 .WithOne(ro => ro.Publisher)
                 .HasForeignKey(ro => ro.PublisherId);
         }

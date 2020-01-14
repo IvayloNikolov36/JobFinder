@@ -1,7 +1,11 @@
-﻿using JobFinder.Data.Models;
+﻿using JobFinder.Data;
+using JobFinder.Data.Models;
+using JobFinder.Web.Infrastructure.Enums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using static JobFinder.Web.Infrastructure.WebConstants;
 
@@ -24,14 +28,19 @@ namespace JobFinder.Web.Infrastructure.Extensions
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var db = scope.ServiceProvider.GetRequiredService<JobFinderDbContext>();
 
                 await CreateRoles(roleManager);
 
                 //create admin
                 await CreateUser(userManager, AdminUserName, AdminEmail, DefaultAdminPassword, AdminRole);
 
+                await CreateJobEngagements(db);
+
+                await CreateJobCategories(db);
             }
         }
+
 
         private static async Task CreateUser(UserManager<User> userManager, string userName, string email, string defaultPassword, string role)
         {
@@ -61,6 +70,46 @@ namespace JobFinder.Web.Infrastructure.Extensions
                 {
                     await roleManager.CreateAsync(role);
                 }
+            }
+        }
+
+        private static async Task CreateJobEngagements(JobFinderDbContext db)
+        {
+            string[] engagements = Enum.GetNames(typeof(JobEngagementType));
+
+            string[] dbEngagements = db.JobEngagements.Select(x => x.Type).ToArray();
+
+            string[] engagementsToWrite = engagements.Where(e => !dbEngagements.Contains(e)).ToArray();
+
+            foreach (var engagementType in engagementsToWrite)
+            {
+                var engagement = new JobEngagement
+                {
+                    Type = engagementType
+                };
+
+                await db.AddAsync(engagement);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        private static async Task CreateJobCategories(JobFinderDbContext db)
+        {
+            string[] categories = Enum.GetNames(typeof(JobCategoryType));
+
+            string[] dbCategories = db.JobCategories.Select(x => x.Type).ToArray();
+
+            string[] categoriesToWrite = categories.Where(e => !dbCategories.Contains(e)).ToArray();
+
+            foreach (var categoryType in categoriesToWrite)
+            {
+                var category = new JobCategory
+                {
+                    Type = categoryType
+                };
+
+                await db.AddAsync(category);
+                await db.SaveChangesAsync();
             }
         }
     }

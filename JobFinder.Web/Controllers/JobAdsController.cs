@@ -1,5 +1,6 @@
 ﻿using JobFinder.Data.Models;
 using JobFinder.Services;
+using JobFinder.Services.Models;
 using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,27 +15,27 @@ namespace JobFinder.Web.Controllers
 {
     public class JobAdsController : ApiController
     {
-        private readonly IJobAdsService offersService;
+        private readonly IJobAdsService adsService;
 
-        public JobAdsController(IJobAdsService offersService)
+        public JobAdsController(IJobAdsService adsService)
         {
-            this.offersService = offersService;
+            this.adsService = adsService;
         }
 
         [HttpGet("all")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<RecruitmentOffer>>> All()
+        public async Task<ActionResult<IEnumerable<JobAdsListingServiceModel>>> All()
         {
-            var offers = await this.offersService.AllAsync();
+            var offers = await this.adsService.AllAsync();
 
             return offers.ToList();
         }
 
         [HttpGet("details/{id}")]
         [Authorize]
-        public async Task<ActionResult<RecruitmentOffer>> Get(int id)
+        public async Task<ActionResult<JobAd>> Get(int id)
         {
-            var offer = await this.offersService.GetAsync(id);
+            var offer = await this.adsService.GetAsync(id);
 
             if (offer == null)
             {
@@ -45,15 +46,18 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize(Roles = "Company")]
+        [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> Create([FromBody] JobAdBindingModel model)
         {
+            //TODO: make filter to check for valid jobCategoryId and jobEngagementId
+
             DateTime expirationDate = DateTime.UtcNow.AddDays(model.DaysActive);
 
             string publisherId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            await this.offersService
-                .CreateAsync(publisherId, model.Position, model.Description, expirationDate);
+            await this.adsService
+                .CreateAsync(publisherId, model.Position, model.Description, expirationDate, model.JobCategoryId, 
+                model.JobEngagementId, model.MinSalary, model.MaxSalary);
 
             return this.Ok(new { Message = SuccessOnCreation });
         }
@@ -62,7 +66,7 @@ namespace JobFinder.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Edit(int id, [FromBody] JobAdEditModel model)
         {
-            var offerFromDb = await this.offersService.GetAsync(id);
+            var offerFromDb = await this.adsService.GetAsync(id);
 
             if (offerFromDb == null)
             {
@@ -78,10 +82,29 @@ namespace JobFinder.Web.Controllers
                 return this.BadRequest(new { Message = CantEditAd });
             }
 
-            await this.offersService
+            await this.adsService
                 .EditAsync(id, model.Position, model.Desription, model.DaysActive);
 
             return this.Ok(new { Message = UpdatedAd });
+        }
+
+        [HttpGet("engagements")]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<ActionResult<IEnumerable<object>>> GetEngagements()
+        {
+            var engagements = await this.adsService.GetJobEngagements();
+
+            return engagements.Select(e => new { Id = e.Key, Name = e.Value }).ToList();
+
+        }
+
+        [HttpGet("categories")]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<ActionResult<IEnumerable<object>>> GetCategories()
+        {
+            var categories = await this.adsService.GetJobCategories();
+
+            return categories.Select(c => new { Id = c.Key, Name = c.Value }).ToList();
         }
     }
 }
