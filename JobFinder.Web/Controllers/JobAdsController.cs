@@ -26,9 +26,18 @@ namespace JobFinder.Web.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<JobAdsListingServiceModel>>> All()
         {
-            var offers = await this.adsService.AllAsync();
+            var offers = await this.adsService.AllAsync(page: 1, items: 20);
 
-            return offers.ToList();
+            return this.Ok(offers.ToList());
+        }
+
+        [HttpGet("get")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<JobAdsListingServiceModel>>> Get([FromQuery] JobAdsParams model)
+        {
+            var offers = await this.adsService.AllAsync(model.Page, model.Items);
+
+            return this.Ok(offers.ToList());
         }
 
         [HttpGet("details/{id}")]
@@ -42,7 +51,7 @@ namespace JobFinder.Web.Controllers
                 return this.NotFound(new { Message = NoAdFound });
             }
 
-            return offer;
+            return this.Ok(offer);
         }
 
         [HttpPost("create")]
@@ -56,8 +65,8 @@ namespace JobFinder.Web.Controllers
             string publisherId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             await this.adsService
-                .CreateAsync(publisherId, model.Position, model.Description, expirationDate, model.JobCategoryId, 
-                model.JobEngagementId, model.MinSalary, model.MaxSalary);
+                .CreateAsync(publisherId, model.Position, model.Description, expirationDate, model.JobCategoryId,
+                model.JobEngagementId, model.MinSalary, model.MaxSalary, model.Location);
 
             return this.Ok(new { Message = SuccessOnCreation });
         }
@@ -92,9 +101,15 @@ namespace JobFinder.Web.Controllers
         [Authorize(Roles = CompanyRole)]
         public async Task<ActionResult<IEnumerable<object>>> GetEngagements()
         {
-            var engagements = await this.adsService.GetJobEngagements();
+            var dbEngagements = await this.adsService.GetJobEngagements();
 
-            return engagements.Select(e => new { Id = e.Key, Name = e.Value }).ToList();
+            var engagements = dbEngagements.Select(e => new
+            {
+                Id = e.Key,
+                Name = e.Value
+            }).ToList();
+
+            return this.Ok(engagements);
 
         }
 
@@ -102,9 +117,15 @@ namespace JobFinder.Web.Controllers
         [Authorize(Roles = CompanyRole)]
         public async Task<ActionResult<IEnumerable<object>>> GetCategories()
         {
-            var categories = await this.adsService.GetJobCategories();
+            var dbCategories = await this.adsService.GetJobCategories();
 
-            return categories.Select(c => new { Id = c.Key, Name = c.Value }).ToList();
+            var categories = dbCategories.Select(c => new
+            {
+                Id = c.Key,
+                Name = c.Value
+            }).ToList();
+
+            return this.Ok(categories);
         }
     }
 }

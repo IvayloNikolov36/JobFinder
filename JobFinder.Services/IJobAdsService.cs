@@ -10,9 +10,9 @@ namespace JobFinder.Services
     {
         Task<JobAd> GetAsync(int id);
 
-        Task CreateAsync(string publisherId, string position, string description, DateTime expiration, int jobCategoryId, int jobEngagementId, int? minSalary, int? maxSalary);
+        Task CreateAsync(string publisherId, string position, string description, DateTime expiration, int jobCategoryId, int jobEngagementId, int? minSalary, int? maxSalary, string location);
 
-        Task<IEnumerable<JobAdsListingServiceModel>> AllAsync();
+        Task<IEnumerable<JobAdsListingServiceModel>> AllAsync(int page, int items);
 
         Task EditAsync(int offerId, string position, string description, int daysActive);
 

@@ -24,7 +24,7 @@ namespace JobFinder.Services.Implementations
         }
 
         public async Task CreateAsync(
-            string publisherId, string position, string description, DateTime expiration, int jobCategoryId, int jobEngagementId, int? minSalary, int? maxSalary)
+            string publisherId, string position, string description, DateTime expiration, int jobCategoryId, int jobEngagementId, int? minSalary, int? maxSalary, string location)
         {
             var offer = new JobAd
             {
@@ -36,27 +36,35 @@ namespace JobFinder.Services.Implementations
                 JobCategoryId = jobCategoryId,
                 JobEngagementId = jobEngagementId,
                 MinSalary = minSalary,
-                MaxSalary = maxSalary
+                MaxSalary = maxSalary,
+                Location = location
             };
 
             await this.dbContext.AddAsync(offer);
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<JobAdsListingServiceModel>> AllAsync()
-        {
-            var jobAds = await this.dbContext.JobAds.ToListAsync();
 
-            IEnumerable<JobAdsListingServiceModel> ads = jobAds
+        public async Task<IEnumerable<JobAdsListingServiceModel>> AllAsync(int page, int items)
+        {
+            var ads = await this.dbContext
+                .JobAds
+                .OrderByDescending(j => j.PostedOn)
+                .Skip((page - 1) * items)
+                .Take(items)
                 .Select(ad => new JobAdsListingServiceModel
                 {
+                    Id = ad.Id,
                     Position = ad.Position,
-                    Description = ad.Desription,
-                    PostedOn = ad.PostedOn,
+                    PostedOn = ad.PostedOn.ToShortDateString(),
                     JobCategory = ad.JobCategory.Type,
                     JobEngagement = ad.JobEngagement.Type,
-                    CompanyLogo = ad.Publisher.Company.CompanyLogo
-                });
+                    CompanyLogo = ad.Publisher.Company.CompanyLogo,
+                    CompanyName = ad.Publisher.Company.CompanyName,
+                    Location = ad.Location,
+                    Salary = ad.MinSalary.ToString() + " - " + ad.MaxSalary.ToString()
+                })
+                .ToListAsync();
 
             return ads;
         }
@@ -90,5 +98,6 @@ namespace JobFinder.Services.Implementations
 
             return categories;
          }
+
     }
 }
