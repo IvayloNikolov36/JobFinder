@@ -16,6 +16,8 @@ namespace JobFinder.Services
 
         Task EditAsync(int offerId, string position, string description, int daysActive);
 
+        Task<int> TotalCountAsync();
+
         Task<IDictionary<int, string>> GetJobEngagements();
 
         Task<IDictionary<int, string>> GetJobCategories();

@@ -40,6 +40,15 @@ namespace JobFinder.Web.Controllers
             return this.Ok(offers.ToList());
         }
 
+        [HttpGet("count")]
+        [Authorize]
+        public async Task<ActionResult> Count()
+        {
+            var count = await this.adsService.TotalCountAsync();
+
+            return this.Ok(new { Count = count });
+        }
+
         [HttpGet("details/{id}")]
         [Authorize]
         public async Task<ActionResult<JobAd>> Get(int id)

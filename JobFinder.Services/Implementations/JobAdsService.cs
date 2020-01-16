@@ -44,7 +44,6 @@ namespace JobFinder.Services.Implementations
             await this.dbContext.SaveChangesAsync();
         }
 
-
         public async Task<IEnumerable<JobAdsListingServiceModel>> AllAsync(int page, int items)
         {
             var ads = await this.dbContext
@@ -78,6 +77,11 @@ namespace JobFinder.Services.Implementations
             offerFromDb.Expiration = DateTime.UtcNow.AddDays(daysActive);
 
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> TotalCountAsync()
+        {
+            return await this.dbContext.JobAds.CountAsync();
         }
 
         public async Task<IDictionary<int, string>> GetJobEngagements()
