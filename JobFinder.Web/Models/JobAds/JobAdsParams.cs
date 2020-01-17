@@ -6,5 +6,11 @@
 
         public int Items { get; set; } = 10;
 
+        public int? CategoryId { get; set; }
+
+        public int? EngagementId { get; set; }
+
+        public string Location { get; set; }
+
     }
 }

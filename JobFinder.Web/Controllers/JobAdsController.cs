@@ -35,19 +35,12 @@ namespace JobFinder.Web.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<JobAdsListingServiceModel>>> Get([FromQuery] JobAdsParams model)
         {
-            var offers = await this.adsService.AllAsync(model.Page, model.Items);
+            var offers = await this.adsService.AllAsync(
+                model.Page, model.Items, model.EngagementId, model.CategoryId, model.Location);
 
             return this.Ok(offers.ToList());
         }
 
-        [HttpGet("count")]
-        [Authorize]
-        public async Task<ActionResult> Count()
-        {
-            var count = await this.adsService.TotalCountAsync();
-
-            return this.Ok(new { Count = count });
-        }
 
         [HttpGet("details/{id}")]
         [Authorize]
@@ -119,7 +112,6 @@ namespace JobFinder.Web.Controllers
             }).ToList();
 
             return this.Ok(engagements);
-
         }
 
         [HttpGet("categories")]
