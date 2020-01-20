@@ -12,5 +12,8 @@
 
         public string Location { get; set; }
 
+        public string SortBy { get; set; }
+
+        public bool? IsAscending { get; set; }
     }
 }

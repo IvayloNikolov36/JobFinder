@@ -22,25 +22,16 @@ namespace JobFinder.Web.Controllers
             this.adsService = adsService;
         }
 
-        [HttpGet("all")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<JobAdsListingServiceModel>>> All()
-        {
-            var offers = await this.adsService.AllAsync(page: 1, items: 20);
-
-            return this.Ok(offers.ToList());
-        }
-
         [HttpGet("get")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<JobAdsListingServiceModel>>> Get([FromQuery] JobAdsParams model)
+        public async Task<ActionResult<JobsListingServiceModel>> Get([FromQuery] JobAdsParams model)
         {
-            var offers = await this.adsService.AllAsync(
-                model.Page, model.Items, model.EngagementId, model.CategoryId, model.Location);
+            var jobsListingModel = await this.adsService.AllAsync(
+                model.Page, model.Items, model.EngagementId, model.CategoryId, model.Location,
+                model.SortBy, model.IsAscending);
 
-            return this.Ok(offers.ToList());
+            return this.Ok(jobsListingModel);
         }
-
 
         [HttpGet("details/{id}")]
         [Authorize]

@@ -25,7 +25,7 @@ namespace JobFinder.Services.Implementations
         }
 
         public async Task CreateAsync(
-            string publisherId, string position, string description, DateTime expiration, 
+            string publisherId, string position, string description, DateTime expiration,
             int jobCategoryId, int jobEngagementId, int? minSalary, int? maxSalary, string location)
         {
             var offer = new JobAd
@@ -76,72 +76,61 @@ namespace JobFinder.Services.Implementations
             return categories;
         }
 
-        public async Task<IEnumerable<JobAdsListingServiceModel>> AllAsync(
-            int page, int items, int? engagementId, int? categoryId, string location)
+        public async Task<JobsListingServiceModel> AllAsync(
+        int page, int items, int? engagementId, int? categoryId, string location,
+        string sortBy, bool? isAscending)
         {
-            bool hasFiltering = engagementId != null | categoryId != null || !string.IsNullOrEmpty(location);
-
-            if (!hasFiltering)
-            {
-                return await this.AllAsync(page, items);
-            }
-
-            IQueryable<JobAd> jobAds = this.dbContext.JobAds;
+            IQueryable<JobAd> jobs = this.dbContext.JobAds;
 
             if (engagementId != null)
             {
-                jobAds = this.FilterByEngagement(jobAds, engagementId);
+                jobs = this.FilterByEngagement(jobs, engagementId);
             }
 
             if (categoryId != null)
             {
-                jobAds = this.FilteredByCategory(jobAds, categoryId);
+                jobs = this.FilteredByCategory(jobs, categoryId);
             }
 
             if (!string.IsNullOrEmpty(location))
             {
-                jobAds = this.FilterByLocation(jobAds, location);
+                jobs = this.FilterByLocation(jobs, location);
             }
 
-            return await jobAds.Skip((page - 1) * items)
-                .Take(items)
-                .Select(ad => new JobAdsListingServiceModel
-                {
-                    Id = ad.Id,
-                    Position = ad.Position,
-                    PostedOn = ad.PostedOn.ToShortDateString(),
-                    JobCategory = ad.JobCategory.Type,
-                    JobEngagement = ad.JobEngagement.Type,
-                    CompanyLogo = ad.Publisher.Company.CompanyLogo,
-                    CompanyName = ad.Publisher.Company.CompanyName,
-                    Location = ad.Location,
-                    Salary = ad.MinSalary.ToString() + " - " + ad.MaxSalary.ToString()
-                })
-                .ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(sortBy) && sortBy == "Salary")
+            {
+                jobs = this.SortBySalary(jobs, (bool)isAscending);
+            }
 
-        private async Task<IEnumerable<JobAdsListingServiceModel>> AllAsync(int page, int items)
-        {
-            var ads = await this.dbContext
-                .JobAds
-                .OrderByDescending(j => j.PostedOn)
-                .Skip((page - 1) * items)
-                .Take(items)
-                .Select(ad => new JobAdsListingServiceModel
-                {
-                    Id = ad.Id,
-                    Position = ad.Position,
-                    PostedOn = ad.PostedOn.ToShortDateString(),
-                    JobCategory = ad.JobCategory.Type,
-                    JobEngagement = ad.JobEngagement.Type,
-                    CompanyLogo = ad.Publisher.Company.CompanyLogo,
-                    CompanyName = ad.Publisher.Company.CompanyName,
-                    Location = ad.Location,
-                    Salary = ad.MinSalary.ToString() + " - " + ad.MaxSalary.ToString()
-                })
-                .ToListAsync();
+            if (!string.IsNullOrEmpty(sortBy) && sortBy == "Published")
+            {
+                jobs = this.SortByPublishDate(jobs, (bool)isAscending);
+            }
 
-            return ads;
+            int totalCount = await jobs.CountAsync();
+
+            List<JobListingModel> jobAds = await jobs.Skip((page - 1) * items)
+               .Take(items)
+               .Select(ad => new JobListingModel
+               {
+                   Id = ad.Id,
+                   Position = ad.Position,
+                   PostedOn = ad.PostedOn.ToShortDateString(),
+                   JobCategory = ad.JobCategory.Type,
+                   JobEngagement = ad.JobEngagement.Type,
+                   CompanyLogo = ad.Publisher.Company.CompanyLogo,
+                   CompanyName = ad.Publisher.Company.CompanyName,
+                   Location = ad.Location,
+                   Salary = ad.MinSalary.ToString() + " - " + ad.MaxSalary.ToString()
+               })
+               .ToListAsync();
+
+            return new JobsListingServiceModel
+            {
+                TotalCount = totalCount,
+                JobAds = jobAds
+            };
+
         }
 
         //Filter methods
@@ -159,6 +148,22 @@ namespace JobFinder.Services.Implementations
         private IQueryable<JobAd> FilterByLocation(IQueryable<JobAd> jobAds, string location)
         {
             return jobAds.Where(j => j.Location == location);
+        }
+
+        //Sort methods
+
+        private IQueryable<JobAd> SortBySalary(IQueryable<JobAd> jobAds, bool isAscending)
+        {
+            return isAscending
+                ? jobAds.OrderBy(j => j.MaxSalary)
+                : jobAds.OrderByDescending(j => j.MinSalary);
+        }
+
+        private IQueryable<JobAd> SortByPublishDate(IQueryable<JobAd> jobAds, bool isAscending)
+        {
+            return isAscending
+                ? jobAds.OrderBy(j => j.PostedOn)
+                : jobAds.OrderByDescending(j => j.PostedOn);
         }
     }
 }
