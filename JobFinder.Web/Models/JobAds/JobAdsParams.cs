@@ -6,6 +6,8 @@
 
         public int Items { get; set; } = 10;
 
+        public string SearchText { get; set; }
+
         public int? CategoryId { get; set; }
 
         public int? EngagementId { get; set; }

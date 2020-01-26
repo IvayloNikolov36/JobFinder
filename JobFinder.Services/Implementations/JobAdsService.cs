@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JobFinder.Data;
 using JobFinder.Data.Models;
@@ -64,7 +64,6 @@ namespace JobFinder.Services.Implementations
             IDictionary<int, string> engagements = dbEngagements.ToDictionary(x => x.Id, x => x.Type);
 
             return engagements;
-
         }
 
         public async Task<IDictionary<int, string>> GetJobCategories()
@@ -77,10 +76,18 @@ namespace JobFinder.Services.Implementations
         }
 
         public async Task<JobsListingServiceModel> AllAsync(
-        int page, int items, int? engagementId, int? categoryId, string location,
+        int page, int items, string searchText, int? engagementId, int? categoryId, string location,
         string sortBy, bool? isAscending)
         {
-            IQueryable<JobAd> jobs = this.dbContext.JobAds;
+            IQueryable<JobAd> jobs = this.dbContext.JobAds.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                searchText = searchText.ToLower();
+
+                jobs = jobs.Where(j => j.Position.ToLower().Contains(searchText)
+                        || j.Publisher.Company.CompanyName.ToLower().Contains(searchText));
+            }
 
             if (engagementId != null)
             {

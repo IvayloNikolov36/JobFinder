@@ -27,7 +27,7 @@ namespace JobFinder.Web.Controllers
         public async Task<ActionResult<JobsListingServiceModel>> Get([FromQuery] JobAdsParams model)
         {
             var jobsListingModel = await this.adsService.AllAsync(
-                model.Page, model.Items, model.EngagementId, model.CategoryId, model.Location,
+                model.Page, model.Items, model.SearchText, model.EngagementId, model.CategoryId, model.Location,
                 model.SortBy, model.IsAscending);
 
             return this.Ok(jobsListingModel);
