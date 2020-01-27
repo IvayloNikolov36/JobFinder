@@ -10,6 +10,8 @@ namespace JobFinder.Services
     {
         Task<JobAd> GetAsync(int id);
 
+        Task<JobDetailsServiceModel> GetDetailsAsync(int jobId);
+
         Task CreateAsync(string publisherId, string position, string description, DateTime expiration, 
             int jobCategoryId, int jobEngagementId, int? minSalary, int? maxSalary, string location);
 

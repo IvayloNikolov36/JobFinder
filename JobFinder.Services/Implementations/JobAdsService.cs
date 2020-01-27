@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using JobFinder.Data;
@@ -22,6 +21,26 @@ namespace JobFinder.Services.Implementations
         public async Task<JobAd> GetAsync(int id)
         {
             return await this.dbContext.FindAsync<JobAd>(id);
+        }
+
+        public async Task<JobDetailsServiceModel> GetDetailsAsync(int jobId)
+        {
+            var jobDetails = await this.dbContext.JobAds
+                .Where(j => j.Id == jobId)
+                .Select(j => new JobDetailsServiceModel
+                {
+                    Id = j.Id,
+                    Description = j.Desription,
+                    Position = j.Position,
+                    CompanyLogo = j.Publisher.Company.CompanyLogo,
+                    CompanyName = j.Publisher.Company.CompanyName,
+                    PostedOn = j.PostedOn.ToString(),
+                    Salary = j.MinSalary.ToString() + " - " + j.MaxSalary.ToString(),
+                    Location = j.Location,
+                    JobEngagement = j.JobEngagement.Type
+                }).FirstOrDefaultAsync();
+
+            return jobDetails;
         }
 
         public async Task CreateAsync(

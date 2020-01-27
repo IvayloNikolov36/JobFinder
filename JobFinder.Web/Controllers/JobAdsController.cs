@@ -35,16 +35,16 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet("details/{id}")]
         [Authorize]
-        public async Task<ActionResult<JobAd>> Get(int id)
+        public async Task<ActionResult<JobAd>> Details(int id)
         {
-            var offer = await this.adsService.GetAsync(id);
+            var jobDetails = await this.adsService.GetDetailsAsync(id);
 
-            if (offer == null)
+            if (jobDetails == null)
             {
-                return this.NotFound(new { Message = NoAdFound });
+                return this.NotFound(new { Message = NoJobFound });
             }
 
-            return this.Ok(offer);
+            return this.Ok(jobDetails);
         }
 
         [HttpPost("create")]
@@ -72,7 +72,7 @@ namespace JobFinder.Web.Controllers
 
             if (offerFromDb == null)
             {
-                return this.NotFound(new { Message = NoAdFound });
+                return this.NotFound(new { Message = NoJobFound });
             }
 
             //TODO: make filters!
