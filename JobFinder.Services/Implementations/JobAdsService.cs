@@ -32,8 +32,8 @@ namespace JobFinder.Services.Implementations
                     Id = j.Id,
                     Description = j.Desription,
                     Position = j.Position,
-                    CompanyLogo = j.Publisher.Company.CompanyLogo,
-                    CompanyName = j.Publisher.Company.CompanyName,
+                    CompanyLogo = j.Publisher.Company.Logo,
+                    CompanyName = j.Publisher.Company.Name,
                     PostedOn = j.PostedOn.ToString(),
                     Salary = j.MinSalary.ToString() + " - " + j.MaxSalary.ToString(),
                     Location = j.Location,
@@ -44,15 +44,14 @@ namespace JobFinder.Services.Implementations
         }
 
         public async Task CreateAsync(
-            string publisherId, string position, string description, DateTime expiration,
-            int jobCategoryId, int jobEngagementId, int? minSalary, int? maxSalary, string location)
+            string publisherId, string position, string description, int jobCategoryId, 
+            int jobEngagementId, int? minSalary, int? maxSalary, string location)
         {
             var offer = new JobAd
             {
                 Position = position,
                 Desription = description,
                 PostedOn = DateTime.UtcNow,
-                Expiration = expiration,
                 PublisherId = publisherId,
                 JobCategoryId = jobCategoryId,
                 JobEngagementId = jobEngagementId,
@@ -65,13 +64,12 @@ namespace JobFinder.Services.Implementations
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task EditAsync(int offerId, string position, string description, int daysActive)
+        public async Task EditAsync(int offerId, string position, string description)
         {
             var offerFromDb = await this.dbContext.FindAsync<JobAd>(offerId);
 
             offerFromDb.Position = position;
             offerFromDb.Desription = description;
-            offerFromDb.Expiration = DateTime.UtcNow.AddDays(daysActive);
 
             await this.dbContext.SaveChangesAsync();
         }
@@ -105,7 +103,7 @@ namespace JobFinder.Services.Implementations
                 searchText = searchText.ToLower();
 
                 jobs = jobs.Where(j => j.Position.ToLower().Contains(searchText)
-                        || j.Publisher.Company.CompanyName.ToLower().Contains(searchText));
+                        || j.Publisher.Company.Name.ToLower().Contains(searchText));
             }
 
             if (engagementId != null)
@@ -144,8 +142,8 @@ namespace JobFinder.Services.Implementations
                    PostedOn = ad.PostedOn.ToShortDateString(),
                    JobCategory = ad.JobCategory.Type,
                    JobEngagement = ad.JobEngagement.Type,
-                   CompanyLogo = ad.Publisher.Company.CompanyLogo,
-                   CompanyName = ad.Publisher.Company.CompanyName,
+                   CompanyLogo = ad.Publisher.Company.Logo,
+                   CompanyName = ad.Publisher.Company.Name,
                    Location = ad.Location,
                    Salary = ad.MinSalary.ToString() + " - " + ad.MaxSalary.ToString()
                })

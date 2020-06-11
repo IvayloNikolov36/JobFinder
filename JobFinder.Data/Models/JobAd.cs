@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Data.Models
 {
     public class JobAd
     {
+        public JobAd()
+        {
+            this.JobApplications = new List<JobApplication>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -17,8 +23,6 @@ namespace JobFinder.Data.Models
 
         [Required]
         public string Location { get; set; }
-
-        public DateTime Expiration { get; set; }
 
         public DateTime PostedOn { get; set; }
 
@@ -37,5 +41,7 @@ namespace JobFinder.Data.Models
         public string PublisherId { get; set; }
 
         public User Publisher { get; set; }
+
+        public IList<JobApplication> JobApplications { get; set; }
     }
 }

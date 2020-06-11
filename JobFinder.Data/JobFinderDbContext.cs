@@ -19,6 +19,10 @@ namespace JobFinder.Data
 
         public DbSet<JobCategory> JobCategories { get; set; }
 
+        public DbSet<CurriculumVitae> CVs { get; set; }
+
+        public DbSet<JobApplication> JobApplications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //one to one or zero
@@ -33,8 +37,17 @@ namespace JobFinder.Data
             //one to many
             builder.Entity<User>()
                 .HasMany(u => u.JobAds)
-                .WithOne(ro => ro.Publisher)
-                .HasForeignKey(ro => ro.PublisherId);
+                .WithOne(j => j.Publisher)
+                .HasForeignKey(j => j.PublisherId);
+
+            //unique constrains
+            builder.Entity<Company>()
+                .HasIndex(c => c.Bulstat)
+                .IsUnique();
+
+            builder.Entity<Company>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
         }
     }
 }

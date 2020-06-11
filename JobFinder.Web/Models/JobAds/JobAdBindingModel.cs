@@ -16,8 +16,6 @@ namespace JobFinder.Web.Models.JobAds
         [StringLength(50, MinimumLength = 2)]
         public string Location { get; set; }
 
-        public int DaysActive { get; set; }
-
         public int JobCategoryId { get; set; }
 
         public int JobEngagementId { get; set; }

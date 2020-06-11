@@ -12,8 +12,6 @@ namespace JobFinder.Web.Models.JobAds
         [MinLength(20)]
         public string Desription { get; set; }
 
-        public int DaysActive { get; set; }
-
         public string PublisherId { get; set; }
     }
 }

@@ -53,12 +53,10 @@ namespace JobFinder.Web.Controllers
         {
             //TODO: make filter to check for valid jobCategoryId and jobEngagementId
 
-            DateTime expirationDate = DateTime.UtcNow.AddDays(model.DaysActive);
-
-            string publisherId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string publisherId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value; 
 
             await this.adsService
-                .CreateAsync(publisherId, model.Position, model.Description, expirationDate, model.JobCategoryId,
+                .CreateAsync(publisherId, model.Position, model.Description, model.JobCategoryId,
                 model.JobEngagementId, model.MinSalary, model.MaxSalary, model.Location);
 
             return this.Ok(new { Message = SuccessOnCreation });
@@ -85,7 +83,7 @@ namespace JobFinder.Web.Controllers
             }
 
             await this.adsService
-                .EditAsync(id, model.Position, model.Desription, model.DaysActive);
+                .EditAsync(id, model.Position, model.Desription);
 
             return this.Ok(new { Message = UpdatedAd });
         }

@@ -1,6 +1,8 @@
 using JobFinder.Data;
 using JobFinder.Data.Models;
+using JobFinder.Services.Mappings;
 using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +28,9 @@ namespace JobFinder.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AutoMapperConfig
+                .RegisterMappings(typeof(JobAdBindingModel).Assembly);
+
             services.AddDbContext<JobFinderDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

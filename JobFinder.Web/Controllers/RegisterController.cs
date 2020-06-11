@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JobFinder.Data;
 using static JobFinder.Web.Infrastructure.WebConstants;
-using System.Collections.Generic;
+using System;
 
 namespace JobFinder.Web.Controllers
 {
@@ -50,9 +50,9 @@ namespace JobFinder.Web.Controllers
         {
             var newCompany = new Company
             {
-                CompanyName = model.CompanyName,
+                Name = model.CompanyName,
                 Bulstat = model.Bulstat,
-                CompanyLogo = model.CompanyLogo
+                Logo = model.CompanyLogo
             };
 
             await this.dbContext.AddAsync(newCompany);
