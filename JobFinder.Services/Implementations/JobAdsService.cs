@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JobFinder.Data;
-using JobFinder.Data.Models;
-using JobFinder.Services.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace JobFinder.Services.Implementations
+﻿namespace JobFinder.Services.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using JobFinder.Data;
+    using JobFinder.Data.Models;
+    using JobFinder.Services.Mappings;
+    using Microsoft.EntityFrameworkCore;
+
     public class JobAdsService : IJobAdsService
     {
         private readonly JobFinderDbContext dbContext;
@@ -18,29 +18,20 @@ namespace JobFinder.Services.Implementations
             this.dbContext = dbContext;
         }
 
-        public async Task<JobAd> GetAsync(int id)
+        public async Task<T> GetAsync<T>(int id)
         {
-            return await this.dbContext.FindAsync<JobAd>(id);
+            return await this.dbContext.JobAds.AsNoTracking()
+                .Where(ja => ja.Id == id)
+                .To<T>()
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<JobDetailsServiceModel> GetDetailsAsync(int jobId)
+        public async Task<T> DetailsAsync<T>(int jobId)
         {
-            var jobDetails = await this.dbContext.JobAds
+            return await this.dbContext.JobAds.AsNoTracking()
                 .Where(j => j.Id == jobId)
-                .Select(j => new JobDetailsServiceModel
-                {
-                    Id = j.Id,
-                    Description = j.Desription,
-                    Position = j.Position,
-                    CompanyLogo = j.Publisher.Company.Logo,
-                    CompanyName = j.Publisher.Company.Name,
-                    PostedOn = j.PostedOn.ToString(),
-                    Salary = j.MinSalary.ToString() + " - " + j.MaxSalary.ToString(),
-                    Location = j.Location,
-                    JobEngagement = j.JobEngagement.Type
-                }).FirstOrDefaultAsync();
-
-            return jobDetails;
+                .To<T>()
+                .FirstOrDefaultAsync();
         }
 
         public async Task CreateAsync(
@@ -64,14 +55,21 @@ namespace JobFinder.Services.Implementations
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task EditAsync(int offerId, string position, string description)
+        public async Task<bool> EditAsync(int jobAdId, string userId, string position, string description)
         {
-            var offerFromDb = await this.dbContext.FindAsync<JobAd>(offerId);
+            var offerFromDb = await this.dbContext.FindAsync<JobAd>(jobAdId);
+            bool isUserPublisher = userId == offerFromDb.PublisherId;
+
+            if (offerFromDb == null || !isUserPublisher)
+            {
+                return false;
+            }
 
             offerFromDb.Position = position;
             offerFromDb.Desription = description;
 
             await this.dbContext.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IDictionary<int, string>> GetJobEngagements()
@@ -92,7 +90,7 @@ namespace JobFinder.Services.Implementations
             return categories;
         }
 
-        public async Task<JobsListingServiceModel> AllAsync(
+        public async Task<(int, IEnumerable<T>)> AllAsync<T>(
         int page, int items, string searchText, int? engagementId, int? categoryId, string location,
         string sortBy, bool? isAscending)
         {
@@ -133,28 +131,12 @@ namespace JobFinder.Services.Implementations
 
             int totalCount = await jobs.CountAsync();
 
-            List<JobListingModel> jobAds = await jobs.Skip((page - 1) * items)
+            List<T> jobAds = await jobs.Skip((page - 1) * items)
                .Take(items)
-               .Select(ad => new JobListingModel
-               {
-                   Id = ad.Id,
-                   Position = ad.Position,
-                   PostedOn = ad.PostedOn.ToShortDateString(),
-                   JobCategory = ad.JobCategory.Type,
-                   JobEngagement = ad.JobEngagement.Type,
-                   CompanyLogo = ad.Publisher.Company.Logo,
-                   CompanyName = ad.Publisher.Company.Name,
-                   Location = ad.Location,
-                   Salary = ad.MinSalary.ToString() + " - " + ad.MaxSalary.ToString()
-               })
+               .To<T>()
                .ToListAsync();
 
-            return new JobsListingServiceModel
-            {
-                TotalCount = totalCount,
-                JobAds = jobAds
-            };
-
+            return (totalCount, jobAds);
         }
 
         //Filter methods

@@ -12,7 +12,7 @@
         //Job Ads
         public const string NoJobFound = "Job ad not found!";
         public const string SuccessOnCreation = "Successfully created a job ad!";
-        public const string CantEditAd = "You can't edit other companies job ads!";
+        public const string CantEditAd = "Edit does not exist or you are trying to edit other companie job ad!";
         public const string UpdatedAd = "Job ad successfully updated!";
 
     }

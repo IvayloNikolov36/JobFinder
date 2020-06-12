@@ -1,18 +1,15 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Services;
-using JobFinder.Services.Models;
-using JobFinder.Web.Models.JobAds;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using static JobFinder.Web.Infrastructure.WebConstants;
-
-namespace JobFinder.Web.Controllers
+﻿namespace JobFinder.Web.Controllers
 {
+    using JobFinder.Services;
+    using JobFinder.Web.Models.JobAds;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using static JobFinder.Web.Infrastructure.WebConstants;
+
     public class JobAdsController : ApiController
     {
         private readonly IJobAdsService adsService;
@@ -24,20 +21,26 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet("get")]
         [Authorize]
-        public async Task<ActionResult<JobsListingServiceModel>> Get([FromQuery] JobAdsParams model)
+        public async Task<ActionResult<JobsListingsModel>> Get([FromQuery] JobAdsParams model)
         {
-            var jobsListingModel = await this.adsService.AllAsync(
-                model.Page, model.Items, model.SearchText, model.EngagementId, model.CategoryId, model.Location,
-                model.SortBy, model.IsAscending);
+            (int totalCount, var jobAds) = await this.adsService.AllAsync<JobListingModel>(
+                model.Page, model.Items, model.SearchText, model.EngagementId, model.CategoryId, 
+                model.Location, model.SortBy, model.IsAscending);
 
-            return this.Ok(jobsListingModel);
+            var resultModel = new JobsListingsModel
+            {
+                TotalCount = totalCount,
+                JobAds = jobAds
+            };
+
+            return this.Ok(resultModel);
         }
 
         [HttpGet("details/{id}")]
         [Authorize]
-        public async Task<ActionResult<JobAd>> Details(int id)
+        public async Task<ActionResult<JobAdDetailsModel>> Details(int id)
         {
-            var jobDetails = await this.adsService.GetDetailsAsync(id);
+            var jobDetails = await this.adsService.DetailsAsync<JobAdDetailsModel>(id);
 
             if (jobDetails == null)
             {
@@ -66,24 +69,17 @@ namespace JobFinder.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Edit(int id, [FromBody] JobAdEditModel model)
         {
-            var offerFromDb = await this.adsService.GetAsync(id);
-
-            if (offerFromDb == null)
-            {
-                return this.NotFound(new { Message = NoJobFound });
-            }
-
-            //TODO: make filters!
             //TODO: think about for editing expiration
 
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (userId != offerFromDb.PublisherId)
+
+            bool isEditDone = await this.adsService
+                .EditAsync(id, userId, model.Position, model.Desription);
+
+            if (!isEditDone)
             {
                 return this.BadRequest(new { Message = CantEditAd });
             }
-
-            await this.adsService
-                .EditAsync(id, model.Position, model.Desription);
 
             return this.Ok(new { Message = UpdatedAd });
         }

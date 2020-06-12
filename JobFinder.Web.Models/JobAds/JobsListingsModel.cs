@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class JobsListingModel
+    public class JobsListingsModel
     {
         public int TotalCount { get; set; } //count of all filtered job ads
 

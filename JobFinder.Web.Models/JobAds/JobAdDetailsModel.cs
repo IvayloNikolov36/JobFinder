@@ -4,37 +4,35 @@
     using JobFinder.Data.Models;
     using JobFinder.Services.Mappings;
 
-    public class JobListingModel : IMapFrom<JobAd>, IHaveCustomMappings
+    public class JobAdDetailsModel : IMapFrom<JobAd>, IHaveCustomMappings
     {
         public int Id { get; set; }
+
+        public string Position { get; set; }
+
+        public string Desription { get; set; }
+
+        public string Location { get; set; }
+
+        public string PostedOn { get; set; }
+
+        public string JobEngagement { get; set; }
 
         public string CompanyLogo { get; set; }
 
         public string CompanyName { get; set; }
 
-        public string Position { get; set; }
-
-        public string PostedOn { get; set; }
-
-        public string JobCategory { get; set; }
-
-        public string JobEngagement { get; set; }
-
-        public string Salary { get; set; }
-
-        public string Location { get; set; }
+        public string Salary { get; set; } //diapason
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<JobAd, JobListingModel>()
+            configuration.CreateMap<JobAd, JobAdDetailsModel>()
                 .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Company.Logo))
                 .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Company.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.PostedOn.ToString()))
                 .ForMember(x => x.Salary, m => m.MapFrom(
                     m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString()))
-                .ForMember(x => x.JobEngagement, m => m.MapFrom(m => m.JobEngagement.Type))
-                .ForMember(x => x.JobCategory, m => m.MapFrom(m => m.JobCategory.Type));
+                .ForMember(x => x.JobEngagement, m => m.MapFrom(m => m.JobEngagement.Type));
         }
-
     }
 }

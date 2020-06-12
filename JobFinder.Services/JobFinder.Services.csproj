@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
+    <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
   </ItemGroup>
 
 </Project>

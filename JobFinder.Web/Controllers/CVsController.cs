@@ -1,16 +1,15 @@
-﻿using JobFinder.Web.Models.Candidates;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Threading.Tasks;
-
-namespace JobFinder.Web.Controllers
+﻿namespace JobFinder.Web.Controllers
 {
+    using JobFinder.Web.Models.Candidates;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System.IO;
+
     public class CVsController : ApiController
     {
         [HttpPost("upload")]
         [Authorize]
-        public async Task<ActionResult> UploadCv([FromForm] CurriculumVitaeUploadModel model)
+        public ActionResult UploadCv([FromForm] CVUploadModel model)
         {
             var file = model.CurriculumVitae;
             var fileName = model.CurriculumVitae.FileName;

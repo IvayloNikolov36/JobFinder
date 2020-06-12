@@ -1,25 +1,22 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace JobFinder.Services
+﻿namespace JobFinder.Services
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public interface IJobAdsService
     {
-        Task<JobAd> GetAsync(int id);
+        Task<T> GetAsync<T>(int id);
 
-        Task<JobDetailsServiceModel> GetDetailsAsync(int jobId);
+        Task<T> DetailsAsync<T>(int jobId);
 
         Task CreateAsync(string publisherId, string position, string description, int jobCategoryId, 
             int jobEngagementId, int? minSalary, int? maxSalary, string location);
 
-        Task<JobsListingServiceModel> AllAsync(
+        Task<(int, IEnumerable<T>)> AllAsync<T>(
             int page, int items, string searchText = null, int? jobEngagementId = null, int? jobCategoryId = null, 
             string location = null, string sortBy = null, bool? isAscending = null);
 
-        Task EditAsync(int offerId, string position, string description);
+        Task<bool> EditAsync(int jobAdId, string userId, string position, string description);
 
         Task<IDictionary<int, string>> GetJobEngagements();
 
