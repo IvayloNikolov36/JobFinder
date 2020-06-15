@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace JobFinder.Data.Models
+﻿namespace JobFinder.Data.Models
 {
-    public class Company
-    {
-        public int Id { get; set; }
+    using JobFinder.Data.Models.Common;
+    using System.ComponentModel.DataAnnotations;
 
+    public class Company : BaseModel<int>
+    {
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         public string Name { get; set; }

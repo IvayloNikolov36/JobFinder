@@ -1,21 +1,21 @@
-using JobFinder.Data;
-using JobFinder.Data.Models;
-using JobFinder.Services.Mappings;
-using JobFinder.Web.Infrastructure.Extensions;
-using JobFinder.Web.Models.JobAds;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
 namespace JobFinder.Web
 {
+    using JobFinder.Data;
+    using JobFinder.Data.Models;
+    using JobFinder.Services.Mappings;
+    using JobFinder.Web.Infrastructure.Extensions;
+    using JobFinder.Web.Models.JobAds;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.IdentityModel.Tokens;
+    using System.Text;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)

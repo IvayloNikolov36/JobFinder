@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace JobFinder.Data.Models
+﻿namespace JobFinder.Data.Models
 {
-    public class JobAd
+    using JobFinder.Data.Models.Common;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
+    public class JobAd : BaseModel<int>
     {
         public JobAd()
         {
-            this.JobApplications = new List<JobApplication>();
+            this.JobApplications = new HashSet<JobApplication>();
         }
-
-        public int Id { get; set; }
 
         [Required]
         [StringLength(90, MinimumLength = 6)]
@@ -23,8 +21,6 @@ namespace JobFinder.Data.Models
 
         [Required]
         public string Location { get; set; }
-
-        public DateTime PostedOn { get; set; }
 
         public int? MinSalary { get; set; }
 
@@ -42,6 +38,6 @@ namespace JobFinder.Data.Models
 
         public User Publisher { get; set; }
 
-        public IList<JobApplication> JobApplications { get; set; }
+        public ICollection<JobApplication> JobApplications { get; set; }
     }
 }

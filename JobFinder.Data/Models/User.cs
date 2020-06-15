@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace JobFinder.Data.Models
+﻿namespace JobFinder.Data.Models
 {
+    using JobFinder.Data.Models.CV;
+    using Microsoft.AspNetCore.Identity;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class User : IdentityUser
     {
         public User()
-        {
-            this.JobApplications = new List<JobApplication>();
-            this.JobAds = new List<JobAd>();
+        {        
+            this.CVs = new HashSet<CurriculumVitae>();
+            this.JobApplications = new HashSet<JobApplication>();
+            this.JobAds = new HashSet<JobAd>();
         }
 
         [Required]
@@ -26,8 +28,11 @@ namespace JobFinder.Data.Models
 
         public Company Company { get; set; }
 
-        public IList<JobApplication> JobApplications { get; set; }
+        public ICollection<CurriculumVitae> CVs { get; set; }
 
-        public IList<JobAd> JobAds { get; set; }
+        public ICollection<JobApplication> JobApplications { get; set; }
+
+        public ICollection<JobAd> JobAds { get; set; }
+
     }
 }

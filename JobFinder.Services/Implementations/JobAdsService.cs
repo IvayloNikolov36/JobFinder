@@ -1,6 +1,5 @@
 ﻿namespace JobFinder.Services.Implementations
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -42,7 +41,6 @@
             {
                 Position = position,
                 Desription = description,
-                PostedOn = DateTime.UtcNow,
                 PublisherId = publisherId,
                 JobCategoryId = jobCategoryId,
                 JobEngagementId = jobEngagementId,
@@ -168,8 +166,8 @@
         private IQueryable<JobAd> SortByPublishDate(IQueryable<JobAd> jobAds, bool isAscending)
         {
             return isAscending
-                ? jobAds.OrderBy(j => j.PostedOn)
-                : jobAds.OrderByDescending(j => j.PostedOn);
+                ? jobAds.OrderBy(j => j.CreatedOn)
+                : jobAds.OrderByDescending(j => j.CreatedOn);
         }
     }
 }

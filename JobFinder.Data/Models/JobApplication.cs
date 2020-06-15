@@ -1,8 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace JobFinder.Data.Models
+﻿namespace JobFinder.Data.Models
 {
+    using JobFinder.Data.Models.CV;
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class JobApplication
     {
         public int Id { get; set; }
