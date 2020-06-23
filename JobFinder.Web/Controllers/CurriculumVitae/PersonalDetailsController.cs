@@ -4,7 +4,6 @@
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
     [Authorize]
@@ -17,16 +16,19 @@
             this.personalDetailsService = personalDetailsService;
         }
 
-        [HttpPost("create/{id}")]
-        public async Task<ActionResult<int>> Create(string id, [FromBody] PersonalDetailsnputModel model)
+        [HttpGet("")]
+        public async Task<ActionResult<PersonalDetailsViewModel>> Get([FromQuery] string cvId)
+        {
+            var personalDetails = await this.personalDetailsService
+                .GetAsync<PersonalDetailsViewModel>(cvId);
+
+            return this.Ok(personalDetails);
+        }
+
+        [HttpPost("create")]
+        public async Task<ActionResult<int>> Create([FromBody] PersonalDetailsnputModel model)
         {
             //TODO: make filter
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
-
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(new { Errors = this.ModelState.Values });
@@ -48,15 +50,9 @@
             return this.Ok(objectId);
         }
 
-        [HttpPut("edit/{id}")]
-        public async Task<IActionResult> Edit(string id, PersonalDetailsEditModel model)
+        [HttpPut("edit")]
+        public async Task<IActionResult> Edit(PersonalDetailsEditModel model)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
-
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(new { Errors = this.ModelState.Values });

@@ -4,11 +4,24 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Services.Mappings;
+    using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class WorkExperienceService : DbService, IWorkExperienceSerive
     {
+        public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
+        {
+            var workExperiences = await this.DbContext.WorkExperiences.AsNoTracking()
+                .Where(we => we.CurriculumVitaeId == cvId)
+                .To<T>()
+                .ToListAsync();
+
+            return workExperiences;
+        }
 
         public WorkExperienceService(JobFinderDbContext dbContext) 
             : base(dbContext)
@@ -89,6 +102,6 @@
 
             return true;
         }
-       
+
     }
 }

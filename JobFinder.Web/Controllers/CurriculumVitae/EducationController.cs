@@ -4,55 +4,50 @@
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
     [Authorize]
     public class EducationController : ApiController
     {
-        private readonly IEducationService educationservice;
+        private readonly IEducationService educationService;
 
-        public EducationController(IEducationService educationservice)
+        public EducationController(IEducationService educationService)
         {
-            this.educationservice = educationservice;
+            this.educationService = educationService;
         }
 
-        [HttpPost("create/{id}")]
-        public async Task<ActionResult<int>> Create(string id, [FromBody] EducationInputModel model)
+        [HttpGet("all")]
+        public async Task<ActionResult<EducationsListingModel>> GetAll([FromQuery] string cvId)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
+            var educations = await this.educationService.AllAsync<EducationsListingModel>(cvId);
 
+            return this.Ok(educations);
+        }
+
+        [HttpPost("create")]
+        public async Task<ActionResult<int>> Create([FromBody] EducationInputModel model)
+        {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(new { Errors = this.ModelState.Values });
             }
 
-            int educationId = await this.educationservice.CreateAsync(
+            int educationId = await this.educationService.CreateAsync(
                 model.CurriculumVitaeId, model.FromDate, model.ToDate, 
                 model.Location,model.EducationLevel, model.Major, model.MainSubjects);
 
             return this.Ok(educationId);
         }
 
-        [HttpPut("update/{id}")]
-        public async Task<ActionResult> Edit(string id, [FromBody] EducationEditModel model)
+        [HttpPut("update")]
+        public async Task<ActionResult> Edit([FromBody] EducationEditModel model)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
-
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(new { Errors = this.ModelState.Values });
             }
 
-            bool isUpdated = await this.educationservice.UpdateAsync(
+            bool isUpdated = await this.educationService.UpdateAsync(
                 model.EducationId, model.FromDate, model.ToDate,
                 model.Location, model.EducationLevel, model.Major, model.MainSubjects);
 
@@ -64,16 +59,10 @@
             return this.Ok(new { Message = "Education successfully updated!" });
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<ActionResult> Delete(string id, [FromBody] EducationDeleteModel model)
+        [HttpDelete("delete")]
+        public async Task<ActionResult> Delete([FromQuery] int id)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
-
-            bool isDeleted = await this.educationservice.DeleteAsync(model.EducationId);
+            bool isDeleted = await this.educationService.DeleteAsync(id);
 
             if (!isDeleted)
             {

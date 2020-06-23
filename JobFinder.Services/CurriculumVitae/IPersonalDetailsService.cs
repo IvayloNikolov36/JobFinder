@@ -6,6 +6,8 @@
 
     public interface IPersonalDetailsService
     {
+        Task<T> GetAsync<T>(string cvId);
+
         Task<int> CreateAsync(
             string cvId,
             string firstName,

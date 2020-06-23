@@ -4,7 +4,11 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Services.Mappings;
+    using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class EducationService : DbService, IEducationService
@@ -14,6 +18,16 @@
             : base(dbContext)
         {
 
+        }
+
+        public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
+        {
+            var educations = await this.DbContext.Educations.AsNoTracking()
+                .Where(e => e.CurriculumVitaeId == cvId)
+                .To<T>()
+                .ToListAsync();
+
+            return educations;
         }
 
         public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string location, 
@@ -72,5 +86,6 @@
 
             return true;
         }
+
     }
 }

@@ -4,7 +4,7 @@
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     [Authorize]
@@ -17,15 +17,18 @@
             this.workExperienceService = workExperienceService;
         }
 
-        [HttpPost("create/{id}")]
-        public async Task<ActionResult<int>> Create(string id, [FromBody] WorkExperienceInputModel model)
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<WorkExperiencesListingModel>>> All([FromQuery] string cvId)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
+            var workExperiences = await this.workExperienceService
+                .AllAsync<WorkExperiencesListingModel>(cvId);
 
+            return this.Ok(workExperiences);
+        }
+
+        [HttpPost("create")]
+        public async Task<ActionResult<int>> Create([FromBody] WorkExperienceInputModel model)
+        {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(new { Errors = this.ModelState.Values });
@@ -37,15 +40,9 @@
             return this.Ok(workExperienceId);
         }
 
-        [HttpPut("update/{id}")]
-        public async Task<ActionResult> Update(string id, [FromBody] WorkExperienceEditModel model)
+        [HttpPut("update")]
+        public async Task<ActionResult> Update([FromBody] WorkExperienceEditModel model)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
-
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(new { Errors = this.ModelState.Values });
@@ -62,16 +59,10 @@
             return this.Ok(new { Message = "Work Experience updated successfully!" } );
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<ActionResult> Delete(string id, [FromBody] WorkExperienceDeleteModel model)
+        [HttpDelete("delete")]
+        public async Task<ActionResult> Delete([FromQuery] int id)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != id)
-            {
-                return this.BadRequest(new { Message = "User Id is incorrect!" });
-            }
-
-            bool isDeleted = await this.workExperienceService.DeleteAsync(model.WorkExperienceId);
+            bool isDeleted = await this.workExperienceService.DeleteAsync(id);
             if (!isDeleted)
             {
                 return this.BadRequest(new { Message = "Work Experience not deleted!" });

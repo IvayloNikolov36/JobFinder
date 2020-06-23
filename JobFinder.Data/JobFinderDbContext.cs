@@ -29,6 +29,14 @@
 
         public DbSet<Education> Educations { get; set; }
 
+        public DbSet<Skill> Skills { get; set; }
+
+        public DbSet<LanguageInfo> LanguagesInfo { get; set; }
+
+        public DbSet<PersonalDetails> PersonalDetails { get; set; }
+
+        public DbSet<WorkExperience> WorkExperiences { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
