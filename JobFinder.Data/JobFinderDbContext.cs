@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.Common;
+    using JobFinder.Data.Models.CV;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -23,6 +24,10 @@
         public DbSet<JobEngagement> JobEngagements { get; set; }
 
         public DbSet<JobCategory> JobCategories { get; set; }
+
+        public DbSet<DrivingCategoryType> DrivingCategoryTypes { get; set; }
+
+        public DbSet<Education> Educations { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

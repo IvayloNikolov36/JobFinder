@@ -1,17 +1,11 @@
-﻿namespace JobFinder.Data.Models.CV
+﻿namespace JobFinder.Web.Models.CurriculumVitae
 {
-    using JobFinder.Data.Models.Common;
     using JobFinder.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class WorkExperience : BaseModel<int>
+    public class WorkExperienceInputModel
     {
-        [Required]
-        public string CurriculumVitaeId { get; set; }
-
-        public CurriculumVitae CurriculumVitae { get; set; }
-
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }

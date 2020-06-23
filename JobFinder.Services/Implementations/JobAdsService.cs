@@ -8,18 +8,17 @@
     using JobFinder.Services.Mappings;
     using Microsoft.EntityFrameworkCore;
 
-    public class JobAdsService : IJobAdsService
+    public class JobAdsService : DbService, IJobAdsService
     {
-        private readonly JobFinderDbContext dbContext;
-
         public JobAdsService(JobFinderDbContext dbContext)
+            : base(dbContext)
         {
-            this.dbContext = dbContext;
+
         }
 
         public async Task<T> GetAsync<T>(int id)
         {
-            return await this.dbContext.JobAds.AsNoTracking()
+            return await this.DbContext.JobAds.AsNoTracking()
                 .Where(ja => ja.Id == id)
                 .To<T>()
                 .FirstOrDefaultAsync();
@@ -27,14 +26,14 @@
 
         public async Task<T> DetailsAsync<T>(int jobId)
         {
-            return await this.dbContext.JobAds.AsNoTracking()
+            return await this.DbContext.JobAds.AsNoTracking()
                 .Where(j => j.Id == jobId)
                 .To<T>()
                 .FirstOrDefaultAsync();
         }
 
         public async Task CreateAsync(
-            string publisherId, string position, string description, int jobCategoryId, 
+            string publisherId, string position, string description, int jobCategoryId,
             int jobEngagementId, int? minSalary, int? maxSalary, string location)
         {
             var offer = new JobAd
@@ -49,13 +48,13 @@
                 Location = location
             };
 
-            await this.dbContext.AddAsync(offer);
-            await this.dbContext.SaveChangesAsync();
+            await this.DbContext.AddAsync(offer);
+            await this.DbContext.SaveChangesAsync();
         }
 
         public async Task<bool> EditAsync(int jobAdId, string userId, string position, string description)
         {
-            var offerFromDb = await this.dbContext.FindAsync<JobAd>(jobAdId);
+            var offerFromDb = await this.DbContext.FindAsync<JobAd>(jobAdId);
             bool isUserPublisher = userId == offerFromDb.PublisherId;
 
             if (offerFromDb == null || !isUserPublisher)
@@ -66,13 +65,13 @@
             offerFromDb.Position = position;
             offerFromDb.Desription = description;
 
-            await this.dbContext.SaveChangesAsync();
+            await this.DbContext.SaveChangesAsync();
             return true;
         }
 
         public async Task<IDictionary<int, string>> GetJobEngagements()
         {
-            var dbEngagements = await this.dbContext.JobEngagements.ToListAsync();
+            var dbEngagements = await this.DbContext.JobEngagements.ToListAsync();
 
             IDictionary<int, string> engagements = dbEngagements.ToDictionary(x => x.Id, x => x.Type);
 
@@ -81,7 +80,7 @@
 
         public async Task<IDictionary<int, string>> GetJobCategories()
         {
-            var dbCategories = await this.dbContext.JobCategories.ToListAsync();
+            var dbCategories = await this.DbContext.JobCategories.ToListAsync();
 
             IDictionary<int, string> categories = dbCategories.ToDictionary(x => x.Id, x => x.Type);
 
@@ -92,7 +91,7 @@
         int page, int items, string searchText, int? engagementId, int? categoryId, string location,
         string sortBy, bool? isAscending)
         {
-            IQueryable<JobAd> jobs = this.dbContext.JobAds.AsNoTracking();
+            IQueryable<JobAd> jobs = this.DbContext.JobAds.AsNoTracking();
 
             if (!string.IsNullOrEmpty(searchText))
             {

@@ -1,15 +1,14 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Web.Models.Account;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
-using JobFinder.Data;
-using static JobFinder.Web.Infrastructure.WebConstants;
-using System;
-
-namespace JobFinder.Web.Controllers
+﻿namespace JobFinder.Web.Controllers
 {
+    using JobFinder.Data.Models;
+    using JobFinder.Web.Models.Account;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using JobFinder.Data;
+    using static JobFinder.Web.Infrastructure.WebConstants;
+
     public class RegisterController : ApiController
     {
         private readonly UserManager<User> userManager;
@@ -22,7 +21,7 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPost("user")]
-        public async Task<IActionResult> RegisterUser([FromBody]RegisterModel model)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model)
         {
             var newUser = new User 
             { 
