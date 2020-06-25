@@ -2,12 +2,10 @@
 {
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CurriculumVitae;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 
-    [Authorize]
-    public class EducationController : ApiController
+    public class EducationController : BaseCVsController
     {
         private readonly IEducationService educationService;
 
@@ -40,7 +38,7 @@
         }
 
         [HttpPut("update")]
-        public async Task<ActionResult> Edit([FromBody] EducationEditModel model)
+        public async Task<IActionResult> Edit([FromBody] EducationEditModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -60,7 +58,7 @@
         }
 
         [HttpDelete("delete")]
-        public async Task<ActionResult> Delete([FromQuery] int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
             bool isDeleted = await this.educationService.DeleteAsync(id);
 

@@ -25,7 +25,11 @@
 
         public DbSet<JobCategory> JobCategories { get; set; }
 
+        public DbSet<CurriculumVitae> CVs { get; set; }
+
         public DbSet<DrivingCategoryType> DrivingCategoryTypes { get; set; }
+
+        public DbSet<DrivingCategory> DrivingCategories { get; set; }
 
         public DbSet<Education> Educations { get; set; }
 
@@ -36,6 +40,8 @@
         public DbSet<PersonalDetails> PersonalDetails { get; set; }
 
         public DbSet<WorkExperience> WorkExperiences { get; set; }
+
+        public DbSet<CourseCertificate> CoursesCertificates { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

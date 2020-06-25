@@ -2,13 +2,11 @@
 {
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CurriculumVitae;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    [Authorize]
-    public class WorkExperienceController : ApiController
+    public class WorkExperienceController : BaseCVsController
     {
         private readonly IWorkExperienceSerive workExperienceService;
 
@@ -41,7 +39,7 @@
         }
 
         [HttpPut("update")]
-        public async Task<ActionResult> Update([FromBody] WorkExperienceEditModel model)
+        public async Task<IActionResult> Update([FromBody] WorkExperienceEditModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -60,7 +58,7 @@
         }
 
         [HttpDelete("delete")]
-        public async Task<ActionResult> Delete([FromQuery] int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
             bool isDeleted = await this.workExperienceService.DeleteAsync(id);
             if (!isDeleted)

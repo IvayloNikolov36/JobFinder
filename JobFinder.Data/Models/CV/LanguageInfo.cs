@@ -2,9 +2,11 @@
 {
     using JobFinder.Data.Models.Common;
     using JobFinder.Data.Models.Enums;
+    using System.ComponentModel.DataAnnotations;
 
     public class LanguageInfo : BaseModel<int>
     {
+        [Required]
         public string CurriculumVitaeId { get; set; }
 
         public CurriculumVitae CurriculumVitae { get; set; }

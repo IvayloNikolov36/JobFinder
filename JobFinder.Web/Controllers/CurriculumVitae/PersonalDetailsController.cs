@@ -2,12 +2,10 @@
 {
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CurriculumVitae;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 
-    [Authorize]
-    public class PersonalDetailsController : ApiController
+    public class PersonalDetailsController : BaseCVsController
     {
         private readonly IPersonalDetailsService personalDetailsService;
 

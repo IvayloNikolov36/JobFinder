@@ -7,6 +7,7 @@
 
     public class Education : BaseModel<int>
     {
+        [Required]
         public string CurriculumVitaeId { get; set; }
 
         public CurriculumVitae CurriculumVitae { get; set; }

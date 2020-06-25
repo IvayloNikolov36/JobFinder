@@ -5,10 +5,13 @@
     using Microsoft.AspNetCore.Mvc;
     using System.IO;
 
+    [Authorize]
     public class CVsController : ApiController
     {
+        [HttpPost]
+
+
         [HttpPost("upload")]
-        [Authorize]
         public ActionResult UploadCv([FromForm] CVUploadModel model)
         {
             var file = model.CurriculumVitae;

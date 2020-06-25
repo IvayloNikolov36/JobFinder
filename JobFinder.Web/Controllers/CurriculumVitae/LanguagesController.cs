@@ -2,14 +2,11 @@
 {
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CurriculumVitae;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    [Authorize]
-    public class LanguagesController : ApiController
+    public class LanguagesController : BaseCVsController
     {
         private readonly ILanguageInfoService languageService;
 
@@ -41,7 +38,7 @@
         }
 
         [HttpPut("update")]
-        public async Task<ActionResult> Edit([FromBody] LanguageInfoEditModel model)
+        public async Task<IActionResult> Edit([FromBody] LanguageInfoEditModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -60,7 +57,7 @@
         }
 
         [HttpDelete("delete")]
-        public async Task<ActionResult> Delete([FromQuery] int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
             bool isDeleted = await this.languageService.DeleteAsync(id);
 

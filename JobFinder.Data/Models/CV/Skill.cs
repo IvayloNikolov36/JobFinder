@@ -11,6 +11,7 @@
             this.DrivingLicenseCategories = new HashSet<DrivingCategory>();
         }
 
+        [Required]
         public string CurriculumVitaeId { get; set; }
 
         public CurriculumVitae CurriculumVitae { get; set; }

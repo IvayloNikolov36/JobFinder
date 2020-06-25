@@ -4,14 +4,16 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200625161346_ChangedColumnTypeOnCourseCertificate")]
+    partial class ChangedColumnTypeOnCourseCertificate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,7 +84,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CVs");
+                    b.ToTable("CurriculumVitae");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.DrivingCategory", b =>
@@ -102,7 +104,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("DrivingCategories");
+                    b.ToTable("DrivingCategory");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.DrivingCategoryType", b =>
