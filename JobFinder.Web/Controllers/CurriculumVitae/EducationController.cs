@@ -25,13 +25,8 @@
         [HttpPost("create")]
         public async Task<ActionResult<int>> Create([FromBody] EducationInputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             int educationId = await this.educationService.CreateAsync(
-                model.CurriculumVitaeId, model.FromDate, model.ToDate, 
+                model.CvId, model.FromDate, model.ToDate, 
                 model.Location,model.EducationLevel, model.Major, model.MainSubjects);
 
             return this.Ok(educationId);
@@ -40,11 +35,6 @@
         [HttpPut("update")]
         public async Task<IActionResult> Edit([FromBody] EducationEditModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             bool isUpdated = await this.educationService.UpdateAsync(
                 model.EducationId, model.FromDate, model.ToDate,
                 model.Location, model.EducationLevel, model.Major, model.MainSubjects);

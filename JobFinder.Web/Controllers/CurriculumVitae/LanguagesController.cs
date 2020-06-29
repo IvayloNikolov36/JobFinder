@@ -23,15 +23,10 @@
             return this.Ok(languagesInfo);
         }
 
-        [HttpPost("add")]
+        [HttpPost("create")]
         public async Task<ActionResult<int>> Add([FromBody] LanguageInfoInputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
-            int languageInfoId = await this.languageService.AddAsync(model.CurriculumVitaeId,
+            int languageInfoId = await this.languageService.AddAsync(model.CvId,
                 model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
 
             return this.Ok(languageInfoId);
@@ -40,11 +35,6 @@
         [HttpPut("update")]
         public async Task<IActionResult> Edit([FromBody] LanguageInfoEditModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             bool isUpdated = await this.languageService.UpdateAsync(model.LanguageInfoId,
                  model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
 

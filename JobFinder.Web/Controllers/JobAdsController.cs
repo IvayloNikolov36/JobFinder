@@ -56,11 +56,6 @@
         {
             //TODO: make filter to check for valid jobCategoryId and jobEngagementId
 
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             string publisherId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value; 
 
             await this.adsService

@@ -11,7 +11,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class WorkExperienceService : DbService, IWorkExperienceSerive
+    public class WorkExperienceService : DbService, IWorkExperienceService
     {
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
         {
@@ -29,30 +29,11 @@
 
         }
 
-        public async Task<int> AddAsync(string cvId, DateTime fromDate, DateTime? toDate, string jobTitle, string organization, BusinessSector businessSector, string location, string additionalDetails)
+        public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string jobTitle, string organization, BusinessSector businessSector, string location, string additionalDetails)
         {
             var workExperience = new WorkExperience
             {
                 CurriculumVitaeId = cvId,
-                FromDate = fromDate,
-                ToDate = toDate,
-                JobTitle = jobTitle,
-                Organization = organization,
-                BusinessSector = businessSector,
-                Location = location,
-                AditionalDetails = additionalDetails
-            };
-
-            await this.DbContext.AddAsync(workExperience);
-            await this.DbContext.SaveChangesAsync();
-
-            return workExperience.Id;
-        }
-
-        public async Task<int> CreateAsync(DateTime fromDate, DateTime? toDate, string jobTitle, string organization, BusinessSector businessSector, string location, string additionalDetails)
-        {
-            var workExperience = new WorkExperience
-            {
                 FromDate = fromDate,
                 ToDate = toDate,
                 JobTitle = jobTitle,

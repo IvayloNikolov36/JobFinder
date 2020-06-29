@@ -4,7 +4,7 @@
 
     public class SkillsInputModel
     {
-        public string CurriculumVitaeId { get; set; }
+        public string CvId { get; set; }
 
         [StringLength(10000, MinimumLength = 10)]
         public string ComputerSkills { get; set; }

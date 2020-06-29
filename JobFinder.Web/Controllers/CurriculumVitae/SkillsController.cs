@@ -14,23 +14,18 @@
             this.skillsService = skillsService;
         }
 
-        [HttpGet("")]
-        public async Task<ActionResult<SkillsViewModel>> Get([FromQuery] int skillsId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SkillsViewModel>> Get(int id)
         {
-            var skills = await this.skillsService.GetAsync<SkillsViewModel>(skillsId);
+            var skills = await this.skillsService.GetAsync<SkillsViewModel>(id);
 
             return skills;
         }
 
-        [HttpPost("add")]
+        [HttpPost("create")]
         public async Task<ActionResult<int>> Add([FromBody] SkillsInputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
-            int skillsId = await this.skillsService.AddAsync(model.CurriculumVitaeId, model.ComputerSkills, 
+            int skillsId = await this.skillsService.AddAsync(model.CvId, model.ComputerSkills, 
                 model.Skills, model.HasManagedPeople, model.HasDrivingLicense);
 
             return this.Ok(skillsId);
@@ -39,11 +34,6 @@
         [HttpPut("update")]
         public async Task<IActionResult> Edit([FromBody] SkillsEditModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             bool isUpdated = await this.skillsService.UpdateAsync(model.SkillId, model.ComputerSkills, model.Skills, 
                 model.HasManagedPeople, model.HasDrivingLicense);
 

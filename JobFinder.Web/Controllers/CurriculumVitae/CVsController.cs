@@ -22,16 +22,11 @@
         [HttpPost("create")]
         public async Task<ActionResult<string>> Create([FromBody] CVCreateInputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Message = this.ModelState.Values });
-            }
-
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             string cvId = await this.cvsService.CreateAsync(userId, model.Name, model.PictureUrl);
 
-            return this.Ok(cvId);
+            return this.Ok(new { cvId });
         }
     }
 }

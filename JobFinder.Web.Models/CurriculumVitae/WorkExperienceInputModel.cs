@@ -6,6 +6,9 @@
 
     public class WorkExperienceInputModel
     {
+        [Required]
+        public string CvId { get; set; }
+
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
@@ -25,6 +28,6 @@
         public string Location { get; set; }
 
         [StringLength(3000, MinimumLength = 20)]
-        public string AditionalDetails { get; set; }
+        public string AdditionalDetails { get; set; }
     }
 }

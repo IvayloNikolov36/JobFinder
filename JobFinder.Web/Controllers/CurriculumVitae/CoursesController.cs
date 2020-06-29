@@ -23,16 +23,11 @@
             return this.Ok(courses);
         } 
 
-        [HttpPost("add")]
+        [HttpPost("create")]
         public async Task<ActionResult<int>> Add([FromBody] CourseSertificateInputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             var entityId = await this.coursesService
-                .AddAsync(model.CurriculumVitaeId, model.CourseName, model.CertificateUrl);
+                .AddAsync(model.CvId, model.CourseName, model.CertificateUrl);
 
             return this.Ok(entityId);
         }
@@ -40,11 +35,6 @@
         [HttpPut("update")]
         public async Task<IActionResult> Edit([FromBody] CourseSertificateEditModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             bool isUpdated = await this.coursesService.UpdateAsync(model.Id, model.CourseName, model.CertificateUrl);
             if (!isUpdated)
             {

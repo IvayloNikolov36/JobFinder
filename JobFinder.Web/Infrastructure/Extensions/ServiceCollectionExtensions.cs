@@ -1,10 +1,10 @@
-﻿using JobFinder.Services;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Reflection;
-
-namespace JobFinder.Web.Infrastructure.Extensions
+﻿namespace JobFinder.Web.Infrastructure.Extensions
 {
+    using JobFinder.Services;
+    using Microsoft.Extensions.DependencyInjection;
+    using System.Linq;
+    using System.Reflection;
+
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDomainServices(
@@ -21,7 +21,6 @@ namespace JobFinder.Web.Infrastructure.Extensions
                 })
                 .ToList()
                 .ForEach(s => services.AddScoped(s.Interface, s.Implementation));
-
 
             return services;
         }

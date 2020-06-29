@@ -2,8 +2,10 @@ namespace JobFinder.Web
 {
     using JobFinder.Data;
     using JobFinder.Data.Models;
+    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Infrastructure.Extensions;
+    using JobFinder.Web.Infrastructure.JsonConverters;
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
@@ -83,7 +85,12 @@ namespace JobFinder.Web
 
             services.AddDomainServices();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options => 
+            {
+                options.SerializerSettings.Converters.Add(new EnumConverter<BusinessSector>());
+                options.SerializerSettings.Converters.Add(new EnumConverter<EducationLevel>());
+                options.SerializerSettings.Converters.Add(new EnumConverter<LanguageType>());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

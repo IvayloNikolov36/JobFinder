@@ -7,7 +7,7 @@
     public class EducationInputModel
     {
         [Required]
-        public string CurriculumVitaeId { get; set; }
+        public string CvId { get; set; }
 
         public DateTime FromDate { get; set; }
 

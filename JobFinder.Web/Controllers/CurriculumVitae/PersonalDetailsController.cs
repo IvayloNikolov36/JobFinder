@@ -26,12 +26,6 @@
         [HttpPost("create")]
         public async Task<ActionResult<int>> Create([FromBody] PersonalDetailsnputModel model)
         {
-            //TODO: make filter
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             int objectId = await this.personalDetailsService.CreateAsync(
                 model.CvId,
                 model.FirstName,
@@ -51,11 +45,6 @@
         [HttpPut("edit")]
         public async Task<IActionResult> Edit(PersonalDetailsEditModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             bool isUpdated = await this.personalDetailsService.UpdateAsync(
                 model.PersonalDetailsId,
                 model.FirstName,

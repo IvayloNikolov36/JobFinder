@@ -8,9 +8,9 @@
 
     public class WorkExperienceController : BaseCVsController
     {
-        private readonly IWorkExperienceSerive workExperienceService;
+        private readonly IWorkExperienceService workExperienceService;
 
-        public WorkExperienceController(IWorkExperienceSerive workExperienceService)
+        public WorkExperienceController(IWorkExperienceService workExperienceService)
         {
             this.workExperienceService = workExperienceService;
         }
@@ -27,13 +27,9 @@
         [HttpPost("create")]
         public async Task<ActionResult<int>> Create([FromBody] WorkExperienceInputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
 
-            int workExperienceId = await this.workExperienceService.CreateAsync(model.FromDate, model.ToDate, model.JobTitle, 
-                model.Organization, model.BusinessSector, model.Location, model.AditionalDetails);
+            int workExperienceId = await this.workExperienceService.CreateAsync(model.CvId, model.FromDate, model.ToDate, model.JobTitle, 
+                model.Organization, model.BusinessSector, model.Location, model.AdditionalDetails);
 
             return this.Ok(workExperienceId);
         }
@@ -41,11 +37,6 @@
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] WorkExperienceEditModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(new { Errors = this.ModelState.Values });
-            }
-
             bool isUpdated = await this.workExperienceService.UpdateAsync(model.WorkExperienceId, model.FromDate, model.ToDate, model.JobTitle,
                 model.Organization, model.BusinessSector, model.Location, model.AditionalDetails);
 

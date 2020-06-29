@@ -6,7 +6,7 @@
     public class LanguageInfoInputModel
     {
         [Required]
-        public string CurriculumVitaeId { get; set; }
+        public string CvId { get; set; }
 
         public LanguageType LanguageType { get; set; }
 
