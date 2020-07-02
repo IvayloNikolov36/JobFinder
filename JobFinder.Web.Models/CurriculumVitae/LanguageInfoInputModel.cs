@@ -5,9 +5,6 @@
 
     public class LanguageInfoInputModel
     {
-        [Required]
-        public string CvId { get; set; }
-
         public LanguageType LanguageType { get; set; }
 
         public LanguageLevel Comprehension { get; set; }

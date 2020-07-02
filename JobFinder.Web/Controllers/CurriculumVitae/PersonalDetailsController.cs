@@ -60,7 +60,7 @@
 
             if (!isUpdated)
             {
-                return this.BadRequest(new { Message = "Invalid personal details id!" });
+                return this.BadRequest(new { Title = "Invalid personal details id!" });
             }
 
             return this.Ok(new { Message = "Personal details updated successfully!" });

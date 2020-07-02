@@ -6,9 +6,6 @@
 
     public class WorkExperienceInputModel
     {
-        [Required]
-        public string CvId { get; set; }
-
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }

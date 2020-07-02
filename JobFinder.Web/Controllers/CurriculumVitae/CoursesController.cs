@@ -21,15 +21,19 @@
             var courses = await this.coursesService.AllAsync<CoursesSertificatesListingModel>(cvId);
 
             return this.Ok(courses);
-        } 
+        }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<int>> Add([FromBody] CourseSertificateInputModel model)
+        [HttpPost("create/{id}")]
+        public async Task<ActionResult<IEnumerable<int>>> Add(string id, [FromBody] CourseSertificateInputModel[] models)
         {
-            var entityId = await this.coursesService
-                .AddAsync(model.CvId, model.CourseName, model.CertificateUrl);
+            IList<int> entitiesIds = new List<int>();
+            foreach (var model in models)
+            {
+                var entityId = await this.coursesService.AddAsync(id, model.CourseName, model.CertificateUrl);
+                entitiesIds.Add(entityId);
+            }
 
-            return this.Ok(entityId);
+            return this.Ok(entitiesIds);
         }
 
         [HttpPut("update")]
@@ -38,7 +42,7 @@
             bool isUpdated = await this.coursesService.UpdateAsync(model.Id, model.CourseName, model.CertificateUrl);
             if (!isUpdated)
             {
-                return this.BadRequest(new { Message = "Not updated!" });
+                return this.BadRequest(new { Title = "Not updated!" });
             }
 
             return this.Ok(new { Message = "Entity successfully updated!" });
@@ -51,7 +55,7 @@
 
             if (!isDeleted)
             {
-                return this.BadRequest(new { Message = "Entity not deleted!" });
+                return this.BadRequest(new { Title = "Entity not deleted!" });
             }
 
             return this.Ok(new { Message = "Entity successfully deleted!" });

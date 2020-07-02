@@ -3,6 +3,7 @@
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class EducationController : BaseCVsController
@@ -22,14 +23,20 @@
             return this.Ok(educations);
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<int>> Create([FromBody] EducationInputModel model)
+        [HttpPost("create/{id}")]
+        public async Task<ActionResult<IEnumerable<int>>> Create(string id, [FromBody] EducationInputModel[] models)
         {
-            int educationId = await this.educationService.CreateAsync(
-                model.CvId, model.FromDate, model.ToDate, 
-                model.Location,model.EducationLevel, model.Major, model.MainSubjects);
+            IList<int> entitiesIds = new List<int>();
+            foreach (var model in models)
+            {
+                int educationId = await this.educationService
+                    .CreateAsync(id, model.FromDate, model.ToDate,
+                model.Location, model.EducationLevel, model.Major, model.MainSubjects);
+                entitiesIds.Add(educationId);
+            }
+            
 
-            return this.Ok(educationId);
+            return this.Ok(entitiesIds);
         }
 
         [HttpPut("update")]
@@ -41,7 +48,7 @@
 
             if (!isUpdated)
             {
-                return this.BadRequest(new { Message = "Education details are not updated!" });
+                return this.BadRequest(new { Title = "Education details are not updated!" });
             }
 
             return this.Ok(new { Message = "Education successfully updated!" });
@@ -54,7 +61,7 @@
 
             if (!isDeleted)
             {
-                return this.BadRequest(new { Message = "Education is not deleted!" });
+                return this.BadRequest(new { Title = "Education is not deleted!" });
             }
 
             return this.Ok(new { Message = "Education successfully deleted!" });

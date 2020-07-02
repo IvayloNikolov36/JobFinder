@@ -6,9 +6,6 @@
 
     public class EducationInputModel
     {
-        [Required]
-        public string CvId { get; set; }
-
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }

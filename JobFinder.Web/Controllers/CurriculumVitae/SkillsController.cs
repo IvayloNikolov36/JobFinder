@@ -39,7 +39,7 @@
 
             if (!isUpdated)
             {
-                return this.BadRequest(new { Message = "Skills are not updated!" });
+                return this.BadRequest(new { Title = "Skills are not updated!" });
             }
 
             return this.Ok(new { Message = "Skills successfully updated!" });
@@ -52,7 +52,7 @@
 
             if (!isDeleted)
             {
-                return this.BadRequest(new { Message = "Skills are not deleted!" });
+                return this.BadRequest(new { Title = "Skills are not deleted!" });
             }
 
             return this.Ok(new { Message = "Skills successfully deleted!" });

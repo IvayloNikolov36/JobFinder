@@ -4,6 +4,7 @@
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -27,6 +28,16 @@
             string cvId = await this.cvsService.CreateAsync(userId, model.Name, model.PictureUrl);
 
             return this.Ok(new { cvId });
+        }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<CvListingModel>>> All()
+        {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var cvs = await this.cvsService.AllAsync<CvListingModel>(userId);
+
+            return this.Ok(cvs);
         }
     }
 }

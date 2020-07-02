@@ -23,13 +23,19 @@
             return this.Ok(languagesInfo);
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<int>> Add([FromBody] LanguageInfoInputModel model)
+        [HttpPost("create/{id}")]
+        public async Task<ActionResult<IEnumerable<int>>> Add(string id, [FromBody] LanguageInfoInputModel[] models)
         {
-            int languageInfoId = await this.languageService.AddAsync(model.CvId,
+            IList<int> entitiesIds = new List<int>();
+            foreach (LanguageInfoInputModel model in models)
+            {
+                int languageInfoId = await this.languageService.AddAsync(id,
                 model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
 
-            return this.Ok(languageInfoId);
+                entitiesIds.Add(languageInfoId);
+            }
+            
+            return this.Ok(entitiesIds);
         }
 
         [HttpPut("update")]
@@ -40,7 +46,7 @@
 
             if (!isUpdated)
             {
-                return this.BadRequest(new { Message = "Language info not updated!" });
+                return this.BadRequest(new { Title = "Language info not updated!" });
             }
 
             return this.Ok(new { Message = "Language info successfully updated!" });
@@ -53,7 +59,7 @@
 
             if (!isDeleted)
             {
-                return this.BadRequest(new { Message = "Language info is not deleted!" });
+                return this.BadRequest(new { Title = "Language info is not deleted!" });
             }
 
             return this.Ok(new { Message = "Language info successfully deleted!" });

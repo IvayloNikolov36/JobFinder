@@ -4,6 +4,10 @@
     using JobFinder.Services.CurriculumVitae;
     using System.Threading.Tasks;
     using JobFinder.Data.Models.CV;
+    using System.Collections.Generic;
+    using Microsoft.EntityFrameworkCore;
+    using System.Linq;
+    using JobFinder.Services.Mappings;
 
     public class CVsService : DbService, ICVsService
     {
@@ -11,6 +15,14 @@
             : base(dbContext)
         {
 
+        }
+
+        public async Task<IEnumerable<T>> AllAsync<T>(string userId)
+        {
+            return await this.DbContext.CVs.AsNoTracking()
+                .Where(c => c.UserId == userId)
+                .To<T>()
+                .ToListAsync();
         }
 
         public async Task<string> CreateAsync(string userId, string name, string pictureUrl)

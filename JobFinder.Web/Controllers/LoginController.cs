@@ -36,7 +36,7 @@
 
             if (!result.Succeeded)
             {
-                return BadRequest(new LoginResult { Message = "Username and password are invalid." });
+                return BadRequest(new { Title = "Username and/or password are invalid." });
             }
 
             var user = await this.userManager.FindByNameAsync(model.Username);

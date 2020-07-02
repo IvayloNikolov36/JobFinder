@@ -24,14 +24,20 @@
             return this.Ok(workExperiences);
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<int>> Create([FromBody] WorkExperienceInputModel model)
+        [HttpPost("create/{id}")]
+        public async Task<ActionResult<List<int>>> Create(string id, [FromBody] WorkExperienceInputModel[] experiences)
         {
+            IList<int> entitiesIds = new List<int>();
+            foreach (var model in experiences)
+            {
+                int workExperienceId = await this.workExperienceService
+                    .CreateAsync(id, model.FromDate, model.ToDate, model.JobTitle,model.Organization,
+                    model.BusinessSector, model.Location, model.AdditionalDetails);
 
-            int workExperienceId = await this.workExperienceService.CreateAsync(model.CvId, model.FromDate, model.ToDate, model.JobTitle, 
-                model.Organization, model.BusinessSector, model.Location, model.AdditionalDetails);
+                entitiesIds.Add(workExperienceId);
+            }
 
-            return this.Ok(workExperienceId);
+            return this.Ok(entitiesIds);
         }
 
         [HttpPut("update")]
@@ -42,7 +48,7 @@
 
             if (!isUpdated)
             {
-                return this.BadRequest(new { Message = "Work Experience not updated!" });
+                return this.BadRequest(new { Title = "Work Experience not updated!" });
             }
 
             return this.Ok(new { Message = "Work Experience updated successfully!" } );
@@ -54,7 +60,7 @@
             bool isDeleted = await this.workExperienceService.DeleteAsync(id);
             if (!isDeleted)
             {
-                return this.BadRequest(new { Message = "Work Experience not deleted!" });
+                return this.BadRequest(new { Title = "Work Experience not deleted!" });
             }
 
             return this.Ok(new { Message = "Work Experience successfully deleted!" });
