@@ -1,8 +1,11 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
+    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -65,6 +68,18 @@
             }
 
             return this.Ok(new { Message = "Education successfully deleted!" });
+        }
+
+        [HttpGet("levels")]
+        public async Task<ActionResult> GetEducationLevels()
+        {
+            var educationLevels = new List<EnumTypeViewModel>();
+            foreach (var level in Enum.GetValues(typeof(EducationLevel)))
+            {
+                educationLevels.Add(new EnumTypeViewModel((int)level, level.ToString()));
+            }
+
+            return this.Ok(educationLevels);
         }
     }
 }

@@ -69,22 +69,22 @@
             return true;
         }
 
-        public async Task<IDictionary<int, string>> GetJobEngagements()
+        public async Task<IEnumerable<T>> GetJobEngagements<T>()
         {
-            var dbEngagements = await this.DbContext.JobEngagements.ToListAsync();
+            var dbEngagements = await this.DbContext.JobEngagements.AsNoTracking()
+                .To<T>()
+                .ToListAsync();
 
-            IDictionary<int, string> engagements = dbEngagements.ToDictionary(x => x.Id, x => x.Type);
-
-            return engagements;
+            return dbEngagements;
         }
 
-        public async Task<IDictionary<int, string>> GetJobCategories()
+        public async Task<IEnumerable<T>> GetJobCategories<T>()
         {
-            var dbCategories = await this.DbContext.JobCategories.ToListAsync();
+            var dbCategories = await this.DbContext.JobCategories.AsNoTracking()
+                .To<T>()
+                .ToListAsync();
 
-            IDictionary<int, string> categories = dbCategories.ToDictionary(x => x.Id, x => x.Type);
-
-            return categories;
+            return dbCategories;
         }
 
         public async Task<(int, IEnumerable<T>)> AllAsync<T>(

@@ -1,8 +1,11 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
+    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -64,6 +67,18 @@
             }
 
             return this.Ok(new { Message = "Work Experience successfully deleted!" });
+        }
+
+        [HttpGet("businessSectors")]
+        public async Task<ActionResult> GetBusinessSectors()
+        {
+            var sectors = new List<EnumTypeViewModel>();
+            foreach (var sector in Enum.GetValues(typeof(BusinessSector)))
+            {
+                sectors.Add(new EnumTypeViewModel((int)sector, sector.ToString()));
+            }
+
+            return this.Ok(sectors);
         }
     }
 }

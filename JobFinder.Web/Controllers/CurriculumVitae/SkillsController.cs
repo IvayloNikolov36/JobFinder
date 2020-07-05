@@ -3,6 +3,7 @@
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class SkillsController : BaseCVsController
@@ -56,6 +57,14 @@
             }
 
             return this.Ok(new { Message = "Skills successfully deleted!" });
+        }
+
+        [HttpGet("drivingCategories")]
+        public async Task<ActionResult<IEnumerable<object>>> GetDrivingCategories()
+        {
+            var categories =  await this.skillsService.GetDrivingCategories<SkillsDrivingCategoryViewModel>();
+
+            return this.Ok(categories);
         }
     }
 }

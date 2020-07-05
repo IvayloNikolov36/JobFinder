@@ -18,8 +18,8 @@
 
         Task<bool> EditAsync(int jobAdId, string userId, string position, string description);
 
-        Task<IDictionary<int, string>> GetJobEngagements();
+        Task<IEnumerable<T>> GetJobEngagements<T>();
 
-        Task<IDictionary<int, string>> GetJobCategories();
+        Task<IEnumerable<T>> GetJobCategories<T>();
     }
 }

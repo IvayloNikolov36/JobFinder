@@ -5,6 +5,7 @@
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
     using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -77,5 +78,11 @@
             return true;
         }
 
+        public async Task<IEnumerable<T>> GetDrivingCategories<T>()
+        {
+            return await this.DbContext.DrivingCategoryTypes.AsNoTracking()
+                .To<T>()
+                .ToListAsync();
+        }
     }
 }

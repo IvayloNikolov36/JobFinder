@@ -88,13 +88,7 @@
         [Authorize(Roles = CompanyRole)]
         public async Task<ActionResult<IEnumerable<object>>> GetEngagements()
         {
-            var dbEngagements = await this.adsService.GetJobEngagements();
-
-            var engagements = dbEngagements.Select(e => new
-            {
-                Id = e.Key,
-                Name = e.Value
-            }).ToList();
+            var engagements = await this.adsService.GetJobEngagements<JobEngagementViewModel>();
 
             return this.Ok(engagements);
         }
@@ -103,13 +97,7 @@
         [Authorize(Roles = CompanyRole)]
         public async Task<ActionResult<IEnumerable<object>>> GetCategories()
         {
-            var dbCategories = await this.adsService.GetJobCategories();
-
-            var categories = dbCategories.Select(c => new
-            {
-                Id = c.Key,
-                Name = c.Value
-            }).ToList();
+            var categories = await this.adsService.GetJobCategories<JobCategoryViewModel>();
 
             return this.Ok(categories);
         }

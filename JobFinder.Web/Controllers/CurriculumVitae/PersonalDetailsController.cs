@@ -1,8 +1,12 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
+    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CurriculumVitae;
+    using JobFinder.Web.Models.Common;
     using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class PersonalDetailsController : BaseCVsController
@@ -64,6 +68,18 @@
             }
 
             return this.Ok(new { Message = "Personal details updated successfully!" });
+        }
+
+        [HttpGet("countryTypes")]
+        public async Task<ActionResult> GetCountries()
+        {
+            var countries = new List<EnumTypeViewModel>();
+            foreach (var country in Enum.GetValues(typeof(Country)))
+            {
+                countries.Add(new EnumTypeViewModel((int)country, country.ToString()));
+            }
+
+            return this.Ok(countries);
         }
 
     }

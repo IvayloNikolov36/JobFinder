@@ -1,8 +1,11 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
+    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -63,6 +66,30 @@
             }
 
             return this.Ok(new { Message = "Language info successfully deleted!" });
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult> GetLanguageTypes()
+        {
+            var types = new List<EnumTypeViewModel>();
+            foreach (var languageType in Enum.GetValues(typeof(LanguageType)))
+            {
+                types.Add(new EnumTypeViewModel((int)languageType, languageType.ToString()));
+            }
+
+            return this.Ok(types);
+        }
+
+        [HttpGet("levels")]
+        public async Task<ActionResult> GetLanguageLevel()
+        {
+            var educationLevels = new List<EnumTypeViewModel>();
+            foreach (var level in Enum.GetValues(typeof(LanguageLevel)))
+            {
+                educationLevels.Add(new EnumTypeViewModel((int)level, level.ToString()));
+            }
+
+            return this.Ok(educationLevels);
         }
     }
 }
