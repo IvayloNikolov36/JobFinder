@@ -11,6 +11,8 @@
 
         public DateTime? ToDate { get; set; }
 
+        public string Organization { get; set; }
+
         public string Location { get; set; }
 
         public string EducationLevel { get; set; }

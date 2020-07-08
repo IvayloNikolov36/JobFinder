@@ -30,14 +30,15 @@
             return educations;
         }
 
-        public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string location, 
-            EducationLevel educationLevel, string major, string mainSubjects)
+        public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string organization,
+            string location, EducationLevel educationLevel, string major, string mainSubjects)
         {
             var education = new Education
             {
                 CurriculumVitaeId = cvId,
                 FromDate = fromDate,
                 ToDate = toDate,
+                Organization = organization,
                 Location = location,
                 EducationLevel = educationLevel,
                 Major = major,
@@ -50,8 +51,8 @@
             return education.Id;
         }
         
-        public async Task<bool> UpdateAsync(int educationId, DateTime fromDate, DateTime? toDate, string location, 
-            EducationLevel educationLevel, string major, string mainSubjects)
+        public async Task<bool> UpdateAsync(int educationId, DateTime fromDate, DateTime? toDate, string organization,
+            string location, EducationLevel educationLevel, string major, string mainSubjects)
         {
             var educationFromDb = await this.DbContext.FindAsync<Education>(educationId);
 
@@ -62,6 +63,7 @@
 
             educationFromDb.FromDate = fromDate;
             educationFromDb.ToDate = toDate;
+            educationFromDb.Organization = organization;
             educationFromDb.Location = location;
             educationFromDb.EducationLevel = educationLevel;
             educationFromDb.Major = major;

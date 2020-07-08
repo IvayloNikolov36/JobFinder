@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.6.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
   </ItemGroup>

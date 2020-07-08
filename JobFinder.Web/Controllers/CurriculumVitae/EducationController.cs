@@ -32,12 +32,12 @@
             IList<int> entitiesIds = new List<int>();
             foreach (var model in models)
             {
-                int educationId = await this.educationService
-                    .CreateAsync(id, model.FromDate, model.ToDate,
-                model.Location, model.EducationLevel, model.Major, model.MainSubjects);
-                entitiesIds.Add(educationId);
+                int educationId = await this.educationService.CreateAsync(
+                    id, model.FromDate, model.ToDate, model.Organization,
+                    model.Location, model.EducationLevel, model.Major, model.MainSubjects);
+
+                    entitiesIds.Add(educationId);
             }
-            
 
             return this.Ok(entitiesIds);
         }
@@ -46,7 +46,7 @@
         public async Task<IActionResult> Edit([FromBody] EducationEditModel model)
         {
             bool isUpdated = await this.educationService.UpdateAsync(
-                model.EducationId, model.FromDate, model.ToDate,
+                model.EducationId, model.FromDate, model.ToDate, model.Organization,
                 model.Location, model.EducationLevel, model.Major, model.MainSubjects);
 
             if (!isUpdated)
@@ -71,7 +71,7 @@
         }
 
         [HttpGet("levels")]
-        public async Task<ActionResult> GetEducationLevels()
+        public IActionResult GetEducationLevels()
         {
             var educationLevels = new List<EnumTypeViewModel>();
             foreach (var level in Enum.GetValues(typeof(EducationLevel)))

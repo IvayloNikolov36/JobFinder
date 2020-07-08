@@ -7,7 +7,7 @@
 
     public class PersonalDetailsViewModel : IMapFrom<PersonalDetails>, IHaveCustomMappings
     {
-        public string CurriculumVitaeId { get; set; }
+        //public string CurriculumVitaeId { get; set; }
 
         public string FirstName { get; set; }
 

@@ -9,11 +9,11 @@
     {
         Task<IEnumerable<T>> AllAsync<T>(string cvId);
 
-        Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string location, 
-            EducationLevel educationLevel, string major, string mainSubjects);
+        Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string organization,
+            string location, EducationLevel educationLevel, string major, string mainSubjects);
 
-        Task<bool> UpdateAsync(int educationId, DateTime fromDate, DateTime? toDate, string location,
-            EducationLevel educationLevel, string major, string mainSubjects);
+        Task<bool> UpdateAsync(int educationId, DateTime fromDate, DateTime? toDate, string organization,
+            string location, EducationLevel educationLevel, string major, string mainSubjects);
 
         Task<bool> DeleteAsync(int educationId);
     }

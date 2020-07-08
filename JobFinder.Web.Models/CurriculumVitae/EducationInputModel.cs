@@ -12,6 +12,10 @@
 
         [Required]
         [StringLength(60, MinimumLength = 2)]
+        public string Organization { get; set; }
+
+        [Required]
+        [StringLength(60, MinimumLength = 2)]
         public string Location { get; set; }
 
         public EducationLevel EducationLevel { get; set; }

@@ -30,6 +30,10 @@
 
         public byte[] Data { get; set; }
 
+        public PersonalDetails PersonalDetails { get; set; }
+
+        public Skill Skills { get; set; }
+
         public ICollection<WorkExperience> WorkExperiences { get; set; }
 
         public ICollection<Education> Educations { get; set; }

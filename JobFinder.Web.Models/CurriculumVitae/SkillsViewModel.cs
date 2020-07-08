@@ -13,8 +13,6 @@
 
         public bool HasManagedPeople { get; set; }
 
-        public bool HasDrivingLicense { get; set; }
-
         //public ICollection<DrivingCategory> DrivingLicenseCategories { get; set; }
     }
 }
