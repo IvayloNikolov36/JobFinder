@@ -4,6 +4,7 @@ namespace JobFinder.Web
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.Mappings;
+    using JobFinder.Services.Messages;
     using JobFinder.Web.Infrastructure.Extensions;
     using JobFinder.Web.Infrastructure.JsonConverters;
     using JobFinder.Web.Models.JobAds;
@@ -83,14 +84,15 @@ namespace JobFinder.Web
                     });
             });
 
-            services.AddDomainServices();
-
-            services.AddControllers().AddNewtonsoftJson(options => 
+            services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.Converters.Add(new EnumConverter<BusinessSector>());
                 options.SerializerSettings.Converters.Add(new EnumConverter<EducationLevel>());
                 options.SerializerSettings.Converters.Add(new EnumConverter<LanguageType>());
             });
+
+            services.AddDomainServices();
+            services.AddTransient<IEmailSender, SendGridEmailSender>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
