@@ -3,6 +3,7 @@
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.Common;
     using JobFinder.Data.Models.CV;
+    using JobFinder.Data.Models.Subscriptions;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -42,6 +43,10 @@
         public DbSet<WorkExperience> WorkExperiences { get; set; }
 
         public DbSet<CourseCertificate> CoursesCertificates { get; set; }
+
+        public DbSet<CompanySubscription> CompanySubscriptions { get; set; }
+
+        public DbSet<JobCategorySubscription> JobCategorySubscriptions { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -87,6 +92,12 @@
             builder.Entity<Company>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
+
+            builder.Entity<CompanySubscription>()
+                .HasKey(x => new { x.UserId, x.CompanyId });
+
+            builder.Entity<JobCategorySubscription>()
+                .HasKey(x => new { x.UserId, x.JobCategoryId });
 
             base.OnModelCreating(builder);
         }

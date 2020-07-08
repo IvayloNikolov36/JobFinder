@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Data.Models
 {
     using JobFinder.Data.Models.CV;
+    using JobFinder.Data.Models.Subscriptions;
     using Microsoft.AspNetCore.Identity;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,8 @@
             this.CVs = new HashSet<CurriculumVitae>();
             this.JobApplications = new HashSet<JobApplication>();
             this.JobAds = new HashSet<JobAd>();
+            this.JobCategorySubscriptions = new HashSet<JobCategorySubscription>();
+            this.CompanySubscriptions = new HashSet<CompanySubscription>();
         }
 
         [Required]
@@ -33,6 +36,10 @@
         public ICollection<JobApplication> JobApplications { get; set; }
 
         public ICollection<JobAd> JobAds { get; set; }
+
+        public ICollection<CompanySubscription> CompanySubscriptions { get; set; }
+
+        public ICollection<JobCategorySubscription> JobCategorySubscriptions { get; set; }
 
     }
 }

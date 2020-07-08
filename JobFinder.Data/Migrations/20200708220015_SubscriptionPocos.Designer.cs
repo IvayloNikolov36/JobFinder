@@ -4,14 +4,16 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200708220015_SubscriptionPocos")]
+    partial class SubscriptionPocos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -523,30 +525,46 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.CompanySubscription", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "CompanyId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("CompanySubscriptions");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.JobCategorySubscription", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("JobCategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "JobCategoryId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("JobCategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("JobCategorySubscriptions");
                 });
@@ -886,7 +904,7 @@ namespace JobFinder.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.User", "User")
-                        .WithMany("CompanySubscriptions")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -901,7 +919,7 @@ namespace JobFinder.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.User", "User")
-                        .WithMany("JobCategorySubscriptions")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
