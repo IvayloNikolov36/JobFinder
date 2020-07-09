@@ -9,7 +9,7 @@
 
         Task<T> DetailsAsync<T>(int jobId);
 
-        Task CreateAsync(string publisherId, string position, string description, int jobCategoryId, 
+        Task CreateAsync(string userId, string position, string description, int jobCategoryId, 
             int jobEngagementId, int? minSalary, int? maxSalary, string location);
 
         Task<(int, IEnumerable<T>)> AllAsync<T>(

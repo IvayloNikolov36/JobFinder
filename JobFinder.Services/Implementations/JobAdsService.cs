@@ -33,9 +33,14 @@
         }
 
         public async Task CreateAsync(
-            string publisherId, string position, string description, int jobCategoryId,
+            string userId, string position, string description, int jobCategoryId,
             int jobEngagementId, int? minSalary, int? maxSalary, string location)
         {
+            int publisherId = await this.DbContext.Users
+                .Where(u => u.Id == userId)
+                .Select(x => x.Company.Id)
+                .FirstAsync();
+
             var offer = new JobAd
             {
                 Position = position,
@@ -55,7 +60,7 @@
         public async Task<bool> EditAsync(int jobAdId, string userId, string position, string description)
         {
             var offerFromDb = await this.DbContext.FindAsync<JobAd>(jobAdId);
-            bool isUserPublisher = userId == offerFromDb.PublisherId;
+            bool isUserPublisher = userId == offerFromDb.Publisher.User.Id;
 
             if (offerFromDb == null || !isUserPublisher)
             {
@@ -98,7 +103,7 @@
                 searchText = searchText.ToLower();
 
                 jobs = jobs.Where(j => j.Position.ToLower().Contains(searchText)
-                        || j.Publisher.Company.Name.ToLower().Contains(searchText));
+                        || j.Publisher.Name.ToLower().Contains(searchText));
             }
 
             if (engagementId != null)

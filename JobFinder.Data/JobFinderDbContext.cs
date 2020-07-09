@@ -4,6 +4,7 @@
     using JobFinder.Data.Models.Common;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Subscriptions;
+    using JobFinder.Data.Models.ViewsModels;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -48,6 +49,9 @@
 
         public DbSet<JobCategorySubscription> JobCategorySubscriptions { get; set; }
 
+        //For VIEWS
+        public DbSet<CompaniesSubscriptionsData> CompaniesSubscriptionsData { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -79,7 +83,7 @@
             base.OnModelCreating(builder);
 
             //one to many
-            builder.Entity<User>()
+            builder.Entity<Company>()
                 .HasMany(u => u.JobAds)
                 .WithOne(j => j.Publisher)
                 .HasForeignKey(j => j.PublisherId);
@@ -98,6 +102,11 @@
 
             builder.Entity<JobCategorySubscription>()
                 .HasKey(x => new { x.UserId, x.JobCategoryId });
+
+            //FOR DB VIEWS
+            builder.Entity<CompaniesSubscriptionsData>()
+                .HasNoKey()
+                .ToView("CompanySubscriptionsData", "dbo");
 
             base.OnModelCreating(builder);
         }

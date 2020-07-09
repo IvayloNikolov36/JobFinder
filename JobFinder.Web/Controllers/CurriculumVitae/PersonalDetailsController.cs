@@ -71,7 +71,7 @@
         }
 
         [HttpGet("countryTypes")]
-        public async Task<ActionResult> GetCountries()
+        public IActionResult GetCountries()
         {
             var countries = new List<EnumTypeViewModel>();
             foreach (var country in Enum.GetValues(typeof(Country)))

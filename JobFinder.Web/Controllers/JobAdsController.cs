@@ -1,11 +1,12 @@
 ﻿namespace JobFinder.Web.Controllers
 {
+    using JobFinder.Data.Models;
     using JobFinder.Services;
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using static JobFinder.Web.Infrastructure.WebConstants;
@@ -56,10 +57,10 @@
         {
             //TODO: make filter to check for valid jobCategoryId and jobEngagementId
 
-            string publisherId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value; 
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             await this.adsService
-                .CreateAsync(publisherId, model.Position, model.Description, model.JobCategoryId,
+                .CreateAsync(userId, model.Position, model.Description, model.JobCategoryId,
                 model.JobEngagementId, model.MinSalary, model.MaxSalary, model.Location);
 
             return this.Ok(new { Message = SuccessOnCreation });

@@ -70,7 +70,7 @@
         }
 
         [HttpGet("businessSectors")]
-        public async Task<ActionResult> GetBusinessSectors()
+        public IActionResult GetBusinessSectors()
         {
             var sectors = new List<EnumTypeViewModel>();
             foreach (var sector in Enum.GetValues(typeof(BusinessSector)))

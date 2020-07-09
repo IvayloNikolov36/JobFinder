@@ -3,6 +3,7 @@
     using JobFinder.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -72,5 +73,12 @@
             return this.Ok(new { Message = "Successfully unsubscribed from job ads with chosen category!" });
         }
 
+        [HttpGet("getSubscribersNewJobAds")]
+        public async Task<ActionResult<IEnumerable<object>>> GetSubscribersNewJobAds()
+        {
+            var data = await this.subscriptionsService.GetNewJobAdsForSubscribersAsync();
+
+            return this.Ok(data);
+        }
     }
 }

@@ -3,7 +3,10 @@
     using JobFinder.Data;
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.Subscriptions;
+    using JobFinder.Data.Models.ViewsModels;
+    using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class SubscriptionsService : DbService, ISubscriptionsService
@@ -96,6 +99,16 @@
             await this.DbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<CompaniesSubscriptionsData>> GetNewJobAdsForSubscribersAsync()
+        {
+            List<CompaniesSubscriptionsData> data = await this.DbContext
+                .CompaniesSubscriptionsData
+                .AsNoTracking()
+                .ToListAsync();
+
+            return data;
         }
     }
 }

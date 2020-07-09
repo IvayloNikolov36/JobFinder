@@ -12,7 +12,6 @@
         {        
             this.CVs = new HashSet<CurriculumVitae>();
             this.JobApplications = new HashSet<JobApplication>();
-            this.JobAds = new HashSet<JobAd>();
             this.JobCategorySubscriptions = new HashSet<JobCategorySubscription>();
             this.CompanySubscriptions = new HashSet<CompanySubscription>();
         }
@@ -34,8 +33,6 @@
         public ICollection<CurriculumVitae> CVs { get; set; }
 
         public ICollection<JobApplication> JobApplications { get; set; }
-
-        public ICollection<JobAd> JobAds { get; set; }
 
         public ICollection<CompanySubscription> CompanySubscriptions { get; set; }
 

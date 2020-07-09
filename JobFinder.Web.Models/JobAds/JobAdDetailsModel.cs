@@ -27,8 +27,8 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<JobAd, JobAdDetailsModel>()
-                .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Company.Logo))
-                .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Company.Name))
+                .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Logo))
+                .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))
                 .ForMember(x => x.Salary, m => m.MapFrom(
                     m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString()))

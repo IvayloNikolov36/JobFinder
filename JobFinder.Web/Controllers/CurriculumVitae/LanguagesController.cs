@@ -69,7 +69,7 @@
         }
 
         [HttpGet("types")]
-        public async Task<ActionResult> GetLanguageTypes()
+        public IActionResult GetLanguageTypes()
         {
             var types = new List<EnumTypeViewModel>();
             foreach (var languageType in Enum.GetValues(typeof(LanguageType)))
@@ -81,7 +81,7 @@
         }
 
         [HttpGet("levels")]
-        public async Task<ActionResult> GetLanguageLevel()
+        public IActionResult GetLanguageLevel()
         {
             var educationLevels = new List<EnumTypeViewModel>();
             foreach (var level in Enum.GetValues(typeof(LanguageLevel)))

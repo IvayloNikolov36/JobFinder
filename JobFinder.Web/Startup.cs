@@ -18,6 +18,9 @@ namespace JobFinder.Web
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using System.Text;
+    using Hangfire;
+    using Hangfire.SqlServer;
+    using System;
 
     public class Startup
     {
@@ -61,18 +64,18 @@ namespace JobFinder.Web
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
-               {
-                   options.SaveToken = true;
-                   options.RequireHttpsMetadata = false;
-                   options.TokenValidationParameters = new TokenValidationParameters()
-                   {
-                       ValidateIssuer = true,
-                       ValidateAudience = true,
-                       ValidAudience = Configuration["JwtAudience"],
-                       ValidIssuer = Configuration["JwtIssuer"],
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
-                   };
-               });
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JwtAudience"],
+                    ValidIssuer = Configuration["JwtIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+                };
+            });
 
             services.AddCors(options =>
             {
@@ -91,12 +94,34 @@ namespace JobFinder.Web
                 options.SerializerSettings.Converters.Add(new EnumConverter<LanguageType>());
             });
 
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"), 
+                    new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
+
             services.AddDomainServices();
-            services.AddTransient<IEmailSender, SendGridEmailSender>();            
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        [Obsolete]
+        public void Configure(
+            IApplicationBuilder app, 
+            IWebHostEnvironment env, 
+            IRecurringJobManager reccuringJobManager,
+            IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -113,6 +138,12 @@ namespace JobFinder.Web
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseHangfireDashboard();
+            reccuringJobManager.AddOrUpdate(
+                "sendingJobAdsToSubscribers",
+                () => serviceProvider.GetService<IDataSender>().SendSubscribersNewJobAds(),
+                Cron.DayInterval(1));
 
             app.UseEndpoints(endpoints =>
             {

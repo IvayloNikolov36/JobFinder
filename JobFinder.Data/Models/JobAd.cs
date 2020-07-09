@@ -34,9 +34,9 @@
 
         public JobEngagement JobEngagement { get; set; }
 
-        public string PublisherId { get; set; }
+        public int PublisherId { get; set; }
 
-        public User Publisher { get; set; }
+        public Company Publisher { get; set; }
 
         public ICollection<JobApplication> JobApplications { get; set; }
     }
