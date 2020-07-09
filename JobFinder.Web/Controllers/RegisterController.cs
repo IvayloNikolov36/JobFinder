@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using JobFinder.Data;
     using static JobFinder.Web.Infrastructure.WebConstants;
+    using System;
 
     public class RegisterController : ApiController
     {
@@ -53,10 +54,7 @@
                 Bulstat = model.Bulstat,
                 Logo = model.CompanyLogo
             };
-
-            await this.dbContext.AddAsync(newCompany);
-            await this.dbContext.SaveChangesAsync();
-
+            
             var newUser = new User
             {
                 UserName = model.Username,
@@ -67,8 +65,16 @@
                 Company = newCompany
             };
 
-            IdentityResult result = await this.userManager.CreateAsync(newUser, model.Password);
-
+            IdentityResult result;
+            try
+            {
+                 result = await this.userManager.CreateAsync(newUser, model.Password);
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(new { Title = "There is already a company with this name or bulstat!" });
+            }
+            
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(x => x.Description);
