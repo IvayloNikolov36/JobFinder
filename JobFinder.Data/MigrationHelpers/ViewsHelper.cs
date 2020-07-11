@@ -33,5 +33,23 @@
         {
             builder.Sql("DROP VIEW [dbo].[CompanySubscriptionsData]");
         }
+
+        public static void CreateSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)
+        {
+            builder.Sql(@"CREATE VIEW [dbo].[SubscriprionsByJobCategoryAndLocation] AS
+                            SELECT jcs.[JobCategoryId], jc.[Type] AS [JobCategory], jcs.[Location], 
+                            STRING_AGG(u.[Email], '; ') AS [Subscribers]
+                            FROM JobCategorySubscriptions as jcs
+                            JOIN AspNetUsers AS u
+                            	ON jcs.[UserId] = u.[Id]
+                            JOIN JobCategories AS jc
+                            	ON jcs.JobCategoryId = jc.Id 
+                            GROUP BY jcs.[JobCategoryId], jc.[Type], jcs.[Location]");
+        }
+
+        public static void DropSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)
+        {
+            builder.Sql("DROP VIEW [dbo].[SubscriprionsByJobCategoryAndLocation]");
+        }
     }
 }

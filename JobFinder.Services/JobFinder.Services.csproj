@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -12,7 +12,7 @@
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
     <ProjectReference Include="..\JobFinder.Web.Models\JobFinder.Web.Models.csproj" />
-    <PackageReference Include="Sendgrid" Version="9.15.1" />
+    <PackageReference Include="Sendgrid" Version="9.18.0" />
   </ItemGroup>
 
 </Project>

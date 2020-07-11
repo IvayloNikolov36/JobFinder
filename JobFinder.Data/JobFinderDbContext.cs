@@ -8,6 +8,8 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -51,6 +53,18 @@
 
         //For VIEWS
         public DbSet<CompaniesSubscriptionsData> CompaniesSubscriptionsData { get; set; }
+
+        public DbSet<JobCategoriesSubscriptionsData> JobCategoriesSubscriptionsData { get; set; }
+
+        public DbSet<LatestCompanyJobAds> LatestCompanyJobAds { get; set; } // for function which returns table
+
+        //DB Functions
+        //[DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
+        public IQueryable<LatestCompanyJobAds>
+            GetLatesJobAdsForSubscribers(int jobCategoryId, string location) =>
+            Set<LatestCompanyJobAds>()
+            .FromSqlInterpolated($"SELECT * FROM GetLatesJobAdsForSubscribers({jobCategoryId}, {location})");
+        
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -101,14 +115,23 @@
                 .HasKey(x => new { x.UserId, x.CompanyId });
 
             builder.Entity<JobCategorySubscription>()
-                .HasKey(x => new { x.UserId, x.JobCategoryId });
+                .HasAlternateKey(x => new { x.UserId, x.JobCategoryId, x.Location })
+                .HasName("IX_JobCategorySubscription_TripleAK");
 
             //FOR DB VIEWS
             builder.Entity<CompaniesSubscriptionsData>()
                 .HasNoKey()
                 .ToView("CompanySubscriptionsData", "dbo");
 
+            builder.Entity<JobCategoriesSubscriptionsData>()
+                .HasNoKey()
+                .ToView("SubscriprionsByJobCategoryAndLocation", "dbo");
+
             base.OnModelCreating(builder);
+
+            builder.Entity<LatestCompanyJobAds>()
+                .HasNoKey()
+                .ToView(null);
         }
 
         private void ApplyAuditInfoRules()

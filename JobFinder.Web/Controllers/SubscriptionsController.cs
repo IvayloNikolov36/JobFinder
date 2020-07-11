@@ -31,7 +31,7 @@
             return this.Ok(new { Message = "Successfully subscribed for job ads from this company!" });
         }
 
-        [HttpGet("unsubscribeCompany/{id}")]
+        [HttpGet("unsubscribe/company/{id}")]
         public async Task<ActionResult> UnsubscribeFromCompany(int id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -45,12 +45,12 @@
             return this.Ok(new { Message = "Successfully unsubscribed for job ads from this company!" });
         }
 
-        [HttpGet("jobCategory/{id}")]
-        public async Task<ActionResult> SubscribeToJobCategory(int id)
+        [HttpGet("jobCategory/{id}/{location}")]
+        public async Task<ActionResult> SubscribeToJobCategory(int id, string location)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isSubscribed = await this.subscriptionsService.SubscribeToJobCategoryAsync(id, userId);
+            bool isSubscribed = await this.subscriptionsService.SubscribeToJobCategoryAsync(id, userId, location);
             if (!isSubscribed)
             {
                 return this.BadRequest(new { Title = "Can't subscribe to job ads from this caregory!" });
@@ -59,12 +59,12 @@
             return this.Ok(new { Message = "Successfully subscribed for job ads with chosen category!" });
         }
 
-        [HttpGet("unsubscribeJobCategory/{id}")]
-        public async Task<ActionResult> UnsubscribeFromJobCategory(int id)
+        [HttpGet("unsubscribe/jobCategory/{id}/{location}")]
+        public async Task<ActionResult> UnsubscribeFromJobCategory(int id, string location)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isUnsubscribed = await this.subscriptionsService.UnsubscribeFromJobCategoryAsync(id, userId);
+            bool isUnsubscribed = await this.subscriptionsService.UnsubscribeFromJobCategoryAsync(id, userId, location);
             if (!isUnsubscribed)
             {
                 return this.BadRequest(new { Title = "Can't unsubscribe from job ads from this caregory!" });
@@ -73,10 +73,18 @@
             return this.Ok(new { Message = "Successfully unsubscribed from job ads with chosen category!" });
         }
 
-        [HttpGet("getSubscribersNewJobAds")]
-        public async Task<ActionResult<IEnumerable<object>>> GetSubscribersNewJobAds()
+        [HttpGet("newJobAdsByCompany")]
+        public async Task<ActionResult<IEnumerable<object>>> GetSubscribersNewJobAdsByCompany()
         {
-            var data = await this.subscriptionsService.GetNewJobAdsForSubscribersAsync();
+            var data = await this.subscriptionsService.GetCompaniesNewJobAdsAsync();
+
+            return this.Ok(data);
+        }
+       
+        [HttpGet("newJobAdsByCategory")]
+        public async Task<ActionResult<IEnumerable<object>>> GetSubscribersNewJobAdsByCategory()
+        {
+            var data = await this.subscriptionsService.GetNewJobAdsByCategoryAsync();
 
             return this.Ok(data);
         }

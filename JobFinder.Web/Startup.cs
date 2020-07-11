@@ -31,7 +31,6 @@ namespace JobFinder.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             AutoMapperConfig
@@ -108,15 +107,13 @@ namespace JobFinder.Web
                     DisableGlobalLocks = true
                 }));
 
-            // Add the processing server as IHostedService
+            //HangFire
             services.AddHangfireServer();
 
             services.AddDomainServices();
             services.AddTransient<IEmailSender, SendGridEmailSender>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        [Obsolete]
         public void Configure(
             IApplicationBuilder app, 
             IWebHostEnvironment env, 
@@ -139,11 +136,18 @@ namespace JobFinder.Web
 
             app.UseAuthorization();
 
+            //HangFire
             app.UseHangfireDashboard();
             reccuringJobManager.AddOrUpdate(
-                "sendingJobAdsToSubscribers",
-                () => serviceProvider.GetService<IDataSender>().SendSubscribersNewJobAds(),
-                Cron.DayInterval(1));
+                "sendingLatestJobAdsByCompany",
+                () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsBySubscribedCompanies(),
+                "0 0 */1 * *");
+
+            reccuringJobManager.AddOrUpdate(
+                "sendingLatestJobAdsByCategoryAndLocation",
+                () => serviceProvider.GetService<IDataSender>()
+                    .SendLatestJobAdsBySubscribedCategoriesAndLocations(),
+                "0 0 */1 * *");
 
             app.UseEndpoints(endpoints =>
             {
