@@ -6,6 +6,8 @@
 
         public string CompanyName { get; set; }
 
+        public string CompanyLogo { get; set; }
+
         public string Subscribers { get; set; }
 
         public string JobIds { get; set; }

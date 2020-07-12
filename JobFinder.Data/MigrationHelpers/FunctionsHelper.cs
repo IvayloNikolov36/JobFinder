@@ -13,7 +13,7 @@
 				  AS
 				  RETURN 
 					SELECT 
-				  	c.[Name], c.[Logo],
+				  	c.[Id], c.[Name], c.[Logo],
 				  	STRING_AGG(ja.[Id], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [JobAdsIds], 
 				  	STRING_AGG(ja.[Position], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [Positions]
 				  	FROM JobAds AS ja
@@ -22,7 +22,7 @@
 				  	WHERE ja.[JobCategoryId] = @jobCategoryId
 				  	AND ja.[Location] LIKE @location
 				  	AND DATEDIFF(DAY, ja.[CreatedOn], GETDATE()) <= 1
-				  	GROUP BY c.[Name], c.[Logo]");
+				  	GROUP BY c.[Id], c.[Name], c.[Logo]");
 		}
 
 		public static void DropGetLatesJobAdsForSubscribersFunction(MigrationBuilder builder)

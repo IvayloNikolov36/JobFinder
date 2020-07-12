@@ -13,6 +13,9 @@
         private readonly ISubscriptionsService subscriptionsService;
         private readonly IEmailSender emailSender;
 
+        private const string JobAdDetailsLink = "https://localhost:4200/jobs/";
+        private const string CompanyDetailsUrl = "https://localhost:4200/company/";
+
         public DataSender(ISubscriptionsService subscriptionsService, IEmailSender emailSender)
         {
             this.subscriptionsService = subscriptionsService;
@@ -25,19 +28,42 @@
 
             foreach (var item in data)
             {
-                int companyId = item.CompanyId;
-                string[] subscribers = item.Subscribers.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).ToArray();
                 int[] jobIds = item.JobIds.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+                string[] subscribers = item.Subscribers.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).ToArray();
                 string[] jobPositions = item.JobPositions.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).ToArray();
                 string[] jobLocations = item.JobLocations.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                
+                
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(@$"<table style=""width: 100%"">");
 
-                //TODO: make table with job ads
-                string htmlContent = "html content";
+                for (int i = 0; i < jobIds.Length; i++)
+                {
+                    int jobId = jobIds[i];
+                    string position = jobPositions[i];
+                    string location = jobLocations[i];
+
+                    //string backgroundStyle = string.Empty;
+                    //if (i % 2 == 0)
+                    //{
+                    //    backgroundStyle = @"style=""background-color:#f2f2f2;""";
+                    //}
+
+                    sb.AppendLine(@"<hr style=""width: 100%"">");
+                    sb.AppendLine(@$"<tr style=""border-bottom:1px solid black"">
+                                      <td><a href=""{JobAdDetailsLink}{jobId}"" style=""text-decoration:none"">{position}</a></td>
+                                      <td>{location}</td>
+                                      <td><a href=""{CompanyDetailsUrl}{item.CompanyId}"" style=""text-decoration:none"">{item.CompanyName}</a></td>
+                                      <td style=""text-align:right;""><img src=""{item.CompanyLogo}"" alt=""CompanyLogo"" width=""90"" height=""90""></td>
+                                    </tr>");
+                }
+                sb.AppendLine("</table>");
+
                 string subject = $"New job ads from company '{item.CompanyName}'";
-
                 foreach (string userEmail in subscribers)
                 {
-                    await this.emailSender.SendEmailAsync("jobFinder@abv.bg", "JobFinder", userEmail, subject, htmlContent);
+                    await this.emailSender
+                        .SendEmailAsync("jobFinder@abv.bg", "JobFinder", userEmail, subject, sb.ToString());
                 }
             }
         }
@@ -49,26 +75,39 @@
 
             foreach (var item in data)
             {
-                //TODO: make table with job ads
-
                 string jobCategory = item.JobCategory;
                 string location = item.Location;
                 string[] subscribers = item.Subscribers;
 
                 StringBuilder sb = new StringBuilder();
                 string emailSubject = $"Latest job ads from {jobCategory} category in {location}.";
-                sb.AppendLine(emailSubject);
+                
+                sb.AppendLine(@$"<div><h4>{emailSubject}</h4><div>");
+                sb.AppendLine(@$"<table style=""width: 100%"">");
 
+                int line = 0;
                 foreach (LatestCompanyJobAds info in item.LatestCompanyJobAds)
                 {
+                    line++;
+                    int companyId = info.Id;
                     string companyName = info.Name;
                     string[] positions = info.Positions.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+                    int[] jobAdsIds = info.JobAdsIds.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(int.Parse).ToArray();
 
-                    foreach (string position in positions)
+                    for (int i = 0; i < positions.Length; i++)
                     {
-                        sb.AppendLine($"Company: {companyName}, Job: {position}");
+                        string position = positions[i];
+
+                        sb.AppendLine(@$"<tr style=""border-bottom:1px solid black"">
+                                      < td><a href=""{JobAdDetailsLink}{jobAdsIds[i]}"" style=""text-decoration:none"">{position}</a></td>
+                                      <td>{location}</td>
+                                      <td><a href=""{CompanyDetailsUrl}{companyId}"" style=""text-decoration:none"">{companyName}</a></td>
+                                      <td style=""text-align:right;""><img src=""{info.Logo}"" alt=""CompanyLogo"" width=""90"" height=""90""></td>
+                                    </tr>");
                     }
                 }
+                sb.AppendLine("</table>");
 
                 foreach (string subscriberEmail in subscribers)
                 {

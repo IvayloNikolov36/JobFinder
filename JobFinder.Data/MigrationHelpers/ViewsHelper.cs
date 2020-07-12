@@ -7,26 +7,27 @@
         public static void CreateCompaniesSubscriptionsDataView(MigrationBuilder builder)
         {
             builder.Sql(@"CREATE VIEW [dbo].[CompanySubscriptionsData] AS
-                            SELECT x.[CompanyId], x.[CompanyName], x.[Subscribers], 
+                            SELECT x.[CompanyId], x.[CompanyName], x.[CompanyLogo], x.[Subscribers], 
                             STRING_AGG(j.Id, '; ') AS [JobIds] ,
                             STRING_AGG(j.Position, '; ') AS [JobPositions], 
                             STRING_AGG(j.Location, '; ') AS [JobLocations]
                             FROM
                             	(SELECT cs.[CompanyId], 
-                            	c.[Name] As [CompanyName], 
+                            	c.[Name] AS [CompanyName],
+								c.[Logo] AS [CompanyLogo], 
                             	STRING_AGG(u.Email, '; ') AS [Subscribers]
                             	FROM CompanySubscriptions AS cs
                             	LEFT JOIN Companies AS c 
                             		ON cs.CompanyId = c.Id
                             	LEFT JOIN AspNetUsers AS u
                             		ON cs.UserId = u.Id
-                            	GROUP BY cs.CompanyId, c.Name ) AS x
+                            	GROUP BY cs.[CompanyId], c.[Name], c.[Logo]) AS x
                             LEFT JOIN Companies AS c 
                             	ON x.CompanyId = c.Id
                             LEFT JOIN JobAds AS j 
                             	ON c.Id = j.PublisherId
                             WHERE DATEDIFF(DAY, j.CreatedOn, GETDATE()) <= 1
-                            GROUP BY x.CompanyId, x.CompanyName, x.Subscribers");
+                            GROUP BY x.[CompanyId], x.[CompanyLogo], x.[CompanyName], x.[Subscribers]");
         }
 
         public static void DropCompaniesSubscriptionsDataView(MigrationBuilder builder)

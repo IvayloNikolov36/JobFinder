@@ -2,6 +2,8 @@
 {
     public class LatestCompanyJobAds
     {
+        public int Id { get; set; } //Company id
+
         public string Name { get; set; } //Company name
 
         public string Logo { get; set; } //Company logo

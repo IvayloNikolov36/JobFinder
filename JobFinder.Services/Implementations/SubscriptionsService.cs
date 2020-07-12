@@ -8,8 +8,6 @@
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     public class SubscriptionsService : DbService, ISubscriptionsService
@@ -124,20 +122,25 @@
                 .AsNoTracking()
                 .ToListAsync();
 
-            List<JobAdsByCategoryAndLocationViewModel> result = new List<JobAdsByCategoryAndLocationViewModel>();
+            var result = new List<JobAdsByCategoryAndLocationViewModel>();
 
             foreach (var item in data)
             {
-                string location = item.Location;
-                int jobCategoryId = item.JobCategoryId;
+                List<LatestCompanyJobAds> latestCompanyJobAds = await this.DbContext
+                    .GetLatesJobAdsForSubscribers(item.JobCategoryId, item.Location).ToListAsync();
+
+                if (latestCompanyJobAds.Count == 0)
+                {
+                    continue;
+                }
 
                 result.Add(new JobAdsByCategoryAndLocationViewModel
                 {
-                    JobCategoryId = jobCategoryId,
+                    JobCategoryId = item.JobCategoryId,
                     JobCategory = item.JobCategory,
-                    Location = location,
+                    Location = item.Location,
                     Subscribers = item.Subscribers.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries),
-                    LatestCompanyJobAds = await this.DbContext.GetLatesJobAdsForSubscribers(jobCategoryId, location).ToListAsync()
+                    LatestCompanyJobAds = latestCompanyJobAds
                 });
             }
 
