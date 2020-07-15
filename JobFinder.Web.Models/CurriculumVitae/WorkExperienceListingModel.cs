@@ -5,7 +5,7 @@
     using JobFinder.Services.Mappings;
     using System;
 
-    public class WorkExperiencesListingModel : IMapFrom<WorkExperience>, IHaveCustomMappings
+    public class WorkExperienceListingModel : IMapFrom<WorkExperience>, IHaveCustomMappings
     {
         public string CurriculumVitaeId { get; set; }
 
