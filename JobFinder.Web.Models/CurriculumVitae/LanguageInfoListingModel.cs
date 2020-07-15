@@ -4,7 +4,7 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
 
-    public class LanguagesListingModel : IMapFrom<LanguageInfo>, IHaveCustomMappings
+    public class LanguageInfoListingModel : IMapFrom<LanguageInfo>, IHaveCustomMappings
     {
         public string CurriculumVitaeId { get; set; }
 
