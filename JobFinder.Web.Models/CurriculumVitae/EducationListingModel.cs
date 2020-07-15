@@ -5,7 +5,7 @@
     using JobFinder.Services.Mappings;
     using System;
 
-    public class EducationsListingModel : IMapFrom<Education>, IHaveCustomMappings
+    public class EducationListingModel : IMapFrom<Education>, IHaveCustomMappings
     {
         public DateTime FromDate { get; set; }
 
