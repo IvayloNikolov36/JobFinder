@@ -9,11 +9,11 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public class WorkExperienceController : BaseCVsController
+    public class WorkExperiencesController : BaseCVsController
     {
         private readonly IWorkExperienceService workExperienceService;
 
-        public WorkExperienceController(IWorkExperienceService workExperienceService)
+        public WorkExperiencesController(IWorkExperienceService workExperienceService)
         {
             this.workExperienceService = workExperienceService;
         }
