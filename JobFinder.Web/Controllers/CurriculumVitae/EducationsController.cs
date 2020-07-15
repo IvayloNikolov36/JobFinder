@@ -9,11 +9,11 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public class EducationController : BaseCVsController
+    public class EducationsController : BaseCVsController
     {
         private readonly IEducationService educationService;
 
-        public EducationController(IEducationService educationService)
+        public EducationsController(IEducationService educationService)
         {
             this.educationService = educationService;
         }
