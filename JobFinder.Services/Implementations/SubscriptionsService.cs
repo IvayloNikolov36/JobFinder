@@ -24,21 +24,14 @@
                 return false;
             }
 
-            try
+            var sub = new CompanySubscription
             {
-                var sub = new CompanySubscription
-                {
-                    UserId = userId,
-                    CompanyId = companyId
-                };
+                UserId = userId,
+                CompanyId = companyId
+            };
 
-                await this.DbContext.AddAsync(sub);
-                await this.DbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            await this.DbContext.AddAsync(sub);
+            await this.DbContext.SaveChangesAsync();
 
             return true;
         }
@@ -51,22 +44,15 @@
                 return false;
             }
 
-            try
+            var sub = new JobCategorySubscription
             {
-                var sub = new JobCategorySubscription
-                {
-                    UserId = userId,
-                    JobCategoryId = jobCategoryId,
-                    Location = location
-                };
+                UserId = userId,
+                JobCategoryId = jobCategoryId,
+                Location = location
+            };
 
-                await this.DbContext.AddAsync(sub);
-                await this.DbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            await this.DbContext.AddAsync(sub);
+            await this.DbContext.SaveChangesAsync();
 
             return true;
         }

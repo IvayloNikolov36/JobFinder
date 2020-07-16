@@ -3,6 +3,7 @@
     using JobFinder.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -22,10 +23,20 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isSubscribed = await this.subscriptionsService.SubscribeToCompanyAsync(id, userId);
+            bool isSubscribed;
+            try
+            {
+                isSubscribed = await this.subscriptionsService.SubscribeToCompanyAsync(id, userId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return this.BadRequest(new { Title = "Can't subscribe twice to this company!" });
+            }
+
             if (!isSubscribed)
             {
-                return this.BadRequest(new { Title = "Can't subscribe to company!" });
+                return this.BadRequest(new { Title = "Can't subscribe to unexisting company!" });
             }
 
             return this.Ok(new { Message = "Successfully subscribed for job ads from this company!" });
@@ -37,9 +48,10 @@
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             bool isUnsubscribed = await this.subscriptionsService.UnsubscribeFromCompanyAsync(id, userId);
+          
             if (!isUnsubscribed)
             {
-                return this.BadRequest(new { Title = "Can't unsubscribe from company!" });
+                return this.BadRequest(new { Title = "You doesn't have un subscription to this company!" });
             }
 
             return this.Ok(new { Message = "Successfully unsubscribed for job ads from this company!" });
@@ -50,10 +62,21 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isSubscribed = await this.subscriptionsService.SubscribeToJobCategoryAsync(id, userId, location);
+            bool isSubscribed;
+
+            try
+            {
+                isSubscribed = await this.subscriptionsService.SubscribeToJobCategoryAsync(id, userId, location);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return this.BadRequest(new { Title = "You already have a subscription for this category and location!" });
+            }
+            
             if (!isSubscribed)
             {
-                return this.BadRequest(new { Title = "Can't subscribe to job ads from this caregory!" });
+                return this.BadRequest(new { Title = "Invalid job category!" });
             }
 
             return this.Ok(new { Message = "Successfully subscribed for job ads with chosen category!" });
