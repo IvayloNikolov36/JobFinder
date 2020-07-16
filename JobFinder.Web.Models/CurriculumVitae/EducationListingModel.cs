@@ -23,7 +23,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Education, EducationsListingModel>()
+            configuration.CreateMap<Education, EducationListingModel>()
                .ForMember(x => x.EducationLevel, m => m.MapFrom(m => m.EducationLevel.ToString()));
         }
     }

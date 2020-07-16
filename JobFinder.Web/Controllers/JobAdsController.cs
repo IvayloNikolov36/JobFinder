@@ -1,16 +1,15 @@
 ﻿namespace JobFinder.Web.Controllers
 {
-    using JobFinder.Data.Models;
     using JobFinder.Services;
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using static JobFinder.Web.Infrastructure.WebConstants;
 
+    [Authorize]
     public class JobAdsController : ApiController
     {
         private readonly IJobAdsService adsService;
@@ -20,8 +19,7 @@
             this.adsService = adsService;
         }
 
-        [HttpGet("get")]
-        [Authorize]
+        [HttpGet("")]
         public async Task<ActionResult<JobsListingsModel>> Get([FromQuery] JobAdsParams model)
         {
             (int totalCount, var jobAds) = await this.adsService.AllAsync<JobListingModel>(
@@ -37,8 +35,7 @@
             return this.Ok(resultModel);
         }
 
-        [HttpGet("details/{id}")]
-        [Authorize]
+        [HttpGet("{id}")]
         public async Task<ActionResult<JobAdDetailsModel>> Details(int id)
         {
             var jobDetails = await this.adsService.DetailsAsync<JobAdDetailsModel>(id);
@@ -51,12 +48,10 @@
             return this.Ok(jobDetails);
         }
 
-        [HttpPost("create")]
+        [HttpPost("")]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> Create([FromBody] JobAdBindingModel model)
         {
-            //TODO: make filter to check for valid jobCategoryId and jobEngagementId
-
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             await this.adsService
@@ -66,8 +61,7 @@
             return this.Ok(new { Message = SuccessOnCreation });
         }
 
-        [HttpPut("edit/{id}")]
-        [Authorize]
+        [HttpPut("{id}")]
         public async Task<ActionResult> Edit(int id, [FromBody] JobAdEditModel model)
         {
             //TODO: think about for editing expiration
@@ -86,7 +80,6 @@
         }
 
         [HttpGet("engagements")]
-        [Authorize(Roles = CompanyRole)]
         public async Task<ActionResult<IEnumerable<object>>> GetEngagements()
         {
             var engagements = await this.adsService.GetJobEngagements<JobEngagementViewModel>();
@@ -95,7 +88,6 @@
         }
 
         [HttpGet("categories")]
-        [Authorize(Roles = CompanyRole)]
         public async Task<ActionResult<IEnumerable<object>>> GetCategories()
         {
             var categories = await this.adsService.GetJobCategories<JobCategoryViewModel>();

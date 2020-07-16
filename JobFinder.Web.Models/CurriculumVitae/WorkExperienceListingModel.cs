@@ -25,7 +25,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<WorkExperience, WorkExperiencesListingModel>()
+            configuration.CreateMap<WorkExperience, WorkExperienceListingModel>()
               .ForMember(x => x.BusinessSector, m => m.MapFrom(m => m.BusinessSector.ToString()));
         }
     }

@@ -7,7 +7,7 @@
 		public static void CreateGetLatesJobAdsForSubscribersFunction(MigrationBuilder builder)
 		{
 			builder.Sql(
-				@"CREATE FUNCTION [dbo].[GetLatesJobAdsForSubscribers] 
+				@"CREATE OR ALTER FUNCTION [dbo].[GetLatesJobAdsForSubscribers] 
 				  (@jobCategoryId INT, @location NVARCHAR(250))
 				  RETURNS TABLE
 				  AS

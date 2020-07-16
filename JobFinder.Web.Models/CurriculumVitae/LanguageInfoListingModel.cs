@@ -18,7 +18,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<LanguageInfo, LanguagesListingModel>()
+            configuration.CreateMap<LanguageInfo, LanguageInfoListingModel>()
                .ForMember(x => x.LanguageType, m => m.MapFrom(m => m.LanguageType.ToString()))
                .ForMember(x => x.Comprehension, m => m.MapFrom(m => m.Comprehension.ToString()))
                .ForMember(x => x.Speaking, m => m.MapFrom(m => m.Speaking.ToString()))

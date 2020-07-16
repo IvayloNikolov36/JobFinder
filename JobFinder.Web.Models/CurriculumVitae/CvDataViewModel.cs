@@ -14,13 +14,13 @@
 
         public SkillsViewModel Skills { get; set; }
 
-        public ICollection<WorkExperiencesListingModel> WorkExperiences { get; set; }
+        public ICollection<WorkExperienceListingModel> WorkExperiences { get; set; }
 
-        public ICollection<EducationsListingModel> Educations { get; set; }
+        public ICollection<EducationListingModel> Educations { get; set; }
 
-        public ICollection<LanguagesListingModel> LanguagesInfo { get; set; }
+        public ICollection<LanguageInfoListingModel> LanguagesInfo { get; set; }
 
-        public ICollection<CoursesSertificatesListingModel> CourseCertificates { get; set; }
+        public ICollection<CourseSertificateListingModel> CourseCertificates { get; set; }
 
     }
 }

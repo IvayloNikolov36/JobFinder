@@ -19,10 +19,10 @@
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<WorkExperiencesListingModel>>> All([FromQuery] string cvId)
+        public async Task<ActionResult<IEnumerable<WorkExperienceListingModel>>> All([FromQuery] string cvId)
         {
             var workExperiences = await this.workExperienceService
-                .AllAsync<WorkExperiencesListingModel>(cvId);
+                .AllAsync<WorkExperienceListingModel>(cvId);
 
             return this.Ok(workExperiences);
         }

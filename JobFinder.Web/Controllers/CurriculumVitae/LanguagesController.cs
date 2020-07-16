@@ -19,9 +19,9 @@
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<LanguagesListingModel>>> All([FromQuery] string cvId)
+        public async Task<ActionResult<IEnumerable<LanguageInfoListingModel>>> All([FromQuery] string cvId)
         {
-            var languagesInfo = await this.languageService.AllAsync<LanguagesListingModel>(cvId);
+            var languagesInfo = await this.languageService.AllAsync<LanguageInfoListingModel>(cvId);
 
             return this.Ok(languagesInfo);
         }

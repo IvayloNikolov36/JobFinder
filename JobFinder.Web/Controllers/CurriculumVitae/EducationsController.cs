@@ -19,9 +19,9 @@
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<EducationsListingModel>> GetAll([FromQuery] string cvId)
+        public async Task<ActionResult<EducationListingModel>> GetAll([FromQuery] string cvId)
         {
-            var educations = await this.educationService.AllAsync<EducationsListingModel>(cvId);
+            var educations = await this.educationService.AllAsync<EducationListingModel>(cvId);
 
             return this.Ok(educations);
         }
