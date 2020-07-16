@@ -5,11 +5,10 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
+    using JobFinder.Data.SchemaDefinitions;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -87,29 +86,14 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new CompanyEntitySchemaDefinition());
+
             //one to one or zero
             builder.Entity<User>()
                 .HasOne(u => u.Company)
                 .WithOne(c => c.User)
                 .HasForeignKey<Company>(c => c.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-
-            base.OnModelCreating(builder);
-
-            //one to many
-            builder.Entity<Company>()
-                .HasMany(u => u.JobAds)
-                .WithOne(j => j.Publisher)
-                .HasForeignKey(j => j.PublisherId);
-
-            //unique constrains
-            builder.Entity<Company>()
-                .HasIndex(c => c.Bulstat)
-                .IsUnique();
-
-            builder.Entity<Company>()
-                .HasIndex(c => c.Name)
-                .IsUnique();
 
             builder.Entity<CompanySubscription>()
                 .HasKey(x => new { x.UserId, x.CompanyId });
@@ -127,11 +111,11 @@
                 .HasNoKey()
                 .ToView("SubscriprionsByJobCategoryAndLocation", "dbo");
 
-            base.OnModelCreating(builder);
-
             builder.Entity<LatestCompanyJobAds>()
                 .HasNoKey()
                 .ToView(null);
+
+            base.OnModelCreating(builder);
         }
 
         private void ApplyAuditInfoRules()
