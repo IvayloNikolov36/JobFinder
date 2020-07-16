@@ -4,8 +4,6 @@
 
     public class LanguageInfoEditModel
     {
-        public int LanguageInfoId { get; set; }
-
         public LanguageType LanguageType { get; set; }
 
         public LanguageLevel Comprehension { get; set; }

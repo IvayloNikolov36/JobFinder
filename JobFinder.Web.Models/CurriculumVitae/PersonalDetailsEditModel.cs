@@ -6,8 +6,6 @@
 
     public class PersonalDetailsEditModel
     {
-        public int PersonalDetailsId { get; set; }
-
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public string FirstName { get; set; }

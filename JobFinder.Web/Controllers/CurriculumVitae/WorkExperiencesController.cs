@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Web.Infrastructure.Filters;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@
             this.workExperienceService = workExperienceService;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<WorkExperienceListingModel>>> All([FromQuery] string cvId)
         {
             var workExperiences = await this.workExperienceService
@@ -27,14 +28,15 @@
             return this.Ok(workExperiences);
         }
 
-        [HttpPost("create/{id}")]
-        public async Task<ActionResult<List<int>>> Create(string id, [FromBody] WorkExperienceInputModel[] experiences)
+        [HttpPost("{cvId:guid}")]
+        [ServiceFilter(typeof(ValidateCvIdExistsServiceFilter))]
+        public async Task<ActionResult<List<int>>> Create(Guid cvId, [FromBody] WorkExperienceInputModel[] experiences)
         {
             IList<int> entitiesIds = new List<int>();
             foreach (var model in experiences)
             {
                 int workExperienceId = await this.workExperienceService
-                    .CreateAsync(id, model.FromDate, model.ToDate, model.JobTitle,model.Organization,
+                    .CreateAsync(cvId.ToString(), model.FromDate, model.ToDate, model.JobTitle,model.Organization,
                     model.BusinessSector, model.Location, model.AdditionalDetails);
 
                 entitiesIds.Add(workExperienceId);
@@ -43,10 +45,10 @@
             return this.Ok(entitiesIds);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] WorkExperienceEditModel model)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] WorkExperienceEditModel model)
         {
-            bool isUpdated = await this.workExperienceService.UpdateAsync(model.WorkExperienceId, model.FromDate, model.ToDate, model.JobTitle,
+            bool isUpdated = await this.workExperienceService.UpdateAsync(id, model.FromDate, model.ToDate, model.JobTitle,
                 model.Organization, model.BusinessSector, model.Location, model.AditionalDetails);
 
             if (!isUpdated)
@@ -57,8 +59,8 @@
             return this.Ok(new { Message = "Work Experience updated successfully!" } );
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromQuery] int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             bool isDeleted = await this.workExperienceService.DeleteAsync(id);
             if (!isDeleted)

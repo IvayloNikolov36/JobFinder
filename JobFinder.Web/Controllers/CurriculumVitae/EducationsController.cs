@@ -18,7 +18,7 @@
             this.educationService = educationService;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<EducationListingModel>> GetAll([FromQuery] string cvId)
         {
             var educations = await this.educationService.AllAsync<EducationListingModel>(cvId);
@@ -26,14 +26,14 @@
             return this.Ok(educations);
         }
 
-        [HttpPost("create/{id}")]
-        public async Task<ActionResult<IEnumerable<int>>> Create(string id, [FromBody] EducationInputModel[] models)
+        [HttpPost("{cvId:guid}")]
+        public async Task<ActionResult<IEnumerable<int>>> Create(Guid cvId, [FromBody] EducationInputModel[] models)
         {
             IList<int> entitiesIds = new List<int>();
             foreach (var model in models)
             {
                 int educationId = await this.educationService.CreateAsync(
-                    id, model.FromDate, model.ToDate, model.Organization,
+                    cvId.ToString(), model.FromDate, model.ToDate, model.Organization,
                     model.Location, model.EducationLevel, model.Major, model.MainSubjects);
 
                     entitiesIds.Add(educationId);
@@ -42,11 +42,11 @@
             return this.Ok(entitiesIds);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Edit([FromBody] EducationEditModel model)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] EducationEditModel model)
         {
             bool isUpdated = await this.educationService.UpdateAsync(
-                model.EducationId, model.FromDate, model.ToDate, model.Organization,
+                id, model.FromDate, model.ToDate, model.Organization,
                 model.Location, model.EducationLevel, model.Major, model.MainSubjects);
 
             if (!isUpdated)
@@ -57,8 +57,8 @@
             return this.Ok(new { Message = "Education successfully updated!" });
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromQuery] int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             bool isDeleted = await this.educationService.DeleteAsync(id);
 

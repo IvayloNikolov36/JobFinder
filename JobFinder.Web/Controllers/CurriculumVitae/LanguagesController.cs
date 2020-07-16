@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Web.Infrastructure.Filters;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@
             this.languageService = languageService;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<LanguageInfoListingModel>>> All([FromQuery] string cvId)
         {
             var languagesInfo = await this.languageService.AllAsync<LanguageInfoListingModel>(cvId);
@@ -26,13 +27,14 @@
             return this.Ok(languagesInfo);
         }
 
-        [HttpPost("create/{id}")]
-        public async Task<ActionResult<IEnumerable<int>>> Add(string id, [FromBody] LanguageInfoInputModel[] models)
+        [HttpPost("{cvId:guid}")]
+        [ServiceFilter(typeof(ValidateCvIdExistsServiceFilter))]
+        public async Task<ActionResult<IEnumerable<int>>> Add(Guid cvId, [FromBody] LanguageInfoInputModel[] models)
         {
             IList<int> entitiesIds = new List<int>();
             foreach (LanguageInfoInputModel model in models)
             {
-                int languageInfoId = await this.languageService.AddAsync(id,
+                int languageInfoId = await this.languageService.AddAsync(cvId.ToString(),
                 model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
 
                 entitiesIds.Add(languageInfoId);
@@ -41,10 +43,10 @@
             return this.Ok(entitiesIds);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Edit([FromBody] LanguageInfoEditModel model)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] LanguageInfoEditModel model)
         {
-            bool isUpdated = await this.languageService.UpdateAsync(model.LanguageInfoId,
+            bool isUpdated = await this.languageService.UpdateAsync(id,
                  model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
 
             if (!isUpdated)
@@ -55,8 +57,8 @@
             return this.Ok(new { Message = "Language info successfully updated!" });
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromQuery] int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             bool isDeleted = await this.languageService.DeleteAsync(id);
 

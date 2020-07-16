@@ -6,8 +6,6 @@
 
     public class WorkExperienceEditModel
     {
-        public int WorkExperienceId { get; set; }
-
         public DateTime FromDate { get; set; }
 
         //TODO: make validator Todate to be after FromDate

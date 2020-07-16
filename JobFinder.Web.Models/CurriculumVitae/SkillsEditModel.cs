@@ -4,8 +4,6 @@
 
     public class SkillsEditModel
     {
-        public int SkillId { get; set; }
-
         [StringLength(10000, MinimumLength = 10)]
         public string ComputerSkills { get; set; }
 

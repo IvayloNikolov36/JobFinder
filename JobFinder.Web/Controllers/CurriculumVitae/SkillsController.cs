@@ -15,7 +15,7 @@
             this.skillsService = skillsService;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<SkillsViewModel>> Get(int id)
         {
             var skills = await this.skillsService.GetAsync<SkillsViewModel>(id);
@@ -23,7 +23,7 @@
             return skills;
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<int>> Add([FromBody] SkillsInputModel model)
         {
             int skillsId = await this.skillsService.AddAsync(model.CvId, model.ComputerSkills, 
@@ -32,10 +32,10 @@
             return this.Ok(skillsId);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Edit([FromBody] SkillsEditModel model)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] SkillsEditModel model)
         {
-            bool isUpdated = await this.skillsService.UpdateAsync(model.SkillId, model.ComputerSkills, model.Skills, 
+            bool isUpdated = await this.skillsService.UpdateAsync(id, model.ComputerSkills, model.Skills, 
                 model.HasManagedPeople, model.HasDrivingLicense);
 
             if (!isUpdated)
@@ -46,8 +46,8 @@
             return this.Ok(new { Message = "Skills successfully updated!" });
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromQuery] int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             bool isDeleted = await this.skillsService.DeleteAsync(id);
 

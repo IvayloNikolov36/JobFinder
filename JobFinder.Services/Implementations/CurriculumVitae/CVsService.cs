@@ -17,6 +17,13 @@
 
         }
 
+        public async Task<bool> ExistsAsync(string id)
+        {
+            bool exists = await this.DbContext.CVs.AnyAsync(x => x.Id == id);
+
+            return exists;
+        }
+
         public async Task<IEnumerable<T>> AllAsync<T>(string userId)
         {
             return await this.DbContext.CVs.AsNoTracking()

@@ -5,6 +5,7 @@
     using JobFinder.Web.Models.CurriculumVitae;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Text;
@@ -16,15 +17,13 @@
     public class CVsController : ControllerBase
     {
         private readonly ICVsService cvsService;
-        private readonly IPdfGenerator pdfGenerator;
 
-        public CVsController(ICVsService cvsService, IPdfGenerator pdfGenerator)
+        public CVsController(ICVsService cvsService)
         {
             this.cvsService = cvsService;
-            this.pdfGenerator = pdfGenerator;
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<string>> Create([FromBody] CVCreateInputModel model)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -34,10 +33,10 @@
             return this.Ok(new { cvId });
         }
 
-        [HttpGet("getPdf/{id}")]
-        public async Task<ActionResult> GetCvPdf(string id)
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult> GetCvPdf(Guid id)
         {
-            byte[] cvData = await this.cvsService.GetCvDataAsync(id);
+            byte[] cvData = await this.cvsService.GetCvDataAsync(id.ToString());
             if (cvData == null)
             {
                 return this.BadRequest();
@@ -46,7 +45,7 @@
             return this.File(cvData, "application/pdf");
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<CvListingModel>>> All()
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -57,7 +56,7 @@
         }
 
         [HttpGet("generate/{id}")]
-        public async Task<ActionResult> GeneratePdf(string id)
+        public async Task<ActionResult> GeneratePdf(string id, [FromServices] IPdfGenerator pdfGenerator)
         {
             CvDataViewModel data = await this.cvsService.GetDataAsync<CvDataViewModel>(cvId: id);
 
@@ -198,7 +197,7 @@
             sb.Append(@"</body>
                         </html>");
 
-            byte[] cvData = this.pdfGenerator.Generate(sb.ToString());
+            byte[] cvData = pdfGenerator.Generate(sb.ToString());
 
             bool isDataSet = await this.cvsService.SetDataAsync(id, cvData);
             if (!isDataSet)

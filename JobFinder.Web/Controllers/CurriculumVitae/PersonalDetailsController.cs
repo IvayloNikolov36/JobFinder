@@ -18,7 +18,7 @@
             this.personalDetailsService = personalDetailsService;
         }
 
-        [HttpGet("")]
+        [HttpGet]
         public async Task<ActionResult<PersonalDetailsViewModel>> Get([FromQuery] string cvId)
         {
             var personalDetails = await this.personalDetailsService
@@ -27,7 +27,7 @@
             return this.Ok(personalDetails);
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<int>> Create([FromBody] PersonalDetailsnputModel model)
         {
             int objectId = await this.personalDetailsService.CreateAsync(
@@ -46,11 +46,10 @@
             return this.Ok(objectId);
         }
 
-        [HttpPut("edit")]
-        public async Task<IActionResult> Edit(PersonalDetailsEditModel model)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Edit(int id, PersonalDetailsEditModel model)
         {
-            bool isUpdated = await this.personalDetailsService.UpdateAsync(
-                model.PersonalDetailsId,
+            bool isUpdated = await this.personalDetailsService.UpdateAsync(id,
                 model.FirstName,
                 model.MiddleName,
                 model.LastName,

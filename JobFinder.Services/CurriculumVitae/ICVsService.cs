@@ -5,6 +5,8 @@
 
     public interface ICVsService
     {
+        Task<bool> ExistsAsync(string id);
+
         Task<string> CreateAsync(string userId, string name, string pictureUrl);
 
         Task<IEnumerable<T>> AllAsync<T>(string userId);

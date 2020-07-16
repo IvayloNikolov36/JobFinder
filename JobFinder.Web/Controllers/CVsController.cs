@@ -8,10 +8,8 @@
     [Authorize]
     public class CVsController : ApiController
     {
+
         [HttpPost]
-
-
-        [HttpPost("upload")]
         public ActionResult UploadCv([FromForm] CVUploadModel model)
         {
             var file = model.CurriculumVitae;

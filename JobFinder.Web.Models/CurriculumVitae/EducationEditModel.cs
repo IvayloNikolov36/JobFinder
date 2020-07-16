@@ -6,8 +6,6 @@
 
     public class EducationEditModel
     {
-        public int EducationId { get; set; }
-
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }

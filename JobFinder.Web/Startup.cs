@@ -21,6 +21,7 @@ namespace JobFinder.Web
     using Hangfire;
     using Hangfire.SqlServer;
     using System;
+    using JobFinder.Web.Infrastructure.Filters;
 
     public class Startup
     {
@@ -112,6 +113,9 @@ namespace JobFinder.Web
 
             services.AddDomainServices();
             services.AddTransient<IEmailSender, SendGridEmailSender>();
+
+            // Add service filters.
+            services.AddScoped<ValidateCvIdExistsServiceFilter>();
         }
 
         public void Configure(
