@@ -13,7 +13,7 @@
             int jobEngagementId, int? minSalary, int? maxSalary, string location);
 
         Task<(int, IEnumerable<T>)> AllAsync<T>(
-            int page, int items, string searchText = null, int? jobEngagementId = null, int? jobCategoryId = null, 
+            int page, int items, string searchText = null, int jobEngagementId = 0, int jobCategoryId = 0, 
             string location = null, string sortBy = null, bool? isAscending = null);
 
         Task<bool> EditAsync(int jobAdId, string userId, string position, string description);

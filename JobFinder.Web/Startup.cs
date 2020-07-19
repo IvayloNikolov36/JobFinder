@@ -76,7 +76,7 @@ namespace JobFinder.Web
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors(CorsPolicyName);
+            app.UseCors(CorsPolicyName); //UserCors must be before UseResponseCashing
             app.UseAuthentication();
             app.UseAuthorization();
 

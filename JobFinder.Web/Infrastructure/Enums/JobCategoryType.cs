@@ -13,6 +13,6 @@
         HumanResources = 9,
         Tourism = 10,
         Architecture = 11,
-        Production
+        Production = 12
     }
 }

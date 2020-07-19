@@ -8,9 +8,9 @@
 
         public string SearchText { get; set; }
 
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; } = 0;
 
-        public int? EngagementId { get; set; }
+        public int EngagementId { get; set; } = 0;
 
         public string Location { get; set; }
 

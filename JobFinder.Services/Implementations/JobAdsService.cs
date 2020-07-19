@@ -93,7 +93,7 @@
         }
 
         public async Task<(int, IEnumerable<T>)> AllAsync<T>(
-        int page, int items, string searchText, int? engagementId, int? categoryId, string location,
+        int page, int items, string searchText, int engagementId, int categoryId, string location,
         string sortBy, bool? isAscending)
         {
             IQueryable<JobAd> jobs = this.DbContext.JobAds.AsNoTracking();
@@ -106,12 +106,12 @@
                         || j.Publisher.Name.ToLower().Contains(searchText));
             }
 
-            if (engagementId != null)
+            if (engagementId != 0)
             {
                 jobs = this.FilterByEngagement(jobs, engagementId);
             }
 
-            if (categoryId != null)
+            if (categoryId != 0)
             {
                 jobs = this.FilteredByCategory(jobs, categoryId);
             }

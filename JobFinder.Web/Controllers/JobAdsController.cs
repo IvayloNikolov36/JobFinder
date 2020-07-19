@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers
 {
     using JobFinder.Services;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -19,20 +20,14 @@
             this.adsService = adsService;
         }
 
-        [HttpGet("")]
+        [HttpGet]
         public async Task<ActionResult<JobsListingsModel>> Get([FromQuery] JobAdsParams model)
         {
             (int totalCount, var jobAds) = await this.adsService.AllAsync<JobListingModel>(
                 model.Page, model.Items, model.SearchText, model.EngagementId, model.CategoryId, 
                 model.Location, model.SortBy, model.IsAscending);
 
-            var resultModel = new JobsListingsModel
-            {
-                TotalCount = totalCount,
-                JobAds = jobAds
-            };
-
-            return this.Ok(resultModel);
+            return this.Ok(new DataListingsModel<JobListingModel>(totalCount, jobAds));
         }
 
         [HttpGet("{id}")]
@@ -48,7 +43,7 @@
             return this.Ok(jobDetails);
         }
 
-        [HttpPost("")]
+        [HttpPost]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> Create([FromBody] JobAdBindingModel model)
         {
