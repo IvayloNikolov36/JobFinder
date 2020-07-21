@@ -4,6 +4,7 @@
 
     public abstract class DbService
     {
+        //TODO: delete this
         protected DbService(JobFinderDbContext dbContext)
         {
             DbContext = dbContext;

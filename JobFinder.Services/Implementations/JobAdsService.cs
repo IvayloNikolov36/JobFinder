@@ -3,49 +3,38 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using JobFinder.Data;
     using JobFinder.Data.Models;
+    using JobFinder.Data.Repositories;
+    using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.Mappings;
     using Microsoft.EntityFrameworkCore;
 
-    public class JobAdsService : DbService, IJobAdsService
+    public class JobAdsService : IJobAdsService
     {
-        public JobAdsService(JobFinderDbContext dbContext)
-            : base(dbContext)
-        {
+        private readonly IRepository<JobAd> jobsRepository;
 
+        public JobAdsService(IRepository<JobAd> jobsRepository)
+        {
+            this.jobsRepository = jobsRepository;
         }
 
         public async Task<T> GetAsync<T>(int id)
-        {
-            return await this.DbContext.JobAds.AsNoTracking()
+         => await this.jobsRepository
+                .AllAsNoTracking()
                 .Where(ja => ja.Id == id)
                 .To<T>()
                 .FirstOrDefaultAsync();
-        }
 
-        public async Task<T> DetailsAsync<T>(int jobId)
-        {
-            return await this.DbContext.JobAds.AsNoTracking()
-                .Where(j => j.Id == jobId)
-                .To<T>()
-                .FirstOrDefaultAsync();
-        }
 
         public async Task CreateAsync(
-            string userId, string position, string description, int jobCategoryId,
+            int companyId, string position, string description, int jobCategoryId,
             int jobEngagementId, int? minSalary, int? maxSalary, string location)
         {
-            int publisherId = await this.DbContext.Users
-                .Where(u => u.Id == userId)
-                .Select(x => x.Company.Id)
-                .FirstAsync();
-
             var offer = new JobAd
             {
                 Position = position,
                 Desription = description,
-                PublisherId = publisherId,
+                PublisherId = companyId,
                 JobCategoryId = jobCategoryId,
                 JobEngagementId = jobEngagementId,
                 MinSalary = minSalary,
@@ -53,13 +42,13 @@
                 Location = location
             };
 
-            await this.DbContext.AddAsync(offer);
-            await this.DbContext.SaveChangesAsync();
+            await this.jobsRepository.AddAsync(offer);
+            await this.jobsRepository.SaveChangesAsync();
         }
 
         public async Task<bool> EditAsync(int jobAdId, string userId, string position, string description)
         {
-            var offerFromDb = await this.DbContext.FindAsync<JobAd>(jobAdId);
+            JobAd offerFromDb = await this.jobsRepository.FindAsync(jobAdId);
             bool isUserPublisher = userId == offerFromDb.Publisher.User.Id;
 
             if (offerFromDb == null || !isUserPublisher)
@@ -70,33 +59,15 @@
             offerFromDb.Position = position;
             offerFromDb.Desription = description;
 
-            await this.DbContext.SaveChangesAsync();
+            await this.jobsRepository.SaveChangesAsync();
             return true;
-        }
-
-        public async Task<IEnumerable<T>> GetJobEngagements<T>()
-        {
-            var dbEngagements = await this.DbContext.JobEngagements.AsNoTracking()
-                .To<T>()
-                .ToListAsync();
-
-            return dbEngagements;
-        }
-
-        public async Task<IEnumerable<T>> GetJobCategories<T>()
-        {
-            var dbCategories = await this.DbContext.JobCategories.AsNoTracking()
-                .To<T>()
-                .ToListAsync();
-
-            return dbCategories;
         }
 
         public async Task<(int, IEnumerable<T>)> AllAsync<T>(
         int page, int items, string searchText, int engagementId, int categoryId, string location,
         string sortBy, bool? isAscending)
         {
-            IQueryable<JobAd> jobs = this.DbContext.JobAds.AsNoTracking();
+            IQueryable<JobAd> jobs = this.jobsRepository.AllAsNoTracking();
 
             if (!string.IsNullOrEmpty(searchText))
             {

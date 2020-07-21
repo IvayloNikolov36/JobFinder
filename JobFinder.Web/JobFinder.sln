@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobFinder.Web.Models", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobFinder.Data.Models", "..\JobFinder.Data.Models\JobFinder.Data.Models.csproj", "{F6166838-3BD0-4C72-B943-F1C72354139F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobFinder.Data.Repositories", "..\JobFinder.Data.Repositories\JobFinder.Data.Repositories.csproj", "{B8958A62-AE79-4E44-A9D4-C3D3F02D4E98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{F6166838-3BD0-4C72-B943-F1C72354139F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6166838-3BD0-4C72-B943-F1C72354139F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6166838-3BD0-4C72-B943-F1C72354139F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8958A62-AE79-4E44-A9D4-C3D3F02D4E98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8958A62-AE79-4E44-A9D4-C3D3F02D4E98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8958A62-AE79-4E44-A9D4-C3D3F02D4E98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8958A62-AE79-4E44-A9D4-C3D3F02D4E98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

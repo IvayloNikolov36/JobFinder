@@ -7,9 +7,7 @@
     {
         Task<T> GetAsync<T>(int id);
 
-        Task<T> DetailsAsync<T>(int jobId);
-
-        Task CreateAsync(string userId, string position, string description, int jobCategoryId, 
+        Task CreateAsync(int companyId, string position, string description, int jobCategoryId, 
             int jobEngagementId, int? minSalary, int? maxSalary, string location);
 
         Task<(int, IEnumerable<T>)> AllAsync<T>(
@@ -18,8 +16,5 @@
 
         Task<bool> EditAsync(int jobAdId, string userId, string position, string description);
 
-        Task<IEnumerable<T>> GetJobEngagements<T>();
-
-        Task<IEnumerable<T>> GetJobCategories<T>();
     }
 }

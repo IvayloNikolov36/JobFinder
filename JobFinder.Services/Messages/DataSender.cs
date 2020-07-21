@@ -11,20 +11,25 @@
     public class DataSender : IDataSender
     {
         private readonly ISubscriptionsService subscriptionsService;
+        private readonly ICompanySubscriptionsService companySubscriptionsService;
         private readonly IEmailSender emailSender;
 
         private const string JobAdDetailsLink = "https://localhost:4200/jobs/";
         private const string CompanyDetailsUrl = "https://localhost:4200/company/";
 
-        public DataSender(ISubscriptionsService subscriptionsService, IEmailSender emailSender)
+        public DataSender(
+            ICompanySubscriptionsService companySubscriptionsService, 
+            ISubscriptionsService subscriptionsService, 
+            IEmailSender emailSender)
         {
             this.subscriptionsService = subscriptionsService;
+            this.companySubscriptionsService = companySubscriptionsService;
             this.emailSender = emailSender;
         }
 
         public async Task SendLatestJobAdsBySubscribedCompanies()
         {
-            List<CompaniesSubscriptionsData> data = await this.subscriptionsService.GetCompaniesNewJobAdsAsync();
+            List<CompaniesSubscriptionsData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
             foreach (var item in data)
             {

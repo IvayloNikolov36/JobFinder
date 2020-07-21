@@ -1,8 +1,9 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
-    using JobFinder.Data;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
+    using JobFinder.Data.Repositories;
+    using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
     using Microsoft.EntityFrameworkCore;
@@ -11,18 +12,18 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class EducationService : DbService, IEducationService
+    public class EducationService : IEducationService
     {
+        private readonly IRepository<Education> repository;
 
-        public EducationService(JobFinderDbContext dbContext) 
-            : base(dbContext)
+        public EducationService(IRepository<Education> educationRepository) 
         {
-
+            this.repository = educationRepository;
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
         {
-            var educations = await this.DbContext.Educations.AsNoTracking()
+            var educations = await this.repository.AllAsNoTracking()
                 .Where(e => e.CurriculumVitaeId == cvId)
                 .To<T>()
                 .ToListAsync();
@@ -45,8 +46,8 @@
                 MainSubjects = mainSubjects
             };
 
-            await this.DbContext.AddAsync(education);
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.AddAsync(education);
+            await this.repository.SaveChangesAsync();
 
             return education.Id;
         }
@@ -54,7 +55,7 @@
         public async Task<bool> UpdateAsync(int educationId, DateTime fromDate, DateTime? toDate, string organization,
             string location, EducationLevel educationLevel, string major, string mainSubjects)
         {
-            var educationFromDb = await this.DbContext.FindAsync<Education>(educationId);
+            var educationFromDb = await this.repository.FindAsync(educationId);
 
             if (educationFromDb == null)
             {
@@ -69,22 +70,21 @@
             educationFromDb.Major = major;
             educationFromDb.MainSubjects = mainSubjects;
 
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<bool> DeleteAsync(int educationId)
         {
-            var educationFromDb = await this.DbContext.FindAsync<Education>(educationId);
-
+            var educationFromDb = await this.repository.FindAsync(educationId);
             if (educationFromDb == null)
             {
                 return false;
             }
 
-            this.DbContext.Educations.Remove(educationFromDb);
-            await this.DbContext.SaveChangesAsync();
+            this.repository.Delete(educationFromDb);
+            await this.repository.SaveChangesAsync();
 
             return true;
         }

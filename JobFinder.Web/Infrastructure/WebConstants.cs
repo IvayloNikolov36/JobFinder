@@ -15,7 +15,6 @@
         public const string CantEditAd = "Edit does not exist or you are trying to edit other companie job ad!";
         public const string UpdatedAd = "Job ad successfully updated!";
 
-
         //CORS
         public const string CorsPolicyName = "JobFinderCORSPolicy";
     }

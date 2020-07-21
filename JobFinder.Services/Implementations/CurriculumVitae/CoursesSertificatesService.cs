@@ -1,7 +1,8 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
-    using JobFinder.Data;
     using JobFinder.Data.Models.CV;
+    using JobFinder.Data.Repositories;
+    using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
     using Microsoft.EntityFrameworkCore;
@@ -9,17 +10,18 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class CoursesSertificatesService : DbService, ICoursesSertificatesService
+    public class CoursesSertificatesService : ICoursesSertificatesService
     {
-        public CoursesSertificatesService(JobFinderDbContext dbContext)
-            : base(dbContext)
-        {
+        private readonly IRepository<CourseCertificate> repository;
 
+        public CoursesSertificatesService(IRepository<CourseCertificate> repository)
+        {
+            this.repository = repository;
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
         {
-            var coursesSertificates = await this.DbContext.CoursesCertificates.AsNoTracking()
+            var coursesSertificates = await this.repository.AllAsNoTracking()
                 .Where(cs => cs.CurriculumVitaeId == cvId)
                 .To<T>()
                 .ToListAsync();
@@ -36,15 +38,15 @@
                 CertificateUrl = certificateUrl
             };
 
-            await this.DbContext.AddAsync(courseSertificate);
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.AddAsync(courseSertificate);
+            await this.repository.SaveChangesAsync();
 
             return courseSertificate.Id;
         }
 
         public async Task<bool> UpdateAsync(int id, string courseName, string certificateUrl)
         {
-            var courseCertificateFromDb = await this.DbContext.FindAsync<CourseCertificate>(id);
+            var courseCertificateFromDb = await this.repository.FindAsync(id);
 
             if (courseCertificateFromDb == null)
             {
@@ -53,22 +55,22 @@
 
             courseCertificateFromDb.CourseName = courseName;
             courseCertificateFromDb.CertificateUrl = certificateUrl;
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var courseCertificateFromDb = await this.DbContext.FindAsync<CourseCertificate>(id);
+            var courseCertificateFromDb = await this.repository.FindAsync(id);
 
             if (courseCertificateFromDb == null)
             {
                 return false;
             }
 
-            this.DbContext.Remove(courseCertificateFromDb);
-            await this.DbContext.SaveChangesAsync();
+            this.repository.Delete(courseCertificateFromDb);
+            await this.repository.SaveChangesAsync();
 
             return true;
         }

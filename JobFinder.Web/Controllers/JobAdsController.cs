@@ -14,14 +14,20 @@
     public class JobAdsController : ApiController
     {
         private readonly IJobAdsService adsService;
+        private readonly IJobCategoriesService categoriesService;
+        private readonly IJobEngagementsService engagementsService;
 
-        public JobAdsController(IJobAdsService adsService)
+        public JobAdsController(IJobAdsService adsService, 
+            IJobCategoriesService categoriesService, 
+            IJobEngagementsService engagementsService)
         {
             this.adsService = adsService;
+            this.categoriesService = categoriesService;
+            this.engagementsService = engagementsService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<JobsListingsModel>> Get([FromQuery] JobAdsParams model)
+        public async Task<ActionResult<DataListingsModel<JobListingModel>>> Get([FromQuery] JobAdsParams model)
         {
             (int totalCount, var jobAds) = await this.adsService.AllAsync<JobListingModel>(
                 model.Page, model.Items, model.SearchText, model.EngagementId, model.CategoryId, 
@@ -33,7 +39,7 @@
         [HttpGet("{id}")]
         public async Task<ActionResult<JobAdDetailsModel>> Details(int id)
         {
-            var jobDetails = await this.adsService.DetailsAsync<JobAdDetailsModel>(id);
+            var jobDetails = await this.adsService.GetAsync<JobAdDetailsModel>(id);
 
             if (jobDetails == null)
             {
@@ -45,12 +51,14 @@
 
         [HttpPost]
         [Authorize(Roles = CompanyRole)]
-        public async Task<IActionResult> Create([FromBody] JobAdBindingModel model)
+        public async Task<IActionResult> Create([FromBody] JobAdBindingModel model, [FromServices] ICompanyService companyService)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
+            int companyId = (await companyService.GetAsync(userId)).Id;
+
             await this.adsService
-                .CreateAsync(userId, model.Position, model.Description, model.JobCategoryId,
+                .CreateAsync(companyId, model.Position, model.Description, model.JobCategoryId,
                 model.JobEngagementId, model.MinSalary, model.MaxSalary, model.Location);
 
             return this.Ok(new { Message = SuccessOnCreation });
@@ -77,7 +85,7 @@
         [HttpGet("engagements")]
         public async Task<ActionResult<IEnumerable<object>>> GetEngagements()
         {
-            var engagements = await this.adsService.GetJobEngagements<JobEngagementViewModel>();
+            var engagements = await this.engagementsService.AllAsync<JobEngagementViewModel>();
 
             return this.Ok(engagements);
         }
@@ -85,7 +93,7 @@
         [HttpGet("categories")]
         public async Task<ActionResult<IEnumerable<object>>> GetCategories()
         {
-            var categories = await this.adsService.GetJobCategories<JobCategoryViewModel>();
+            var categories = await this.categoriesService.AllAsync<JobCategoryViewModel>();
 
             return this.Ok(categories);
         }

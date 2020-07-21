@@ -17,6 +17,8 @@ namespace JobFinder.Web
     using System;
     using JobFinder.Web.Infrastructure.Filters;
     using static JobFinder.Web.Infrastructure.WebConstants;
+    using JobFinder.Data.Repositories.Contracts;
+    using JobFinder.Data.Repositories;
 
     public class Startup
     {
@@ -55,11 +57,13 @@ namespace JobFinder.Web
                 .Set(Configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
 
-            services.AddDomainServices();
-            services.AddTransient<IEmailSender, SendGridEmailSender>();
-
             // Add service filters.
             services.AddScoped<ValidateCvIdExistsServiceFilter>();
+
+            services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
+            services.AddDomainServices();
+
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
         }
 
         public void Configure(

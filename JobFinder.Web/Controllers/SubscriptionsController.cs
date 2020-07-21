@@ -13,48 +13,10 @@
     {
         private readonly ISubscriptionsService subscriptionsService;
 
-        public SubscriptionsController(ISubscriptionsService subscriptionsService)
+        public SubscriptionsController(
+            ISubscriptionsService subscriptionsService)
         {
             this.subscriptionsService = subscriptionsService;
-        }
-
-        [HttpGet("company/{id}")]
-        public async Task<ActionResult> SubscribeToCompany(int id)
-        {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            bool isSubscribed;
-            try
-            {
-                isSubscribed = await this.subscriptionsService.SubscribeToCompanyAsync(id, userId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return this.BadRequest(new { Title = "Can't subscribe twice to this company!" });
-            }
-
-            if (!isSubscribed)
-            {
-                return this.BadRequest(new { Title = "Can't subscribe to unexisting company!" });
-            }
-
-            return this.Ok(new { Message = "Successfully subscribed for job ads from this company!" });
-        }
-
-        [HttpGet("unsubscribe/company/{id}")]
-        public async Task<ActionResult> UnsubscribeFromCompany(int id)
-        {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            bool isUnsubscribed = await this.subscriptionsService.UnsubscribeFromCompanyAsync(id, userId);
-          
-            if (!isUnsubscribed)
-            {
-                return this.BadRequest(new { Title = "You doesn't have un subscription to this company!" });
-            }
-
-            return this.Ok(new { Message = "Successfully unsubscribed for job ads from this company!" });
         }
 
         [HttpGet("jobCategory/{id}/{location}")]
@@ -94,14 +56,6 @@
             }
 
             return this.Ok(new { Message = "Successfully unsubscribed from job ads with chosen category!" });
-        }
-
-        [HttpGet("newJobAdsByCompany")]
-        public async Task<ActionResult<IEnumerable<object>>> GetSubscribersNewJobAdsByCompany()
-        {
-            var data = await this.subscriptionsService.GetCompaniesNewJobAdsAsync();
-
-            return this.Ok(data);
         }
        
         [HttpGet("newJobAdsByCategory")]

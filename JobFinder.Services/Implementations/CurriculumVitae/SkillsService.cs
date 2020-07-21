@@ -1,7 +1,7 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
-    using JobFinder.Data;
     using JobFinder.Data.Models.CV;
+    using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
     using Microsoft.EntityFrameworkCore;
@@ -9,17 +9,18 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class SkillsService : DbService, ISkillsService
+    public class SkillsService : ISkillsService
     {
-        public SkillsService(JobFinderDbContext dbContext)
-            : base(dbContext)
-        {
+        private readonly IRepository<Skill> repository;
 
+        public SkillsService(IRepository<Skill> skillRepository)
+        {
+            this.repository = skillRepository;
         }
 
         public async Task<T> GetAsync<T>(int skillsId)
         {
-            T skill = await this.DbContext.Skills.AsNoTracking()
+            T skill = await this.repository.AllAsNoTracking()
                 .Where(s => s.Id == skillsId)
                 .To<T>()
                 .FirstOrDefaultAsync();
@@ -38,15 +39,15 @@
                 HasDrivingLicense = hasDrivingLicense
             };
 
-            await this.DbContext.AddAsync(skill);
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.AddAsync(skill);
+            await this.repository.SaveChangesAsync();
 
             return skill.Id;
         }
 
         public async Task<bool> UpdateAsync(int skillId, string computerSkills, string skills, bool hasManagedPeople, bool hasDrivingLicense)
         {
-            var skillFromDb = await this.DbContext.FindAsync<Skill>(skillId);
+            var skillFromDb = await this.repository.FindAsync(skillId);
 
             if (skillFromDb == null)
             {
@@ -58,29 +59,29 @@
             skillFromDb.HasManagedPeople = hasManagedPeople;
             skillFromDb.HasDrivingLicense = hasDrivingLicense;
 
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<bool> DeleteAsync(int skillId)
         {
-            var skillFromDb = await this.DbContext.FindAsync<Skill>(skillId);
+            var skillFromDb = await this.repository.FindAsync(skillId);
 
             if (skillFromDb == null)
             {
                 return false;
             }
 
-            this.DbContext.Remove(skillFromDb);
-            await this.DbContext.SaveChangesAsync();
+            this.repository.Delete(skillFromDb);
+            await this.repository.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<IEnumerable<T>> GetDrivingCategories<T>()
         {
-            return await this.DbContext.DrivingCategoryTypes.AsNoTracking()
+            return await this.repository.AllAsNoTracking()
                 .To<T>()
                 .ToListAsync();
         }

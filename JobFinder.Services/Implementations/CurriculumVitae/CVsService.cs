@@ -1,6 +1,5 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
-    using JobFinder.Data;
     using JobFinder.Services.CurriculumVitae;
     using System.Threading.Tasks;
     using JobFinder.Data.Models.CV;
@@ -8,25 +7,27 @@
     using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using JobFinder.Services.Mappings;
+    using JobFinder.Data.Repositories.Contracts;
 
-    public class CVsService : DbService, ICVsService
+    public class CVsService : ICVsService
     {
-        public CVsService(JobFinderDbContext dbContext) 
-            : base(dbContext)
-        {
+        private readonly IRepository<CurriculumVitae> repository;
 
+        public CVsService(IRepository<CurriculumVitae> repository) 
+        {
+            this.repository = repository;
         }
 
         public async Task<bool> ExistsAsync(string id)
         {
-            bool exists = await this.DbContext.CVs.AnyAsync(x => x.Id == id);
+            var entity = await this.repository.FindAsync(id);
 
-            return exists;
+            return entity != null;
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string userId)
         {
-            return await this.DbContext.CVs.AsNoTracking()
+            return await this.repository.AllAsNoTracking()
                 .Where(c => c.UserId == userId)
                 .To<T>()
                 .ToListAsync();
@@ -41,15 +42,15 @@
                 PictureUrl = pictureUrl
             };
 
-            await this.DbContext.AddAsync(cv);
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.AddAsync(cv);
+            await this.repository.SaveChangesAsync();
 
             return cv.Id;
         }
 
         public async Task<byte[]> GetCvDataAsync(string cvId)
         {
-            byte[] data = await this.DbContext.CVs.AsNoTracking()
+            byte[] data = await this.repository.AllAsNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .Select(cv => cv.Data)
                 .FirstOrDefaultAsync();
@@ -59,7 +60,7 @@
 
         public async Task<T> GetDataAsync<T>(string cvId)
         {
-            var data = await this.DbContext.CVs.AsNoTracking()
+            var data = await this.repository.AllAsNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .To<T>()
                 .SingleOrDefaultAsync();
@@ -69,15 +70,14 @@
 
         public async Task<bool> SetDataAsync(string cvId, byte[] data)
         {
-            var cvFromDb = await this.DbContext.FindAsync<CurriculumVitae>(cvId);
-
+            var cvFromDb = await this.repository.FindAsync(cvId);
             if (cvFromDb == null)
             {
                 return false;
             }
 
             cvFromDb.Data = data;
-            await this.DbContext.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
 
             return true;
         }

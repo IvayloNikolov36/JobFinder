@@ -10,35 +10,18 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public class SubscriptionsService : DbService, ISubscriptionsService
+    public class SubscriptionsService : ISubscriptionsService
     {
-        public SubscriptionsService(JobFinderDbContext dbContext) : base(dbContext)
+        private readonly JobFinderDbContext dbContext;
+
+        public SubscriptionsService(JobFinderDbContext dbContext)
         {
-        }
-
-        public async Task<bool> SubscribeToCompanyAsync(int companyId, string userId)
-        {
-            var company = await this.DbContext.FindAsync<Company>(companyId);
-            if (company == null)
-            {
-                return false;
-            }
-
-            var sub = new CompanySubscription
-            {
-                UserId = userId,
-                CompanyId = companyId
-            };
-
-            await this.DbContext.AddAsync(sub);
-            await this.DbContext.SaveChangesAsync();
-
-            return true;
+            this.dbContext = dbContext;
         }
 
         public async Task<bool> SubscribeToJobCategoryAsync(int jobCategoryId, string userId, string location)
         {
-            var jobCategory = await this.DbContext.FindAsync<JobCategory>(jobCategoryId);
+            var jobCategory = await this.dbContext.FindAsync<JobCategory>(jobCategoryId);
             if (jobCategory == null)
             {
                 return false;
@@ -51,31 +34,15 @@
                 Location = location
             };
 
-            await this.DbContext.AddAsync(sub);
-            await this.DbContext.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<bool> UnsubscribeFromCompanyAsync(int companyId, string userId)
-        {
-            var subFromDb = await this.DbContext
-                .FindAsync<CompanySubscription>(userId, companyId);
-
-            if (subFromDb == null)
-            {
-                return false;
-            }
-
-            this.DbContext.Remove(subFromDb);
-            await this.DbContext.SaveChangesAsync();
+            await this.dbContext.AddAsync(sub);
+            await this.dbContext.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<bool> UnsubscribeFromJobCategoryAsync(int jobCategoryId, string userId, string location)
         {
-            var subFromDb = await this.DbContext.JobCategorySubscriptions
+            var subFromDb = await this.dbContext.JobCategorySubscriptions
                 .FirstOrDefaultAsync(x => x.JobCategoryId == jobCategoryId
                                   && x.UserId == userId
                                   && x.Location == location);
@@ -85,26 +52,15 @@
                 return false;
             }
 
-            this.DbContext.Remove(subFromDb);
-            await this.DbContext.SaveChangesAsync();
+            this.dbContext.Remove(subFromDb);
+            await this.dbContext.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<List<CompaniesSubscriptionsData>> GetCompaniesNewJobAdsAsync()
-        {
-            List<CompaniesSubscriptionsData> data = await this.DbContext
-                .CompaniesSubscriptionsData
-                .AsNoTracking()
-                .ToListAsync();
-
-            return data;
-        }
-
         public async Task<List<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()
         {
-            List<JobCategoriesSubscriptionsData> data = await this.DbContext
-                .JobCategoriesSubscriptionsData
+            List<JobCategoriesSubscriptionsData> data = await this.dbContext.JobCategoriesSubscriptionsData
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -112,7 +68,7 @@
 
             foreach (var item in data)
             {
-                List<LatestCompanyJobAds> latestCompanyJobAds = await this.DbContext
+                List<LatestCompanyJobAds> latestCompanyJobAds = await this.dbContext
                     .GetLatesJobAdsForSubscribers(item.JobCategoryId, item.Location).ToListAsync();
 
                 if (latestCompanyJobAds.Count == 0)

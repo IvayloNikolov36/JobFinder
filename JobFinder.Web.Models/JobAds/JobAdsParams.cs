@@ -16,6 +16,6 @@
 
         public string SortBy { get; set; }
 
-        public bool? IsAscending { get; set; }
+        public bool IsAscending { get; set; }
     }
 }
