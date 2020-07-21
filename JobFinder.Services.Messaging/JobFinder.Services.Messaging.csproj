@@ -4,4 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JobFinder.Data.Models\JobFinder.Data.Models.csproj" />
+    <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
+    <ProjectReference Include="..\JobFinder.Services\JobFinder.Services.csproj" />
+    <ProjectReference Include="..\JobFinder.Web.Models\JobFinder.Web.Models.csproj" />
+  </ItemGroup>
+
 </Project>

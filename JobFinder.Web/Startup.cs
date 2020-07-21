@@ -3,7 +3,6 @@ namespace JobFinder.Web
     using JobFinder.Data;
     using JobFinder.Data.Models;
     using JobFinder.Services.Mappings;
-    using JobFinder.Services.Messages;
     using JobFinder.Web.Infrastructure.Extensions;
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Builder;
@@ -19,6 +18,7 @@ namespace JobFinder.Web
     using static JobFinder.Web.Infrastructure.WebConstants;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Data.Repositories;
+    using JobFinder.Services.Messages;
 
     public class Startup
     {

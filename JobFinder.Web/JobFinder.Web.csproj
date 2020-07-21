@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
+    <ProjectReference Include="..\JobFinder.Services.Messaging\JobFinder.Services.Messaging.csproj" />
     <ProjectReference Include="..\JobFinder.Services\JobFinder.Services.csproj" />
     <ProjectReference Include="..\JobFinder.Web.Models\JobFinder.Web.Models.csproj" />
   </ItemGroup>
