@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JobFinder.Data.Models\JobFinder.Data.Models.csproj" />
-    <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
-    <ProjectReference Include="..\JobFinder.Services\JobFinder.Services.csproj" />
-    <ProjectReference Include="..\JobFinder.Web.Models\JobFinder.Web.Models.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.6" />
+    <PackageReference Include="Sendgrid" Version="9.18.0" />
   </ItemGroup>
-
 </Project>

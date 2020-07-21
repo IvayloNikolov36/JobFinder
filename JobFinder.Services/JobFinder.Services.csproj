@@ -12,8 +12,8 @@
     <ProjectReference Include="..\JobFinder.Data.Repositories\JobFinder.Data.Repositories.csproj" />
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
+    <ProjectReference Include="..\JobFinder.Services.Messaging\JobFinder.Services.Messaging.csproj" />
     <ProjectReference Include="..\JobFinder.Web.Models\JobFinder.Web.Models.csproj" />
-    <PackageReference Include="Sendgrid" Version="9.18.0" />
   </ItemGroup>
 
 </Project>
