@@ -27,4 +27,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JobFinder.Data.Models\JobFinder.Data.Models.csproj" />
+  </ItemGroup>
+
 </Project>

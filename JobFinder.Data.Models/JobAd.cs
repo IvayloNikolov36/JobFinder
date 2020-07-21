@@ -1,16 +1,10 @@
 ﻿namespace JobFinder.Data.Models
 {
     using JobFinder.Data.Models.Common;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class JobAd : BaseModel<int>
     {
-        public JobAd()
-        {
-            this.JobApplications = new HashSet<JobApplication>();
-        }
-
         [Required]
         [StringLength(90, MinimumLength = 6)]
         public string Position { get; set; }
@@ -38,6 +32,5 @@
 
         public Company Publisher { get; set; }
 
-        public ICollection<JobApplication> JobApplications { get; set; }
     }
 }
