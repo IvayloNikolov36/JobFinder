@@ -5,7 +5,6 @@
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using static JobFinder.Web.Infrastructure.WebConstants;
@@ -14,16 +13,10 @@
     public class JobAdsController : ApiController
     {
         private readonly IJobAdsService adsService;
-        private readonly IJobCategoriesService categoriesService;
-        private readonly IJobEngagementsService engagementsService;
 
-        public JobAdsController(IJobAdsService adsService, 
-            IJobCategoriesService categoriesService, 
-            IJobEngagementsService engagementsService)
+        public JobAdsController(IJobAdsService adsService)
         {
             this.adsService = adsService;
-            this.categoriesService = categoriesService;
-            this.engagementsService = engagementsService;
         }
 
         [HttpGet]
@@ -83,20 +76,5 @@
             return this.Ok(new { Message = UpdatedAd });
         }
 
-        [HttpGet("engagements")]
-        public async Task<ActionResult<IEnumerable<object>>> GetEngagements()
-        {
-            var engagements = await this.engagementsService.AllAsync<JobEngagementViewModel>();
-
-            return this.Ok(engagements);
-        }
-
-        [HttpGet("categories")]
-        public async Task<ActionResult<IEnumerable<object>>> GetCategories()
-        {
-            var categories = await this.categoriesService.AllAsync<JobCategoryViewModel>();
-
-            return this.Ok(categories);
-        }
     }
 }
