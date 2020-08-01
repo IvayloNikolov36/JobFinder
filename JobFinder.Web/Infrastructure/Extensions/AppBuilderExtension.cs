@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using static JobFinder.Web.Infrastructure.WebConstants;
@@ -77,7 +78,9 @@
 
         private static async Task CreateJobEngagements(JobFinderDbContext db)
         {
-            string[] engagements = Enum.GetNames(typeof(JobEngagementType));
+            string[] enumeEngagements = Enum.GetNames(typeof(JobEngagementType));
+            var engagements = new List<string>();
+            enumeEngagements.ToList().ForEach(x => engagements.Add(x.SeparateWords()));
 
             string[] dbEngagements = db.JobEngagements.Select(x => x.Type).ToArray();
 
@@ -98,7 +101,9 @@
 
         private static async Task CreateJobCategories(JobFinderDbContext db)
         {
-            string[] categories = Enum.GetNames(typeof(JobCategoryType));
+            var enumCategories = Enum.GetNames(typeof(JobCategoryType));
+            var categories = new List<string>();
+            enumCategories.ToList().ForEach(x => categories.Add(x.ReplaceDashesAndSeparate()));
 
             string[] dbCategories = db.JobCategories.Select(x => x.Type).ToArray();
 

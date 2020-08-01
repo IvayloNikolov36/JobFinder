@@ -5,7 +5,7 @@
         Aviation = 1,
         Healthcare = 2,
         IT_SoftwareDevelopment = 3,
-        It_HardwareSupport = 4,
+        IT_HardwareSupport = 4,
         Marketing = 5,
         CleaningService = 6,
         Engeneering = 7,

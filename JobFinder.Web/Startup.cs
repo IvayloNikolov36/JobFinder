@@ -19,6 +19,7 @@ namespace JobFinder.Web
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Data.Repositories;
     using JobFinder.Services.Messages;
+    using Microsoft.AspNetCore.Mvc;
 
     public class Startup
     {
@@ -43,14 +44,25 @@ namespace JobFinder.Web
 
             services.AddAuthentication(options => options.Configure())
             .AddJwtBearer(options => options.Configure(
-                validAudience:  Configuration["JwtAudience"], 
-                validIssuer:    Configuration["JwtIssuer"], 
+                validAudience: Configuration["JwtAudience"],
+                validIssuer: Configuration["JwtIssuer"],
                 jwtSecurityKey: Configuration["JwtSecurityKey"])
             );
 
+            services.AddResponseCaching();
+            services.AddHttpCacheHeaders();
+
             services.AddCors(options => options.Configure());
 
-            services.AddControllers().AddNewtonsoftJson(options => options.Configure());
+            services.AddControllers(config =>
+                config.CacheProfiles.Add(
+                    "JobAdsCashProfile",
+                    new CacheProfile
+                    {
+                        Duration = 120,
+                        Location = ResponseCacheLocation.Any
+                    })
+                ).AddNewtonsoftJson(options => options.Configure());
 
             //HangFire
             services.AddHangfire(configuration => configuration
@@ -67,8 +79,8 @@ namespace JobFinder.Web
         }
 
         public void Configure(
-            IApplicationBuilder app, 
-            IWebHostEnvironment env, 
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
             IRecurringJobManager reccuringJobManager,
             IServiceProvider serviceProvider)
         {
@@ -79,8 +91,10 @@ namespace JobFinder.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseRouting();
             app.UseCors(CorsPolicyName); //UserCors must be before UseResponseCashing
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
