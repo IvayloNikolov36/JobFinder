@@ -54,15 +54,8 @@ namespace JobFinder.Web
 
             services.AddCors(options => options.Configure());
 
-            services.AddControllers(config =>
-                config.CacheProfiles.Add(
-                    "JobAdsCashProfile",
-                    new CacheProfile
-                    {
-                        Duration = 120,
-                        Location = ResponseCacheLocation.Any
-                    })
-                ).AddNewtonsoftJson(options => options.Configure());
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.Configure());
 
             //HangFire
             services.AddHangfire(configuration => configuration
@@ -91,9 +84,7 @@ namespace JobFinder.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(CorsPolicyName); //UserCors must be before UseResponseCashing
-            app.UseResponseCaching();
-            app.UseHttpCacheHeaders();
+            app.UseCors(CorsPolicyName);
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

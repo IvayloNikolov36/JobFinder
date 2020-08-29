@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
+    using System.Collections.Generic;
 
     public class SkillsViewModel : IMapFrom<Skill>
     {
@@ -13,6 +14,6 @@
 
         public bool HasManagedPeople { get; set; }
 
-        //public ICollection<DrivingCategory> DrivingLicenseCategories { get; set; }
+        public ICollection<DrivingCategory> DrivingLicenseCategories { get; set; }
     }
 }

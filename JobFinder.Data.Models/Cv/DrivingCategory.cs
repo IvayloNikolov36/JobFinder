@@ -5,9 +5,9 @@
         public int Id { get; set; }
 
         public int DrivingCategoryTypeId { get; set; } //FK
+        public DrivingCategoryType DrivingCategoryType { get; set; }
 
         public int SkillId { get; set; }
-
         public Skill Skill { get; set; }
     }
 }

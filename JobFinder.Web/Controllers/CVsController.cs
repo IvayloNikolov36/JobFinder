@@ -9,7 +9,7 @@
     public class CVsController : ApiController
     {
 
-        [HttpPost]
+        [NonAction]
         public ActionResult UploadCv([FromForm] CVUploadModel model)
         {
             var file = model.CurriculumVitae;

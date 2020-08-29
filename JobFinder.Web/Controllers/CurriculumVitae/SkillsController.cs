@@ -59,7 +59,7 @@
             return this.Ok(new { Message = "Skills successfully deleted!" });
         }
 
-        [HttpGet("drivingCategories")]
+        [HttpGet("driving-categories")]
         public async Task<ActionResult<IEnumerable<object>>> GetDrivingCategories()
         {
             var categories =  await this.skillsService.GetDrivingCategories<SkillsDrivingCategoryViewModel>();

@@ -20,7 +20,6 @@
         }
 
         [HttpGet]
-        [ResponseCache(CacheProfileName = "JobAdsCashProfile")]
         public async Task<ActionResult<DataListingsModel<JobListingModel>>> Get([FromQuery] JobAdsParams model)
         {
             (int totalCount, var jobAds) = await this.adsService.AllAsync<JobListingModel>(

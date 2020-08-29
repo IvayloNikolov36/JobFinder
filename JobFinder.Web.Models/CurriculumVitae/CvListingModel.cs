@@ -2,6 +2,7 @@
 {
     using JobFinder.Services.Mappings;
     using JobFinder.Data.Models.CV;
+    using System;
 
     public class CvListingModel : IMapFrom<CurriculumVitae>
     {
@@ -9,6 +10,6 @@
 
         public string Name { get; set; }
 
-        public string PictureUrl { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
