@@ -15,11 +15,10 @@ namespace JobFinder.Web
     using Hangfire;
     using System;
     using JobFinder.Web.Infrastructure.Filters;
-    using static JobFinder.Web.Infrastructure.WebConstants;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Data.Repositories;
     using JobFinder.Services.Messages;
-    using Microsoft.AspNetCore.Mvc;
+    using static JobFinder.Web.Infrastructure.WebConstants;
 
     public class Startup
     {
@@ -57,7 +56,7 @@ namespace JobFinder.Web
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.Configure());
 
-            //HangFire
+            // HangFire
             services.AddHangfire(configuration => configuration
                 .Set(Configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
@@ -89,7 +88,7 @@ namespace JobFinder.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //HangFire
+            // HangFire
             app.UseHangfireDashboard();
             reccuringJobManager.AddOrUpdate(
                 "sendingLatestJobAdsByCompany",
