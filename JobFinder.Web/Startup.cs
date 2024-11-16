@@ -78,13 +78,29 @@ namespace JobFinder.Web
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    using (var context = scope.ServiceProvider.GetService<JobFinderDbContext>())
+                    {
+                        context.Database.EnsureCreated();
+                    }
+                }
+
+                app.UseDeveloperExceptionPage();               
                 app.SeedDatabase();
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(CorsPolicyName);
+            app.UseStaticFiles();
             app.UseRouting();
+            // app.UseCors(CorsPolicyName);
+
+            app.UseCors(x => x
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .SetIsOriginAllowed(origin => true) // allow any origin
+              .AllowCredentials()); // allow credentials
+
             app.UseAuthentication();
             app.UseAuthorization();
 

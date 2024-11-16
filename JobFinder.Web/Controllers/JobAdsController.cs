@@ -43,6 +43,7 @@
         }
 
         [HttpPost]
+        [Route("create")]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> Create([FromBody] JobAdBindingModel model, [FromServices] ICompanyService companyService)
         {
