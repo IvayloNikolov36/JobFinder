@@ -33,8 +33,8 @@
             {
                 foreach (var attachment in attachments)
                 {
-                    message.AddAttachment(attachment.FileName, 
-                        Convert.ToBase64String(attachment.Content), 
+                    message.AddAttachment(attachment.FileName,
+                        Convert.ToBase64String(attachment.Content),
                         attachment.MimeType);
                 }
             }

@@ -12,9 +12,7 @@
     using System.Threading.Tasks;
 
     [Authorize]
-    [ApiController]
-    [Route("api/cvs")]
-    public class CVsController : ControllerBase
+    public class CVsController : ApiController
     {
         private readonly ICVsService cvsService;
 
@@ -54,6 +52,12 @@
 
             return this.Ok(cvs);
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult<CvListingModel>> GetCv(Guid id)
+        //{
+
+        //}
 
         [HttpGet("generate/{id}")]
         public async Task<ActionResult> GeneratePdf(string id, [FromServices] IPdfGenerator pdfGenerator)

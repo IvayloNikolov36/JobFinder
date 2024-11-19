@@ -18,7 +18,6 @@ namespace JobFinder.Web
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Data.Repositories;
     using JobFinder.Services.Messages;
-    using static JobFinder.Web.Infrastructure.WebConstants;
 
     public class Startup
     {
