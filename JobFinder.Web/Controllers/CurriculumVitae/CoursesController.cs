@@ -18,9 +18,9 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseSertificateListingModel>>> All([FromQuery] string cvId)
+        public async Task<ActionResult<IEnumerable<CourseCertificateListingModel>>> All([FromQuery] string cvId)
         {
-            var courses = await this.coursesService.AllAsync<CourseSertificateListingModel>(cvId);
+            var courses = await this.coursesService.AllAsync<CourseCertificateListingModel>(cvId);
 
             return this.Ok(courses);
         }

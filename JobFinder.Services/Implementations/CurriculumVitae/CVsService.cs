@@ -60,7 +60,7 @@
 
         public async Task<T> GetDataAsync<T>(string cvId)
         {
-            var data = await this.repository.AllAsNoTracking()
+            T data = await this.repository.AllAsNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .To<T>()
                 .SingleOrDefaultAsync();
