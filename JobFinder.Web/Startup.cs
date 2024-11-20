@@ -1,10 +1,15 @@
 namespace JobFinder.Web
 {
+    using Hangfire;
     using JobFinder.Data;
     using JobFinder.Data.Models;
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Infrastructure.Extensions;
     using JobFinder.Web.Models.JobAds;
+    using JobFinder.Web.Infrastructure.Filters;
+    using JobFinder.Data.Repositories;
+    using JobFinder.Data.Repositories.Contracts;
+    using JobFinder.Services.Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -12,18 +17,13 @@ namespace JobFinder.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Hangfire;
     using System;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Data.Repositories.Contracts;
-    using JobFinder.Data.Repositories;
-    using JobFinder.Services.Messages;
 
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -40,12 +40,13 @@ namespace JobFinder.Web
 
             services.Configure<IdentityOptions>(options => options.Configure());
 
-            services.AddAuthentication(options => options.Configure())
-            .AddJwtBearer(options => options.Configure(
-                validAudience: Configuration["JwtAudience"],
-                validIssuer: Configuration["JwtIssuer"],
-                jwtSecurityKey: Configuration["JwtSecurityKey"])
-            );
+            services
+                .AddAuthentication(options => options.Configure())
+                .AddJwtBearer(options => options.Configure(
+                    validAudience: Configuration["JwtAudience"],
+                    validIssuer: Configuration["JwtIssuer"],
+                    jwtSecurityKey: Configuration["JwtSecurityKey"])
+                );
 
             services.AddResponseCaching();
             services.AddHttpCacheHeaders();
@@ -55,7 +56,6 @@ namespace JobFinder.Web
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.Configure());
 
-            // HangFire
             services.AddHangfire(configuration => configuration
                 .Set(Configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
@@ -79,32 +79,43 @@ namespace JobFinder.Web
             {
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    using (var context = scope.ServiceProvider.GetService<JobFinderDbContext>())
-                    {
-                        context.Database.EnsureCreated();
-                    }
+                    using var context = scope.ServiceProvider.GetService<JobFinderDbContext>();
+                    context.Database.EnsureCreated();
                 }
 
-                app.UseDeveloperExceptionPage();               
+                app.UseDeveloperExceptionPage();
                 app.SeedDatabase();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            // app.UseCors(CorsPolicyName);
 
+            // app.UseCors(CorsPolicyName);
             app.UseCors(x => x
               .AllowAnyMethod()
               .AllowAnyHeader()
-              .SetIsOriginAllowed(origin => true) // allow any origin
-              .AllowCredentials()); // allow credentials
+              .SetIsOriginAllowed(origin => true)
+              .AllowCredentials());
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // HangFire
+            ConfigureHangfire(app, reccuringJobManager, serviceProvider);
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+
+        private void ConfigureHangfire(
+            IApplicationBuilder app,
+            IRecurringJobManager reccuringJobManager,
+            IServiceProvider serviceProvider)
+        {
             app.UseHangfireDashboard();
+
             reccuringJobManager.AddOrUpdate(
                 "sendingLatestJobAdsByCompany",
                 () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsBySubscribedCompanies(),
@@ -115,11 +126,6 @@ namespace JobFinder.Web
                 () => serviceProvider.GetService<IDataSender>()
                     .SendLatestJobAdsBySubscribedCategoriesAndLocations(),
                 "0 0 */1 * *");
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }
