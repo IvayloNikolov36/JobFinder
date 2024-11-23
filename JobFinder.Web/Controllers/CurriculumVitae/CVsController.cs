@@ -45,7 +45,7 @@
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<CvListingModel>> GetCvData(string id)
+        public async Task<ActionResult<CvDataModel>> GetCvData(string id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -57,6 +57,21 @@
             }
 
             return this.Ok(cv);
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> DeleteCv([FromRoute] string id)
+        {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            bool isDeleted = await this.cvsService.DeleteCvAsync(id, userId);
+            if (!isDeleted)
+            {
+                return this.BadRequest();
+            }
+
+            return this.NoContent();
         }
 
         [HttpGet]

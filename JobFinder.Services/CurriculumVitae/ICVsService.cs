@@ -16,5 +16,7 @@
         Task<bool> SetDataAsync(string cvId, byte[] data);
 
         Task<byte[]> GetCvDataAsync(string cvId);
+
+        Task<bool> DeleteCvAsync(string id, string userId);
     }
 }

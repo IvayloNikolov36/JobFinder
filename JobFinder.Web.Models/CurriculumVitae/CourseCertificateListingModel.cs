@@ -5,6 +5,8 @@
 
     public class CourseCertificateListingModel : IMapFrom<CourseCertificate>
     {
+        public int Id { get; set; }
+
         public string CurriculumVitaeId { get; set; }
 
         public string CourseName { get; set; }

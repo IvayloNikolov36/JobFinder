@@ -12,10 +12,26 @@
     public class CVsService : ICVsService
     {
         private readonly IRepository<CurriculumVitae> repository;
+        private readonly IRepository<PersonalDetails> personalDetailsRepo;
+        private readonly IRepository<Education> educationRepo;
+        private readonly IRepository<WorkExperience> workExperienceRepo;
+        private readonly IRepository<Skill> skillRepo;
+        private readonly IRepository<CourseCertificate> courseSertificateRepo;
 
-        public CVsService(IRepository<CurriculumVitae> repository) 
+        public CVsService(
+            IRepository<CurriculumVitae> repository,
+            IRepository<PersonalDetails> personalDetailsRepo,
+            IRepository<Education> educationRepo,
+            IRepository<WorkExperience> workExperienceRepo,
+            IRepository<Skill> skillRepo,
+            IRepository<CourseCertificate> courseSertificateRepo)
         {
             this.repository = repository;
+            this.personalDetailsRepo = personalDetailsRepo;
+            this.educationRepo = educationRepo;
+            this.workExperienceRepo = workExperienceRepo;
+            this.skillRepo = skillRepo;
+            this.courseSertificateRepo = courseSertificateRepo;
         }
 
         public async Task<bool> ExistsAsync(string id)
@@ -77,6 +93,27 @@
             }
 
             cvFromDb.Data = data;
+            await this.repository.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteCvAsync(string id, string userId)
+        {
+            CurriculumVitae cv = await this.repository.FindAsync(id);
+
+            if (cv.UserId != userId)
+            {
+                return false;
+            }
+
+            this.personalDetailsRepo.DeleteWhere(pd => pd.CurriculumVitaeId == cv.Id);
+            this.educationRepo.DeleteWhere(ed => ed.CurriculumVitaeId == cv.Id);
+            this.workExperienceRepo.DeleteWhere(we => we.CurriculumVitaeId == cv.Id);
+            this.skillRepo.DeleteWhere(sk => sk.CurriculumVitaeId == cv.Id);
+            this.courseSertificateRepo.DeleteWhere(cs => cs.CurriculumVitaeId == cv.Id);
+            this.repository.Delete(cv);
+
             await this.repository.SaveChangesAsync();
 
             return true;

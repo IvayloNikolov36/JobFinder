@@ -23,6 +23,11 @@
 
         public virtual IQueryable<T> AllAsNoTracking() => this.DbSet.AsNoTracking();
 
+        public IQueryable<T> AllWhere(Expression<Func<T, bool>> predicate)
+        {
+            return this.DbSet.Where(predicate);
+        }
+
         public virtual Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate) 
             => this.DbSet.FirstOrDefaultAsync(predicate);
 
@@ -42,6 +47,12 @@
         }
 
         public virtual void Delete(T entity) => this.DbSet.Remove(entity);
+
+        public virtual void DeleteWhere(Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> entitiestoRemove = this.DbSet.Where(predicate);
+            this.DbSet.RemoveRange(entitiestoRemove);
+        }
 
         public Task<int> SaveChangesAsync() => this.Context.SaveChangesAsync();
 

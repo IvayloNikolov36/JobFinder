@@ -5,10 +5,11 @@
     using System.Linq.Expressions;
     using System.Threading.Tasks;
 
-    public interface IRepository<T> : IDisposable
-        where T : class
+    public interface IRepository<T> : IDisposable where T : class
     {
         IQueryable<T> All();
+
+        IQueryable<T> AllWhere(Expression<Func<T, bool>> predicate);
 
         IQueryable<T> AllAsNoTracking();
 
@@ -21,6 +22,8 @@
         void Update(T entity);
 
         void Delete(T entity);
+
+        void DeleteWhere(Expression<Func<T, bool>> predicate);
 
         Task<int> SaveChangesAsync();
     }

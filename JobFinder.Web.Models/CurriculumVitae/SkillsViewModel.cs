@@ -6,6 +6,8 @@
 
     public class SkillsViewModel : IMapFrom<Skill>
     {
+        public int Id { get; set; }
+
         public string CurriculumVitaeId { get; set; }
 
         public string ComputerSkills { get; set; }
@@ -14,6 +16,9 @@
 
         public bool HasManagedPeople { get; set; }
 
+        public bool HasDrivingLicense { get; set; }
+
+        // TODO: use viewModel, not the entity
         public ICollection<DrivingCategory> DrivingLicenseCategories { get; set; }
     }
 }
