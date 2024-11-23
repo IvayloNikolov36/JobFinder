@@ -2,7 +2,8 @@
 {
     using JobFinder.Services;
     using JobFinder.Services.CurriculumVitae;
-    using JobFinder.Web.Models.CurriculumVitae;
+    using JobFinder.Web.Models.Common;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -23,13 +24,13 @@
 
         [HttpPost]
         [Route("create")]
-        public async Task<ActionResult<string>> Create([FromBody] CVCreateInputModel model)
+        public async Task<ActionResult<BasicViewModel>> Create([FromBody] CVCreateInputModel cvModel)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            string cvId = await this.cvsService.CreateAsync(userId, model.Name, model.PictureUrl);
+            BasicViewModel cvBasic = await this.cvsService.CreateAsync(cvModel, userId);
 
-            return this.Ok(new { cvId });
+            return this.Ok(cvBasic);
         }
 
         [HttpGet]

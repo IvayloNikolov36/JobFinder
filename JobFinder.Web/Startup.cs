@@ -18,6 +18,7 @@ namespace JobFinder.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using System;
+    using AutoMapper;
 
     public class Startup
     {
@@ -32,6 +33,8 @@ namespace JobFinder.Web
         {
             AutoMapperConfig
                 .RegisterMappings(typeof(JobAdBindingModel).Assembly);
+
+            services.AddSingleton(AutoMapperConfig.MapperInstance);
 
             services.AddDbContext<JobFinderDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

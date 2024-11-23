@@ -1,13 +1,14 @@
-﻿namespace JobFinder.Web.Models.CurriculumVitae
+﻿namespace JobFinder.Web.Models.CVModels
 {
     using JobFinder.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class WorkExperienceInputModel
+    public class WorkExperienceEditModel
     {
         public DateTime FromDate { get; set; }
 
+        // TODO: make validator Todate to be after FromDate
         public DateTime? ToDate { get; set; }
 
         [Required]
@@ -25,6 +26,6 @@
         public string Location { get; set; }
 
         [StringLength(3000, MinimumLength = 20)]
-        public string AdditionalDetails { get; set; }
+        public string AditionalDetails { get; set; }
     }
 }

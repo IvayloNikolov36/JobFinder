@@ -1,9 +1,10 @@
-﻿namespace JobFinder.Web.Models.CurriculumVitae
+﻿namespace JobFinder.Web.Models.CVModels
 {
+    using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
-    using System.ComponentModel.DataAnnotations;
+    using JobFinder.Services.Mappings;
 
-    public class LanguageInfoInputModel
+    public class LanguageInfoInputModel : IMapTo<LanguageInfo>
     {
         public LanguageType LanguageType { get; set; }
 

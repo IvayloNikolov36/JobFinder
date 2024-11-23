@@ -1,4 +1,4 @@
-﻿namespace JobFinder.Web.Models.CurriculumVitae
+﻿namespace JobFinder.Web.Models.CVModels
 {
     public class WorkExperienceDeleteModel
     {

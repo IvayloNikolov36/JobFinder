@@ -2,7 +2,7 @@
 {
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
-    using JobFinder.Web.Models.CurriculumVitae;
+    using JobFinder.Web.Models.CVModels;
     using JobFinder.Web.Models.Common;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -28,10 +28,11 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] PersonalDetailsnputModel model)
+        [Route("{cvId:guid}/create")]
+        public async Task<ActionResult<int>> Create([FromRoute] Guid cvId, [FromBody] PersonalDetailsInputModel model)
         {
             int objectId = await this.personalDetailsService.CreateAsync(
-                model.CvId,
+                cvId.ToString(),
                 model.FirstName,
                 model.MiddleName,
                 model.LastName,

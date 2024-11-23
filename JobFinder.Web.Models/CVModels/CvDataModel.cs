@@ -1,5 +1,5 @@
 ﻿
-namespace JobFinder.Web.Models.CurriculumVitae
+namespace JobFinder.Web.Models.CVModels
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;

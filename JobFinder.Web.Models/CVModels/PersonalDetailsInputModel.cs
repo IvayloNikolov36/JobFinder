@@ -1,13 +1,13 @@
-﻿namespace JobFinder.Web.Models.CurriculumVitae
+﻿namespace JobFinder.Web.Models.CVModels
 {
+    using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
+    using JobFinder.Services.Mappings;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetailsnputModel
+    public class PersonalDetailsInputModel : IMapTo<PersonalDetails>
     {
-        [Required]
-        public string CvId { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 2)]

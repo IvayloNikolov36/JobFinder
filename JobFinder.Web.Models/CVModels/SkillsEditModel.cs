@@ -1,11 +1,9 @@
-﻿namespace JobFinder.Web.Models.CurriculumVitae
+﻿namespace JobFinder.Web.Models.CVModels
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class SkillsInputModel
+    public class SkillsEditModel
     {
-        public string CvId { get; set; }
-
         [StringLength(10000, MinimumLength = 10)]
         public string ComputerSkills { get; set; }
 
@@ -15,5 +13,7 @@
         public bool HasManagedPeople { get; set; }
 
         public bool HasDrivingLicense { get; set; }
+
+        //public ICollection<DrivingCategory> DrivingLicenseCategories { get; set; }
     }
 }

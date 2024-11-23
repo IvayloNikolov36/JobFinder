@@ -5,9 +5,13 @@
     using JobFinder.Data.Models.CV;
     using System.Collections.Generic;
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Linq;
     using JobFinder.Services.Mappings;
     using JobFinder.Data.Repositories.Contracts;
+    using JobFinder.Web.Models.Common;
+    using AutoMapper;
+    using JobFinder.Web.Models.CVModels;
 
     public class CVsService : ICVsService
     {
@@ -15,23 +19,29 @@
         private readonly IRepository<PersonalDetails> personalDetailsRepo;
         private readonly IRepository<Education> educationRepo;
         private readonly IRepository<WorkExperience> workExperienceRepo;
+        private readonly IRepository<LanguageInfo> languageInfoRepo;
         private readonly IRepository<Skill> skillRepo;
         private readonly IRepository<CourseCertificate> courseSertificateRepo;
+        private readonly IMapper mapper;
 
         public CVsService(
             IRepository<CurriculumVitae> repository,
             IRepository<PersonalDetails> personalDetailsRepo,
             IRepository<Education> educationRepo,
             IRepository<WorkExperience> workExperienceRepo,
+            IRepository<LanguageInfo> languageInfoRepo,
             IRepository<Skill> skillRepo,
-            IRepository<CourseCertificate> courseSertificateRepo)
+            IRepository<CourseCertificate> courseSertificateRepo,
+            IMapper mapper)
         {
             this.repository = repository;
             this.personalDetailsRepo = personalDetailsRepo;
             this.educationRepo = educationRepo;
             this.workExperienceRepo = workExperienceRepo;
+            this.languageInfoRepo = languageInfoRepo;
             this.skillRepo = skillRepo;
             this.courseSertificateRepo = courseSertificateRepo;
+            this.mapper = mapper;
         }
 
         public async Task<bool> ExistsAsync(string id)
@@ -49,19 +59,18 @@
                 .ToListAsync();
         }
 
-        public async Task<string> CreateAsync(string userId, string name, string pictureUrl)
+        public async Task<BasicViewModel> CreateAsync(CVCreateInputModel cvModel, string userId)
         {
-            var cv = new CurriculumVitae
-            {
-                UserId = userId,
-                Name = name,
-                PictureUrl = pictureUrl
-            };
+            CurriculumVitae cvEntity = new();
 
-            await this.repository.AddAsync(cv);
+            this.mapper.Map(cvModel, cvEntity);
+            cvEntity.UserId = userId;
+            cvEntity.CreatedOn = DateTime.UtcNow;
+
+            await this.repository.AddAsync(cvEntity);
             await this.repository.SaveChangesAsync();
 
-            return cv.Id;
+            return new BasicViewModel(cvEntity.Id, cvEntity.Name);
         }
 
         public async Task<byte[]> GetCvDataAsync(string cvId)
@@ -111,6 +120,7 @@
             this.educationRepo.DeleteWhere(ed => ed.CurriculumVitaeId == cv.Id);
             this.workExperienceRepo.DeleteWhere(we => we.CurriculumVitaeId == cv.Id);
             this.skillRepo.DeleteWhere(sk => sk.CurriculumVitaeId == cv.Id);
+            this.languageInfoRepo.DeleteWhere(li => li.CurriculumVitaeId == cv.Id);
             this.courseSertificateRepo.DeleteWhere(cs => cs.CurriculumVitaeId == cv.Id);
             this.repository.Delete(cv);
 

@@ -3,7 +3,7 @@
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.CurriculumVitae;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;

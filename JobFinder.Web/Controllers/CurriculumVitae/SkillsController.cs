@@ -1,8 +1,9 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
     using JobFinder.Services.CurriculumVitae;
-    using JobFinder.Web.Models.CurriculumVitae;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -24,9 +25,10 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Add([FromBody] SkillsInputModel model)
+        [Route("{cvId:guid}/create")]
+        public async Task<ActionResult<int>> Add([FromRoute] Guid cvId, [FromBody] SkillsInputModel model)
         {
-            int skillsId = await this.skillsService.AddAsync(model.CvId, model.ComputerSkills, 
+            int skillsId = await this.skillsService.AddAsync(cvId.ToString(), model.ComputerSkills, 
                 model.Skills, model.HasManagedPeople, model.HasDrivingLicense);
 
             return this.Ok(skillsId);
