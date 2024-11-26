@@ -1,10 +1,12 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
+    using AutoMapper;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Repositories;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
@@ -13,10 +15,14 @@
     public class CoursesSertificatesService : ICoursesSertificatesService
     {
         private readonly IRepository<CourseCertificate> repository;
+        private readonly IMapper mapper;
 
-        public CoursesSertificatesService(IRepository<CourseCertificate> repository)
+        public CoursesSertificatesService(
+            IRepository<CourseCertificate> repository,
+            IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
@@ -44,20 +50,54 @@
             return courseSertificate.Id;
         }
 
-        public async Task<bool> UpdateAsync(int id, string courseName, string certificateUrl)
+        public async Task UpdateAsync(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfoModels)
         {
-            var courseCertificateFromDb = await this.repository.FindAsync(id);
+            List<CourseCertificate> courceEntitiesFromDb = await this.repository
+                .AllWhere(we => we.CurriculumVitaeId == cvId)
+                .ToListAsync();
 
-            if (courseCertificateFromDb == null)
+            IEnumerable<CourseSertificateEditModel> coursesToAdd = coursesInfoModels
+                .Where(m => !courceEntitiesFromDb.Any(ce => ce.Id == m.Id));
+
+            if (coursesToAdd.Any())
             {
-                return false;
+                List<CourseCertificate> entitiesToAdd = new();
+                foreach (CourseSertificateEditModel model in coursesToAdd)
+                {
+                    CourseCertificate entityToAdd = this.mapper.Map<CourseCertificate>(model);
+                    entityToAdd.Id = 0;
+                    entityToAdd.CurriculumVitaeId = cvId;
+                    entitiesToAdd.Add(entityToAdd);
+                }
+
+                await this.repository.AddRangeAsync(entitiesToAdd);
             }
 
-            courseCertificateFromDb.CourseName = courseName;
-            courseCertificateFromDb.CertificateUrl = certificateUrl;
-            await this.repository.SaveChangesAsync();
+            IEnumerable<CourseCertificate> entitiesToRemove = courceEntitiesFromDb
+                .Where(ce => !coursesInfoModels.Any(m => m.Id == ce.Id));
 
-            return true;
+            if (entitiesToRemove.Any())
+            {
+                this.repository.DeleteRange(entitiesToRemove);
+            }
+
+            IEnumerable<CourseCertificate> entitiesToUpdate = courceEntitiesFromDb
+                .Where(ce => coursesInfoModels.Any(m => m.Id == ce.Id));
+
+            if (entitiesToUpdate.Any())
+            {
+                foreach (CourseCertificate item in entitiesToUpdate)
+                {
+                    CourseSertificateEditModel correspondingModel = coursesInfoModels
+                        .First(m => m.Id == item.Id);
+
+                    this.mapper.Map(correspondingModel, item);
+                }
+
+                this.repository.UpdateRange(entitiesToUpdate);
+            }
+
+            await this.repository.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -74,6 +114,5 @@
 
             return true;
         }
-
     }
 }

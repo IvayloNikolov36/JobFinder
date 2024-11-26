@@ -1,11 +1,12 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
+    using AutoMapper;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
-    using JobFinder.Data.Repositories;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
@@ -14,10 +15,14 @@
     public class LanguageInfoService : ILanguageInfoService
     {
         private readonly IRepository<LanguageInfo> repository;
+        private readonly IMapper mapper;
 
-        public LanguageInfoService(IRepository<LanguageInfo> languageInfoRepository) 
+        public LanguageInfoService(
+            IRepository<LanguageInfo> languageInfoRepository,
+            IMapper mapper) 
         {
             this.repository = languageInfoRepository;
+            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
@@ -48,24 +53,54 @@
             return languageInfo.Id;
         }
 
-        public async Task<bool> UpdateAsync(int languageInfoId, LanguageType languageType, 
-            LanguageLevel comprehension, LanguageLevel speaking, LanguageLevel writing)
+        public async Task UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfoModels)
         {
-            var languageInfoFromDb = await this.repository.FindAsync(languageInfoId);
+            List<LanguageInfo> languageInfoEntitiesFromDB = await this.repository
+                .AllWhere(we => we.CurriculumVitaeId == cvId)
+                .ToListAsync();
 
-            if (languageInfoFromDb == null)
+            IEnumerable<LanguageInfoEditModel> languageInfoToAdd = languagesInfoModels
+                .Where(li => !languageInfoEntitiesFromDB.Any(le => le.Id == li.Id));
+
+            if (languageInfoToAdd.Any())
             {
-                return false;
+                List<LanguageInfo> entitiesToAdd = new();
+                foreach (LanguageInfoEditModel model in languageInfoToAdd)
+                {
+                    LanguageInfo entityToAdd = this.mapper.Map<LanguageInfo>(model);
+                    entityToAdd.Id = 0;
+                    entityToAdd.CurriculumVitaeId = cvId;
+                    entitiesToAdd.Add(entityToAdd);
+                }
+
+                await this.repository.AddRangeAsync(entitiesToAdd);
             }
 
-            languageInfoFromDb.LanguageType = languageType;
-            languageInfoFromDb.Comprehension = comprehension;
-            languageInfoFromDb.Speaking = speaking;
-            languageInfoFromDb.Writing = writing;
+            IEnumerable<LanguageInfo> entitiesToRemove = languageInfoEntitiesFromDB
+                .Where(we => !languagesInfoModels.Any(wem => wem.Id == we.Id));
+
+            if (entitiesToRemove.Any())
+            {
+                this.repository.DeleteRange(entitiesToRemove);
+            }
+
+            IEnumerable<LanguageInfo> entitiesToUpdate = languageInfoEntitiesFromDB
+                .Where(we => languagesInfoModels.Any(m => m.Id == we.Id));
+
+            if (entitiesToUpdate.Any())
+            {
+                foreach (LanguageInfo item in entitiesToUpdate)
+                {
+                    LanguageInfoEditModel correspondingModel = languagesInfoModels
+                        .First(m => m.Id == item.Id);
+
+                    this.mapper.Map(correspondingModel, item);
+                }
+
+                this.repository.UpdateRange(entitiesToUpdate);
+            }
 
             await this.repository.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> DeleteAsync(int languageInfoId)
@@ -81,6 +116,5 @@
 
             return true;
         }
-
     }
 }

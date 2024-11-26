@@ -1,11 +1,15 @@
 ﻿namespace JobFinder.Web.Models.CVModels
 {
+    using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
+    using JobFinder.Services.Mappings;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class WorkExperienceEditModel
+    public class WorkExperienceEditModel : IMapTo<WorkExperience>
     {
+        public int Id { get; set; }
+
         public DateTime FromDate { get; set; }
 
         // TODO: make validator Todate to be after FromDate

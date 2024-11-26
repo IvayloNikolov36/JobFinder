@@ -7,6 +7,8 @@
 
     public class WorkExperienceListingModel : IMapFrom<WorkExperience>, IHaveCustomMappings
     {
+        public int Id { get; set; }
+
         public string CurriculumVitaeId { get; set; }
 
         public DateTime FromDate { get; set; }

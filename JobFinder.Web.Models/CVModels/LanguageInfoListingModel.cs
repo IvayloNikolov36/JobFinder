@@ -6,6 +6,8 @@
 
     public class LanguageInfoListingModel : IMapFrom<LanguageInfo>, IHaveCustomMappings
     {
+        public int Id { get; set; }
+
         public string CurriculumVitaeId { get; set; }
 
         public string LanguageType { get; set; }

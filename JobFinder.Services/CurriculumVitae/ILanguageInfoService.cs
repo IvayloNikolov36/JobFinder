@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Services.CurriculumVitae
 {
     using JobFinder.Data.Models.Enums;
+    using JobFinder.Web.Models.CVModels;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -11,8 +12,7 @@
         Task<int> AddAsync(string cvId, LanguageType languageType, 
             LanguageLevel comprehension, LanguageLevel speaking, LanguageLevel writing);
 
-        Task<bool> UpdateAsync(int languageInfoId, LanguageType languageType,
-            LanguageLevel comprehension, LanguageLevel speaking, LanguageLevel writing);
+        Task UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfo);
 
         Task<bool> DeleteAsync(int languageInfoId);
     }

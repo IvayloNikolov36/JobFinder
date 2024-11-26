@@ -41,16 +41,14 @@
             return this.Ok(entitiesIds);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Edit([FromBody] CourseSertificateEditModel model)
+        [HttpPut("{cvId:guid}/update")]
+        public async Task<IActionResult> Update(
+            [FromRoute] Guid cvId,
+            [FromBody] IEnumerable<CourseSertificateEditModel> coursesInfo)
         {
-            bool isUpdated = await this.coursesService.UpdateAsync(model.Id, model.CourseName, model.CertificateUrl);
-            if (!isUpdated)
-            {
-                return this.BadRequest(new { Title = "Not updated!" });
-            }
+            await this.coursesService.UpdateAsync(cvId.ToString(), coursesInfo);
 
-            return this.Ok(new { Message = "Entity successfully updated!" });
+            return this.Ok(new { Message = "Courses info successfully updated!" });
         }
 
         [HttpDelete]

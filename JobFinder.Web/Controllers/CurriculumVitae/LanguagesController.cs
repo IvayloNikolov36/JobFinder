@@ -43,18 +43,14 @@
             return this.Ok(entitiesIds);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] LanguageInfoEditModel model)
+        [HttpPut("{cvId:guid}/update")]
+        public async Task<IActionResult> Update(
+            [FromRoute] Guid cvId,
+            [FromBody] IEnumerable<LanguageInfoEditModel> languagesInfo)
         {
-            bool isUpdated = await this.languageService.UpdateAsync(id,
-                 model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
+            await this.languageService.UpdateAsync(cvId.ToString(), languagesInfo);
 
-            if (!isUpdated)
-            {
-                return this.BadRequest(new { Title = "Language info not updated!" });
-            }
-
-            return this.Ok(new { Message = "Language info successfully updated!" });
+            return this.Ok(new { Message = "Languages info successfully updated!" });
         }
 
         [HttpDelete("{id:int}")]

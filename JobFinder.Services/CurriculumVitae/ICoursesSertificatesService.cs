@@ -1,5 +1,6 @@
 ﻿namespace JobFinder.Services.CurriculumVitae
 {
+    using JobFinder.Web.Models.CVModels;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@
 
         Task<int> AddAsync(string cvId, string courseName, string certificateUrl);
 
-        Task<bool> UpdateAsync(int id, string courseName, string certificateUrl);
+        Task UpdateAsync(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfo);
 
         Task<bool> DeleteAsync(int id);
     }

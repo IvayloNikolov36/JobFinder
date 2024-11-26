@@ -1,11 +1,12 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
+    using AutoMapper;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
-    using JobFinder.Data.Repositories;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
@@ -15,10 +16,14 @@
     public class EducationService : IEducationService
     {
         private readonly IRepository<Education> repository;
+        private readonly IMapper mapper;
 
-        public EducationService(IRepository<Education> educationRepository) 
+        public EducationService(
+            IRepository<Education> educationRepository,
+            IMapper mapper) 
         {
             this.repository = educationRepository;
+            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
@@ -52,27 +57,54 @@
             return education.Id;
         }
         
-        public async Task<bool> UpdateAsync(int educationId, DateTime fromDate, DateTime? toDate, string organization,
-            string location, EducationLevel educationLevel, string major, string mainSubjects)
+        public async Task UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationModels)
         {
-            var educationFromDb = await this.repository.FindAsync(educationId);
+            List<Education> educationEntitiesFromDb = await this.repository
+                .AllWhere(e => e.CurriculumVitaeId == cvId)
+                .ToListAsync();
 
-            if (educationFromDb == null)
+            IEnumerable<EducationEditModel> educationsToAdd = educationModels
+                .Where(em => !educationEntitiesFromDb.Any(ee => ee.Id == em.Id));
+
+            if (educationsToAdd.Any())
             {
-                return false;
+                List<Education> educationEntitiesToAdd = new();
+                foreach (EducationEditModel educationEditModel in educationsToAdd)
+                {
+                    Education educationEntity = this.mapper.Map<Education>(educationEditModel);
+                    educationEntity.Id = 0;
+                    educationEntity.CurriculumVitaeId = cvId;
+                    educationEntitiesToAdd.Add(educationEntity);
+                }
+
+                await this.repository.AddRangeAsync(educationEntitiesToAdd);
             }
 
-            educationFromDb.FromDate = fromDate;
-            educationFromDb.ToDate = toDate;
-            educationFromDb.Organization = organization;
-            educationFromDb.Location = location;
-            educationFromDb.EducationLevel = educationLevel;
-            educationFromDb.Major = major;
-            educationFromDb.MainSubjects = mainSubjects;
+            IEnumerable<Education> educationEntitiesToRemove = educationEntitiesFromDb
+                .Where(ee => !educationModels.Any(em => em.Id == ee.Id));
+
+            if (educationEntitiesToRemove.Any())
+            {
+                this.repository.DeleteRange(educationEntitiesToRemove);
+            }
+
+            IEnumerable<Education> educationsToUpdate = educationEntitiesFromDb
+                .Where(ee => educationModels.Any(em => em.Id == ee.Id));
+
+            if (educationsToUpdate.Any())
+            {
+                foreach (Education educationEntityToUpdate in educationsToUpdate)
+                {
+                    EducationEditModel correspondingModel = educationModels
+                        .First(em => em.Id == educationEntityToUpdate.Id);
+
+                    this.mapper.Map(correspondingModel, educationEntityToUpdate);
+                }
+
+                this.repository.UpdateRange(educationsToUpdate);
+            }
 
             await this.repository.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> DeleteAsync(int educationId)
@@ -88,6 +120,5 @@
 
             return true;
         }
-
     }
 }

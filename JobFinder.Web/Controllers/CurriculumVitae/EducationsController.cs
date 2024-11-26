@@ -42,19 +42,14 @@
             return this.Ok(entitiesIds);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] EducationEditModel model)
+        [HttpPut("{cvId:guid}/update")]
+        public async Task<IActionResult> Update(
+            [FromRoute] Guid cvId,
+            [FromBody] IEnumerable<EducationEditModel> educationsModel)
         {
-            bool isUpdated = await this.educationService.UpdateAsync(
-                id, model.FromDate, model.ToDate, model.Organization,
-                model.Location, model.EducationLevel, model.Major, model.MainSubjects);
+            await this.educationService.UpdateAsync(cvId.ToString(), educationsModel);
 
-            if (!isUpdated)
-            {
-                return this.BadRequest(new { Title = "Education details are not updated!" });
-            }
-
-            return this.Ok(new { Message = "Education successfully updated!" });
+            return this.Ok(new { Message = "Educations successfully updated!" });
         }
 
         [HttpDelete("{id:int}")]

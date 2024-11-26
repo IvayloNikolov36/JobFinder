@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Data.Repositories.Contracts
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
@@ -19,9 +20,15 @@
 
         Task AddAsync(T entity);
 
+        Task AddRangeAsync(IEnumerable<T> entities);
+
         void Update(T entity);
 
+        void UpdateRange(IEnumerable<T> entities);
+
         void Delete(T entity);
+
+        void DeleteRange(IEnumerable<T> entities);
 
         void DeleteWhere(Expression<Func<T, bool>> predicate);
 

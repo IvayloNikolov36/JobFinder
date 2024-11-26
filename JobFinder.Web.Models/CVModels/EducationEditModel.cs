@@ -1,11 +1,15 @@
 ﻿namespace JobFinder.Web.Models.CVModels
 {
+    using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
+    using JobFinder.Services.Mappings;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class EducationEditModel
+    public class EducationEditModel : IMapTo<Education>
     {
+        public int Id { get; set; }
+
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }

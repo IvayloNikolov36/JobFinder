@@ -7,6 +7,8 @@
 
     public class EducationListingModel : IMapFrom<Education>, IHaveCustomMappings
     {
+        public int Id { get; set; }
+
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }

@@ -45,18 +45,14 @@
             return this.Ok(entitiesIds);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] WorkExperienceEditModel model)
+        [HttpPut("{cvId:guid}/update")]
+        public async Task<IActionResult> Update(
+        [FromRoute] Guid cvId,
+        [FromBody] IEnumerable<WorkExperienceEditModel> workExperience)
         {
-            bool isUpdated = await this.workExperienceService.UpdateAsync(id, model.FromDate, model.ToDate, model.JobTitle,
-                model.Organization, model.BusinessSector, model.Location, model.AditionalDetails);
+            await this.workExperienceService.UpdateAsync(cvId.ToString(), workExperience);
 
-            if (!isUpdated)
-            {
-                return this.BadRequest(new { Title = "Work Experience not updated!" });
-            }
-
-            return this.Ok(new { Message = "Work Experience updated successfully!" } );
+            return this.Ok(new { Message = "Work Experience successfully updated!" });
         }
 
         [HttpDelete("{id:int}")]

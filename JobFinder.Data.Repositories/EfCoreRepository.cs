@@ -3,6 +3,7 @@
     using JobFinder.Data.Repositories.Contracts;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
@@ -35,6 +36,8 @@
 
         public virtual Task AddAsync(T entity) => this.DbSet.AddAsync(entity).AsTask();
 
+        public virtual Task AddRangeAsync(IEnumerable<T> entities) => this.DbSet.AddRangeAsync(entities);
+
         public virtual void Update(T entity)
         {
             var entry = this.Context.Entry(entity);
@@ -46,7 +49,14 @@
             entry.State = EntityState.Modified;
         }
 
+        public virtual void UpdateRange(IEnumerable<T> entities)
+        {
+            this.DbSet.UpdateRange(entities);
+        }
+
         public virtual void Delete(T entity) => this.DbSet.Remove(entity);
+
+        public virtual void DeleteRange(IEnumerable<T> entities) => this.DbSet.RemoveRange(entities);
 
         public virtual void DeleteWhere(Expression<Func<T, bool>> predicate)
         {
