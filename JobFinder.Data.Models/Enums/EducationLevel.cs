@@ -1,12 +1,12 @@
 ﻿namespace JobFinder.Data.Models.Enums
 {
-    public enum EducationLevel
+    public enum EducationLevel // TODO: create db table for education level
     {
-        SecondarySchool = 0,
-        Proffesional = 1,
-        College = 2,
-        BachelorsDegree = 3,
-        MastersDegree = 4,
-        Doctorate = 5
+        SecondarySchool = 1,
+        Proffesional = 2,
+        College = 3,
+        BachelorsDegree = 4,
+        MastersDegree = 5,
+        Doctorate = 6
     }
 }

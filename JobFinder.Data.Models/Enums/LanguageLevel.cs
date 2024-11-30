@@ -2,8 +2,8 @@
 {
     public enum LanguageLevel
     {
-        Beginner = 0,
-        Intermediate = 1,
-        Fluent = 2
+        Beginner = 1,
+        Intermediate = 2,
+        Fluent = 3
     }
 }

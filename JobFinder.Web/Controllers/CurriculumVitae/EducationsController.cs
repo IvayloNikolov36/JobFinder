@@ -52,19 +52,6 @@
             return this.Ok(new { Message = "Educations successfully updated!" });
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            bool isDeleted = await this.educationService.DeleteAsync(id);
-
-            if (!isDeleted)
-            {
-                return this.BadRequest(new { Title = "Education is not deleted!" });
-            }
-
-            return this.Ok(new { Message = "Education successfully deleted!" });
-        }
-
         [HttpGet("levels")]
         public IActionResult GetEducationLevels()
         {
