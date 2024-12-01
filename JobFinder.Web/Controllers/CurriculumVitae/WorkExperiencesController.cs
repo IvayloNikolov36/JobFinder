@@ -70,10 +70,10 @@
         [HttpGet("businessSectors")]
         public IActionResult GetBusinessSectors()
         {
-            var sectors = new List<EnumTypeViewModel>();
+            var sectors = new List<BasicValueViewModel>();
             foreach (var sector in Enum.GetValues(typeof(BusinessSector)))
             {
-                sectors.Add(new EnumTypeViewModel((int)sector, sector.ToString()));
+                sectors.Add(new BasicValueViewModel((int)sector, sector.ToString()));
             }
 
             return this.Ok(sectors);

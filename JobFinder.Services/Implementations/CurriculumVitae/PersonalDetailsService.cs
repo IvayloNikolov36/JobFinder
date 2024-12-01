@@ -1,11 +1,12 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
+    using AutoMapper;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
-    using JobFinder.Data.Repositories;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
@@ -14,10 +15,14 @@
     public class PersonalDetailsService : IPersonalDetailsService
     {
         private readonly IRepository<PersonalDetails> repository;
+        private readonly IMapper mapper;
 
-        public PersonalDetailsService(IRepository<PersonalDetails> personalDetailsRepository) 
+        public PersonalDetailsService(
+            IRepository<PersonalDetails> personalDetailsRepository,
+            IMapper mapper) 
         {
             this.repository = personalDetailsRepository;
+            this.mapper = mapper;
         }
 
         public async Task<T> GetAsync<T>(string cvId)
@@ -30,9 +35,10 @@
             return personalDetails;
         }
 
-        public async Task<int> CreateAsync(string cvId, string firstName, string middleName, string lastName, DateTime birthdate, Gender gender, string email, string phone, Country country, Country citizenShip, string city)
+        // TODO: refactor or delete if it is not used
+        public async Task<int> CreateAsync(string cvId, string firstName, string middleName, string lastName, DateTime birthdate, GenderEnum gender, string email, string phone, CountryEnum country, CountryEnum citizenShip, string city)
         {
-            var personalInfo = new PersonalDetails
+            PersonalDetails personalInfo = new()
             {
                 CurriculumVitaeId = cvId,
                 FirstName = firstName,
@@ -53,26 +59,19 @@
             return personalInfo.Id;
         }
 
-        public async Task<bool> UpdateAsync(int personalDetailsId, string firstName, string middleName, string lastName, DateTime birthdate, Gender gender, string email, string phone, Country country, Country citizenShip, string city)
+        public async Task<bool> UpdateAsync(string cvId, PersonalDetailsEditModel personalDetails)
         {
-            var personalDetails = await this.repository.FindAsync(personalDetailsId);
+            PersonalDetails personalDetailsFromDb = await this.repository
+                .FirstOrDefaultAsync(pd => pd.CurriculumVitaeId == cvId);
 
-            if (personalDetails == null)
+            if (personalDetailsFromDb == null)
             {
                 return false;
             }
 
-            personalDetails.FirstName = firstName;
-            personalDetails.MiddleName = middleName;
-            personalDetails.LastName = lastName;
-            personalDetails.Birthdate = birthdate;
-            personalDetails.Gender = gender;
-            personalDetails.Email = email;
-            personalDetails.Phone = phone;
-            personalDetails.Country = country;
-            personalDetails.CitizenShip = citizenShip;
-            personalDetails.City = city;
+            this.mapper.Map(personalDetails, personalDetailsFromDb);
 
+            this.repository.Update(personalDetailsFromDb);
             await this.repository.SaveChangesAsync();
 
             return true;

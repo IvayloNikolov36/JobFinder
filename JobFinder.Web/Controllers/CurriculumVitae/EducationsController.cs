@@ -55,10 +55,10 @@
         [HttpGet("levels")]
         public IActionResult GetEducationLevels()
         {
-            var educationLevels = new List<EnumTypeViewModel>();
+            var educationLevels = new List<BasicValueViewModel>();
             foreach (var level in Enum.GetValues(typeof(EducationLevel)))
             {
-                educationLevels.Add(new EnumTypeViewModel((int)level, level.ToString()));
+                educationLevels.Add(new BasicValueViewModel((int)level, level.ToString()));
             }
 
             return this.Ok(educationLevels);

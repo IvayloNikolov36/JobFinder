@@ -1,10 +1,13 @@
 ﻿namespace JobFinder.Web.Models.CVModels
 {
+    using AutoMapper;
+    using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
+    using JobFinder.Services.Mappings;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetailsEditModel
+    public class PersonalDetailsEditModel : IHaveCustomMappings
     {
         [Required]
         [StringLength(50, MinimumLength = 2)]
@@ -25,14 +28,22 @@
         [Phone]
         public string Phone { get; set; }
 
-        public Gender Gender { get; set; }
+        public int Gender { get; set; }
 
         public DateTime Birthdate { get; set; }
 
-        public Country CitizenShip { get; set; }
+        public int CitizenShip { get; set; }
 
-        public Country Country { get; set; }
+        public int Country { get; set; }
 
         public string City { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<PersonalDetailsEditModel, PersonalDetails>()
+                .ForMember(e => e.Country, o => o.MapFrom(vm => (CountryEnum)vm.Country))
+                .ForMember(e => e.CitizenShip, o => o.MapFrom(vm => (CountryEnum)vm.CitizenShip))
+                .ForMember(e => e.Gender, o => o.MapFrom(vm => (GenderEnum)vm.Gender));
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace JobFinder.Web.Models.Common
 {
-    public class EnumTypeViewModel
+    public class BasicValueViewModel
     {
-        public EnumTypeViewModel(int value, string viewValue)
+        public BasicValueViewModel(int value, string viewValue)
         {
             this.Value = value;
             this.ViewValue = viewValue;

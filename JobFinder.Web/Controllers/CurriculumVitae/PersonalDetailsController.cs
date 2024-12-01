@@ -47,36 +47,26 @@
             return this.Ok(objectId);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Edit(int id, PersonalDetailsEditModel model)
+        [HttpPut("{cvId:guid}/update")]
+        public async Task<IActionResult> Edit([FromRoute] Guid cvId, [FromBody] PersonalDetailsEditModel model)
         {
-            bool isUpdated = await this.personalDetailsService.UpdateAsync(id,
-                model.FirstName,
-                model.MiddleName,
-                model.LastName,
-                model.Birthdate,
-                model.Gender,
-                model.Email,
-                model.Phone,
-                model.Country,
-                model.CitizenShip,
-                model.City);
+            bool isUpdated = await this.personalDetailsService.UpdateAsync(cvId.ToString(), model);
 
             if (!isUpdated)
             {
-                return this.BadRequest(new { Title = "Invalid personal details id!" });
+                return this.NotFound();
             }
 
-            return this.Ok(new { Message = "Personal details updated successfully!" });
+            return this.Ok();
         }
 
         [HttpGet("countryTypes")]
         public IActionResult GetCountries()
         {
-            var countries = new List<EnumTypeViewModel>();
-            foreach (var country in Enum.GetValues(typeof(Country)))
+            var countries = new List<BasicValueViewModel>();
+            foreach (var country in Enum.GetValues(typeof(CountryEnum)))
             {
-                countries.Add(new EnumTypeViewModel((int)country, country.ToString()));
+                countries.Add(new BasicValueViewModel((int)country, country.ToString()));
             }
 
             return this.Ok(countries);

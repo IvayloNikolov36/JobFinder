@@ -1,6 +1,6 @@
 ﻿namespace JobFinder.Data.Models.Enums
 {
-    public enum Gender
+    public enum GenderEnum
     {
         Unspecified = 0,
         Male = 1,

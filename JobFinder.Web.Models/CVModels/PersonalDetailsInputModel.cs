@@ -28,13 +28,13 @@
         [Phone]
         public string Phone { get; set; }
 
-        public Gender Gender { get; set; }
+        public GenderEnum Gender { get; set; }
 
         public DateTime Birthdate { get; set; }
 
-        public Country CitizenShip { get; set; }
+        public CountryEnum CitizenShip { get; set; }
 
-        public Country Country { get; set; }
+        public CountryEnum Country { get; set; }
 
         public string City { get; set; }
     }

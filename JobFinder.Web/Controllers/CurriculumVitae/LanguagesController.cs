@@ -69,10 +69,10 @@
         [HttpGet("types")]
         public IActionResult GetLanguageTypes()
         {
-            var types = new List<EnumTypeViewModel>();
+            var types = new List<BasicValueViewModel>();
             foreach (var languageType in Enum.GetValues(typeof(LanguageType)))
             {
-                types.Add(new EnumTypeViewModel((int)languageType, languageType.ToString()));
+                types.Add(new BasicValueViewModel((int)languageType, languageType.ToString()));
             }
 
             return this.Ok(types);
@@ -81,10 +81,10 @@
         [HttpGet("levels")]
         public IActionResult GetLanguageLevel()
         {
-            var educationLevels = new List<EnumTypeViewModel>();
+            var educationLevels = new List<BasicValueViewModel>();
             foreach (var level in Enum.GetValues(typeof(LanguageLevel)))
             {
-                educationLevels.Add(new EnumTypeViewModel((int)level, level.ToString()));
+                educationLevels.Add(new BasicValueViewModel((int)level, level.ToString()));
             }
 
             return this.Ok(educationLevels);

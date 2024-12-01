@@ -3,9 +3,10 @@
     using AutoMapper;
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Common;
     using System;
 
-    public class WorkExperienceListingModel : IMapFrom<WorkExperience>, IHaveCustomMappings
+    public class WorkExperienceListingModel : IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -19,7 +20,7 @@
 
         public string Organization { get; set; }
 
-        public string BusinessSector { get; set; }
+        public BasicValueViewModel BusinessSector { get; set; }
 
         public string Location { get; set; }
 
@@ -28,7 +29,8 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<WorkExperience, WorkExperienceListingModel>()
-              .ForMember(x => x.BusinessSector, m => m.MapFrom(m => m.BusinessSector.ToString()));
+              .ForMember(x => x.BusinessSector, m => m.MapFrom(m =>
+                new BasicValueViewModel((int)m.BusinessSector, m.BusinessSector.ToString())));
         }
     }
 }

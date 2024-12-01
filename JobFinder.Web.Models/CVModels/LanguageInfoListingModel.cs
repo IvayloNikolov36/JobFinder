@@ -11,25 +11,25 @@
 
         public string CurriculumVitaeId { get; set; }
 
-        public EnumTypeViewModel LanguageType { get; set; }
+        public BasicValueViewModel LanguageType { get; set; }
 
-        public EnumTypeViewModel Comprehension { get; set; }
+        public BasicValueViewModel Comprehension { get; set; }
 
-        public EnumTypeViewModel Speaking { get; set; }
+        public BasicValueViewModel Speaking { get; set; }
 
-        public EnumTypeViewModel Writing { get; set; }
+        public BasicValueViewModel Writing { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<LanguageInfo, LanguageInfoListingModel>()
                .ForMember(x => x.LanguageType, m => m.MapFrom(m =>
-                    new EnumTypeViewModel((int)m.LanguageType, m.LanguageType.ToString())))
+                    new BasicValueViewModel((int)m.LanguageType, m.LanguageType.ToString())))
                .ForMember(x => x.Comprehension, m => m.MapFrom(m =>
-                    new EnumTypeViewModel((int)m.Comprehension, m.Comprehension.ToString())))
+                    new BasicValueViewModel((int)m.Comprehension, m.Comprehension.ToString())))
                .ForMember(x => x.Speaking, m => m.MapFrom(m =>
-                    new EnumTypeViewModel((int)m.Speaking, m.Speaking.ToString())))
+                    new BasicValueViewModel((int)m.Speaking, m.Speaking.ToString())))
                .ForMember(x => x.Writing, m => m.MapFrom(m =>
-                new EnumTypeViewModel((int)m.Writing, m.Writing.ToString())));
+                new BasicValueViewModel((int)m.Writing, m.Writing.ToString())));
         }
     }
 }
