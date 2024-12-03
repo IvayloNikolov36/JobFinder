@@ -3,13 +3,9 @@
     using JobFinder.Data;
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Web.Infrastructure.Enums;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using static JobFinder.Web.Infrastructure.WebConstants;
 
@@ -34,12 +30,9 @@
 
                 await CreateRoles(roleManager);
 
+                // TODO: refactor
                 //create admin
                 await CreateUser(userManager, AdminUserName, AdminEmail, DefaultAdminPassword, AdminRole);
-
-                await CreateJobEngagements(db);
-
-                await CreateJobCategories(db);
 
                 await CreateDrivingLicenseCategories(db);
             }
@@ -76,52 +69,7 @@
             }
         }
 
-        private static async Task CreateJobEngagements(JobFinderDbContext db)
-        {
-            string[] enumeEngagements = Enum.GetNames(typeof(JobEngagementType));
-            var engagements = new List<string>();
-            enumeEngagements.ToList().ForEach(x => engagements.Add(x.SeparateWords()));
-
-            string[] dbEngagements = db.JobEngagements.Select(x => x.Type).ToArray();
-
-            string[] engagementsToWrite = engagements.Where(e => !dbEngagements.Contains(e)).ToArray();
-
-            foreach (var engagementType in engagementsToWrite)
-            {
-                var engagement = new JobEngagement
-                {
-                    Type = engagementType
-                };
-
-                await db.AddAsync(engagement);
-            }
-
-            await db.SaveChangesAsync();
-        }
-
-        private static async Task CreateJobCategories(JobFinderDbContext db)
-        {
-            var enumCategories = Enum.GetNames(typeof(JobCategoryType));
-            var categories = new List<string>();
-            enumCategories.ToList().ForEach(x => categories.Add(x.ReplaceDashesAndSeparate()));
-
-            string[] dbCategories = db.JobCategories.Select(x => x.Type).ToArray();
-
-            string[] categoriesToWrite = categories.Where(e => !dbCategories.Contains(e)).ToArray();
-
-            foreach (var categoryType in categoriesToWrite)
-            {
-                var category = new JobCategory
-                {
-                    Type = categoryType
-                };
-
-                await db.AddAsync(category);
-            }
-
-            await db.SaveChangesAsync();
-        }
-
+        // TODO: remove and create a seed
         private static async Task CreateDrivingLicenseCategories(JobFinderDbContext db)
         {
             string[] categories = new string[] { "A", "B", "C", "D", "BE", "CE", "DE", "T tb", "T tm", "T ct", "M" };

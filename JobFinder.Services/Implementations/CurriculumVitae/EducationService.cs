@@ -2,13 +2,11 @@
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -36,26 +34,27 @@
             return educations;
         }
 
-        public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string organization,
-            string location, EducationLevel educationLevel, string major, string mainSubjects)
-        {
-            var education = new Education
-            {
-                CurriculumVitaeId = cvId,
-                FromDate = fromDate,
-                ToDate = toDate,
-                Organization = organization,
-                Location = location,
-                EducationLevel = educationLevel,
-                Major = major,
-                MainSubjects = mainSubjects
-            };
+        // TODO: delete?
+        //public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string organization,
+        //    string location, EducationLevel educationLevel, string major, string mainSubjects)
+        //{
+        //    var education = new Education
+        //    {
+        //        CurriculumVitaeId = cvId,
+        //        FromDate = fromDate,
+        //        ToDate = toDate,
+        //        Organization = organization,
+        //        Location = location,
+        //        EducationLevel = educationLevel,
+        //        Major = major,
+        //        MainSubjects = mainSubjects
+        //    };
 
-            await this.repository.AddAsync(education);
-            await this.repository.SaveChangesAsync();
+        //    await this.repository.AddAsync(education);
+        //    await this.repository.SaveChangesAsync();
 
-            return education.Id;
-        }
+        //    return education.Id;
+        //}
         
         public async Task UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationModels)
         {

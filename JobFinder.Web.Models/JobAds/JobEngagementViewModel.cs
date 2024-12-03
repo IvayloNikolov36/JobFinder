@@ -13,7 +13,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<JobEngagement, JobEngagementViewModel>()
-               .ForMember(x => x.Name, m => m.MapFrom(m => m.Type));
+               .ForMember(x => x.Name, m => m.MapFrom(m => m.Name));
         }
     }
 }

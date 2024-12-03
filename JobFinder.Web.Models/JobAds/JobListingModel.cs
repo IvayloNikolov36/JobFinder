@@ -32,8 +32,8 @@
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))
                 .ForMember(x => x.Salary, m => m.MapFrom(
                     m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString()))
-                .ForMember(x => x.JobEngagement, m => m.MapFrom(m => m.JobEngagement.Type))
-                .ForMember(x => x.JobCategory, m => m.MapFrom(m => m.JobCategory.Type));
+                .ForMember(x => x.JobEngagement, m => m.MapFrom(m => m.JobEngagement.Name))
+                .ForMember(x => x.JobCategory, m => m.MapFrom(m => m.JobCategory.Name));
         }
 
     }

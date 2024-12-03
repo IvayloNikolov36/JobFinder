@@ -41,7 +41,7 @@
 
         public DbSet<Skill> Skills { get; set; }
 
-        public DbSet<LanguageInfo> LanguagesInfo { get; set; }
+        public DbSet<LanguageInfo> LanguageInfos { get; set; }
 
         public DbSet<PersonalInfo> PersonalDetails { get; set; }
 
@@ -59,7 +59,14 @@
 
         public DbSet<Gender> Gender { get; set; }
 
-        //For VIEWS
+        public DbSet<BusinessSector> BusinessSectors { get; set; }
+
+        public DbSet<LanguageType> LanguageTpes { get; set; }
+
+        public DbSet<LanguageLevel> LanguageLevels { get; set; }
+
+        // For VIEWS
+
         public DbSet<CompaniesSubscriptionsData> CompaniesSubscriptionsData { get; set; }
 
         public DbSet<JobCategoriesSubscriptionsData> JobCategoriesSubscriptionsData { get; set; }
@@ -127,13 +134,22 @@
                 .HasNoKey()
                 .ToView(null);
 
-            // SEED
+            this.SeedData(builder);
 
+            base.OnModelCreating(builder);
+        }
+
+        private void SeedData(ModelBuilder builder)
+        {
             CountriesSeeder.Seed(builder);
             CitizenshipsSeeder.Seed(builder);
             GenderSeeder.Seed(builder);
-
-            base.OnModelCreating(builder);
+            BusinessSectorsSeeder.Seed(builder);
+            JobCategorySeeder.Seed(builder);
+            JobEngagementSeeder.Seed(builder);
+            EducationLevelSeeder.Seed(builder);
+            LanguageTypesSeeder.Seed(builder);
+            LanguageLevelsSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

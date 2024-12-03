@@ -11,5 +11,17 @@ namespace JobFinder.Services
         Task<IEnumerable<BasicViewModel>> GetCitizenships();
 
         Task<IEnumerable<BasicViewModel>> GetGender();
+
+        Task<IEnumerable<BasicViewModel>> GetBusinessSector();
+
+        Task<IEnumerable<BasicViewModel>> GetJobCategories();
+
+        Task<IEnumerable<BasicViewModel>> GetJobEngagements();
+
+        Task<IEnumerable<BasicViewModel>> GetEducationLevels();
+
+        Task<IEnumerable<BasicViewModel>> GetLanguageTypes();
+
+        Task<IEnumerable<BasicViewModel>> GetLanguageLevels();
     }
 }

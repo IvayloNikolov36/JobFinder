@@ -1,7 +1,6 @@
 ﻿namespace JobFinder.Data.Models.CV
 {
     using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
 
@@ -24,6 +23,8 @@
         [StringLength(60, MinimumLength = 4)]
         public string Organization { get; set; }
 
+        [Required]
+        public int BusinessSectorId { get; set; }
         public BusinessSector BusinessSector { get; set; }
 
         [Required]

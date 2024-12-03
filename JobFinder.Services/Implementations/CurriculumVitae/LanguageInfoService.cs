@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
@@ -35,23 +34,23 @@
             return languagesInfo;
         }
 
-        public async Task<int> AddAsync(string cvId, LanguageType languageType, 
-            LanguageLevel comprehension, LanguageLevel speaking, LanguageLevel writing)
-        {
-            var languageInfo = new LanguageInfo
-            {
-                CurriculumVitaeId = cvId,
-                LanguageType = languageType,
-                Comprehension = comprehension,
-                Speaking = speaking,
-                Writing = writing
-            };
+        //public async Task<int> AddAsync(string cvId, LanguageType languageType, 
+        //    LanguageLevel comprehension, LanguageLevel speaking, LanguageLevel writing)
+        //{
+        //    var languageInfo = new LanguageInfo
+        //    {
+        //        CurriculumVitaeId = cvId,
+        //        LanguageType = languageType,
+        //        Comprehension = comprehension,
+        //        Speaking = speaking,
+        //        Writing = writing
+        //    };
 
-            await this.repository.AddAsync(languageInfo);
-            await this.repository.SaveChangesAsync();
+        //    await this.repository.AddAsync(languageInfo);
+        //    await this.repository.SaveChangesAsync();
 
-            return languageInfo.Id;
-        }
+        //    return languageInfo.Id;
+        //}
 
         public async Task UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfoModels)
         {

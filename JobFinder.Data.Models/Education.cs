@@ -1,7 +1,6 @@
 ﻿namespace JobFinder.Data.Models.CV
 {
     using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
 
@@ -23,6 +22,9 @@
         [Required]
         [StringLength(60, MinimumLength = 2)]
         public string Location { get; set; }
+
+        [Required]
+        public int EducationLevelId { get; set; }
 
         public EducationLevel EducationLevel { get; set; }
 

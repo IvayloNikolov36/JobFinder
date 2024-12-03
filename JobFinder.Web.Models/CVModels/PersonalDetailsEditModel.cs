@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.Mappings;
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -28,7 +27,7 @@
         [Phone]
         public string Phone { get; set; }
 
-        public int Gender { get; set; }
+        public int GenderId { get; set; }
 
         public DateTime Birthdate { get; set; }
 
@@ -40,8 +39,8 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<PersonalDetailsEditModel, PersonalInfo>()
-                .ForMember(e => e.Gender, o => o.MapFrom(vm => (GenderEnum)vm.Gender));
+            // TODO: refactor
+            configuration.CreateMap<PersonalDetailsEditModel, PersonalInfo>();
         }
     }
 }

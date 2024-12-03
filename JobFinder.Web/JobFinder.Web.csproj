@@ -28,5 +28,9 @@
     <ProjectReference Include="..\JobFinder.Web.Models\JobFinder.Web.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Enums\" />
+  </ItemGroup>
+
 
 </Project>

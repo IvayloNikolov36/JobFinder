@@ -28,9 +28,10 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<WorkExperience, WorkExperienceListingModel>()
-              .ForMember(x => x.BusinessSector, m => m.MapFrom(m =>
-                new BasicViewModel((int)m.BusinessSector, m.BusinessSector.ToString())));
+            // TODO: refactor
+            configuration.CreateMap<WorkExperience, WorkExperienceListingModel>();
+              //.ForMember(x => x.BusinessSector, m => m.MapFrom(m =>
+              //  new BasicViewModel((int)m.BusinessSector, m.BusinessSector.ToString())));
         }
     }
 }

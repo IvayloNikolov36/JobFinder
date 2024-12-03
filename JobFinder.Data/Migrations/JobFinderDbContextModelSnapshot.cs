@@ -19,6 +19,263 @@ namespace JobFinder.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("JobFinder.Data.Models.BusinessSector", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BusinessSectors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Accounting"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Advertising"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Agriculture"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Architecture and Construction"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Arts and Entertainment"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Automotive"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Aviation"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Banks and Credit"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Chemical and Mining"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Consultancy Services"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Education"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Electronics"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Electrical"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Energy and Utilities"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Food and Beverage"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Healthcare"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Human Resources"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Information Technologies"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Insurance"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Internet"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Legal"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Manufacturing"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Machinery"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Marketing"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Media"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "NGOs"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Pharmaceutical"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Public Administration"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Real Estate"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Science"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Security"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Services"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Sports and Recreation"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Telecommunications"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Textile Industry"
+                        },
+                        new
+                        {
+                            Id = 36,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tourism and Restaurants"
+                        },
+                        new
+                        {
+                            Id = 37,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Trade"
+                        },
+                        new
+                        {
+                            Id = 38,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Transportation and Logistics"
+                        },
+                        new
+                        {
+                            Id = 39,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Other"
+                        });
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.CV.CourseCertificate", b =>
                 {
                     b.Property<int>("Id")
@@ -136,7 +393,7 @@ namespace JobFinder.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("EducationLevel")
+                    b.Property<int>("EducationLevelId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FromDate")
@@ -170,6 +427,8 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("CurriculumVitaeId");
 
+                    b.HasIndex("EducationLevelId");
+
                     b.ToTable("Educations");
                 });
 
@@ -180,7 +439,7 @@ namespace JobFinder.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Comprehension")
+                    b.Property<int>("ComprehensionLevelId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -190,23 +449,31 @@ namespace JobFinder.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("LanguageType")
+                    b.Property<int>("LanguageTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Speaking")
+                    b.Property<int>("SpeakingLevelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Writing")
+                    b.Property<int>("WritingLevelId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ComprehensionLevelId");
+
                     b.HasIndex("CurriculumVitaeId");
 
-                    b.ToTable("LanguagesInfo");
+                    b.HasIndex("LanguageTypeId");
+
+                    b.HasIndex("SpeakingLevelId");
+
+                    b.HasIndex("WritingLevelId");
+
+                    b.ToTable("LanguageInfos");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.PersonalInfo", b =>
@@ -327,7 +594,7 @@ namespace JobFinder.Data.Migrations
                         .HasMaxLength(3000)
                         .HasColumnType("nvarchar(3000)");
 
-                    b.Property<int>("BusinessSector")
+                    b.Property<int>("BusinessSectorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -362,6 +629,8 @@ namespace JobFinder.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessSectorId");
 
                     b.HasIndex("CurriculumVitaeId");
 
@@ -3387,6 +3656,65 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.EducationLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EducationLevel");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Secondary School"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Proffesional"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "College"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bachelors Degree"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Masters Degree"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Doctorate"
+                        });
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.Gender", b =>
                 {
                     b.Property<int>("Id")
@@ -3487,12 +3815,74 @@ namespace JobFinder.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Type")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("JobCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Aviation"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Healthcare"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "IT Software Development"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "IT Hardware Support"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Marketing"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Cleaning Service"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Engeneering"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Advertisement"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Human Resources"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Tourism"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Architecture"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Production"
+                        });
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.JobEngagement", b =>
@@ -3502,12 +3892,305 @@ namespace JobFinder.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Type")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("JobEngagements");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "FullTime"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "PartTime"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Permanent"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Temporary"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Intership"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "SuitableForStudents"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Suitable for candidates with no expirience"
+                        });
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.LanguageLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LanguageLevels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Beginner"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Intermediate"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Fluent"
+                        });
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.LanguageType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("LanguageTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageTypeId");
+
+                    b.ToTable("LanguageTpes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Arabic"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bulgarian"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Chinese"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Czech"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Danish"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Dutch"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "English"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Estonian"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Finnish"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "French"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "German"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Greek"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Hindi"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Hungarian"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Italian"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Japanese"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Korean"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Latvian"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Lithuanian"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Norwegian"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Polish"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Portuguese"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Romanian"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Russian"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Serbian"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Slovak"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Slovene"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Spanish"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Swedish"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Turkish"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Ukrainian"
+                        });
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.CompanySubscription", b =>
@@ -3872,18 +4555,58 @@ namespace JobFinder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JobFinder.Data.Models.EducationLevel", "EducationLevel")
+                        .WithMany("Educations")
+                        .HasForeignKey("EducationLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CurriculumVitae");
+
+                    b.Navigation("EducationLevel");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.LanguageInfo", b =>
                 {
+                    b.HasOne("JobFinder.Data.Models.LanguageLevel", "ComprehensionLevel")
+                        .WithMany()
+                        .HasForeignKey("ComprehensionLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
                         .WithMany("LanguagesInfo")
                         .HasForeignKey("CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JobFinder.Data.Models.LanguageType", "LanguageType")
+                        .WithMany()
+                        .HasForeignKey("LanguageTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobFinder.Data.Models.LanguageLevel", "SpeakingLevel")
+                        .WithMany()
+                        .HasForeignKey("SpeakingLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobFinder.Data.Models.LanguageLevel", "WritingLevel")
+                        .WithMany()
+                        .HasForeignKey("WritingLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ComprehensionLevel");
+
                     b.Navigation("CurriculumVitae");
+
+                    b.Navigation("LanguageType");
+
+                    b.Navigation("SpeakingLevel");
+
+                    b.Navigation("WritingLevel");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.PersonalInfo", b =>
@@ -3934,11 +4657,19 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.WorkExperience", b =>
                 {
+                    b.HasOne("JobFinder.Data.Models.BusinessSector", "BusinessSector")
+                        .WithMany("WorkExperiences")
+                        .HasForeignKey("BusinessSectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
                         .WithMany("WorkExperiences")
                         .HasForeignKey("CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BusinessSector");
 
                     b.Navigation("CurriculumVitae");
                 });
@@ -3977,6 +4708,13 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("JobEngagement");
 
                     b.Navigation("Publisher");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.LanguageType", b =>
+                {
+                    b.HasOne("JobFinder.Data.Models.LanguageType", null)
+                        .WithMany("LanguageTypes")
+                        .HasForeignKey("LanguageTypeId");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.CompanySubscription", b =>
@@ -4068,6 +4806,11 @@ namespace JobFinder.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.BusinessSector", b =>
+                {
+                    b.Navigation("WorkExperiences");
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitae", b =>
                 {
                     b.Navigation("CourseCertificates");
@@ -4103,9 +4846,19 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("PersonalInfos");
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.EducationLevel", b =>
+                {
+                    b.Navigation("Educations");
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.Gender", b =>
                 {
                     b.Navigation("PersonalInfos");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.LanguageType", b =>
+                {
+                    b.Navigation("LanguageTypes");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.User", b =>

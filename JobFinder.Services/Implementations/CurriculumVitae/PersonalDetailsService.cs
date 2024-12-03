@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;

@@ -1,9 +1,6 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -28,22 +25,23 @@
             return this.Ok(workExperiences);
         }
 
-        [HttpPost("{cvId:guid}")]
-        [ServiceFilter(typeof(ValidateCvIdExistsServiceFilter))]
-        public async Task<ActionResult<List<int>>> Create(Guid cvId, [FromBody] WorkExperienceInputModel[] experiences)
-        {
-            IList<int> entitiesIds = new List<int>();
-            foreach (var model in experiences)
-            {
-                int workExperienceId = await this.workExperienceService
-                    .CreateAsync(cvId.ToString(), model.FromDate, model.ToDate, model.JobTitle,model.Organization,
-                    model.BusinessSector, model.Location, model.AdditionalDetails);
+        // TODO: delete?
+        //[HttpPost("{cvId:guid}")]
+        //[ServiceFilter(typeof(ValidateCvIdExistsServiceFilter))]
+        //public async Task<ActionResult<List<int>>> Create(Guid cvId, [FromBody] WorkExperienceInputModel[] experiences)
+        //{
+        //    IList<int> entitiesIds = new List<int>();
+        //    foreach (var model in experiences)
+        //    {
+        //        int workExperienceId = await this.workExperienceService
+        //            .CreateAsync(cvId.ToString(), model.FromDate, model.ToDate, model.JobTitle,model.Organization,
+        //            model.BusinessSector, model.Location, model.AdditionalDetails);
 
-                entitiesIds.Add(workExperienceId);
-            }
+        //        entitiesIds.Add(workExperienceId);
+        //    }
 
-            return this.Ok(entitiesIds);
-        }
+        //    return this.Ok(entitiesIds);
+        //}
 
         [HttpPut("{cvId:guid}/update")]
         public async Task<IActionResult> Update(
@@ -67,16 +65,5 @@
             return this.Ok(new { Message = "Work Experience successfully deleted!" });
         }
 
-        [HttpGet("businessSectors")]
-        public IActionResult GetBusinessSectors()
-        {
-            var sectors = new List<BasicViewModel>();
-            foreach (var sector in Enum.GetValues(typeof(BusinessSector)))
-            {
-                sectors.Add(new BasicViewModel((int)sector, sector.ToString()));
-            }
-
-            return this.Ok(sectors);
-        }
     }
 }

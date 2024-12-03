@@ -1,7 +1,6 @@
 ﻿namespace JobFinder.Web.Models.CVModels
 {
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Common;
     using System;
@@ -29,7 +28,7 @@
         [Phone]
         public string Phone { get; set; }
 
-        public GenderEnum Gender { get; set; }
+        public int GenderId { get; set; }
 
         public DateTime Birthdate { get; set; }
 

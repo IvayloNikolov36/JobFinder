@@ -1,8 +1,6 @@
 ﻿namespace JobFinder.Services.CurriculumVitae
 {
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Web.Models.CVModels;
-    using System;
     using System.Threading.Tasks;
 
     public interface IPersonalDetailsService

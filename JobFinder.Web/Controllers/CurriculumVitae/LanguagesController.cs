@@ -1,9 +1,6 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -27,21 +24,21 @@
             return this.Ok(languagesInfo);
         }
 
-        [HttpPost("{cvId:guid}")]
-        [ServiceFilter(typeof(ValidateCvIdExistsServiceFilter))]
-        public async Task<ActionResult<IEnumerable<int>>> Add(Guid cvId, [FromBody] LanguageInfoInputModel[] models)
-        {
-            IList<int> entitiesIds = new List<int>();
-            foreach (LanguageInfoInputModel model in models)
-            {
-                int languageInfoId = await this.languageService.AddAsync(cvId.ToString(),
-                model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
+        //[HttpPost("{cvId:guid}")]
+        //[ServiceFilter(typeof(ValidateCvIdExistsServiceFilter))]
+        //public async Task<ActionResult<IEnumerable<int>>> Add(Guid cvId, [FromBody] LanguageInfoInputModel[] models)
+        //{
+        //    IList<int> entitiesIds = new List<int>();
+        //    foreach (LanguageInfoInputModel model in models)
+        //    {
+        //        int languageInfoId = await this.languageService.AddAsync(cvId.ToString(),
+        //        model.LanguageType, model.Comprehension, model.Speaking, model.Writing);
 
-                entitiesIds.Add(languageInfoId);
-            }
+        //        entitiesIds.Add(languageInfoId);
+        //    }
             
-            return this.Ok(entitiesIds);
-        }
+        //    return this.Ok(entitiesIds);
+        //}
 
         [HttpPut("{cvId:guid}/update")]
         public async Task<IActionResult> Update(
@@ -64,30 +61,6 @@
             }
 
             return this.Ok(new { Message = "Language info successfully deleted!" });
-        }
-
-        [HttpGet("types")]
-        public IActionResult GetLanguageTypes()
-        {
-            var types = new List<BasicViewModel>();
-            foreach (var languageType in Enum.GetValues(typeof(LanguageType)))
-            {
-                types.Add(new BasicViewModel((int)languageType, languageType.ToString()));
-            }
-
-            return this.Ok(types);
-        }
-
-        [HttpGet("levels")]
-        public IActionResult GetLanguageLevel()
-        {
-            var educationLevels = new List<BasicViewModel>();
-            foreach (var level in Enum.GetValues(typeof(LanguageLevel)))
-            {
-                educationLevels.Add(new BasicViewModel((int)level, level.ToString()));
-            }
-
-            return this.Ok(educationLevels);
         }
     }
 }

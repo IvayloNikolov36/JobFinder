@@ -41,5 +41,59 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok(gender);
         }
+
+        [HttpGet]
+        [Route("business-sectors")]
+        public async Task<IActionResult> GetBusinessSectors()
+        {
+            IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetBusinessSector();
+
+            return this.Ok(data);
+        }
+
+        [HttpGet]
+        [Route("job-categories")]
+        public async Task<IActionResult> GetJobCategories()
+        {
+            IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetJobCategories();
+
+            return this.Ok(data);
+        }
+
+        [HttpGet]
+        [Route("job-engagements")]
+        public async Task<IActionResult> GetJobEngagements()
+        {
+            IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetJobEngagements();
+
+            return this.Ok(data);
+        }
+
+        [HttpGet]
+        [Route("education-levels")]
+        public async Task<IActionResult> GetEducationLevels()
+        {
+            IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetEducationLevels();
+
+            return this.Ok(data);
+        }
+
+        [HttpGet]
+        [Route("language-types")]
+        public async Task<IActionResult> GetLanguageTypes()
+        {
+            IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetLanguageTypes();
+
+            return this.Ok(data);
+        }
+
+        [HttpGet]
+        [Route("language-levels")]
+        public async Task<IActionResult> GetLanguageLevels()
+        {
+            IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetLanguageLevels();
+
+            return this.Ok(data);
+        }
     }
 }

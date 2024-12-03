@@ -1,7 +1,6 @@
 ﻿namespace JobFinder.Data.Models.CV
 {
     using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
 

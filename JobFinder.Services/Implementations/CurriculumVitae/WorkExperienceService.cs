@@ -2,13 +2,11 @@
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -36,25 +34,26 @@
             return workExperiences;
         }
 
-        public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string jobTitle, string organization, BusinessSector businessSector, string location, string additionalDetails)
-        {
-            var workExperience = new WorkExperience
-            {
-                CurriculumVitaeId = cvId,
-                FromDate = fromDate,
-                ToDate = toDate,
-                JobTitle = jobTitle,
-                Organization = organization,
-                BusinessSector = businessSector,
-                Location = location,
-                AditionalDetails = additionalDetails
-            };
+        // TODO: delete?
+        //public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string jobTitle, string organization, BusinessSector businessSector, string location, string additionalDetails)
+        //{
+        //    var workExperience = new WorkExperience
+        //    {
+        //        CurriculumVitaeId = cvId,
+        //        FromDate = fromDate,
+        //        ToDate = toDate,
+        //        JobTitle = jobTitle,
+        //        Organization = organization,
+        //        BusinessSector = businessSector,
+        //        Location = location,
+        //        AditionalDetails = additionalDetails
+        //    };
 
-            await this.repository.AddAsync(workExperience);
-            await this.repository.SaveChangesAsync();
+        //    await this.repository.AddAsync(workExperience);
+        //    await this.repository.SaveChangesAsync();
 
-            return workExperience.Id;
-        }
+        //    return workExperience.Id;
+        //}
 
         public async Task<bool> DeleteAsync(int workExperieceId)
         {

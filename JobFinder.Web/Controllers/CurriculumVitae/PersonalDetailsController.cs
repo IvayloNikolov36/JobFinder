@@ -1,12 +1,9 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
-    using JobFinder.Data.Models.Enums;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CVModels;
-    using JobFinder.Web.Models.Common;
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class PersonalDetailsController : BaseCVsController

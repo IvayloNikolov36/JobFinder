@@ -219,15 +219,15 @@
 
                 sb.AppendFormat(@$"<tr>
                                     <td>Comprehension</td>
-                                    <td>{l.Comprehension}</td>");
+                                    <td>{l.ComprehensionLevel.Name}</td>");
 
                 sb.AppendFormat(@$"<tr>
                                     <td>Speaking</td>
-                                    <td>{l.Speaking}</td>");
+                                    <td>{l.SpeakingLevel.Name}</td>");
 
                 sb.AppendFormat(@$"<tr>
                                     <td>Writing</td>
-                                    <td>{l.Writing}</td>");
+                                    <td>{l.WritingLevel.Name}</td>");
             }
 
             // Skills

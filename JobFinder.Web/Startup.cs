@@ -56,8 +56,7 @@ namespace JobFinder.Web
 
             services.AddCors(options => options.Configure());
 
-            services.AddControllers()
-                .AddNewtonsoftJson(options => options.Configure());
+            services.AddControllers();
 
             services.AddHangfire(configuration => configuration
                 .Set(Configuration.GetConnectionString("DefaultConnection")));
