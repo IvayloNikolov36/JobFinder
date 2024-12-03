@@ -6,16 +6,19 @@
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Data.SchemaDefinitions;
+    using JobFinder.Data.Seeders;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
     public class JobFinderDbContext : IdentityDbContext<User>
     {
-        public JobFinderDbContext(DbContextOptions<JobFinderDbContext> options) 
+        public JobFinderDbContext(DbContextOptions<JobFinderDbContext> options)
             : base(options)
         {
         }
@@ -40,7 +43,7 @@
 
         public DbSet<LanguageInfo> LanguagesInfo { get; set; }
 
-        public DbSet<PersonalDetails> PersonalDetails { get; set; }
+        public DbSet<PersonalInfo> PersonalDetails { get; set; }
 
         public DbSet<WorkExperience> WorkExperiences { get; set; }
 
@@ -50,6 +53,12 @@
 
         public DbSet<JobCategorySubscription> JobCategorySubscriptions { get; set; }
 
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<Citizenship> Citizenships { get; set; }
+
+        public DbSet<Gender> Gender { get; set; }
+
         //For VIEWS
         public DbSet<CompaniesSubscriptionsData> CompaniesSubscriptionsData { get; set; }
 
@@ -57,13 +66,14 @@
 
         public DbSet<LatestCompanyJobAds> LatestCompanyJobAds { get; set; } // for function which returns table
 
-        //DB Functions
-        //[DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
+        // DB Functions
+        // [DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
+
         public IQueryable<LatestCompanyJobAds>
             GetLatesJobAdsForSubscribers(int jobCategoryId, string location) =>
             Set<LatestCompanyJobAds>()
             .FromSqlInterpolated($"SELECT * FROM GetLatesJobAdsForSubscribers({jobCategoryId}, {location})");
-        
+
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -88,7 +98,8 @@
         {
             builder.ApplyConfiguration(new CompanyEntitySchemaDefinition());
 
-            //one to one or zero
+            // one to one or one to zero connections
+
             builder.Entity<User>()
                 .HasOne(u => u.Company)
                 .WithOne(c => c.User)
@@ -102,7 +113,8 @@
                 .HasAlternateKey(x => new { x.UserId, x.JobCategoryId, x.Location })
                 .HasName("IX_JobCategorySubscription_TripleAK");
 
-            //FOR DB VIEWS
+            // FOR Database VIEWS
+
             builder.Entity<CompaniesSubscriptionsData>()
                 .HasNoKey()
                 .ToView("CompanySubscriptionsData", "dbo");
@@ -115,20 +127,27 @@
                 .HasNoKey()
                 .ToView(null);
 
+            // SEED
+
+            CountriesSeeder.Seed(builder);
+            CitizenshipsSeeder.Seed(builder);
+            GenderSeeder.Seed(builder);
+
             base.OnModelCreating(builder);
         }
 
         private void ApplyAuditInfoRules()
         {
-            var changedEntries = this.ChangeTracker
+            IEnumerable<EntityEntry> changedEntries = this.ChangeTracker
                 .Entries()
                 .Where(e =>
                     e.Entity is IAuditInfo &&
                     (e.State == EntityState.Added || e.State == EntityState.Modified));
 
-            foreach (var entry in changedEntries)
+            foreach (EntityEntry entry in changedEntries)
             {
-                var entity = (IAuditInfo)entry.Entity;
+                IAuditInfo entity = (IAuditInfo)entry.Entity;
+
                 if (entry.State == EntityState.Added && entity.CreatedOn == default)
                 {
                     entity.CreatedOn = DateTime.UtcNow;
@@ -138,6 +157,6 @@
                     entity.ModifiedOn = DateTime.UtcNow;
                 }
             }
-        }
+        }           
     }
 }

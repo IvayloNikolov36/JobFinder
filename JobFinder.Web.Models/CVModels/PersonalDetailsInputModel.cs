@@ -3,10 +3,11 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Enums;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Common;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetailsInputModel : IMapTo<PersonalDetails>
+    public class PersonalDetailsInputModel : IMapTo<PersonalInfo>
     {
 
         [Required]
@@ -32,9 +33,9 @@
 
         public DateTime Birthdate { get; set; }
 
-        public CountryEnum CitizenShip { get; set; }
+        public BasicViewModel CitizenShip { get; set; }
 
-        public CountryEnum Country { get; set; }
+        public BasicViewModel Country { get; set; }
 
         public string City { get; set; }
     }

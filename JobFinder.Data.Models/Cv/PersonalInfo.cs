@@ -5,7 +5,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetails : BaseModel<int>
+    public class PersonalInfo : BaseModel<int>
     {
         [Required]
         public string CurriculumVitaeId { get; set; }
@@ -31,13 +31,22 @@
         [Phone]
         public string Phone { get; set; }
 
-        public GenderEnum Gender { get; set; }
+        [Required]
+        public int GenderId { get; set; }
+
+        public Gender Gender { get; set; }
 
         public DateTime Birthdate { get; set; }
 
-        public CountryEnum CitizenShip { get; set; }
+        [Required]
+        public int CitizenshipId { get; set; }
 
-        public CountryEnum Country { get; set; }
+        public Citizenship Citizenship { get; set; }
+
+        [Required]
+        public int CountryId { get; set; }
+
+        public Country Country { get; set; }
 
         public string City { get; set; }
     }

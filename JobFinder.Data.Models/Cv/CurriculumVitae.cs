@@ -30,7 +30,7 @@
 
         public byte[] Data { get; set; }
 
-        public PersonalDetails PersonalDetails { get; set; }
+        public PersonalInfo PersonalDetails { get; set; }
 
         public Skill Skills { get; set; }
 

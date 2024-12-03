@@ -18,7 +18,7 @@
 
         public string Location { get; set; }
 
-        public BasicValueViewModel EducationLevel { get; set; }
+        public BasicViewModel EducationLevel { get; set; }
 
         public string Major { get; set; }
 
@@ -27,7 +27,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Education, EducationListingModel>()
-               .ForMember(x => x.EducationLevel, m => m.MapFrom(m => new BasicValueViewModel(
+               .ForMember(x => x.EducationLevel, m => m.MapFrom(m => new BasicViewModel(
                    (int)m.EducationLevel,
                    m.EducationLevel.ToString())));
         }

@@ -1,6 +1,9 @@
-﻿namespace JobFinder.Web.Models.Common
+﻿using JobFinder.Data.Models;
+using JobFinder.Services.Mappings;
+
+namespace JobFinder.Web.Models.Common
 {
-    public class BasicViewModel
+    public class BasicViewModel : IMapFrom<Country>, IMapFrom<Citizenship>, IMapFrom<Gender>
     {
         public BasicViewModel(string id, string name)
         {

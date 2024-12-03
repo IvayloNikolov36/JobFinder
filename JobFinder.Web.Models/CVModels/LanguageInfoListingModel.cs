@@ -11,25 +11,25 @@
 
         public string CurriculumVitaeId { get; set; }
 
-        public BasicValueViewModel LanguageType { get; set; }
+        public BasicViewModel LanguageType { get; set; }
 
-        public BasicValueViewModel Comprehension { get; set; }
+        public BasicViewModel Comprehension { get; set; }
 
-        public BasicValueViewModel Speaking { get; set; }
+        public BasicViewModel Speaking { get; set; }
 
-        public BasicValueViewModel Writing { get; set; }
+        public BasicViewModel Writing { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<LanguageInfo, LanguageInfoListingModel>()
                .ForMember(x => x.LanguageType, m => m.MapFrom(m =>
-                    new BasicValueViewModel((int)m.LanguageType, m.LanguageType.ToString())))
+                    new BasicViewModel((int)m.LanguageType, m.LanguageType.ToString())))
                .ForMember(x => x.Comprehension, m => m.MapFrom(m =>
-                    new BasicValueViewModel((int)m.Comprehension, m.Comprehension.ToString())))
+                    new BasicViewModel((int)m.Comprehension, m.Comprehension.ToString())))
                .ForMember(x => x.Speaking, m => m.MapFrom(m =>
-                    new BasicValueViewModel((int)m.Speaking, m.Speaking.ToString())))
+                    new BasicViewModel((int)m.Speaking, m.Speaking.ToString())))
                .ForMember(x => x.Writing, m => m.MapFrom(m =>
-                new BasicValueViewModel((int)m.Writing, m.Writing.ToString())));
+                new BasicViewModel((int)m.Writing, m.Writing.ToString())));
         }
     }
 }

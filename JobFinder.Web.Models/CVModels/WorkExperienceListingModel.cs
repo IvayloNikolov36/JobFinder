@@ -20,7 +20,7 @@
 
         public string Organization { get; set; }
 
-        public BasicValueViewModel BusinessSector { get; set; }
+        public BasicViewModel BusinessSector { get; set; }
 
         public string Location { get; set; }
 
@@ -30,7 +30,7 @@
         {
             configuration.CreateMap<WorkExperience, WorkExperienceListingModel>()
               .ForMember(x => x.BusinessSector, m => m.MapFrom(m =>
-                new BasicValueViewModel((int)m.BusinessSector, m.BusinessSector.ToString())));
+                new BasicViewModel((int)m.BusinessSector, m.BusinessSector.ToString())));
         }
     }
 }

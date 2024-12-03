@@ -32,17 +32,15 @@
 
         public DateTime Birthdate { get; set; }
 
-        public int CitizenShip { get; set; }
+        public int CitizenShipId { get; set; }
 
-        public int Country { get; set; }
+        public int CountryId { get; set; }
 
         public string City { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<PersonalDetailsEditModel, PersonalDetails>()
-                .ForMember(e => e.Country, o => o.MapFrom(vm => (CountryEnum)vm.Country))
-                .ForMember(e => e.CitizenShip, o => o.MapFrom(vm => (CountryEnum)vm.CitizenShip))
+            configuration.CreateMap<PersonalDetailsEditModel, PersonalInfo>()
                 .ForMember(e => e.Gender, o => o.MapFrom(vm => (GenderEnum)vm.Gender));
         }
     }

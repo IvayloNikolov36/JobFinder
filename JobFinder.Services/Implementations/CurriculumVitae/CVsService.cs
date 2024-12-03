@@ -16,7 +16,7 @@
     public class CVsService : ICVsService
     {
         private readonly IRepository<CurriculumVitae> repository;
-        private readonly IRepository<PersonalDetails> personalDetailsRepo;
+        private readonly IRepository<PersonalInfo> personalDetailsRepo;
         private readonly IRepository<Education> educationRepo;
         private readonly IRepository<WorkExperience> workExperienceRepo;
         private readonly IRepository<LanguageInfo> languageInfoRepo;
@@ -26,7 +26,7 @@
 
         public CVsService(
             IRepository<CurriculumVitae> repository,
-            IRepository<PersonalDetails> personalDetailsRepo,
+            IRepository<PersonalInfo> personalDetailsRepo,
             IRepository<Education> educationRepo,
             IRepository<WorkExperience> workExperienceRepo,
             IRepository<LanguageInfo> languageInfoRepo,

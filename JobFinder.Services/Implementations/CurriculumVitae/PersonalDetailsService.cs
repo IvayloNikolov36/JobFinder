@@ -14,11 +14,11 @@
 
     public class PersonalDetailsService : IPersonalDetailsService
     {
-        private readonly IRepository<PersonalDetails> repository;
+        private readonly IRepository<PersonalInfo> repository;
         private readonly IMapper mapper;
 
         public PersonalDetailsService(
-            IRepository<PersonalDetails> personalDetailsRepository,
+            IRepository<PersonalInfo> personalDetailsRepository,
             IMapper mapper) 
         {
             this.repository = personalDetailsRepository;
@@ -36,32 +36,32 @@
         }
 
         // TODO: refactor or delete if it is not used
-        public async Task<int> CreateAsync(string cvId, string firstName, string middleName, string lastName, DateTime birthdate, GenderEnum gender, string email, string phone, CountryEnum country, CountryEnum citizenShip, string city)
-        {
-            PersonalDetails personalInfo = new()
-            {
-                CurriculumVitaeId = cvId,
-                FirstName = firstName,
-                MiddleName = middleName,
-                LastName = lastName,
-                Birthdate = birthdate,
-                Gender = gender,
-                Email = email,
-                Phone = phone,
-                Country = country,
-                CitizenShip = citizenShip,
-                City = city
-            };
+        //public async Task<int> CreateAsync(string cvId, string firstName, string middleName, string lastName, DateTime birthdate, GenderEnum gender, string email, string phone, CountryEnum country, CountryEnum citizenShip, string city)
+        //{
+        //    PersonalDetails personalInfo = new()
+        //    {
+        //        CurriculumVitaeId = cvId,
+        //        FirstName = firstName,
+        //        MiddleName = middleName,
+        //        LastName = lastName,
+        //        Birthdate = birthdate,
+        //        Gender = gender,
+        //        Email = email,
+        //        Phone = phone,
+        //        Country = country,
+        //        CitizenShip = citizenShip,
+        //        City = city
+        //    };
 
-            await this.repository.AddAsync(personalInfo);
-            await this.repository.SaveChangesAsync();
+        //    await this.repository.AddAsync(personalInfo);
+        //    await this.repository.SaveChangesAsync();
 
-            return personalInfo.Id;
-        }
+        //    return personalInfo.Id;
+        //}
 
         public async Task<bool> UpdateAsync(string cvId, PersonalDetailsEditModel personalDetails)
         {
-            PersonalDetails personalDetailsFromDb = await this.repository
+            PersonalInfo personalDetailsFromDb = await this.repository
                 .FirstOrDefaultAsync(pd => pd.CurriculumVitaeId == cvId);
 
             if (personalDetailsFromDb == null)

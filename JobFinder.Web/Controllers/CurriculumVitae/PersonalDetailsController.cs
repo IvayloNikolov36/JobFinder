@@ -27,25 +27,25 @@
             return this.Ok(personalDetails);
         }
 
-        [HttpPost]
-        [Route("{cvId:guid}/create")]
-        public async Task<ActionResult<int>> Create([FromRoute] Guid cvId, [FromBody] PersonalDetailsInputModel model)
-        {
-            int objectId = await this.personalDetailsService.CreateAsync(
-                cvId.ToString(),
-                model.FirstName,
-                model.MiddleName,
-                model.LastName,
-                model.Birthdate,
-                model.Gender,
-                model.Email,
-                model.Phone,
-                model.Country,
-                model.CitizenShip,
-                model.City);
+        //[HttpPost]
+        //[Route("{cvId:guid}/create")]
+        //public async Task<ActionResult<int>> Create([FromRoute] Guid cvId, [FromBody] PersonalDetailsInputModel model)
+        //{
+        //    int objectId = await this.personalDetailsService.CreateAsync(
+        //        cvId.ToString(),
+        //        model.FirstName,
+        //        model.MiddleName,
+        //        model.LastName,
+        //        model.Birthdate,
+        //        model.Gender,
+        //        model.Email,
+        //        model.Phone,
+        //        model.Country,
+        //        model.CitizenShip,
+        //        model.City);
 
-            return this.Ok(objectId);
-        }
+        //    return this.Ok(objectId);
+        //}
 
         [HttpPut("{cvId:guid}/update")]
         public async Task<IActionResult> Edit([FromRoute] Guid cvId, [FromBody] PersonalDetailsEditModel model)
@@ -59,18 +59,5 @@
 
             return this.Ok();
         }
-
-        [HttpGet("countryTypes")]
-        public IActionResult GetCountries()
-        {
-            var countries = new List<BasicValueViewModel>();
-            foreach (var country in Enum.GetValues(typeof(CountryEnum)))
-            {
-                countries.Add(new BasicValueViewModel((int)country, country.ToString()));
-            }
-
-            return this.Ok(countries);
-        }
-
     }
 }
