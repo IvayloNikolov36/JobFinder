@@ -2,7 +2,6 @@
 {
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
-    using JobFinder.Web.Models.Common;
     using System;
     using System.ComponentModel.DataAnnotations;
 
@@ -32,9 +31,9 @@
 
         public DateTime Birthdate { get; set; }
 
-        public BasicViewModel CitizenShip { get; set; }
+        public int CitizenshipId { get; set; }
 
-        public BasicViewModel Country { get; set; }
+        public int CountryId { get; set; }
 
         public string City { get; set; }
     }

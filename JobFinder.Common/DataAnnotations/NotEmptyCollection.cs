@@ -6,10 +6,14 @@ namespace JobFinder.Common.DataAnnotations
 {
     public class NotEmptyCollection : ValidationAttribute
     {
-        // TODO: fix the annotation to not throw 50x
         public override bool IsValid(object value)
         {
             var collection = value as IReadOnlyCollection<object>;
+
+            if (collection == null)
+            {
+                return false;
+            }
 
             if (collection.Any())
             {
