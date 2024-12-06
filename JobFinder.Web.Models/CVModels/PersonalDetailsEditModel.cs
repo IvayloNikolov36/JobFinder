@@ -5,7 +5,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetailsEditModel : IMapTo<PersonalInfo>
+    public class PersonalDetailsEditModel : IMapTo<PersonalInfoEntity>
     {
         public int Id { get; set; }
 

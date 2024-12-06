@@ -6,7 +6,11 @@
 
     public static class JwtBearerOptionsExtension
     {
-        public static void Configure(this JwtBearerOptions options, string validAudience, string validIssuer, string jwtSecurityKey)
+        public static void Configure(
+            this JwtBearerOptions options,
+            string validAudience,
+            string validIssuer,
+            string jwtSecurityKey)
         {
             options.SaveToken = true;
             options.RequireHttpsMetadata = false;

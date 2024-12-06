@@ -6,14 +6,14 @@
 
     public class CompanyService : ICompanyService
     {
-        private readonly IRepository<Company> companyRepository;
+        private readonly IRepository<CompanyEntity> companyRepository;
 
-        public CompanyService(IRepository<Company> companyRepository)
+        public CompanyService(IRepository<CompanyEntity> companyRepository)
         {
             this.companyRepository = companyRepository;
         }
 
-        public async Task<Company> GetAsync(string userId)
+        public async Task<CompanyEntity> GetAsync(string userId)
         {
             return await this.companyRepository
                 .FirstOrDefaultAsync(c => c.UserId == userId);

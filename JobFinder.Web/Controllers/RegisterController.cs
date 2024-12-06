@@ -12,10 +12,10 @@
 
     public class RegisterController : ApiController
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<UserEntity> userManager;
         private readonly JobFinderDbContext dbContext;
 
-        public RegisterController(UserManager<User> userManager, JobFinderDbContext dbContext)
+        public RegisterController(UserManager<UserEntity> userManager, JobFinderDbContext dbContext)
         {
             this.userManager = userManager;
             this.dbContext = dbContext;
@@ -24,7 +24,7 @@
         [HttpPost("user")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model)
         {
-            var newUser = new User 
+            var newUser = new UserEntity 
             { 
                 UserName = model.Username, 
                 Email = model.Email,
@@ -48,14 +48,14 @@
         [HttpPost("company")]
         public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyModel model)
         {
-            var newCompany = new Company
+            var newCompany = new CompanyEntity
             {
                 Name = model.CompanyName,
                 Bulstat = model.Bulstat,
                 Logo = model.CompanyLogo
             };
             
-            var newUser = new User
+            var newUser = new UserEntity
             {
                 UserName = model.Username,
                 Email = model.Email,

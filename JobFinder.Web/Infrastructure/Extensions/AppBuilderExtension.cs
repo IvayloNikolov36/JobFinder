@@ -2,7 +2,6 @@
 {
     using JobFinder.Data;
     using JobFinder.Data.Models;
-    using JobFinder.Data.Models.CV;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
@@ -19,32 +18,33 @@
 
         public static async void SeedDatabase(this IApplicationBuilder app)
         {
-            var serviceFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-            var scope = serviceFactory.CreateScope();
+            IServiceScopeFactory serviceFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            IServiceScope scope = serviceFactory.CreateScope();
 
             using (scope)
             {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                var db = scope.ServiceProvider.GetRequiredService<JobFinderDbContext>();
+                RoleManager<IdentityRole> roleManager = scope.ServiceProvider
+                    .GetRequiredService<RoleManager<IdentityRole>>();
+                UserManager<UserEntity> userManager = scope.ServiceProvider
+                    .GetRequiredService<UserManager<UserEntity>>();
+                JobFinderDbContext db = scope.ServiceProvider
+                    .GetRequiredService<JobFinderDbContext>();
 
                 await CreateRoles(roleManager);
 
                 // TODO: refactor
-                //create admin
+                // create admin
                 await CreateUser(userManager, AdminUserName, AdminEmail, DefaultAdminPassword, AdminRole);
-
-                await CreateDrivingLicenseCategories(db);
             }
         }
 
-        private static async Task CreateUser(UserManager<User> userManager, string userName, string email, string defaultPassword, string role)
+        private static async Task CreateUser(UserManager<UserEntity> userManager, string userName, string email, string defaultPassword, string role)
         {
             var user = await userManager.FindByNameAsync(userName);
 
             if (user == null)
             {
-                user = new User
+                user = new UserEntity
                 {
                     UserName = userName,
                     Email = email,
@@ -68,25 +68,6 @@
                 }
             }
         }
-
-        // TODO: remove and create a seed
-        private static async Task CreateDrivingLicenseCategories(JobFinderDbContext db)
-        {
-            string[] categories = new string[] { "A", "B", "C", "D", "BE", "CE", "DE", "T tb", "T tm", "T ct", "M" };
-
-            foreach (string category in categories)
-            {
-                var categoryType = new DrivingCategoryType
-                {
-                    Category = category
-                };
-
-                await db.AddAsync(categoryType);
-            }
-
-            await db.SaveChangesAsync();
-        }
-
     }
 }
 

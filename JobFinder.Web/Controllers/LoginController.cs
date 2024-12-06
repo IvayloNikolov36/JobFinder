@@ -17,12 +17,12 @@
     public class LoginController : ApiController
     {
         private readonly IConfiguration configuration;
-        private readonly SignInManager<User> signInManager;
-        private readonly UserManager<User> userManager;
+        private readonly SignInManager<UserEntity> signInManager;
+        private readonly UserManager<UserEntity> userManager;
 
         public LoginController(IConfiguration configuration,
-                               SignInManager<User> signInManager,
-                               UserManager<User> userManager)
+                               SignInManager<UserEntity> signInManager,
+                               UserManager<UserEntity> userManager)
         {
             this.configuration = configuration;
             this.signInManager = signInManager;

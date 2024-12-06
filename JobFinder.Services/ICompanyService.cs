@@ -5,6 +5,6 @@
 
     public interface ICompanyService
     {
-        Task<Company> GetAsync(string userId);
+        Task<CompanyEntity> GetAsync(string userId);
     }
 }

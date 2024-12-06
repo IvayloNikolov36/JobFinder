@@ -31,7 +31,7 @@ namespace JobFinder.Web.Models.CVModels
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<CurriculumVitae, CvDataViewModel>()
+            configuration.CreateMap<CurriculumVitaeEntity, CvDataViewModel>()
                 .ForMember(model => model.OwnerId, m => m.MapFrom(e => e.UserId));
         }
     }

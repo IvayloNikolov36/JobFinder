@@ -4,7 +4,7 @@
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Common;
 
-    public class LanguageInfoViewModel : IMapFrom<LanguageInfo>
+    public class LanguageInfoViewModel : IMapFrom<LanguageInfoEntity>
     {
         public int Id { get; set; }
 

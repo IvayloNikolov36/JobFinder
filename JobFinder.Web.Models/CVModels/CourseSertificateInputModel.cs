@@ -4,7 +4,7 @@
     using JobFinder.Services.Mappings;
     using System.ComponentModel.DataAnnotations;
 
-    public class CourseSertificateInputModel : IMapTo<CourseCertificate>
+    public class CourseSertificateInputModel : IMapTo<CourseCertificateEntity>
     {
         [Required]
         [StringLength(100, MinimumLength = 5)]

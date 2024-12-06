@@ -1,10 +1,11 @@
 ﻿namespace JobFinder.Web.Models.CVModels
 {
     using JobFinder.Data.Models.CV;
+    using JobFinder.Data.Models.Nomenclature;
     using JobFinder.Services.Mappings;
     using System.Collections.Generic;
 
-    public class SkillsViewModel : IMapFrom<Skill>
+    public class SkillsViewModel : IMapFrom<SkillsInfoEntity>
     {
         public int Id { get; set; }
 
@@ -17,6 +18,6 @@
         public bool HasDrivingLicense { get; set; }
 
         // TODO: use viewModel, not the entity
-        public ICollection<DrivingCategory> DrivingLicenseCategories { get; set; }
+        public ICollection<DrivingCategoryTypeEntity> DrivingLicenseCategories { get; set; }
     }
 }

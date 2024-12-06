@@ -1,7 +1,7 @@
 ﻿namespace JobFinder.Services.Implementations
 {
     using JobFinder.Data;
-    using JobFinder.Data.Models;
+    using JobFinder.Data.Models.Nomenclature;
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
@@ -21,13 +21,13 @@
 
         public async Task<bool> SubscribeToJobCategoryAsync(int jobCategoryId, string userId, string location)
         {
-            var jobCategory = await this.dbContext.FindAsync<JobCategory>(jobCategoryId);
+            JobCategoryEntity jobCategory = await this.dbContext.FindAsync<JobCategoryEntity>(jobCategoryId);
             if (jobCategory == null)
             {
                 return false;
             }
 
-            var sub = new JobCategorySubscription
+            JobCategorySubscription sub = new()
             {
                 UserId = userId,
                 JobCategoryId = jobCategoryId,

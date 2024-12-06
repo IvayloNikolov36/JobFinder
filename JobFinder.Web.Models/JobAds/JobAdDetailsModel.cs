@@ -4,7 +4,7 @@
     using JobFinder.Data.Models;
     using JobFinder.Services.Mappings;
 
-    public class JobAdDetailsModel : IMapFrom<JobAd>, IHaveCustomMappings
+    public class JobAdDetailsModel : IMapFrom<JobAdvertisementEntity>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -26,7 +26,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<JobAd, JobAdDetailsModel>()
+            configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsModel>()
                 .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Logo))
                 .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))

@@ -3,7 +3,7 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
 
-    public class LanguageInfoEditModel : IMapTo<LanguageInfo>
+    public class LanguageInfoEditModel : IMapTo<LanguageInfoEntity>
     {
         public int Id { get; set; }
 

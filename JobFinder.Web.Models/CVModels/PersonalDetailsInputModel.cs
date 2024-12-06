@@ -5,7 +5,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetailsInputModel : IMapTo<PersonalInfo>
+    public class PersonalDetailsInputModel : IMapTo<PersonalInfoEntity>
     {
 
         [Required]

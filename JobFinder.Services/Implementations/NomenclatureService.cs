@@ -1,4 +1,5 @@
 ﻿using JobFinder.Data.Models;
+using JobFinder.Data.Models.Nomenclature;
 using JobFinder.Data.Repositories.Contracts;
 using JobFinder.Web.Models.Common;
 using Microsoft.EntityFrameworkCore;
@@ -10,26 +11,26 @@ namespace JobFinder.Services.Implementations
 {
     public class NomenclatureService : INomenclatureService
     {
-        private readonly IRepository<Country> countriesRepository;
-        private readonly IRepository<Citizenship> citizenshipRepository;
-        private readonly IRepository<Gender> genderRepository;
-        private readonly IRepository<BusinessSector> businessSectorRepository;
-        private readonly IRepository<JobCategory> jobCategoryRepository;
-        private readonly IRepository<JobEngagement> jobEngagementRepository;
-        private readonly IRepository<EducationLevel> educationLevelsRepository;
-        private readonly IRepository<LanguageType> languageTypesRepository;
-        private readonly IRepository<LanguageLevel> languageLevelsRepository;
+        private readonly IRepository<CountryEntity> countriesRepository;
+        private readonly IRepository<CitizenshipEntity> citizenshipRepository;
+        private readonly IRepository<GenderEntity> genderRepository;
+        private readonly IRepository<BusinessSectorEntity> businessSectorRepository;
+        private readonly IRepository<JobCategoryEntity> jobCategoryRepository;
+        private readonly IRepository<JobEngagementEntity> jobEngagementRepository;
+        private readonly IRepository<EducationLevelEntity> educationLevelsRepository;
+        private readonly IRepository<LanguageTypeEntity> languageTypesRepository;
+        private readonly IRepository<LanguageLevelEntity> languageLevelsRepository;
 
         public NomenclatureService(
-            IRepository<Country> countriesRepository,
-            IRepository<Citizenship> citizenshipRepository,
-            IRepository<Gender> genderRepository,
-            IRepository<BusinessSector> businessSectorRepository,
-            IRepository<JobCategory> jobCategoryRepository,
-            IRepository<JobEngagement> jobEngagementRepository,
-            IRepository<EducationLevel> educationLevelsRepository,
-            IRepository<LanguageType> languageTypesRepository,
-            IRepository<LanguageLevel> languageLevelsRepository)
+            IRepository<CountryEntity> countriesRepository,
+            IRepository<CitizenshipEntity> citizenshipRepository,
+            IRepository<GenderEntity> genderRepository,
+            IRepository<BusinessSectorEntity> businessSectorRepository,
+            IRepository<JobCategoryEntity> jobCategoryRepository,
+            IRepository<JobEngagementEntity> jobEngagementRepository,
+            IRepository<EducationLevelEntity> educationLevelsRepository,
+            IRepository<LanguageTypeEntity> languageTypesRepository,
+            IRepository<LanguageLevelEntity> languageLevelsRepository)
         {
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;

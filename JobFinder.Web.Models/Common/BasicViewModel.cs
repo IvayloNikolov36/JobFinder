@@ -1,16 +1,17 @@
 ﻿using JobFinder.Data.Models;
+using JobFinder.Data.Models.Nomenclature;
 using JobFinder.Services.Mappings;
 
 namespace JobFinder.Web.Models.Common
 {
     public class BasicViewModel : 
-        IMapFrom<Country>,
-        IMapFrom<Citizenship>,
-        IMapFrom<Gender>,
-        IMapFrom<EducationLevel>,
-        IMapFrom<BusinessSector>,
-        IMapFrom<LanguageType>,
-        IMapFrom<LanguageLevel>
+        IMapFrom<CountryEntity>,
+        IMapFrom<CitizenshipEntity>,
+        IMapFrom<GenderEntity>,
+        IMapFrom<EducationLevelEntity>,
+        IMapFrom<BusinessSectorEntity>,
+        IMapFrom<LanguageTypeEntity>,
+        IMapFrom<LanguageLevelEntity>
     {
         public BasicViewModel(string id, string name)
         {

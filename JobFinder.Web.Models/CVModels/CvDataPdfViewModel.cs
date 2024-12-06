@@ -4,7 +4,7 @@
     using JobFinder.Data.Models.CV;
     using System.Collections.Generic;
 
-    public class CvDataPdfViewModel : IMapFrom<CurriculumVitae>
+    public class CvDataPdfViewModel : IMapFrom<CurriculumVitaeEntity>
     {
         public string Name { get; set; }
 

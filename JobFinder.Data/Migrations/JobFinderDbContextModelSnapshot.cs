@@ -19,7 +19,428 @@ namespace JobFinder.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("JobFinder.Data.Models.BusinessSector", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.CourseCertificateEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CertificateUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurriculumVitaeId");
+
+                    b.ToTable("CourseCertificatesInfos");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitaeEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("Data")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("PictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CurriculumVitaes");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.CV.EducationInfoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("EducationLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("MainSubjects")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Major")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Organization")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurriculumVitaeId");
+
+                    b.HasIndex("EducationLevelId");
+
+                    b.ToTable("Educations");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.CV.LanguageInfoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComprehensionLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("LanguageTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SpeakingLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WritingLevelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComprehensionLevelId");
+
+                    b.HasIndex("CurriculumVitaeId");
+
+                    b.HasIndex("LanguageTypeId");
+
+                    b.HasIndex("SpeakingLevelId");
+
+                    b.HasIndex("WritingLevelId");
+
+                    b.ToTable("LanguageInfos");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.CV.PersonalInfoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CitizenshipId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CitizenshipId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("CurriculumVitaeId")
+                        .IsUnique();
+
+                    b.HasIndex("GenderId");
+
+                    b.ToTable("PersonalDetailsInfo");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.CV.SkillsInfoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ComputerSkills")
+                        .HasMaxLength(10000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("HasDrivingLicense")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasManagedPeople")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OtherSkills")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurriculumVitaeId")
+                        .IsUnique();
+
+                    b.ToTable("SkillsInfos");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.CV.WorkExperienceInfoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AditionalDetails")
+                        .HasMaxLength(3000)
+                        .HasColumnType("nvarchar(3000)");
+
+                    b.Property<int>("BusinessSectorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Organization")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessSectorId");
+
+                    b.HasIndex("CurriculumVitaeId");
+
+                    b.ToTable("WorkExperiencesInfos");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Bulstat")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Bulstat")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.JobAdvertisementEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Desription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("JobCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobEngagementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaxSalary")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinSalary")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(90)
+                        .HasColumnType("nvarchar(90)");
+
+                    b.Property<int>("PublisherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobCategoryId");
+
+                    b.HasIndex("JobEngagementId");
+
+                    b.HasIndex("PublisherId");
+
+                    b.ToTable("JobAdvertisements");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.BusinessSectorEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -276,368 +697,7 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.CourseCertificate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CertificateUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CourseName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurriculumVitaeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurriculumVitaeId");
-
-                    b.ToTable("CoursesCertificates");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitae", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("Data")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("PictureUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CVs");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.DrivingCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DrivingCategoryTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DrivingCategoryTypeId");
-
-                    b.HasIndex("SkillId");
-
-                    b.ToTable("DrivingCategories");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.DrivingCategoryType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DrivingCategoryTypes");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.Education", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurriculumVitaeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("EducationLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<string>("MainSubjects")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("Major")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Organization")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurriculumVitaeId");
-
-                    b.HasIndex("EducationLevelId");
-
-                    b.ToTable("Educations");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.LanguageInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ComprehensionLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurriculumVitaeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("LanguageTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SpeakingLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WritingLevelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComprehensionLevelId");
-
-                    b.HasIndex("CurriculumVitaeId");
-
-                    b.HasIndex("LanguageTypeId");
-
-                    b.HasIndex("SpeakingLevelId");
-
-                    b.HasIndex("WritingLevelId");
-
-                    b.ToTable("LanguageInfos");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.PersonalInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Birthdate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CitizenshipId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurriculumVitaeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("GenderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("MiddleName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CitizenshipId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("CurriculumVitaeId")
-                        .IsUnique();
-
-                    b.HasIndex("GenderId");
-
-                    b.ToTable("PersonalDetails");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.Skill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ComputerSkills")
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurriculumVitaeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("HasDrivingLicense")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HasManagedPeople")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Skills")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurriculumVitaeId")
-                        .IsUnique();
-
-                    b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.WorkExperience", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AditionalDetails")
-                        .HasMaxLength(3000)
-                        .HasColumnType("nvarchar(3000)");
-
-                    b.Property<int>("BusinessSectorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurriculumVitaeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Organization")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessSectorId");
-
-                    b.HasIndex("CurriculumVitaeId");
-
-                    b.ToTable("WorkExperiences");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Citizenship", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CitizenshipEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -710,7 +770,7 @@ namespace JobFinder.Data.Migrations
                         {
                             Id = 9,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "AntiguaAndBarbuda"
+                            Name = "Antigua and Barbuda"
                         },
                         new
                         {
@@ -1778,13 +1838,13 @@ namespace JobFinder.Data.Migrations
                         {
                             Id = 187,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SaintPierreAndMiquelon"
+                            Name = "Saint Pierre And Miquelon"
                         },
                         new
                         {
                             Id = 188,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SaintVincentAndTheGrenadines"
+                            Name = "Saint Vincent And The Grenadines"
                         },
                         new
                         {
@@ -1796,19 +1856,19 @@ namespace JobFinder.Data.Migrations
                         {
                             Id = 190,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SanMarino"
+                            Name = "San Marino"
                         },
                         new
                         {
                             Id = 191,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SaoTomeAndPrincipe"
+                            Name = "Sao Tome And Principe"
                         },
                         new
                         {
                             Id = 192,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SaudiArabia"
+                            Name = "Saudi Arabia"
                         },
                         new
                         {
@@ -1874,7 +1934,7 @@ namespace JobFinder.Data.Migrations
                         {
                             Id = 203,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SouthGeorgiaAndTheSouthSandwichIslands"
+                            Name = "South Georgia And The South Sandwich Islands"
                         },
                         new
                         {
@@ -2036,19 +2096,19 @@ namespace JobFinder.Data.Migrations
                         {
                             Id = 230,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "UnitedKingdom"
+                            Name = "United Kingdom"
                         },
                         new
                         {
                             Id = 231,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "UnitedStates"
+                            Name = "United States"
                         },
                         new
                         {
                             Id = 232,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "UnitedStatesMinorOutlyingIslands"
+                            Name = "United States Minor Outlying Islands"
                         },
                         new
                         {
@@ -2096,13 +2156,13 @@ namespace JobFinder.Data.Migrations
                         {
                             Id = 240,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "WallisAndFutuna"
+                            Name = "Wallis And Futuna"
                         },
                         new
                         {
                             Id = 241,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "WesternSahara"
+                            Name = "Western Sahara"
                         },
                         new
                         {
@@ -2124,52 +2184,7 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Bulstat")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Bulstat")
-                        .IsUnique();
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Country", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CountryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3656,7 +3671,83 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.EducationLevel", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.DrivingCategoryTypeEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SkillsInfoEntityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkillsInfoEntityId");
+
+                    b.ToTable("DrivingCategoryTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Category = "AM",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "A1",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "A2",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Category = "B",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Category = "B1",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Category = "C",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Category = "C+E",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Category = "D",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.EducationLevelEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3674,7 +3765,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EducationLevel");
+                    b.ToTable("EducationLevelEntity");
 
                     b.HasData(
                         new
@@ -3715,7 +3806,7 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Gender", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.GenderEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3756,7 +3847,7 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.JobAd", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3766,54 +3857,8 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Desription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("JobCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("JobEngagementId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MaxSalary")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MinSalary")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasMaxLength(90)
-                        .HasColumnType("nvarchar(90)");
-
-                    b.Property<int>("PublisherId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobCategoryId");
-
-                    b.HasIndex("JobEngagementId");
-
-                    b.HasIndex("PublisherId");
-
-                    b.ToTable("JobAds");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.JobCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -3826,71 +3871,89 @@ namespace JobFinder.Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Aviation"
                         },
                         new
                         {
                             Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Healthcare"
                         },
                         new
                         {
                             Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "IT Software Development"
                         },
                         new
                         {
                             Id = 4,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "IT Hardware Support"
                         },
                         new
                         {
                             Id = 5,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Marketing"
                         },
                         new
                         {
                             Id = 6,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Cleaning Service"
                         },
                         new
                         {
                             Id = 7,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Engeneering"
                         },
                         new
                         {
                             Id = 8,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Advertisement"
                         },
                         new
                         {
                             Id = 9,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Human Resources"
                         },
                         new
                         {
                             Id = 10,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Tourism"
                         },
                         new
                         {
                             Id = 11,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Architecture"
                         },
                         new
                         {
                             Id = 12,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Production"
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.JobEngagement", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.JobEngagementEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -3903,41 +3966,48 @@ namespace JobFinder.Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "FullTime"
                         },
                         new
                         {
                             Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "PartTime"
                         },
                         new
                         {
                             Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Permanent"
                         },
                         new
                         {
                             Id = 4,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Temporary"
                         },
                         new
                         {
                             Id = 5,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Intership"
                         },
                         new
                         {
                             Id = 6,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "SuitableForStudents"
                         },
                         new
                         {
                             Id = 7,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Suitable for candidates with no expirience"
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.LanguageLevel", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LanguageLevelEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3978,7 +4048,7 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.LanguageType", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3988,7 +4058,7 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LanguageTypeId")
+                    b.Property<int?>("LanguageTypeEntityId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedOn")
@@ -4000,7 +4070,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageTypeId");
+                    b.HasIndex("LanguageTypeEntityId");
 
                     b.ToTable("LanguageTpes");
 
@@ -4193,13 +4263,22 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.CompanySubscription", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.CompanySubscriptionEntity", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("UserId", "CompanyId");
 
@@ -4215,12 +4294,18 @@ namespace JobFinder.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("JobCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -4236,7 +4321,7 @@ namespace JobFinder.Data.Migrations
                     b.ToTable("JobCategorySubscriptions");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.User", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.UserEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -4508,9 +4593,9 @@ namespace JobFinder.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.CourseCertificate", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.CourseCertificateEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
                         .WithMany("CourseCertificates")
                         .HasForeignKey("CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4519,43 +4604,24 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("CurriculumVitae");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitae", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitaeEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.User", "User")
-                        .WithMany("CVs")
+                    b.HasOne("JobFinder.Data.Models.UserEntity", "User")
+                        .WithMany("CurriculumVitaes")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.DrivingCategory", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.EducationInfoEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.CV.DrivingCategoryType", "DrivingCategoryType")
-                        .WithMany()
-                        .HasForeignKey("DrivingCategoryTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobFinder.Data.Models.CV.Skill", "Skill")
-                        .WithMany("DrivingLicenseCategories")
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DrivingCategoryType");
-
-                    b.Navigation("Skill");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.Education", b =>
-                {
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
                         .WithMany("Educations")
                         .HasForeignKey("CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.EducationLevel", "EducationLevel")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.EducationLevelEntity", "EducationLevel")
                         .WithMany("Educations")
                         .HasForeignKey("EducationLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4566,33 +4632,33 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("EducationLevel");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.LanguageInfo", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.LanguageInfoEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.LanguageLevel", "ComprehensionLevel")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.LanguageLevelEntity", "ComprehensionLevel")
                         .WithMany()
                         .HasForeignKey("ComprehensionLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
                         .WithMany("LanguagesInfo")
                         .HasForeignKey("CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.LanguageType", "LanguageType")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", "LanguageType")
                         .WithMany()
                         .HasForeignKey("LanguageTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.LanguageLevel", "SpeakingLevel")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.LanguageLevelEntity", "SpeakingLevel")
                         .WithMany()
                         .HasForeignKey("SpeakingLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.LanguageLevel", "WritingLevel")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.LanguageLevelEntity", "WritingLevel")
                         .WithMany()
                         .HasForeignKey("WritingLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4609,27 +4675,27 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("WritingLevel");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.PersonalInfo", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.PersonalInfoEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Citizenship", "Citizenship")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.CitizenshipEntity", "Citizenship")
                         .WithMany("PersonalInfos")
                         .HasForeignKey("CitizenshipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.Country", "Country")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.CountryEntity", "Country")
                         .WithMany("PersonalInfos")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
                         .WithOne("PersonalDetails")
-                        .HasForeignKey("JobFinder.Data.Models.CV.PersonalInfo", "CurriculumVitaeId")
+                        .HasForeignKey("JobFinder.Data.Models.CV.PersonalInfoEntity", "CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.Gender", "Gender")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.GenderEntity", "Gender")
                         .WithMany("PersonalInfos")
                         .HasForeignKey("GenderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4644,26 +4710,26 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("Gender");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.Skill", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.SkillsInfoEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
                         .WithOne("Skills")
-                        .HasForeignKey("JobFinder.Data.Models.CV.Skill", "CurriculumVitaeId")
+                        .HasForeignKey("JobFinder.Data.Models.CV.SkillsInfoEntity", "CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CurriculumVitae");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.WorkExperience", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.WorkExperienceInfoEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.BusinessSector", "BusinessSector")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.BusinessSectorEntity", "BusinessSector")
                         .WithMany("WorkExperiences")
                         .HasForeignKey("BusinessSectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitae", "CurriculumVitae")
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
                         .WithMany("WorkExperiences")
                         .HasForeignKey("CurriculumVitaeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4674,30 +4740,30 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("CurriculumVitae");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Company", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.User", "User")
+                    b.HasOne("JobFinder.Data.Models.UserEntity", "User")
                         .WithOne("Company")
-                        .HasForeignKey("JobFinder.Data.Models.Company", "UserId");
+                        .HasForeignKey("JobFinder.Data.Models.CompanyEntity", "UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.JobAd", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.JobAdvertisementEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.JobCategory", "JobCategory")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
                         .WithMany()
                         .HasForeignKey("JobCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.JobEngagement", "JobEngagement")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.JobEngagementEntity", "JobEngagement")
                         .WithMany()
                         .HasForeignKey("JobEngagementId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.Company", "Publisher")
+                    b.HasOne("JobFinder.Data.Models.CompanyEntity", "Publisher")
                         .WithMany("JobAds")
                         .HasForeignKey("PublisherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4710,22 +4776,29 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("Publisher");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.LanguageType", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.DrivingCategoryTypeEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.LanguageType", null)
-                        .WithMany("LanguageTypes")
-                        .HasForeignKey("LanguageTypeId");
+                    b.HasOne("JobFinder.Data.Models.CV.SkillsInfoEntity", null)
+                        .WithMany("DrivingLicenseCategories")
+                        .HasForeignKey("SkillsInfoEntityId");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.CompanySubscription", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Company", "Company")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", null)
+                        .WithMany("LanguageTypes")
+                        .HasForeignKey("LanguageTypeEntityId");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.CompanySubscriptionEntity", b =>
+                {
+                    b.HasOne("JobFinder.Data.Models.CompanyEntity", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.User", "User")
+                    b.HasOne("JobFinder.Data.Models.UserEntity", "User")
                         .WithMany("CompanySubscriptions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4738,13 +4811,13 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.JobCategorySubscription", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.JobCategory", "JobCategory")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
                         .WithMany()
                         .HasForeignKey("JobCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.User", "User")
+                    b.HasOne("JobFinder.Data.Models.UserEntity", "User")
                         .WithMany("JobCategorySubscriptions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4766,7 +4839,7 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.User", null)
+                    b.HasOne("JobFinder.Data.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4775,7 +4848,7 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.User", null)
+                    b.HasOne("JobFinder.Data.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4790,7 +4863,7 @@ namespace JobFinder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.User", null)
+                    b.HasOne("JobFinder.Data.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4799,19 +4872,14 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.User", null)
+                    b.HasOne("JobFinder.Data.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.BusinessSector", b =>
-                {
-                    b.Navigation("WorkExperiences");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitae", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitaeEntity", b =>
                 {
                     b.Navigation("CourseCertificates");
 
@@ -4826,48 +4894,53 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("WorkExperiences");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.CV.Skill", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CV.SkillsInfoEntity", b =>
                 {
                     b.Navigation("DrivingLicenseCategories");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Citizenship", b =>
-                {
-                    b.Navigation("PersonalInfos");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Company", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>
                 {
                     b.Navigation("JobAds");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Country", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.BusinessSectorEntity", b =>
+                {
+                    b.Navigation("WorkExperiences");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CitizenshipEntity", b =>
                 {
                     b.Navigation("PersonalInfos");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.EducationLevel", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CountryEntity", b =>
+                {
+                    b.Navigation("PersonalInfos");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.EducationLevelEntity", b =>
                 {
                     b.Navigation("Educations");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Gender", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.GenderEntity", b =>
                 {
                     b.Navigation("PersonalInfos");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.LanguageType", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", b =>
                 {
                     b.Navigation("LanguageTypes");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.User", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.UserEntity", b =>
                 {
                     b.Navigation("Company");
 
                     b.Navigation("CompanySubscriptions");
 
-                    b.Navigation("CVs");
+                    b.Navigation("CurriculumVitaes");
 
                     b.Navigation("JobCategorySubscriptions");
                 });

@@ -1,4 +1,5 @@
 ﻿using JobFinder.Data.Models;
+using JobFinder.Data.Models.Nomenclature;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
@@ -7,14 +8,14 @@ namespace JobFinder.Data.Seeders
     {
         public static void Seed(ModelBuilder builder)
         {
-            builder.Entity<JobEngagement>().HasData(
-                new JobEngagement { Name = "FullTime", Id = 1 },
-                new JobEngagement { Name = "PartTime", Id = 2 },
-                new JobEngagement { Name = "Permanent", Id = 3 },
-                new JobEngagement { Name = "Temporary", Id = 4 },
-                new JobEngagement { Name = "Intership", Id = 5 },
-                new JobEngagement { Name = "SuitableForStudents", Id = 6 },
-                new JobEngagement
+            builder.Entity<JobEngagementEntity>().HasData(
+                new JobEngagementEntity { Name = "FullTime", Id = 1 },
+                new JobEngagementEntity { Name = "PartTime", Id = 2 },
+                new JobEngagementEntity { Name = "Permanent", Id = 3 },
+                new JobEngagementEntity { Name = "Temporary", Id = 4 },
+                new JobEngagementEntity { Name = "Intership", Id = 5 },
+                new JobEngagementEntity { Name = "SuitableForStudents", Id = 6 },
+                new JobEngagementEntity
                 {
                     Name = "Suitable for candidates with no expirience",
                     Id = 7

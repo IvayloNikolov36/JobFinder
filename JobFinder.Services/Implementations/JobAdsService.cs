@@ -11,9 +11,9 @@
 
     public class JobAdsService : IJobAdsService
     {
-        private readonly IRepository<JobAd> jobsRepository;
+        private readonly IRepository<JobAdvertisementEntity> jobsRepository;
 
-        public JobAdsService(IRepository<JobAd> jobsRepository)
+        public JobAdsService(IRepository<JobAdvertisementEntity> jobsRepository)
         {
             this.jobsRepository = jobsRepository;
         }
@@ -30,7 +30,7 @@
             int companyId, string position, string description, int jobCategoryId,
             int jobEngagementId, int? minSalary, int? maxSalary, string location)
         {
-            var offer = new JobAd
+            var offer = new JobAdvertisementEntity
             {
                 Position = position,
                 Desription = description,
@@ -48,7 +48,7 @@
 
         public async Task<bool> EditAsync(int jobAdId, string userId, string position, string description)
         {
-            JobAd offerFromDb = await this.jobsRepository.FindAsync(jobAdId);
+            JobAdvertisementEntity offerFromDb = await this.jobsRepository.FindAsync(jobAdId);
             bool isUserPublisher = userId == offerFromDb.Publisher.User.Id;
 
             if (offerFromDb == null || !isUserPublisher)
@@ -67,7 +67,7 @@
         int page, int items, string searchText, int engagementId, int categoryId, string location,
         string sortBy, bool? isAscending)
         {
-            IQueryable<JobAd> jobs = this.jobsRepository.AllAsNoTracking();
+            IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository.AllAsNoTracking();
 
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -114,31 +114,31 @@
 
         //Filter methods
 
-        private IQueryable<JobAd> FilteredByCategory(IQueryable<JobAd> jobAds, int? jobCategoryId)
+        private IQueryable<JobAdvertisementEntity> FilteredByCategory(IQueryable<JobAdvertisementEntity> jobAds, int? jobCategoryId)
         {
             return jobAds.Where(j => j.JobCategoryId == jobCategoryId);
         }
 
-        private IQueryable<JobAd> FilterByEngagement(IQueryable<JobAd> jobAds, int? jobEngagementId)
+        private IQueryable<JobAdvertisementEntity> FilterByEngagement(IQueryable<JobAdvertisementEntity> jobAds, int? jobEngagementId)
         {
             return jobAds.Where(j => j.JobEngagementId == jobEngagementId);
         }
 
-        private IQueryable<JobAd> FilterByLocation(IQueryable<JobAd> jobAds, string location)
+        private IQueryable<JobAdvertisementEntity> FilterByLocation(IQueryable<JobAdvertisementEntity> jobAds, string location)
         {
             return jobAds.Where(j => j.Location == location);
         }
 
         //Sort methods
 
-        private IQueryable<JobAd> SortBySalary(IQueryable<JobAd> jobAds, bool isAscending)
+        private IQueryable<JobAdvertisementEntity> SortBySalary(IQueryable<JobAdvertisementEntity> jobAds, bool isAscending)
         {
             return isAscending
                 ? jobAds.OrderBy(j => j.MaxSalary)
                 : jobAds.OrderByDescending(j => j.MinSalary);
         }
 
-        private IQueryable<JobAd> SortByPublishDate(IQueryable<JobAd> jobAds, bool isAscending)
+        private IQueryable<JobAdvertisementEntity> SortByPublishDate(IQueryable<JobAdvertisementEntity> jobAds, bool isAscending)
         {
             return isAscending
                 ? jobAds.OrderBy(j => j.CreatedOn)

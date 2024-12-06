@@ -4,7 +4,7 @@
     using JobFinder.Services.Mappings;
     using System.ComponentModel.DataAnnotations;
 
-    public class SkillsEditModel : IMapTo<Skill>
+    public class SkillsEditModel : IMapTo<SkillsInfoEntity>
     {
         public int Id { get; set; }
 

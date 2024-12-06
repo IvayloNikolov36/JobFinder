@@ -1,6 +1,6 @@
 ﻿namespace JobFinder.Web.Infrastructure.Filters
 {
-    using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Services.CV;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using System.Linq;

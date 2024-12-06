@@ -3,7 +3,7 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
 
-    public class CourseCertificateViewModel : IMapFrom<CourseCertificate>
+    public class CourseCertificateViewModel : IMapFrom<CourseCertificateEntity>
     {
         public int Id { get; set; }
 

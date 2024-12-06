@@ -1,4 +1,5 @@
 ﻿using JobFinder.Data.Models;
+using JobFinder.Data.Models.Nomenclature;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
@@ -7,10 +8,10 @@ namespace JobFinder.Data.Seeders
     {
         public static void Seed(ModelBuilder builder)
         {
-            builder.Entity<Gender>().HasData(
-                new Gender { Id = 1, Name = "Not Specified" },
-                new Gender { Id = 2, Name = "Male" },
-                new Gender { Id = 3, Name = "Female" });
+            builder.Entity<GenderEntity>().HasData(
+                new GenderEntity { Id = 1, Name = "Not Specified" },
+                new GenderEntity { Id = 2, Name = "Male" },
+                new GenderEntity { Id = 3, Name = "Female" });
         }
     }
 }

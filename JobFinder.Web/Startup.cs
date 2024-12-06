@@ -39,7 +39,7 @@ namespace JobFinder.Web
             services.AddDbContext<JobFinderDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<JobFinderDbContext>();
+            services.AddIdentity<UserEntity, IdentityRole>().AddEntityFrameworkStores<JobFinderDbContext>();
 
             services.Configure<IdentityOptions>(options => options.Configure());
 

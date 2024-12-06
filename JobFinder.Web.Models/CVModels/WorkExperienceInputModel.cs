@@ -5,7 +5,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class WorkExperienceInputModel : IMapTo<WorkExperience>
+    public class WorkExperienceInputModel : IMapTo<WorkExperienceInfoEntity>
     {
         public DateTime FromDate { get; set; }
 

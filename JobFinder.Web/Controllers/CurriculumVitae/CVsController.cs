@@ -1,7 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
     using JobFinder.Services;
-    using JobFinder.Services.CurriculumVitae;
+    using JobFinder.Services.CV;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Authorization;

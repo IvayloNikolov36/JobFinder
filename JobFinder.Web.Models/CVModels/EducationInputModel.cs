@@ -5,7 +5,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class EducationInputModel : IMapTo<Education>
+    public class EducationInputModel : IMapTo<EducationInfoEntity>
     {
         public DateTime FromDate { get; set; }
 

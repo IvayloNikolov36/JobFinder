@@ -5,7 +5,7 @@
     using JobFinder.Web.Models.Common;
     using System;
 
-    public class WorkExperienceViewModel : IMapFrom<WorkExperience>
+    public class WorkExperienceViewModel : IMapFrom<WorkExperienceInfoEntity>
     {
         public int Id { get; set; }
 

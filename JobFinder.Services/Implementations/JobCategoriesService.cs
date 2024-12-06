@@ -1,7 +1,6 @@
 ﻿namespace JobFinder.Services.Implementations
 {
-    using JobFinder.Data.Models;
-    using JobFinder.Data.Repositories;
+    using JobFinder.Data.Models.Nomenclature;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.Mappings;
     using Microsoft.EntityFrameworkCore;
@@ -10,9 +9,9 @@
 
     public class JobCategoriesService : IJobCategoriesService
     {
-        private readonly IRepository<JobCategory> repository;
+        private readonly IRepository<JobCategoryEntity> repository;
 
-        public JobCategoriesService(IRepository<JobCategory> repository)
+        public JobCategoriesService(IRepository<JobCategoryEntity> repository)
         {
             this.repository = repository;
         }

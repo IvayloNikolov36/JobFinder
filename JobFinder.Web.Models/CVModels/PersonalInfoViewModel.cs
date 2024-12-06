@@ -5,7 +5,7 @@
     using JobFinder.Web.Models.Common;
     using System;
 
-    public class PersonalInfoViewModel : IMapFrom<PersonalInfo>
+    public class PersonalInfoViewModel : IMapFrom<PersonalInfoEntity>
     {
         public int Id { get; set; }
 

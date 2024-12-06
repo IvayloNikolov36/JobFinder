@@ -28,13 +28,13 @@
 
         public async Task<bool> SubscribeAsync(int companyId, string userId)
         {
-            var company = await this.dbContext.FindAsync<Company>(companyId);
+            var company = await this.dbContext.FindAsync<CompanyEntity>(companyId);
             if (company == null)
             {
                 return false;
             }
 
-            var sub = new CompanySubscription
+            var sub = new CompanySubscriptionEntity
             {
                 UserId = userId,
                 CompanyId = companyId

@@ -6,7 +6,7 @@
     {
         public static void Configure(this IdentityOptions identityOptions)
         {
-            var passwordOptions = new PasswordOptions()
+            PasswordOptions passwordOptions = new()
             {
                 RequiredLength = 6,
                 RequiredUniqueChars = 1,

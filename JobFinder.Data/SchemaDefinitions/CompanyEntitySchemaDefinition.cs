@@ -4,9 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    public class CompanyEntitySchemaDefinition : IEntityTypeConfiguration<Company>
+    public class CompanyEntitySchemaDefinition : IEntityTypeConfiguration<CompanyEntity>
     {
-        public void Configure(EntityTypeBuilder<Company> builder)
+        public void Configure(EntityTypeBuilder<CompanyEntity> builder)
         {
             //one to many
             builder

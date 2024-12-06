@@ -5,7 +5,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class WorkExperienceEditModel : IMapTo<WorkExperience>
+    public class WorkExperienceEditModel : IMapTo<WorkExperienceInfoEntity>
     {
         public int Id { get; set; }
 

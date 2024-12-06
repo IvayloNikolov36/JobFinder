@@ -4,7 +4,7 @@
     using JobFinder.Services.Mappings;
     using System.ComponentModel.DataAnnotations;
 
-    public class SkillsInputModel : IMapTo<Skill>
+    public class SkillsInputModel : IMapTo<SkillsInfoEntity>
     {
         [StringLength(10000, MinimumLength = 10)]
         public string ComputerSkills { get; set; }

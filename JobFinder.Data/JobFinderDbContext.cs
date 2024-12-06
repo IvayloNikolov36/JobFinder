@@ -3,6 +3,7 @@
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.Common;
     using JobFinder.Data.Models.CV;
+    using JobFinder.Data.Models.Nomenclature;
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Data.SchemaDefinitions;
@@ -16,54 +17,54 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class JobFinderDbContext : IdentityDbContext<User>
+    public class JobFinderDbContext : IdentityDbContext<UserEntity>
     {
         public JobFinderDbContext(DbContextOptions<JobFinderDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Company> Companies { get; set; }
+        public DbSet<CompanyEntity> Companies { get; set; }
 
-        public DbSet<JobAd> JobAds { get; set; }
+        public DbSet<JobAdvertisementEntity> JobAdvertisements { get; set; }
 
-        public DbSet<JobEngagement> JobEngagements { get; set; }
+        public DbSet<CurriculumVitaeEntity> CurriculumVitaes { get; set; }
 
-        public DbSet<JobCategory> JobCategories { get; set; }
+        public DbSet<DrivingCategoryTypeEntity> DrivingCategoryTypes { get; set; }
 
-        public DbSet<CurriculumVitae> CVs { get; set; }
+        public DbSet<EducationInfoEntity> Educations { get; set; }
 
-        public DbSet<DrivingCategoryType> DrivingCategoryTypes { get; set; }
+        public DbSet<SkillsInfoEntity> SkillsInfos { get; set; }
 
-        public DbSet<DrivingCategory> DrivingCategories { get; set; }
+        public DbSet<LanguageInfoEntity> LanguageInfos { get; set; }
 
-        public DbSet<Education> Educations { get; set; }
+        public DbSet<PersonalInfoEntity> PersonalDetailsInfo { get; set; }
 
-        public DbSet<Skill> Skills { get; set; }
+        public DbSet<WorkExperienceInfoEntity> WorkExperiencesInfos { get; set; }
 
-        public DbSet<LanguageInfo> LanguageInfos { get; set; }
+        public DbSet<CourseCertificateEntity> CourseCertificatesInfos { get; set; }
 
-        public DbSet<PersonalInfo> PersonalDetails { get; set; }
-
-        public DbSet<WorkExperience> WorkExperiences { get; set; }
-
-        public DbSet<CourseCertificate> CoursesCertificates { get; set; }
-
-        public DbSet<CompanySubscription> CompanySubscriptions { get; set; }
+        public DbSet<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
 
         public DbSet<JobCategorySubscription> JobCategorySubscriptions { get; set; }
 
-        public DbSet<Country> Countries { get; set; }
+        // Nomenclature Entities
 
-        public DbSet<Citizenship> Citizenships { get; set; }
+        public DbSet<CountryEntity> Countries { get; set; }
 
-        public DbSet<Gender> Gender { get; set; }
+        public DbSet<CitizenshipEntity> Citizenships { get; set; }
 
-        public DbSet<BusinessSector> BusinessSectors { get; set; }
+        public DbSet<GenderEntity> Gender { get; set; }
 
-        public DbSet<LanguageType> LanguageTpes { get; set; }
+        public DbSet<BusinessSectorEntity> BusinessSectors { get; set; }
 
-        public DbSet<LanguageLevel> LanguageLevels { get; set; }
+        public DbSet<LanguageTypeEntity> LanguageTpes { get; set; }
+
+        public DbSet<LanguageLevelEntity> LanguageLevels { get; set; }
+
+        public DbSet<JobEngagementEntity> JobEngagements { get; set; }
+
+        public DbSet<JobCategoryEntity> JobCategories { get; set; }
 
         // For VIEWS
 
@@ -107,13 +108,13 @@
 
             // one to one or one to zero connections
 
-            builder.Entity<User>()
+            builder.Entity<UserEntity>()
                 .HasOne(u => u.Company)
                 .WithOne(c => c.User)
-                .HasForeignKey<Company>(c => c.UserId)
+                .HasForeignKey<CompanyEntity>(c => c.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            builder.Entity<CompanySubscription>()
+            builder.Entity<CompanySubscriptionEntity>()
                 .HasKey(x => new { x.UserId, x.CompanyId });
 
             builder.Entity<JobCategorySubscription>()
@@ -150,6 +151,7 @@
             EducationLevelSeeder.Seed(builder);
             LanguageTypesSeeder.Seed(builder);
             LanguageLevelsSeeder.Seed(builder);
+            DrivingCategoryTypeSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

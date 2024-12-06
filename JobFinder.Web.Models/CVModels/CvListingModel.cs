@@ -4,7 +4,7 @@
     using JobFinder.Data.Models.CV;
     using System;
 
-    public class CvListingModel : IMapFrom<CurriculumVitae>
+    public class CvListingModel : IMapFrom<CurriculumVitaeEntity>
     {
         public string Id { get; set; }
 

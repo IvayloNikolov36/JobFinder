@@ -4,7 +4,7 @@
     using JobFinder.Services.Mappings;
     using System;
 
-    public class JobAdsubscriptionViewModel : IMapFrom<JobAd>
+    public class JobAdsubscriptionViewModel : IMapFrom<JobAdvertisementEntity>
     {
         public string Position { get; set; }
 

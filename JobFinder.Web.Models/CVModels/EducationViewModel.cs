@@ -5,7 +5,7 @@
     using JobFinder.Web.Models.Common;
     using System;
 
-    public class EducationViewModel : IMapFrom<Education>
+    public class EducationViewModel : IMapFrom<EducationInfoEntity>
     {
         public int Id { get; set; }
 

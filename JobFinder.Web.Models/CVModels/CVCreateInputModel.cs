@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Web.Models.CVModels
 {
-    public class CVCreateInputModel : IMapTo<CurriculumVitae>
+    public class CVCreateInputModel : IMapTo<CurriculumVitaeEntity>
     {
         [Required]
         [StringLength(20, MinimumLength = 5)]

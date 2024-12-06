@@ -4,7 +4,7 @@
     using JobFinder.Services.Mappings;
     using System.ComponentModel.DataAnnotations;
 
-    public class CourseSertificateEditModel : IMapTo<CourseCertificate>
+    public class CourseSertificateEditModel : IMapTo<CourseCertificateEntity>
     {
         public int Id { get; set; }
 

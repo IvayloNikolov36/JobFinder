@@ -7,7 +7,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class SubscribersNewJobAdsViewModel : IMapFrom<CompanySubscription>, IHaveCustomMappings
+    public class SubscribersNewJobAdsViewModel : IMapFrom<CompanySubscriptionEntity>, IHaveCustomMappings
     {
         public string UserId { get; set; }
 
@@ -21,7 +21,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<CompanySubscription, SubscribersNewJobAdsViewModel>()
+            configuration.CreateMap<CompanySubscriptionEntity, SubscribersNewJobAdsViewModel>()
                 .ForMember(x => x.CompanyUserJobAds, m => m
                     .MapFrom(m => m.Company.JobAds
                         .Where(ja => (DateTime.UtcNow.Day - ja.CreatedOn.Date.Day) <= 1)));
