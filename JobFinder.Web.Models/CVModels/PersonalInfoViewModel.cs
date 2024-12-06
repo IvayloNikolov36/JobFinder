@@ -5,9 +5,9 @@
     using JobFinder.Web.Models.Common;
     using System;
 
-    public class PersonalDetailsViewModel : IMapFrom<PersonalInfo>
+    public class PersonalInfoViewModel : IMapFrom<PersonalInfo>
     {
-        public string CurriculumVitaeId { get; set; }
+        public int Id { get; set; }
 
         public string FirstName { get; set; }
 
@@ -23,7 +23,7 @@
 
         public DateTime Birthdate { get; set; }
 
-        public BasicViewModel CitizenShip { get; set; }
+        public BasicViewModel Citizenship { get; set; }
 
         public BasicViewModel Country { get; set; }
 

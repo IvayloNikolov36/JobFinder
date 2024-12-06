@@ -4,11 +4,9 @@
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Common;
 
-    public class LanguageInfoListingModel : IMapFrom<LanguageInfo>
+    public class LanguageInfoViewModel : IMapFrom<LanguageInfo>
     {
         public int Id { get; set; }
-
-        public string CurriculumVitaeId { get; set; }
 
         public BasicViewModel LanguageType { get; set; }
 

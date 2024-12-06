@@ -1,9 +1,11 @@
 ﻿namespace JobFinder.Services.Implementations.CurriculumVitae
 {
+    using AutoMapper;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
@@ -12,10 +14,14 @@
     public class SkillsService : ISkillsService
     {
         private readonly IRepository<Skill> repository;
+        private readonly IMapper mapper;
 
-        public SkillsService(IRepository<Skill> skillRepository)
+        public SkillsService(
+            IRepository<Skill> skillRepository,
+            IMapper mapper)
         {
             this.repository = skillRepository;
+            this.mapper = mapper;
         }
 
         public async Task<T> GetAsync<T>(int skillsId)
@@ -28,36 +34,18 @@
             return skill;
         }
 
-        public async Task<int> AddAsync(string cvId, string computerSkills, string skills, bool hasManagedPeople, bool hasDrivingLicense)
+        public async Task<bool> UpdateAsync(SkillsEditModel skillsModel)
         {
-            var skill = new Skill
-            {
-                CurriculumVitaeId = cvId,
-                ComputerSkills = computerSkills,
-                Skills = skills,
-                HasManagedPeople = hasManagedPeople,
-                HasDrivingLicense = hasDrivingLicense
-            };
-
-            await this.repository.AddAsync(skill);
-            await this.repository.SaveChangesAsync();
-
-            return skill.Id;
-        }
-
-        public async Task<bool> UpdateAsync(int skillId, string computerSkills, string skills, bool hasManagedPeople, bool hasDrivingLicense)
-        {
-            var skillFromDb = await this.repository.FindAsync(skillId);
+            Skill skillFromDb = await this.repository.FindAsync(skillsModel.Id);
 
             if (skillFromDb == null)
             {
                 return false;
             }
 
-            skillFromDb.ComputerSkills = computerSkills;
-            skillFromDb.Skills = skills;
-            skillFromDb.HasManagedPeople = hasManagedPeople;
-            skillFromDb.HasDrivingLicense = hasDrivingLicense;
+            this.mapper.Map(skillsModel, skillFromDb);
+
+            this.repository.Update(skillFromDb);
 
             await this.repository.SaveChangesAsync();
 

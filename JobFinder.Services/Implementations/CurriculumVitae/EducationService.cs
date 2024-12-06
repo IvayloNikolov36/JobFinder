@@ -33,28 +33,6 @@
 
             return educations;
         }
-
-        // TODO: delete?
-        //public async Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string organization,
-        //    string location, EducationLevel educationLevel, string major, string mainSubjects)
-        //{
-        //    var education = new Education
-        //    {
-        //        CurriculumVitaeId = cvId,
-        //        FromDate = fromDate,
-        //        ToDate = toDate,
-        //        Organization = organization,
-        //        Location = location,
-        //        EducationLevel = educationLevel,
-        //        Major = major,
-        //        MainSubjects = mainSubjects
-        //    };
-
-        //    await this.repository.AddAsync(education);
-        //    await this.repository.SaveChangesAsync();
-
-        //    return education.Id;
-        //}
         
         public async Task UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationModels)
         {

@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Repositories;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Services.Mappings;
@@ -27,27 +26,10 @@
 
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
         {
-            var coursesSertificates = await this.repository.AllAsNoTracking()
+            return await this.repository.AllAsNoTracking()
                 .Where(cs => cs.CurriculumVitaeId == cvId)
                 .To<T>()
                 .ToListAsync();
-
-            return coursesSertificates;
-        }
-
-        public async Task<int> AddAsync(string cvId, string courseName, string certificateUrl)
-        {
-            var courseSertificate = new CourseCertificate
-            {
-                CurriculumVitaeId = cvId,
-                CourseName = courseName,
-                CertificateUrl = certificateUrl
-            };
-
-            await this.repository.AddAsync(courseSertificate);
-            await this.repository.SaveChangesAsync();
-
-            return courseSertificate.Id;
         }
 
         public async Task UpdateAsync(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfoModels)
@@ -102,7 +84,7 @@
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var courseCertificateFromDb = await this.repository.FindAsync(id);
+            CourseCertificate courseCertificateFromDb = await this.repository.FindAsync(id);
 
             if (courseCertificateFromDb == null)
             {

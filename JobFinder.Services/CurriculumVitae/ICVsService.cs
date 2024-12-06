@@ -15,6 +15,8 @@
 
         Task<T> GetDataAsync<T>(string cvId);
 
+        Task<CvDataViewModel> GetDataAsync(string cvId);
+
         Task<bool> SetDataAsync(string cvId, byte[] data);
 
         Task<byte[]> GetCvDataAsync(string cvId);

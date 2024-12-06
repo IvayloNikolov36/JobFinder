@@ -3,7 +3,6 @@
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -24,28 +23,18 @@
             return skills;
         }
 
-        [HttpPost]
-        [Route("{cvId:guid}/create")]
-        public async Task<ActionResult<int>> Add([FromRoute] Guid cvId, [FromBody] SkillsInputModel model)
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] SkillsEditModel model)
         {
-            int skillsId = await this.skillsService.AddAsync(cvId.ToString(), model.ComputerSkills, 
-                model.Skills, model.HasManagedPeople, model.HasDrivingLicense);
-
-            return this.Ok(skillsId);
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] SkillsEditModel model)
-        {
-            bool isUpdated = await this.skillsService.UpdateAsync(id, model.ComputerSkills, model.Skills, 
-                model.HasManagedPeople, model.HasDrivingLicense);
+            bool isUpdated = await this.skillsService.UpdateAsync(model);
 
             if (!isUpdated)
             {
-                return this.BadRequest(new { Title = "Skills are not updated!" });
+                return this.NotFound();
             }
 
-            return this.Ok(new { Message = "Skills successfully updated!" });
+            return this.Ok();
         }
 
         [HttpDelete("{id:int}")]
@@ -53,6 +42,7 @@
         {
             bool isDeleted = await this.skillsService.DeleteAsync(id);
 
+            // TODO: check such statements and with NotFound
             if (!isDeleted)
             {
                 return this.BadRequest(new { Title = "Skills are not deleted!" });

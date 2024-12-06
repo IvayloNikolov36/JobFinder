@@ -3,11 +3,9 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
 
-    public class CourseCertificateListingModel : IMapFrom<CourseCertificate>
+    public class CourseCertificateViewModel : IMapFrom<CourseCertificate>
     {
         public int Id { get; set; }
-
-        public string CurriculumVitaeId { get; set; }
 
         public string CourseName { get; set; }
 

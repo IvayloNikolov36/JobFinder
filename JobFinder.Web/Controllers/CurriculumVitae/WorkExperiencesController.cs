@@ -17,31 +17,13 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WorkExperienceListingModel>>> All([FromQuery] string cvId)
+        public async Task<ActionResult<IEnumerable<WorkExperienceViewModel>>> All([FromQuery] string cvId)
         {
             var workExperiences = await this.workExperienceService
-                .AllAsync<WorkExperienceListingModel>(cvId);
+                .AllAsync<WorkExperienceViewModel>(cvId);
 
             return this.Ok(workExperiences);
         }
-
-        // TODO: delete?
-        //[HttpPost("{cvId:guid}")]
-        //[ServiceFilter(typeof(ValidateCvIdExistsServiceFilter))]
-        //public async Task<ActionResult<List<int>>> Create(Guid cvId, [FromBody] WorkExperienceInputModel[] experiences)
-        //{
-        //    IList<int> entitiesIds = new List<int>();
-        //    foreach (var model in experiences)
-        //    {
-        //        int workExperienceId = await this.workExperienceService
-        //            .CreateAsync(cvId.ToString(), model.FromDate, model.ToDate, model.JobTitle,model.Organization,
-        //            model.BusinessSector, model.Location, model.AdditionalDetails);
-
-        //        entitiesIds.Add(workExperienceId);
-        //    }
-
-        //    return this.Ok(entitiesIds);
-        //}
 
         [HttpPut("{cvId:guid}/update")]
         public async Task<IActionResult> Update(

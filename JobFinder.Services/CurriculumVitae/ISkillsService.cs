@@ -1,5 +1,6 @@
 ﻿namespace JobFinder.Services.CurriculumVitae
 {
+    using JobFinder.Web.Models.CVModels;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -7,9 +8,7 @@
     {
         Task<T> GetAsync<T>(int skillsId);
 
-        Task<int> AddAsync(string cvId, string computerSkills, string skills, bool hasManagedPeople, bool hasDrivingLicense);
-
-        Task<bool> UpdateAsync(int skillId, string computerSkills, string skills, bool hasManagedPeople, bool hasDrivingLicense);
+        Task<bool> UpdateAsync(SkillsEditModel skills);
 
         Task<bool> DeleteAsync(int skillId);
 

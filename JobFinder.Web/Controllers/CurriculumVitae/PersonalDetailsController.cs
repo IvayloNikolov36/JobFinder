@@ -3,7 +3,6 @@
     using JobFinder.Services.CurriculumVitae;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
-    using System;
     using System.Threading.Tasks;
 
     public class PersonalDetailsController : BaseCVsController
@@ -16,38 +15,19 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<PersonalDetailsViewModel>> Get([FromQuery] string cvId)
+        public async Task<ActionResult<PersonalInfoViewModel>> Get([FromQuery] string cvId)
         {
-            var personalDetails = await this.personalDetailsService
-                .GetAsync<PersonalDetailsViewModel>(cvId);
+            PersonalInfoViewModel personalDetails = await this.personalDetailsService
+                .GetAsync<PersonalInfoViewModel>(cvId);
 
             return this.Ok(personalDetails);
         }
 
-        //[HttpPost]
-        //[Route("{cvId:guid}/create")]
-        //public async Task<ActionResult<int>> Create([FromRoute] Guid cvId, [FromBody] PersonalDetailsInputModel model)
-        //{
-        //    int objectId = await this.personalDetailsService.CreateAsync(
-        //        cvId.ToString(),
-        //        model.FirstName,
-        //        model.MiddleName,
-        //        model.LastName,
-        //        model.Birthdate,
-        //        model.Gender,
-        //        model.Email,
-        //        model.Phone,
-        //        model.Country,
-        //        model.CitizenShip,
-        //        model.City);
-
-        //    return this.Ok(objectId);
-        //}
-
-        [HttpPut("{cvId:guid}/update")]
-        public async Task<IActionResult> Edit([FromRoute] Guid cvId, [FromBody] PersonalDetailsEditModel model)
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] PersonalDetailsEditModel model)
         {
-            bool isUpdated = await this.personalDetailsService.UpdateAsync(cvId.ToString(), model);
+            bool isUpdated = await this.personalDetailsService.UpdateAsync(model);
 
             if (!isUpdated)
             {

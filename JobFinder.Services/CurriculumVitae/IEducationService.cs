@@ -8,10 +8,6 @@
     {
         Task<IEnumerable<T>> AllAsync<T>(string cvId);
 
-        // TODO: delete?
-        //Task<int> CreateAsync(string cvId, DateTime fromDate, DateTime? toDate, string organization,
-        //    string location, EducationLevel educationLevel, string major, string mainSubjects);
-
         Task UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationsModel);
 
         Task<bool> DeleteAsync(int educationId);

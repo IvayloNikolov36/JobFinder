@@ -8,8 +8,6 @@
     {
         public int Id { get; set; }
 
-        public string CurriculumVitaeId { get; set; }
-
         public string ComputerSkills { get; set; }
 
         public string Skills { get; set; }

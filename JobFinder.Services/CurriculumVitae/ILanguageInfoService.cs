@@ -8,10 +8,7 @@
     {
         Task<IEnumerable<T>> AllAsync<T>(string cvId);
 
-        //Task<int> AddAsync(string cvId, LanguageType languageType, 
-        //    LanguageLevel comprehension, LanguageLevel speaking, LanguageLevel writing);
-
-        Task UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfo);
+        Task UpdateAsync(IEnumerable<LanguageInfoEditModel> languagesInfo);
 
         Task<bool> DeleteAsync(int languageInfoId);
     }

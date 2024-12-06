@@ -1,26 +1,38 @@
-﻿namespace JobFinder.Web.Models.CVModels
+﻿
+namespace JobFinder.Web.Models.CVModels
 {
-    using JobFinder.Services.Mappings;
+    using AutoMapper;
     using JobFinder.Data.Models.CV;
+    using JobFinder.Services.Mappings;
+    using System;
     using System.Collections.Generic;
 
-    public class CvDataViewModel : IMapFrom<CurriculumVitae>
+    public class CvDataViewModel : IHaveCustomMappings
     {
+        public string Id { get; set; }
+
+        public string OwnerId { get; set; }
+
         public string Name { get; set; }
 
-        public string PictureUrl { get; set; }
+        public PersonalInfoViewModel PersonalDetails { get; set; }
 
-        public PersonalDetailsViewModel PersonalDetails { get; set; }
+        public IEnumerable<EducationViewModel> Educations { get; set; }
+
+        public IEnumerable<WorkExperienceViewModel> WorkExperiences { get; set; }
+
+        public IEnumerable<LanguageInfoViewModel> LanguagesInfo { get; set; }
 
         public SkillsViewModel Skills { get; set; }
 
-        public ICollection<WorkExperienceListingModel> WorkExperiences { get; set; }
+        public IEnumerable<CourseCertificateViewModel> CourseCertificates { get; set; }
 
-        public ICollection<EducationListingModel> Educations { get; set; }
+        public DateTime CreatedOn { get; set; }
 
-        public ICollection<LanguageInfoListingModel> LanguagesInfo { get; set; }
-
-        public ICollection<CourseCertificateListingModel> CourseCertificates { get; set; }
-
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<CurriculumVitae, CvDataViewModel>()
+                .ForMember(model => model.OwnerId, m => m.MapFrom(e => e.UserId));
+        }
     }
 }

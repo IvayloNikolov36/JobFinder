@@ -1,13 +1,14 @@
 ﻿namespace JobFinder.Web.Models.CVModels
 {
-    using AutoMapper;
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetailsEditModel : IHaveCustomMappings
+    public class PersonalDetailsEditModel : IMapTo<PersonalInfo>
     {
+        public int Id { get; set; }
+
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public string FirstName { get; set; }
@@ -36,11 +37,5 @@
         public int CountryId { get; set; }
 
         public string City { get; set; }
-
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            // TODO: refactor
-            configuration.CreateMap<PersonalDetailsEditModel, PersonalInfo>();
-        }
     }
 }

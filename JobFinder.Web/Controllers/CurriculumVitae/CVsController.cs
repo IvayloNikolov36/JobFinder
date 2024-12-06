@@ -46,11 +46,11 @@
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<CvDataModel>> GetCvData(string id)
+        public async Task<ActionResult<CvDataViewModel>> GetCvData([FromRoute] string id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            CvDataModel cv = await this.cvsService.GetDataAsync<CvDataModel>(id);
+            CvDataViewModel cv = await this.cvsService.GetDataAsync(id);
 
             if (cv.OwnerId != userId)
             {
@@ -93,7 +93,7 @@
         [Route("generate-pdf/{id}")]
         public async Task<ActionResult> GenerateCVPdf(string id, [FromServices] IPdfGenerator pdfGenerator)
         {
-            CvDataViewModel data = await this.cvsService.GetDataAsync<CvDataViewModel>(cvId: id);
+            CvDataPdfViewModel data = await this.cvsService.GetDataAsync<CvDataPdfViewModel>(id);
 
             StringBuilder sb = new();
 
@@ -123,7 +123,7 @@
 
             sb.AppendFormat(@$"<tr>
                                     <td>Citizenship</td>
-                                    <td>{data.PersonalDetails.CitizenShip}</td>");
+                                    <td>{data.PersonalDetails.Citizenship}</td>");
 
             sb.AppendFormat(@$"<tr>
                                     <td>I live in</td>
@@ -143,7 +143,7 @@
                                 <th></th>
                             </tr>");
 
-            foreach (WorkExperienceListingModel we in data.WorkExperiences)
+            foreach (WorkExperienceViewModel we in data.WorkExperiences)
             {
                 sb.AppendFormat(@$"<tr>
                                     <td>Dates</td>
@@ -176,7 +176,7 @@
                                 <th></th>
                             </tr>");
 
-            foreach (EducationListingModel e in data.Educations)
+            foreach (EducationViewModel e in data.Educations)
             {
                 sb.AppendFormat(@$"<tr>
                                     <td>Dates</td>
@@ -211,7 +211,7 @@
 
             // Languages
 
-            foreach (LanguageInfoListingModel l in data.LanguagesInfo)
+            foreach (LanguageInfoViewModel l in data.LanguagesInfo)
             {
                 sb.AppendFormat(@$"<tr>
                                     <td>Language</td>
@@ -248,7 +248,7 @@
 
             // Aditional courses
 
-            foreach (CourseCertificateListingModel cs in data.CourseCertificates)
+            foreach (CourseCertificateViewModel cs in data.CourseCertificates)
             {
                 sb.AppendFormat(@$"<tr>
                                     <td>{cs.CourseName}</td>

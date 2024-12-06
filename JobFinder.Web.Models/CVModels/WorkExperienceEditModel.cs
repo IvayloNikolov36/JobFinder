@@ -22,7 +22,7 @@
         [StringLength(60, MinimumLength = 4)]
         public string Organization { get; set; }
 
-        public int BusinessSector { get; set; }
+        public int BusinessSectorId { get; set; }
 
         [Required]
         [StringLength(60, MinimumLength = 2)]

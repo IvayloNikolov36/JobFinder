@@ -34,28 +34,13 @@
             return languagesInfo;
         }
 
-        //public async Task<int> AddAsync(string cvId, LanguageType languageType, 
-        //    LanguageLevel comprehension, LanguageLevel speaking, LanguageLevel writing)
-        //{
-        //    var languageInfo = new LanguageInfo
-        //    {
-        //        CurriculumVitaeId = cvId,
-        //        LanguageType = languageType,
-        //        Comprehension = comprehension,
-        //        Speaking = speaking,
-        //        Writing = writing
-        //    };
-
-        //    await this.repository.AddAsync(languageInfo);
-        //    await this.repository.SaveChangesAsync();
-
-        //    return languageInfo.Id;
-        //}
-
-        public async Task UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfoModels)
+        public async Task UpdateAsync(IEnumerable<LanguageInfoEditModel> languagesInfoModels)
         {
+            languagesInfoModels = languagesInfoModels.OrderBy(li => li.Id);
+            int[] languageInfoIds = languagesInfoModels.Select(li => li.Id).ToArray();
+
             List<LanguageInfo> languageInfoEntitiesFromDB = await this.repository
-                .AllWhere(we => we.CurriculumVitaeId == cvId)
+                .AllWhere(we => languageInfoIds.Contains(we.Id))
                 .ToListAsync();
 
             IEnumerable<LanguageInfoEditModel> languageInfoToAdd = languagesInfoModels
@@ -68,7 +53,7 @@
                 {
                     LanguageInfo entityToAdd = this.mapper.Map<LanguageInfo>(model);
                     entityToAdd.Id = 0;
-                    entityToAdd.CurriculumVitaeId = cvId;
+                    entityToAdd.CurriculumVitaeId = languageInfoEntitiesFromDB.First().CurriculumVitaeId;
                     entitiesToAdd.Add(entityToAdd);
                 }
 
@@ -104,7 +89,7 @@
 
         public async Task<bool> DeleteAsync(int languageInfoId)
         {
-            var languageInfoFromDb = await this.repository.FindAsync(languageInfoId);
+            LanguageInfo languageInfoFromDb = await this.repository.FindAsync(languageInfoId);
             if (languageInfoFromDb == null)
             {
                 return false;
