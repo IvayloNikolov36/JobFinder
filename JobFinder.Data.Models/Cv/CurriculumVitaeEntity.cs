@@ -10,10 +10,10 @@ namespace JobFinder.Data.Models.CV
         public CurriculumVitaeEntity()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.WorkExperiences = new HashSet<WorkExperienceInfoEntity>();
-            this.Educations = new HashSet<EducationInfoEntity>();
-            this.LanguagesInfo = new HashSet<LanguageInfoEntity>();
-            this.CourseCertificates = new HashSet<CourseCertificateEntity>();
+            this.WorkExperiences = new List<WorkExperienceInfoEntity>();
+            this.Educations = new List<EducationInfoEntity>();
+            this.LanguagesInfo = new List<LanguageInfoEntity>();
+            this.CourseCertificates = new List<CourseCertificateEntity>();
         }
 
         public string UserId { get; set; }

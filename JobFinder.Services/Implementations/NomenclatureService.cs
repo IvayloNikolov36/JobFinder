@@ -19,7 +19,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<EducationLevelEntity> educationLevelsRepository;
         private readonly IRepository<LanguageTypeEntity> languageTypesRepository;
         private readonly IRepository<LanguageLevelEntity> languageLevelsRepository;
-        private readonly IRepository<DrivingCategoryTypeEntity> drivingCategoryTypesRepository;
+        private readonly IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository;
 
         public NomenclatureService(
             IRepository<CountryEntity> countriesRepository,
@@ -31,7 +31,7 @@ namespace JobFinder.Services.Implementations
             IRepository<EducationLevelEntity> educationLevelsRepository,
             IRepository<LanguageTypeEntity> languageTypesRepository,
             IRepository<LanguageLevelEntity> languageLevelsRepository,
-            IRepository<DrivingCategoryTypeEntity> drivingCategoryTypesRepository)
+            IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository)
         {
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;

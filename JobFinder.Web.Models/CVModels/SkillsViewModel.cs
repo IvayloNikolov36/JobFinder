@@ -18,6 +18,6 @@
         public bool HasDrivingLicense { get; set; }
 
         // TODO: use viewModel, not the entity
-        public ICollection<DrivingCategoryTypeEntity> DrivingLicenseCategories { get; set; }
+        public ICollection<DrivingCategoryEntity> DrivingLicenseCategories { get; set; }
     }
 }

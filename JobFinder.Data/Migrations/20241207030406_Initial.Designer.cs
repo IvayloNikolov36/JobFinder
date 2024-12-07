@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    [Migration("20241206165518_Initial")]
+    [Migration("20241207030406_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,7 +137,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("EducationLevelId");
 
-                    b.ToTable("Educations");
+                    b.ToTable("EducationInfos");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.LanguageInfoEntity", b =>
@@ -249,7 +249,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("GenderId");
 
-                    b.ToTable("PersonalDetailsInfo");
+                    b.ToTable("PersonalInfos");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.SkillsInfoEntity", b =>
@@ -342,7 +342,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("CurriculumVitaeId");
 
-                    b.ToTable("WorkExperiencesInfos");
+                    b.ToTable("WorkExperienceInfos");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>
@@ -388,6 +388,34 @@ namespace JobFinder.Data.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.Cv.SkillsInfoDrivingCategoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DrivingCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SkillsInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DrivingCategoryId");
+
+                    b.HasIndex("SkillsInfoId");
+
+                    b.ToTable("SkillsInfosDrivingCategories");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.JobAdvertisementEntity", b =>
@@ -3673,15 +3701,12 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.DrivingCategoryTypeEntity", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.DrivingCategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -3689,12 +3714,10 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("SkillsInfoEntityId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SkillsInfoEntityId");
 
                     b.ToTable("DrivingCategoryTypes");
 
@@ -3702,50 +3725,50 @@ namespace JobFinder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Category = "AM",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "AM"
                         },
                         new
                         {
                             Id = 2,
-                            Category = "A1",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "A1"
                         },
                         new
                         {
                             Id = 3,
-                            Category = "A2",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "A2"
                         },
                         new
                         {
                             Id = 4,
-                            Category = "B",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "B"
                         },
                         new
                         {
                             Id = 5,
-                            Category = "B1",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "B1"
                         },
                         new
                         {
                             Id = 6,
-                            Category = "C",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "C"
                         },
                         new
                         {
                             Id = 7,
-                            Category = "C+E",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "C+E"
                         },
                         new
                         {
                             Id = 8,
-                            Category = "D",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "D"
                         });
                 });
 
@@ -4751,6 +4774,25 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.Cv.SkillsInfoDrivingCategoryEntity", b =>
+                {
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.DrivingCategoryEntity", "DrivingCategory")
+                        .WithMany("SkillsInfoDrivingCategories")
+                        .HasForeignKey("DrivingCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobFinder.Data.Models.CV.SkillsInfoEntity", "SkillsInfo")
+                        .WithMany("SkillsInfoDrivingCategories")
+                        .HasForeignKey("SkillsInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DrivingCategory");
+
+                    b.Navigation("SkillsInfo");
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.JobAdvertisementEntity", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
@@ -4776,13 +4818,6 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("JobEngagement");
 
                     b.Navigation("Publisher");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.DrivingCategoryTypeEntity", b =>
-                {
-                    b.HasOne("JobFinder.Data.Models.CV.SkillsInfoEntity", null)
-                        .WithMany("DrivingLicenseCategories")
-                        .HasForeignKey("SkillsInfoEntityId");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", b =>
@@ -4898,7 +4933,7 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.CV.SkillsInfoEntity", b =>
                 {
-                    b.Navigation("DrivingLicenseCategories");
+                    b.Navigation("SkillsInfoDrivingCategories");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>
@@ -4919,6 +4954,11 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CountryEntity", b =>
                 {
                     b.Navigation("PersonalInfos");
+                });
+
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.DrivingCategoryEntity", b =>
+                {
+                    b.Navigation("SkillsInfoDrivingCategories");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.EducationLevelEntity", b =>

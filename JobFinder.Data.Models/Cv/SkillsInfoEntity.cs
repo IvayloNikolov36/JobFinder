@@ -1,7 +1,7 @@
 ﻿namespace JobFinder.Data.Models.CV
 {
     using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Nomenclature;
+    using JobFinder.Data.Models.Cv;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +9,7 @@
     {
         public SkillsInfoEntity()
         {
-            this.DrivingLicenseCategories = new List<DrivingCategoryTypeEntity>();
+            this.SkillsInfoDrivingCategories = new List<SkillsInfoDrivingCategoryEntity>();
         }
 
         [Required]
@@ -26,6 +26,6 @@
 
         public bool HasDrivingLicense { get; set; }
 
-        public ICollection<DrivingCategoryTypeEntity> DrivingLicenseCategories { get; set; }
+        public ICollection<SkillsInfoDrivingCategoryEntity> SkillsInfoDrivingCategories { get; set; }
     }
 }

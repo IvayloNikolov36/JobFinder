@@ -3,7 +3,7 @@
     using JobFinder.Data.Models.Nomenclature;
     using JobFinder.Services.Mappings;
 
-    public class SkillsDrivingCategoryViewModel : IMapFrom<DrivingCategoryTypeEntity>
+    public class SkillsDrivingCategoryViewModel : IMapFrom<DrivingCategoryEntity>
     {
         public int Id { get; set; }
 

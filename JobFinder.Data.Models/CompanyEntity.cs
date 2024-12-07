@@ -8,7 +8,7 @@
     {
         public CompanyEntity()
         {
-            this.JobAds = new HashSet<JobAdvertisementEntity>();
+            this.JobAds = new List<JobAdvertisementEntity>();
         }
 
         [Required]

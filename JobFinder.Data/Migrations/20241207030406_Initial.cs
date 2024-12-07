@@ -95,6 +95,21 @@ namespace JobFinder.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DrivingCategoryTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DrivingCategoryTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EducationLevelEntity",
                 columns: table => new
                 {
@@ -432,13 +447,13 @@ namespace JobFinder.Data.Migrations
                         column: x => x.JobCategoryId,
                         principalTable: "JobCategories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_JobAdvertisements_JobEngagements_JobEngagementId",
                         column: x => x.JobEngagementId,
                         principalTable: "JobEngagements",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -461,11 +476,11 @@ namespace JobFinder.Data.Migrations
                         column: x => x.CurriculumVitaeId,
                         principalTable: "CurriculumVitaes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Educations",
+                name: "EducationInfos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -483,19 +498,19 @@ namespace JobFinder.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Educations", x => x.Id);
+                    table.PrimaryKey("PK_EducationInfos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Educations_CurriculumVitaes_CurriculumVitaeId",
+                        name: "FK_EducationInfos_CurriculumVitaes_CurriculumVitaeId",
                         column: x => x.CurriculumVitaeId,
                         principalTable: "CurriculumVitaes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Educations_EducationLevelEntity_EducationLevelId",
+                        name: "FK_EducationInfos_EducationLevelEntity_EducationLevelId",
                         column: x => x.EducationLevelId,
                         principalTable: "EducationLevelEntity",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -520,7 +535,7 @@ namespace JobFinder.Data.Migrations
                         column: x => x.CurriculumVitaeId,
                         principalTable: "CurriculumVitaes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_LanguageInfos_LanguageLevels_ComprehensionLevelId",
                         column: x => x.ComprehensionLevelId,
@@ -544,11 +559,11 @@ namespace JobFinder.Data.Migrations
                         column: x => x.LanguageTypeId,
                         principalTable: "LanguageTpes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PersonalDetailsInfo",
+                name: "PersonalInfos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -569,31 +584,31 @@ namespace JobFinder.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PersonalDetailsInfo", x => x.Id);
+                    table.PrimaryKey("PK_PersonalInfos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PersonalDetailsInfo_Citizenships_CitizenshipId",
+                        name: "FK_PersonalInfos_Citizenships_CitizenshipId",
                         column: x => x.CitizenshipId,
                         principalTable: "Citizenships",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PersonalDetailsInfo_Countries_CountryId",
+                        name: "FK_PersonalInfos_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PersonalDetailsInfo_CurriculumVitaes_CurriculumVitaeId",
+                        name: "FK_PersonalInfos_CurriculumVitaes_CurriculumVitaeId",
                         column: x => x.CurriculumVitaeId,
                         principalTable: "CurriculumVitaes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PersonalDetailsInfo_Gender_GenderId",
+                        name: "FK_PersonalInfos_Gender_GenderId",
                         column: x => x.GenderId,
                         principalTable: "Gender",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -618,11 +633,11 @@ namespace JobFinder.Data.Migrations
                         column: x => x.CurriculumVitaeId,
                         principalTable: "CurriculumVitaes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkExperiencesInfos",
+                name: "WorkExperienceInfos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -640,38 +655,44 @@ namespace JobFinder.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkExperiencesInfos", x => x.Id);
+                    table.PrimaryKey("PK_WorkExperienceInfos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WorkExperiencesInfos_BusinessSectors_BusinessSectorId",
+                        name: "FK_WorkExperienceInfos_BusinessSectors_BusinessSectorId",
                         column: x => x.BusinessSectorId,
                         principalTable: "BusinessSectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_WorkExperiencesInfos_CurriculumVitaes_CurriculumVitaeId",
+                        name: "FK_WorkExperienceInfos_CurriculumVitaes_CurriculumVitaeId",
                         column: x => x.CurriculumVitaeId,
                         principalTable: "CurriculumVitaes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DrivingCategoryTypes",
+                name: "SkillsInfosDrivingCategories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SkillsInfoEntityId = table.Column<int>(type: "int", nullable: true),
+                    SkillsInfoId = table.Column<int>(type: "int", nullable: false),
+                    DrivingCategoryId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DrivingCategoryTypes", x => x.Id);
+                    table.PrimaryKey("PK_SkillsInfosDrivingCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DrivingCategoryTypes_SkillsInfos_SkillsInfoEntityId",
-                        column: x => x.SkillsInfoEntityId,
+                        name: "FK_SkillsInfosDrivingCategories_DrivingCategoryTypes_DrivingCategoryId",
+                        column: x => x.DrivingCategoryId,
+                        principalTable: "DrivingCategoryTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SkillsInfosDrivingCategories_SkillsInfos_SkillsInfoId",
+                        column: x => x.SkillsInfoId,
                         principalTable: "SkillsInfos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1311,17 +1332,17 @@ namespace JobFinder.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "DrivingCategoryTypes",
-                columns: new[] { "Id", "Category", "CreatedOn", "ModifiedOn", "SkillsInfoEntityId" },
+                columns: new[] { "Id", "CreatedOn", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 6, "C", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null },
-                    { 7, "C+E", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null },
-                    { 8, "D", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null },
-                    { 5, "B1", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null },
-                    { 3, "A2", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null },
-                    { 1, "AM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null },
-                    { 4, "B", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null },
-                    { 2, "A1", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null }
+                    { 6, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "C" },
+                    { 7, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "C+E" },
+                    { 8, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "D" },
+                    { 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "B1" },
+                    { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "A2" },
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "AM" },
+                    { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "B" },
+                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "A1" }
                 });
 
             migrationBuilder.InsertData(
@@ -1516,18 +1537,13 @@ namespace JobFinder.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DrivingCategoryTypes_SkillsInfoEntityId",
-                table: "DrivingCategoryTypes",
-                column: "SkillsInfoEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Educations_CurriculumVitaeId",
-                table: "Educations",
+                name: "IX_EducationInfos_CurriculumVitaeId",
+                table: "EducationInfos",
                 column: "CurriculumVitaeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Educations_EducationLevelId",
-                table: "Educations",
+                name: "IX_EducationInfos_EducationLevelId",
+                table: "EducationInfos",
                 column: "EducationLevelId");
 
             migrationBuilder.CreateIndex(
@@ -1581,24 +1597,24 @@ namespace JobFinder.Data.Migrations
                 column: "LanguageTypeEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalDetailsInfo_CitizenshipId",
-                table: "PersonalDetailsInfo",
+                name: "IX_PersonalInfos_CitizenshipId",
+                table: "PersonalInfos",
                 column: "CitizenshipId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalDetailsInfo_CountryId",
-                table: "PersonalDetailsInfo",
+                name: "IX_PersonalInfos_CountryId",
+                table: "PersonalInfos",
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalDetailsInfo_CurriculumVitaeId",
-                table: "PersonalDetailsInfo",
+                name: "IX_PersonalInfos_CurriculumVitaeId",
+                table: "PersonalInfos",
                 column: "CurriculumVitaeId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalDetailsInfo_GenderId",
-                table: "PersonalDetailsInfo",
+                name: "IX_PersonalInfos_GenderId",
+                table: "PersonalInfos",
                 column: "GenderId");
 
             migrationBuilder.CreateIndex(
@@ -1608,13 +1624,23 @@ namespace JobFinder.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkExperiencesInfos_BusinessSectorId",
-                table: "WorkExperiencesInfos",
+                name: "IX_SkillsInfosDrivingCategories_DrivingCategoryId",
+                table: "SkillsInfosDrivingCategories",
+                column: "DrivingCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SkillsInfosDrivingCategories_SkillsInfoId",
+                table: "SkillsInfosDrivingCategories",
+                column: "SkillsInfoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkExperienceInfos_BusinessSectorId",
+                table: "WorkExperienceInfos",
                 column: "BusinessSectorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkExperiencesInfos_CurriculumVitaeId",
-                table: "WorkExperiencesInfos",
+                name: "IX_WorkExperienceInfos_CurriculumVitaeId",
+                table: "WorkExperienceInfos",
                 column: "CurriculumVitaeId");
         }
 
@@ -1642,10 +1668,7 @@ namespace JobFinder.Data.Migrations
                 name: "CourseCertificatesInfos");
 
             migrationBuilder.DropTable(
-                name: "DrivingCategoryTypes");
-
-            migrationBuilder.DropTable(
-                name: "Educations");
+                name: "EducationInfos");
 
             migrationBuilder.DropTable(
                 name: "JobAdvertisements");
@@ -1657,16 +1680,16 @@ namespace JobFinder.Data.Migrations
                 name: "LanguageInfos");
 
             migrationBuilder.DropTable(
-                name: "PersonalDetailsInfo");
+                name: "PersonalInfos");
 
             migrationBuilder.DropTable(
-                name: "WorkExperiencesInfos");
+                name: "SkillsInfosDrivingCategories");
+
+            migrationBuilder.DropTable(
+                name: "WorkExperienceInfos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "SkillsInfos");
 
             migrationBuilder.DropTable(
                 name: "EducationLevelEntity");
@@ -1694,6 +1717,12 @@ namespace JobFinder.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Gender");
+
+            migrationBuilder.DropTable(
+                name: "DrivingCategoryTypes");
+
+            migrationBuilder.DropTable(
+                name: "SkillsInfos");
 
             migrationBuilder.DropTable(
                 name: "BusinessSectors");

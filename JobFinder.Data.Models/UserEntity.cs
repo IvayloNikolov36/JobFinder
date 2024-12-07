@@ -10,9 +10,9 @@
     {
         public UserEntity()
         {        
-            this.CurriculumVitaes = new HashSet<CurriculumVitaeEntity>();
-            this.JobCategorySubscriptions = new HashSet<JobCategorySubscription>();
-            this.CompanySubscriptions = new HashSet<CompanySubscriptionEntity>();
+            this.CurriculumVitaes = new List<CurriculumVitaeEntity>();
+            this.JobCategorySubscriptions = new List<JobCategorySubscription>();
+            this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
         }
 
         [Required]

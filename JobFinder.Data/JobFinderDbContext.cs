@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.Common;
+    using JobFinder.Data.Models.Cv;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Nomenclature;
     using JobFinder.Data.Models.Subscriptions;
@@ -30,17 +31,19 @@
 
         public DbSet<CurriculumVitaeEntity> CurriculumVitaes { get; set; }
 
-        public DbSet<DrivingCategoryTypeEntity> DrivingCategoryTypes { get; set; }
-
-        public DbSet<EducationInfoEntity> Educations { get; set; }
+        public DbSet<EducationInfoEntity> EducationInfos { get; set; }
 
         public DbSet<SkillsInfoEntity> SkillsInfos { get; set; }
 
+        public DbSet<DrivingCategoryEntity> DrivingCategoryTypes { get; set; }
+
+        public DbSet<SkillsInfoDrivingCategoryEntity> SkillsInfosDrivingCategories { get; set; }
+
         public DbSet<LanguageInfoEntity> LanguageInfos { get; set; }
 
-        public DbSet<PersonalInfoEntity> PersonalDetailsInfo { get; set; }
+        public DbSet<PersonalInfoEntity> PersonalInfos { get; set; }
 
-        public DbSet<WorkExperienceInfoEntity> WorkExperiencesInfos { get; set; }
+        public DbSet<WorkExperienceInfoEntity> WorkExperienceInfos { get; set; }
 
         public DbSet<CourseCertificateEntity> CourseCertificatesInfos { get; set; }
 
@@ -151,7 +154,7 @@
             EducationLevelSeeder.Seed(builder);
             LanguageTypesSeeder.Seed(builder);
             LanguageLevelsSeeder.Seed(builder);
-            DrivingCategoryTypeSeeder.Seed(builder);
+            DrivingCategorySeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

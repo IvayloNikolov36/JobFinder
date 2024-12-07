@@ -11,7 +11,7 @@ namespace JobFinder.Web.Models.Common
         IMapFrom<BusinessSectorEntity>,
         IMapFrom<LanguageTypeEntity>,
         IMapFrom<LanguageLevelEntity>,
-        IMapFrom<DrivingCategoryTypeEntity>,
+        IMapFrom<DrivingCategoryEntity>,
         IMapFrom<JobEngagementEntity>,
         IMapFrom<JobCategoryEntity>
     {

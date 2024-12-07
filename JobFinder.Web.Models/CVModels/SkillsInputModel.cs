@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class SkillsInputModel : IMapTo<SkillsInfoEntity>
@@ -15,5 +16,7 @@
         public bool HasManagedPeople { get; set; }
 
         public bool HasDrivingLicense { get; set; }
+
+        public IEnumerable<int> DrivingLicenseCategories { get; set; }
     }
 }
