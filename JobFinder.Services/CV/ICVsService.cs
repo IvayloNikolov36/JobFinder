@@ -9,13 +9,11 @@
     {
         Task<bool> ExistsAsync(string id);
 
-        Task<BasicViewModel> CreateAsync(CVCreateInputModel cvModel, string userId);
+        Task<string> CreateAsync(CVCreateInputModel cvModel, string userId);
 
         Task<IEnumerable<T>> AllAsync<T>(string userId);
 
         Task<T> GetDataAsync<T>(string cvId);
-
-        Task<CvDataViewModel> GetDataAsync(string cvId);
 
         Task<bool> SetDataAsync(string cvId, byte[] data);
 

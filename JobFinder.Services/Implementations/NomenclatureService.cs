@@ -1,10 +1,9 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Data.Models.Nomenclature;
+﻿using JobFinder.Data.Models.Nomenclature;
 using JobFinder.Data.Repositories.Contracts;
+using JobFinder.Services.Mappings;
 using JobFinder.Web.Models.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobFinder.Services.Implementations
@@ -20,6 +19,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<EducationLevelEntity> educationLevelsRepository;
         private readonly IRepository<LanguageTypeEntity> languageTypesRepository;
         private readonly IRepository<LanguageLevelEntity> languageLevelsRepository;
+        private readonly IRepository<DrivingCategoryTypeEntity> drivingCategoryTypesRepository;
 
         public NomenclatureService(
             IRepository<CountryEntity> countriesRepository,
@@ -30,7 +30,8 @@ namespace JobFinder.Services.Implementations
             IRepository<JobEngagementEntity> jobEngagementRepository,
             IRepository<EducationLevelEntity> educationLevelsRepository,
             IRepository<LanguageTypeEntity> languageTypesRepository,
-            IRepository<LanguageLevelEntity> languageLevelsRepository)
+            IRepository<LanguageLevelEntity> languageLevelsRepository,
+            IRepository<DrivingCategoryTypeEntity> drivingCategoryTypesRepository)
         {
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;
@@ -41,14 +42,14 @@ namespace JobFinder.Services.Implementations
             this.educationLevelsRepository = educationLevelsRepository;
             this.languageTypesRepository = languageTypesRepository;
             this.languageLevelsRepository = languageLevelsRepository;
+            this.drivingCategoryTypesRepository = drivingCategoryTypesRepository;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCountries()
         {
             BasicViewModel[] countries = await this.countriesRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return countries;
@@ -57,9 +58,8 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetCitizenships()
         {
             BasicViewModel[] countries = await this.citizenshipRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return countries;
@@ -68,9 +68,8 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetGender()
         {
             BasicViewModel[] gender = await this.genderRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return gender;
@@ -79,9 +78,8 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetBusinessSector()
         {
             BasicViewModel[] data = await this.businessSectorRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return data;
@@ -90,9 +88,8 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetJobCategories()
         {
             BasicViewModel[] data = await this.jobCategoryRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return data;
@@ -101,9 +98,8 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetJobEngagements()
         {
             BasicViewModel[] data = await this.jobEngagementRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return data;
@@ -112,9 +108,8 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetEducationLevels()
         {
             BasicViewModel[] data = await this.educationLevelsRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return data;
@@ -123,9 +118,8 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetLanguageTypes()
         {
             BasicViewModel[] data = await this.languageTypesRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return data;
@@ -134,9 +128,18 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetLanguageLevels()
         {
             BasicViewModel[] data = await this.languageLevelsRepository
-                .All()
-                .Select(x => new BasicViewModel(x.Id, x.Name))
-                .AsNoTracking()
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
+                .ToArrayAsync();
+
+            return data;
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetDrivingCategories()
+        {
+            BasicViewModel[] data = await this.drivingCategoryTypesRepository
+                .AllAsNoTracking()
+                .To<BasicViewModel>()
                 .ToArrayAsync();
 
             return data;

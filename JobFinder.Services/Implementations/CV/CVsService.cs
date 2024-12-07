@@ -9,7 +9,6 @@
     using System.Linq;
     using JobFinder.Services.Mappings;
     using JobFinder.Data.Repositories.Contracts;
-    using JobFinder.Web.Models.Common;
     using AutoMapper;
     using JobFinder.Web.Models.CVModels;
 
@@ -59,7 +58,7 @@
                 .ToListAsync();
         }
 
-        public async Task<BasicViewModel> CreateAsync(CVCreateInputModel cvModel, string userId)
+        public async Task<string> CreateAsync(CVCreateInputModel cvModel, string userId)
         {
             CurriculumVitaeEntity cvEntity = new();
 
@@ -70,7 +69,7 @@
             await this.repository.AddAsync(cvEntity);
             await this.repository.SaveChangesAsync();
 
-            return new BasicViewModel(cvEntity.Id, cvEntity.Name);
+            return cvEntity.Id;
         }
 
         public async Task<byte[]> GetCvDataAsync(string cvId)
@@ -91,35 +90,6 @@
                 .SingleOrDefaultAsync();
 
             return data;
-        }
-
-        // TODO: this is because the above generic method is not working - automapper throws error
-        public async Task<CvDataViewModel> GetDataAsync(string cvId)
-        {
-            return await this.repository.All()
-                .Include(cv => cv.PersonalDetails)
-                    .ThenInclude(pd => pd.Gender)
-                .Include(cv => cv.PersonalDetails)
-                    .ThenInclude(pd => pd.Citizenship)
-                .Include(cv => cv.PersonalDetails)
-                    .ThenInclude(pd => pd.Country)
-                .Include(cv => cv.Educations)
-                    .ThenInclude(e => e.EducationLevel)
-                .Include(cv => cv.CourseCertificates)
-                .Include(cv => cv.LanguagesInfo)
-                    .ThenInclude(li => li.LanguageType)
-                .Include(cv => cv.LanguagesInfo)
-                    .ThenInclude(li => li.ComprehensionLevel)
-                .Include(cv => cv.LanguagesInfo)
-                    .ThenInclude(li => li.SpeakingLevel)
-                .Include(cv => cv.LanguagesInfo)
-                    .ThenInclude(li => li.WritingLevel)
-                .Include(cv => cv.WorkExperiences)
-                    .ThenInclude(we => we.BusinessSector)
-                .Include(cv => cv.Skills)
-                .Where(cv => cv.Id == cvId)
-                .Select(x => this.mapper.Map<CvDataViewModel>(x))
-                .SingleOrDefaultAsync();
         }
 
         public async Task<bool> SetDataAsync(string cvId, byte[] data)

@@ -95,5 +95,14 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok(data);
         }
+
+        [HttpGet]
+        [Route("driving-categories")]
+        public async Task<IActionResult> GetDrivingCategories()
+        {
+            IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetDrivingCategories();
+
+            return this.Ok(data);
+        }
     }
 }

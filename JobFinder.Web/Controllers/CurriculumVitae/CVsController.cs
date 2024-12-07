@@ -28,9 +28,11 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            BasicViewModel cvBasic = await this.cvsService.CreateAsync(cvModel, userId);
+            string id = await this.cvsService.CreateAsync(cvModel, userId);
 
-            return this.Ok(cvBasic);
+            var resultObject = new { id };
+
+            return this.CreatedAtRoute("GetCvData", resultObject, resultObject);
         }
 
         [HttpGet]
@@ -45,12 +47,12 @@
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id}", Name = "GetCvData")]
         public async Task<ActionResult<CvDataViewModel>> GetCvData([FromRoute] string id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            CvDataViewModel cv = await this.cvsService.GetDataAsync(id);
+            CvDataViewModel cv = await this.cvsService.GetDataAsync<CvDataViewModel>(id);
 
             if (cv.OwnerId != userId)
             {
