@@ -1,6 +1,5 @@
 ﻿namespace JobFinder.Services.CV
 {
-    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -20,5 +19,7 @@
         Task<byte[]> GetCvDataAsync(string cvId);
 
         Task<bool> DeleteCvAsync(string id, string userId);
+
+        Task<string> GetOwnerId(string cvId);
     }
 }

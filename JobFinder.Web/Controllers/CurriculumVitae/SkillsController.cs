@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
     using JobFinder.Services.CV;
+    using JobFinder.Web.Infrastructure.Filters;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
@@ -24,6 +25,7 @@
 
         [HttpPut]
         [Route("update")]
+        [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update([FromBody] SkillsEditModel model)
         {
             bool isUpdated = await this.skillsService.UpdateAsync(model);

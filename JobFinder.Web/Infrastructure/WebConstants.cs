@@ -9,13 +9,18 @@
 
         public const string CompanyRole = "Company";
 
-        //Job Ads
+        // Job Ads
         public const string NoJobFound = "Job ad not found!";
         public const string SuccessOnCreation = "Successfully created a job ad!";
         public const string CantEditAd = "Edit does not exist or you are trying to edit other companie job ad!";
         public const string UpdatedAd = "Job ad successfully updated!";
 
-        //CORS
+        // CORS
         public const string CorsPolicyName = "JobFinderCORSPolicy";
+        public const string HttpGet = "GET";
+        public const string HttpPost = "POST";
+        public const string HttpPut = "PUT";
+        public const string HttpPatch = "PATCH";
+        public const string HttpDelete = "DELETE";
     }
 }

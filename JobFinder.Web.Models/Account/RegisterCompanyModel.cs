@@ -13,6 +13,7 @@
         public string Bulstat { get; set; }
 
         [Required]
+        [Url]
         public string CompanyLogo { get; set; }
     }
 }

@@ -8,11 +8,13 @@
         public static void Configure(this CorsOptions options)
         {
             options.AddPolicy(CorsPolicyName,
-                    builder =>
-                    {
-                        builder.WithOrigins("http://localhost:4200")
-                        .AllowAnyHeader().WithMethods("GET", "POST", "DELETE", "PUT");
-                    });
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:4100")
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true)
+                    .WithMethods(HttpGet, HttpPost, HttpPut, HttpPatch, HttpDelete);
+                });
         }
     }
 }

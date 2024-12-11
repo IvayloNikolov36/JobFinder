@@ -5,6 +5,7 @@
 
     public class CVUploadModel
     {
+        [Required]
         public string CandidateId { get; set; }
 
         [Required]

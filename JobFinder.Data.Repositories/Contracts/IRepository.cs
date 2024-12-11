@@ -14,6 +14,8 @@
 
         IQueryable<T> AllAsNoTracking();
 
+        Task<bool> ExistAsync(Expression<Func<T, bool>> predicate);
+
         Task<T> FindAsync<TKey>(TKey id);
 
         Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);

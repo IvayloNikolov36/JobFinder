@@ -46,9 +46,7 @@
 
         public async Task<bool> ExistsAsync(string id)
         {
-            var entity = await this.repository.FindAsync(id);
-
-            return entity != null;
+            return await this.repository.ExistAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string userId)
@@ -138,6 +136,14 @@
             await this.repository.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<string> GetOwnerId(string cvId)
+        {
+            return await this.repository.AllAsNoTracking()
+                .Where(cv => cv.Id == cvId)
+                .Select(cv => cv.UserId)
+                .FirstOrDefaultAsync();
         }
     }
 }

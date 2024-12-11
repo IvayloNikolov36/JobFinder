@@ -18,7 +18,7 @@ namespace JobFinder.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using System;
-    using AutoMapper;
+    using JobFinder.Web.Infrastructure;
 
     public class Startup
     {
@@ -63,7 +63,7 @@ namespace JobFinder.Web
             services.AddHangfireServer();
 
             // Add service filters.
-            services.AddScoped<ValidateCvIdExistsServiceFilter>();
+            services.AddScoped<ValidateCvIdBelongsToUser>();
 
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
             services.AddDomainServices();
@@ -79,9 +79,9 @@ namespace JobFinder.Web
         {
             if (env.IsDevelopment())
             {
-                using (var scope = app.ApplicationServices.CreateScope())
+                using (IServiceScope scope = app.ApplicationServices.CreateScope())
                 {
-                    using var context = scope.ServiceProvider.GetService<JobFinderDbContext>();
+                    using JobFinderDbContext context = scope.ServiceProvider.GetService<JobFinderDbContext>();
                     context.Database.EnsureCreated();
                 }
 
@@ -93,17 +93,11 @@ namespace JobFinder.Web
             app.UseStaticFiles();
             app.UseRouting();
 
-            // app.UseCors(CorsPolicyName);
-            app.UseCors(x => x
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .SetIsOriginAllowed(origin => true)
-              .AllowCredentials());
-
+            app.UseCors(WebConstants.CorsPolicyName);
             app.UseAuthentication();
             app.UseAuthorization();
 
-            ConfigureHangfire(app, reccuringJobManager, serviceProvider);
+            this.ConfigureHangfire(app, reccuringJobManager, serviceProvider);
 
             app.UseEndpoints(endpoints =>
             {

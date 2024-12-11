@@ -29,6 +29,11 @@
             return this.DbSet.Where(predicate);
         }
 
+        public virtual Task<bool> ExistAsync(Expression<Func<T, bool>> predicate)
+        {
+            return this.DbSet.AnyAsync(predicate);
+        }
+
         public virtual Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate) 
             => this.DbSet.FirstOrDefaultAsync(predicate);
 

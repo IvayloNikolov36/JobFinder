@@ -10,7 +10,7 @@
 
     public static class AppBuilderExtension
     {
-        private static readonly IdentityRole[] roles =
+        private static readonly IdentityRole[] Roles =
         {
             new IdentityRole(AdminRole),
             new IdentityRole(CompanyRole)
@@ -31,16 +31,18 @@
                     .GetRequiredService<JobFinderDbContext>();
 
                 await CreateRoles(roleManager);
-
-                // TODO: refactor
-                // create admin
                 await CreateUser(userManager, AdminUserName, AdminEmail, DefaultAdminPassword, AdminRole);
             }
         }
 
-        private static async Task CreateUser(UserManager<UserEntity> userManager, string userName, string email, string defaultPassword, string role)
+        private static async Task CreateUser(
+            UserManager<UserEntity> userManager,
+            string userName,
+            string email,
+            string defaultPassword,
+            string role)
         {
-            var user = await userManager.FindByNameAsync(userName);
+            UserEntity user = await userManager.FindByNameAsync(userName);
 
             if (user == null)
             {
@@ -60,7 +62,7 @@
 
         private static async Task CreateRoles(RoleManager<IdentityRole> roleManager)
         {
-            foreach (var role in roles)
+            foreach (IdentityRole role in Roles)
             {
                 if (!await roleManager.RoleExistsAsync(role.Name))
                 {
