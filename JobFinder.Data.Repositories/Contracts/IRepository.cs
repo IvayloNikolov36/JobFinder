@@ -10,7 +10,7 @@
     {
         IQueryable<T> All();
 
-        IQueryable<T> AllWhere(Expression<Func<T, bool>> predicate);
+        IQueryable<T> Where(Expression<Func<T, bool>> predicate);
 
         IQueryable<T> AllAsNoTracking();
 

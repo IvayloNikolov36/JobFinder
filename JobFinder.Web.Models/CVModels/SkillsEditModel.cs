@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models.CV;
     using JobFinder.Services.Mappings;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class SkillsEditModel : IMapTo<SkillsInfoEntity>
@@ -12,12 +13,10 @@
         public string ComputerSkills { get; set; }
 
         [StringLength(500, MinimumLength = 10)]
-        public string Skills { get; set; }
+        public string OtherSkills { get; set; }
 
         public bool HasManagedPeople { get; set; }
 
-        public bool HasDrivingLicense { get; set; }
-
-        //public ICollection<DrivingCategory> DrivingLicenseCategories { get; set; }
+        public IEnumerable<int> DrivingLicenseCategoryIds { get; set; }
     }
 }

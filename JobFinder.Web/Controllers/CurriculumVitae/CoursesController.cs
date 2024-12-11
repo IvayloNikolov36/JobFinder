@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
     using JobFinder.Services.CV;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -29,9 +30,9 @@
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<CourseSertificateEditModel> coursesInfo)
         {
-            await this.coursesService.UpdateAsync(cvId.ToString(), coursesInfo);
+            UpdateResult result = await this.coursesService.UpdateAsync(cvId.ToString(), coursesInfo);
 
-            return this.Ok(new { Message = "Courses info successfully updated!" });
+            return this.Ok(result);
         }
 
         [HttpDelete]

@@ -15,6 +15,8 @@ namespace JobFinder.Web.Models.CVModels
 
         public string Name { get; set; }
 
+        public string PictureUrl { get; set; }
+
         public PersonalInfoViewModel PersonalDetails { get; set; }
 
         public IEnumerable<EducationViewModel> Educations { get; set; }

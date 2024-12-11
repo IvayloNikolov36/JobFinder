@@ -240,7 +240,7 @@
 
             sb.AppendFormat(@$"<tr>
                                 <td>Other skills and competences</td>
-                                <td>{data.Skills.Skills}</td>");
+                                <td>{data.Skills.OtherSkills}</td>");
 
             // Driving license
 

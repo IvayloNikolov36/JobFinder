@@ -11,6 +11,7 @@
     using JobFinder.Data.Repositories.Contracts;
     using AutoMapper;
     using JobFinder.Web.Models.CVModels;
+    using JobFinder.Data.Models.Cv;
 
     public class CVsService : ICVsService
     {
@@ -63,6 +64,17 @@
             CurriculumVitaeEntity cvEntity = new();
 
             this.mapper.Map(cvModel, cvEntity);
+
+            if (cvModel.Skills.DrivingLicenseCategoryIds.Any())
+            {
+                cvEntity.Skills.HasDrivingLicense = true;
+                cvEntity.Skills.SkillsInfoDrivingCategories
+                    .AddRange(
+                        cvModel.Skills.DrivingLicenseCategoryIds
+                        .Select(dcId => new SkillsInfoDrivingCategoryEntity { DrivingCategoryId = dcId })
+                    );
+            }
+
             cvEntity.UserId = userId;
             cvEntity.CreatedOn = DateTime.UtcNow;
 

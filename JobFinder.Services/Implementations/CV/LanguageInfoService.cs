@@ -5,6 +5,7 @@
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -18,7 +19,7 @@
 
         public LanguageInfoService(
             IRepository<LanguageInfoEntity> languageInfoRepository,
-            IMapper mapper) 
+            IMapper mapper)
         {
             this.repository = languageInfoRepository;
             this.mapper = mapper;
@@ -34,21 +35,23 @@
             return languagesInfo;
         }
 
-        public async Task UpdateAsync(IEnumerable<LanguageInfoEditModel> languagesInfoModels)
+        public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfoModels)
         {
             languagesInfoModels = languagesInfoModels.OrderBy(li => li.Id);
             int[] languageInfoIds = languagesInfoModels.Select(li => li.Id).ToArray();
 
             List<LanguageInfoEntity> languageInfoEntitiesFromDB = await this.repository
-                .AllWhere(we => languageInfoIds.Contains(we.Id))
+                .Where(we => we.CurriculumVitaeId == cvId)
                 .ToListAsync();
 
             IEnumerable<LanguageInfoEditModel> languageInfoToAdd = languagesInfoModels
                 .Where(li => !languageInfoEntitiesFromDB.Any(le => le.Id == li.Id));
 
+            List<LanguageInfoEntity> entitiesToAdd = null;
+
             if (languageInfoToAdd.Any())
             {
-                List<LanguageInfoEntity> entitiesToAdd = new();
+                entitiesToAdd = new List<LanguageInfoEntity>();
                 foreach (LanguageInfoEditModel model in languageInfoToAdd)
                 {
                     LanguageInfoEntity entityToAdd = this.mapper.Map<LanguageInfoEntity>(model);
@@ -85,6 +88,8 @@
             }
 
             await this.repository.SaveChangesAsync();
+
+            return new UpdateResult(entitiesToAdd);
         }
 
         public async Task<bool> DeleteAsync(int languageInfoId)

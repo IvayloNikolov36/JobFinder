@@ -5,6 +5,7 @@
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -34,18 +35,19 @@
             return educations;
         }
         
-        public async Task UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationModels)
+        public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationModels)
         {
             List<EducationInfoEntity> educationEntitiesFromDb = await this.repository
-                .AllWhere(e => e.CurriculumVitaeId == cvId)
+                .Where(e => e.CurriculumVitaeId == cvId)
                 .ToListAsync();
 
             IEnumerable<EducationEditModel> educationsToAdd = educationModels
                 .Where(em => !educationEntitiesFromDb.Any(ee => ee.Id == em.Id));
 
+            List<EducationInfoEntity> educationEntitiesToAdd = null;
             if (educationsToAdd.Any())
             {
-                List<EducationInfoEntity> educationEntitiesToAdd = new();
+                educationEntitiesToAdd = new List<EducationInfoEntity>();
                 foreach (EducationEditModel educationEditModel in educationsToAdd)
                 {
                     EducationInfoEntity educationEntity = this.mapper.Map<EducationInfoEntity>(educationEditModel);
@@ -82,11 +84,13 @@
             }
 
             await this.repository.SaveChangesAsync();
+
+            return new UpdateResult(educationEntitiesToAdd);
         }
 
         public async Task<bool> DeleteAsync(int educationId)
         {
-            var educationFromDb = await this.repository.FindAsync(educationId);
+            EducationInfoEntity educationFromDb = await this.repository.FindAsync(educationId);
             if (educationFromDb == null)
             {
                 return false;

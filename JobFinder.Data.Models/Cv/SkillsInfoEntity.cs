@@ -26,6 +26,6 @@
 
         public bool HasDrivingLicense { get; set; }
 
-        public ICollection<SkillsInfoDrivingCategoryEntity> SkillsInfoDrivingCategories { get; set; }
+        public List<SkillsInfoDrivingCategoryEntity> SkillsInfoDrivingCategories { get; set; }
     }
 }

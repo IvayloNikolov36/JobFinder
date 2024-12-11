@@ -17,6 +17,6 @@
 
         public bool HasDrivingLicense { get; set; }
 
-        public IEnumerable<int> DrivingLicenseCategories { get; set; }
+        public IEnumerable<int> DrivingLicenseCategoryIds { get; set; }
     }
 }

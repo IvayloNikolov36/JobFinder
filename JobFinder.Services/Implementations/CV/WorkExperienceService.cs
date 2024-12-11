@@ -5,6 +5,7 @@
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -46,18 +47,19 @@
             return true;
         }
 
-        public async Task UpdateAsync(string cvId, IEnumerable<WorkExperienceEditModel> workExperienceModels)
+        public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<WorkExperienceEditModel> workExperienceModels)
         {
             List<WorkExperienceInfoEntity> workExperienceEntitiesFromDB = await this.repository
-                .AllWhere(we => we.CurriculumVitaeId == cvId)
+                .Where(we => we.CurriculumVitaeId == cvId)
                 .ToListAsync();
 
             IEnumerable<WorkExperienceEditModel> workExperinceToAdd = workExperienceModels
                 .Where(wem => !workExperienceEntitiesFromDB.Any(wee => wee.Id == wem.Id));
 
+            List<WorkExperienceInfoEntity> entitiesToAdd = null;
             if (workExperinceToAdd.Any())
             {
-                List<WorkExperienceInfoEntity> entitiesToAdd = new();
+                entitiesToAdd = new List<WorkExperienceInfoEntity>();
                 foreach (WorkExperienceEditModel model in workExperinceToAdd)
                 {
                     WorkExperienceInfoEntity entityToAdd = this.mapper.Map<WorkExperienceInfoEntity>(model);
@@ -94,6 +96,8 @@
             }
 
             await this.repository.SaveChangesAsync();
+
+            return new UpdateResult(entitiesToAdd);
         }
     }
 }

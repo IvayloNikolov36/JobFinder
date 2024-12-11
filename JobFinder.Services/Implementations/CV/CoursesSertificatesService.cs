@@ -5,6 +5,7 @@
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -32,18 +33,19 @@
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfoModels)
+        public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfoModels)
         {
             List<CourseCertificateEntity> courceEntitiesFromDb = await this.repository
-                .AllWhere(we => we.CurriculumVitaeId == cvId)
+                .Where(we => we.CurriculumVitaeId == cvId)
                 .ToListAsync();
 
             IEnumerable<CourseSertificateEditModel> coursesToAdd = coursesInfoModels
                 .Where(m => !courceEntitiesFromDb.Any(ce => ce.Id == m.Id));
 
+            List<CourseCertificateEntity> entitiesToAdd = null;
             if (coursesToAdd.Any())
             {
-                List<CourseCertificateEntity> entitiesToAdd = new();
+                entitiesToAdd = new List<CourseCertificateEntity>();
                 foreach (CourseSertificateEditModel model in coursesToAdd)
                 {
                     CourseCertificateEntity entityToAdd = this.mapper.Map<CourseCertificateEntity>(model);
@@ -80,6 +82,8 @@
             }
 
             await this.repository.SaveChangesAsync();
+
+            return new UpdateResult(entitiesToAdd);
         }
 
         public async Task<bool> DeleteAsync(int id)

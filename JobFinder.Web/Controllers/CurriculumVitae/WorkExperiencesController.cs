@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers.CurriculumVitae
 {
     using JobFinder.Services.CV;
+    using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -30,9 +31,9 @@
         [FromRoute] Guid cvId,
         [FromBody] IEnumerable<WorkExperienceEditModel> workExperience)
         {
-            await this.workExperienceService.UpdateAsync(cvId.ToString(), workExperience);
+            UpdateResult result = await this.workExperienceService.UpdateAsync(cvId.ToString(), workExperience);
 
-            return this.Ok(new { Message = "Work Experience successfully updated!" });
+            return this.Ok(result);
         }
 
         [HttpDelete("{id:int}")]

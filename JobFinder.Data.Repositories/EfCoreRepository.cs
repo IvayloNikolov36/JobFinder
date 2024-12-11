@@ -24,7 +24,7 @@
 
         public virtual IQueryable<T> AllAsNoTracking() => this.DbSet.AsNoTracking();
 
-        public IQueryable<T> AllWhere(Expression<Func<T, bool>> predicate)
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
         {
             return this.DbSet.Where(predicate);
         }
