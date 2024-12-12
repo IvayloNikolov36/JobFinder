@@ -5,7 +5,6 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
-    using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -13,27 +12,17 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class SkillsService : ISkillsService
+    public class SkillsInfosService : ISkillsInfosService
     {
         private readonly IRepository<SkillsInfoEntity> repository;
         private readonly IMapper mapper;
 
-        public SkillsService(
+        public SkillsInfosService(
             IRepository<SkillsInfoEntity> skillRepository,
             IMapper mapper)
         {
             this.repository = skillRepository;
             this.mapper = mapper;
-        }
-
-        public async Task<T> GetAsync<T>(int skillsId)
-        {
-            T skill = await this.repository.AllAsNoTracking()
-                .Where(s => s.Id == skillsId)
-                .To<T>()
-                .FirstOrDefaultAsync();
-
-            return skill;
         }
 
         public async Task<bool> UpdateAsync(SkillsEditModel skillsModel)

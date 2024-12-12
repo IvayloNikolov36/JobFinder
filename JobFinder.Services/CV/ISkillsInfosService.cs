@@ -3,10 +3,8 @@
     using JobFinder.Web.Models.CVModels;
     using System.Threading.Tasks;
 
-    public interface ISkillsService
+    public interface ISkillsInfosService
     {
-        Task<T> GetAsync<T>(int skillsId);
-
         Task<bool> UpdateAsync(SkillsEditModel skills);
     }
 }

@@ -4,7 +4,6 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
-    using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
@@ -12,27 +11,17 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class LanguageInfoService : ILanguageInfoService
+    public class LanguageInfosService : ILanguageInfosService
     {
         private readonly IRepository<LanguageInfoEntity> repository;
         private readonly IMapper mapper;
 
-        public LanguageInfoService(
+        public LanguageInfosService(
             IRepository<LanguageInfoEntity> languageInfoRepository,
             IMapper mapper)
         {
             this.repository = languageInfoRepository;
             this.mapper = mapper;
-        }
-
-        public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
-        {
-            var languagesInfo = await this.repository.AllAsNoTracking()
-                .Where(li => li.CurriculumVitaeId == cvId)
-                .To<T>()
-                .ToListAsync();
-
-            return languagesInfo;
         }
 
         public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfoModels)
@@ -90,20 +79,6 @@
             await this.repository.SaveChangesAsync();
 
             return new UpdateResult(entitiesToAdd);
-        }
-
-        public async Task<bool> DeleteAsync(int languageInfoId)
-        {
-            LanguageInfoEntity languageInfoFromDb = await this.repository.FindAsync(languageInfoId);
-            if (languageInfoFromDb == null)
-            {
-                return false;
-            }
-
-            this.repository.Delete(languageInfoFromDb);
-            await this.repository.SaveChangesAsync();
-
-            return true;
         }
     }
 }

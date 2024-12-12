@@ -17,9 +17,10 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<List<CompaniesSubscriptionsData>> GetLatesJobAdsAsync()
+        public async Task<IEnumerable<CompaniesSubscriptionsData>> GetLatesJobAdsAsync()
         {
-            List<CompaniesSubscriptionsData> data = await this.dbContext.CompaniesSubscriptionsData
+            IEnumerable<CompaniesSubscriptionsData> data = await this.dbContext
+                .CompaniesSubscriptionsData
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -28,13 +29,13 @@
 
         public async Task<bool> SubscribeAsync(int companyId, string userId)
         {
-            var company = await this.dbContext.FindAsync<CompanyEntity>(companyId);
+            CompanyEntity company = await this.dbContext.FindAsync<CompanyEntity>(companyId);
             if (company == null)
             {
                 return false;
             }
 
-            var sub = new CompanySubscriptionEntity
+            CompanySubscriptionEntity sub = new()
             {
                 UserId = userId,
                 CompanyId = companyId
@@ -48,8 +49,11 @@
 
         public async Task<bool> UnsubscribeAsync(int companyId, string userId)
         {
-            var subFromDb = await this.dbContext.CompanySubscriptions
-                .FirstOrDefaultAsync(c => c.UserId == userId && c.CompanyId == companyId);
+            CompanySubscriptionEntity subFromDb = await this.dbContext
+                .CompanySubscriptions
+                .FirstOrDefaultAsync(c => c.UserId == userId
+                    && c.CompanyId == companyId);
+
             if (subFromDb == null)
             {
                 return false;

@@ -1,15 +1,17 @@
 ﻿namespace JobFinder.Web.Models.Account
 {
+    using JobFinder.Data.Models;
+    using JobFinder.Services.Mappings;
     using System.ComponentModel.DataAnnotations;
 
-    public class RegisterModel
+    public class RegisterModel : IMapTo<UserEntity>
     {
         [Required]
         [StringLength(
             25,
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
             MinimumLength = 6)]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         [EmailAddress]

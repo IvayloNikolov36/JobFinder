@@ -4,7 +4,6 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
-    using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
@@ -12,39 +11,17 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class WorkExperienceService : IWorkExperienceService
+    public class WorkExperienceInfosService : IWorkExperienceInfosService
     {
         private readonly IRepository<WorkExperienceInfoEntity> repository;
         private readonly IMapper mapper;
 
-        public WorkExperienceService(
+        public WorkExperienceInfosService(
             IRepository<WorkExperienceInfoEntity> repository,
             IMapper mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
-        }
-
-        public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
-        {
-            return await this.repository.AllAsNoTracking()
-                .Where(we => we.CurriculumVitaeId == cvId)
-                .To<T>()
-                .ToListAsync();
-        }
-
-        public async Task<bool> DeleteAsync(int workExperieceId)
-        {
-            var workExperience = await this.repository.FindAsync(workExperieceId);
-            if (workExperience == null)
-            {
-                return false;
-            }
-
-            this.repository.Delete(workExperience);
-            await this.repository.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<WorkExperienceEditModel> workExperienceModels)

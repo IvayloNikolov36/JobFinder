@@ -14,8 +14,8 @@
         private readonly ICompanySubscriptionsService companySubscriptionsService;
         private readonly IEmailSender emailSender;
 
-        private const string JobAdDetailsLink = "https://localhost:4200/jobs/";
-        private const string CompanyDetailsUrl = "https://localhost:4200/company/";
+        private const string JobAdDetailsLink = "https://localhost:4100/jobs/";
+        private const string CompanyDetailsUrl = "https://localhost:4100/company/";
 
         public DataSender(
             ICompanySubscriptionsService companySubscriptionsService, 
@@ -29,17 +29,29 @@
 
         public async Task SendLatestJobAdsBySubscribedCompanies()
         {
-            List<CompaniesSubscriptionsData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
+            IEnumerable<CompaniesSubscriptionsData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
             foreach (var item in data)
             {
-                int[] jobIds = item.JobIds.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-                string[] subscribers = item.Subscribers.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).ToArray();
-                string[] jobPositions = item.JobPositions.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).ToArray();
-                string[] jobLocations = item.JobLocations.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                int[] jobIds = item.JobIds
+                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse)
+                    .ToArray();
+
+                string[] subscribers = item.Subscribers
+                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToArray();
+
+                string[] jobPositions = item.JobPositions
+                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToArray();
+
+                string[] jobLocations = item.JobLocations
+                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToArray();
                 
                 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 sb.AppendLine(@$"<table style=""width: 100%"">");
 
                 for (int i = 0; i < jobIds.Length; i++)
@@ -75,7 +87,7 @@
 
         public async Task SendLatestJobAdsBySubscribedCategoriesAndLocations()
         {
-            List<JobAdsByCategoryAndLocationViewModel> data = await this.subscriptionsService
+            IEnumerable<JobAdsByCategoryAndLocationViewModel> data = await this.subscriptionsService
                 .GetNewJobAdsByCategoryAsync();
 
             foreach (var item in data)
@@ -84,7 +96,7 @@
                 string location = item.Location;
                 string[] subscribers = item.Subscribers;
 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 string emailSubject = $"Latest job ads from {jobCategory} category in {location}.";
                 
                 sb.AppendLine(@$"<div><h4>{emailSubject}</h4><div>");
@@ -96,9 +108,14 @@
                     line++;
                     int companyId = info.Id;
                     string companyName = info.Name;
-                    string[] positions = info.Positions.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
-                    int[] jobAdsIds = info.JobAdsIds.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(int.Parse).ToArray();
+
+                    string[] positions = info.Positions
+                        .Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+
+                    int[] jobAdsIds = info.JobAdsIds
+                        .Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(int.Parse)
+                        .ToArray();
 
                     for (int i = 0; i < positions.Length; i++)
                     {
@@ -112,12 +129,13 @@
                                     </tr>");
                     }
                 }
+
                 sb.AppendLine("</table>");
 
                 foreach (string subscriberEmail in subscribers)
                 {
-                    await this.emailSender
-                        .SendEmailAsync(
+                    // TODO: get the email and name from config file
+                    await this.emailSender.SendEmailAsync(
                         from: "jobFinder@abv.bg",
                         fromName: "JobFinder",
                         to: subscriberEmail,

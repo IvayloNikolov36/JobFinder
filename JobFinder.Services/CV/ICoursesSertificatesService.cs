@@ -7,10 +7,6 @@
 
     public interface ICoursesSertificatesService
     {
-        Task<IEnumerable<T>> AllAsync<T>(string cvId);
-
         Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfo);
-
-        Task<bool> DeleteAsync(int id);
     }
 }

@@ -5,12 +5,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IWorkExperienceService
+    public interface IWorkExperienceInfosService
     {
-        Task<IEnumerable<T>> AllAsync<T>(string cvId);
-
         Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<WorkExperienceEditModel> workExperienceModels);
-
-        Task<bool> DeleteAsync(int workExperieceId);
     }
 }

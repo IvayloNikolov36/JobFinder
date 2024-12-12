@@ -20,9 +20,10 @@
         private readonly SignInManager<UserEntity> signInManager;
         private readonly UserManager<UserEntity> userManager;
 
-        public LoginController(IConfiguration configuration,
-                               SignInManager<UserEntity> signInManager,
-                               UserManager<UserEntity> userManager)
+        public LoginController(
+            IConfiguration configuration,
+            SignInManager<UserEntity> signInManager,
+            UserManager<UserEntity> userManager)
         {
             this.configuration = configuration;
             this.signInManager = signInManager;
@@ -32,46 +33,48 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var result = await signInManager.PasswordSignInAsync(userName: model.Username, model.Password, false, false);
+            var result = await signInManager
+                .PasswordSignInAsync(userName: model.Username, model.Password, false, false);
 
             if (!result.Succeeded)
             {
-                return BadRequest(new { Title = "Username and/or password are invalid." });
+                return this.BadRequest(new { Title = "Username and/or password are invalid." });
             }
 
-            var user = await this.userManager.FindByNameAsync(model.Username);
-            var roles = await this.userManager.GetRolesAsync(user);
+            UserEntity user = await this.userManager.FindByNameAsync(model.Username);
+            IList<string> roles = await this.userManager.GetRolesAsync(user);
 
-            List<Claim> claims = new List<Claim>
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
-            foreach (var role in roles)
+            foreach (string role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.Now.AddDays(Convert.ToInt32(configuration["JwtExpiryInDays"]));
+            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
+            SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
-                configuration["JwtIssuer"],
-                configuration["JwtAudience"],
-                claims,
-                expires: expiry,
-                signingCredentials: creds
+            JwtSecurityToken token = new(
+                issuer: configuration["JwtIssuer"],
+                audience: configuration["JwtAudience"],
+                claims: claims,
+                expires: DateTime.Now.AddDays(Convert.ToInt32(configuration["JwtExpiryInDays"])),
+                signingCredentials: credentials
             );
 
-            return Ok(new LoginResult
+            LoginResult loginResult = new()
             {
                 Message = "Successfully logged in!",
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Username = user.UserName,
                 Id = user.Id,
                 Role = roles.Any() ? roles.First() : string.Empty,
-            });
+            };
+
+            return this.Ok(loginResult);
         }
     }
 }

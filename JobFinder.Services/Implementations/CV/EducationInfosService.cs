@@ -4,7 +4,6 @@
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.CV;
-    using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.EntityFrameworkCore;
@@ -12,27 +11,17 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class EducationService : IEducationService
+    public class EducationInfosService : IEducationInfosService
     {
         private readonly IRepository<EducationInfoEntity> repository;
         private readonly IMapper mapper;
 
-        public EducationService(
+        public EducationInfosService(
             IRepository<EducationInfoEntity> educationRepository,
             IMapper mapper) 
         {
             this.repository = educationRepository;
             this.mapper = mapper;
-        }
-
-        public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
-        {
-            var educations = await this.repository.AllAsNoTracking()
-                .Where(e => e.CurriculumVitaeId == cvId)
-                .To<T>()
-                .ToListAsync();
-
-            return educations;
         }
         
         public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationModels)
@@ -86,20 +75,6 @@
             await this.repository.SaveChangesAsync();
 
             return new UpdateResult(educationEntitiesToAdd);
-        }
-
-        public async Task<bool> DeleteAsync(int educationId)
-        {
-            EducationInfoEntity educationFromDb = await this.repository.FindAsync(educationId);
-            if (educationFromDb == null)
-            {
-                return false;
-            }
-
-            this.repository.Delete(educationFromDb);
-            await this.repository.SaveChangesAsync();
-
-            return true;
         }
     }
 }

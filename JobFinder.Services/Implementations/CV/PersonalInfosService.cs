@@ -10,27 +10,17 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class PersonalDetailsService : IPersonalDetailsService
+    public class PersonalInfosService : IPersonalInfosService
     {
         private readonly IRepository<PersonalInfoEntity> repository;
         private readonly IMapper mapper;
 
-        public PersonalDetailsService(
+        public PersonalInfosService(
             IRepository<PersonalInfoEntity> personalDetailsRepository,
             IMapper mapper) 
         {
             this.repository = personalDetailsRepository;
             this.mapper = mapper;
-        }
-
-        public async Task<T> GetAsync<T>(string cvId)
-        {
-            T personalDetails = await this.repository.AllAsNoTracking()
-                .Where(pd => pd.CurriculumVitaeId == cvId)
-                .To<T>()
-                .FirstOrDefaultAsync();
-
-            return personalDetails;
         }
 
         public async Task<bool> UpdateAsync(PersonalDetailsEditModel personalDetails)

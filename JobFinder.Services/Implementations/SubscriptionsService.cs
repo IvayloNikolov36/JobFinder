@@ -42,7 +42,8 @@
 
         public async Task<bool> UnsubscribeFromJobCategoryAsync(int jobCategoryId, string userId, string location)
         {
-            var subFromDb = await this.dbContext.JobCategorySubscriptions
+            JobCategorySubscription subFromDb = await this.dbContext
+                .JobCategorySubscriptions
                 .FirstOrDefaultAsync(x => x.JobCategoryId == jobCategoryId
                                   && x.UserId == userId
                                   && x.Location == location);
@@ -58,18 +59,19 @@
             return true;
         }
 
-        public async Task<List<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()
+        public async Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()
         {
-            List<JobCategoriesSubscriptionsData> data = await this.dbContext.JobCategoriesSubscriptionsData
+            List<JobCategoriesSubscriptionsData> jobCategoriesSubs = await this.dbContext.JobCategoriesSubscriptionsData
                 .AsNoTracking()
                 .ToListAsync();
 
-            var result = new List<JobAdsByCategoryAndLocationViewModel>();
+            List<JobAdsByCategoryAndLocationViewModel> result = new();
 
-            foreach (var item in data)
+            foreach (JobCategoriesSubscriptionsData item in jobCategoriesSubs)
             {
                 List<LatestCompanyJobAds> latestCompanyJobAds = await this.dbContext
-                    .GetLatesJobAdsForSubscribers(item.JobCategoryId, item.Location).ToListAsync();
+                    .GetLatesJobAdsForSubscribers(item.JobCategoryId, item.Location)
+                    .ToListAsync();
 
                 if (latestCompanyJobAds.Count == 0)
                 {

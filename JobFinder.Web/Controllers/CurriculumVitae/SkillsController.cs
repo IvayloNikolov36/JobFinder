@@ -8,19 +8,11 @@
 
     public class SkillsController : BaseCVsController
     {
-        private readonly ISkillsService skillsService;
+        private readonly ISkillsInfosService skillsService;
 
-        public SkillsController(ISkillsService skillsService)
+        public SkillsController(ISkillsInfosService skillsService)
         {
             this.skillsService = skillsService;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SkillsViewModel>> Get([FromRoute] int id)
-        {
-            SkillsViewModel skillsInfo = await this.skillsService.GetAsync<SkillsViewModel>(id);
-
-            return this.Ok(skillsInfo);
         }
 
         [HttpPut]

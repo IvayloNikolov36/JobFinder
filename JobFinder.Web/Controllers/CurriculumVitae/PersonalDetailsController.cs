@@ -8,20 +8,11 @@
 
     public class PersonalDetailsController : BaseCVsController
     {
-        private readonly IPersonalDetailsService personalDetailsService;
+        private readonly IPersonalInfosService personalDetailsService;
 
-        public PersonalDetailsController(IPersonalDetailsService personalDetailsService)
+        public PersonalDetailsController(IPersonalInfosService personalDetailsService)
         {
             this.personalDetailsService = personalDetailsService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<PersonalInfoViewModel>> Get([FromQuery] string cvId)
-        {
-            PersonalInfoViewModel personalDetails = await this.personalDetailsService
-                .GetAsync<PersonalInfoViewModel>(cvId);
-
-            return this.Ok(personalDetails);
         }
 
         [HttpPut]

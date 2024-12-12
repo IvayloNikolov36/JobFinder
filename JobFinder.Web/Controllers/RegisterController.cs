@@ -1,93 +1,86 @@
 ﻿namespace JobFinder.Web.Controllers
 {
+    using AutoMapper;
     using JobFinder.Data.Models;
     using JobFinder.Web.Models.Account;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using JobFinder.Data;
     using static JobFinder.Web.Infrastructure.WebConstants;
-    using System;
 
     public class RegisterController : ApiController
     {
         private readonly UserManager<UserEntity> userManager;
-        private readonly JobFinderDbContext dbContext;
+        private readonly IMapper mapper;
 
-        public RegisterController(UserManager<UserEntity> userManager, JobFinderDbContext dbContext)
+        public RegisterController(
+            UserManager<UserEntity> userManager,
+            IMapper mapper)
         {
             this.userManager = userManager;
-            this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
-        [HttpPost("user")]
+        [HttpPost]
+        [Route("user")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model)
         {
-            var newUser = new UserEntity 
-            { 
-                UserName = model.Username, 
-                Email = model.Email,
-                FirstName = model.FirstName,
-                MiddleName = model.MiddleName,
-                LastName = model.LastName
-            };
+            UserEntity newUser = this.mapper.Map<UserEntity>(model);
 
-            var result = await this.userManager.CreateAsync(newUser, model.Password);
+            IdentityResult result = await this.userManager.CreateAsync(newUser, model.Password);
+
+            RegisterResult requestResult = null;
 
             if (!result.Succeeded)
             {
-                var errors = result.Errors.Select(x => x.Description);
+                IEnumerable<string> errors = result.Errors.Select(x => x.Description);
 
-                return BadRequest(new RegisterResult { Successful = false, Errors = errors });
+                requestResult = new RegisterResult { Successful = false, Errors = errors };
+
+                return this.BadRequest(requestResult);
             }
 
-            return Ok(new RegisterResult { Successful = true, Message = "Successfully registered!" } );
+            requestResult = new RegisterResult { Successful = true, Message = "Successfully registered!" };
+
+            return this.Ok(requestResult);
         }
 
-        [HttpPost("company")]
+        [HttpPost]
+        [Route("company")]
         public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyModel model)
         {
-            var newCompany = new CompanyEntity
-            {
-                Name = model.CompanyName,
-                Bulstat = model.Bulstat,
-                Logo = model.CompanyLogo
-            };
-            
-            var newUser = new UserEntity
-            {
-                UserName = model.Username,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                MiddleName = model.MiddleName,
-                LastName = model.LastName,
-                Company = newCompany
-            };
+            CompanyEntity newCompany = this.mapper.Map<CompanyEntity>(model);
+
+            UserEntity newUser = this.mapper.Map<UserEntity>(model);
+            newUser.Company = newCompany;
 
             IdentityResult result;
             try
             {
-                 result = await this.userManager.CreateAsync(newUser, model.Password);
+                result = await this.userManager.CreateAsync(newUser, model.Password);
             }
             catch (Exception)
             {
                 return this.BadRequest(new { Title = "There is already a company with this name or bulstat!" });
             }
-            
+
             if (!result.Succeeded)
             {
-                var errors = result.Errors.Select(x => x.Description);
-                return BadRequest(new RegisterResult { Successful = false, Errors = errors });
+                IEnumerable<string> errors = result.Errors.Select(x => x.Description);
+
+                return this.BadRequest(new RegisterResult { Successful = false, Errors = errors });
             }
 
-            IdentityResult adToRoleResult = await this.userManager.AddToRoleAsync(newUser, CompanyRole);
-            if (!adToRoleResult.Succeeded)
+            IdentityResult addRoleResult = await this.userManager.AddToRoleAsync(newUser, CompanyRole);
+            if (!addRoleResult.Succeeded)
             {
-                return BadRequest(new RegisterResult { Successful = false });
+                return this.BadRequest(new RegisterResult { Successful = false });
             }
 
-            return Ok(new RegisterResult { Successful = true, Message = "Successfully registered!" });
+            return this.Ok(new RegisterResult { Successful = true, Message = "Successfully registered!" });
         }
     }
 }

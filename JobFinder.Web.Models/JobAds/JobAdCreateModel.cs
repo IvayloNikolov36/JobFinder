@@ -1,8 +1,10 @@
 ﻿namespace JobFinder.Web.Models.JobAds
 {
+    using JobFinder.Data.Models;
+    using JobFinder.Services.Mappings;
     using System.ComponentModel.DataAnnotations;
 
-    public class JobAdBindingModel
+    public class JobAdCreateModel : IMapTo<JobAdvertisementEntity>
     {
         [Required]
         [StringLength(90, MinimumLength = 6)]

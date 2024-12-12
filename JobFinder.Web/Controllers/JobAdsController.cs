@@ -20,19 +20,18 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<DataListingsModel<JobListingModel>>> Get([FromQuery] JobAdsParams model)
+        public async Task<ActionResult<DataListingsModel<JobListingModel>>> Get([FromQuery] JobAdsParams paramsModel)
         {
-            (int totalCount, var jobAds) = await this.adsService.AllAsync<JobListingModel>(
-                model.Page, model.Items, model.SearchText, model.EngagementId, model.CategoryId, 
-                model.Location, model.SortBy, model.IsAscending);
+            DataListingsModel<JobListingModel> data = await this.adsService.AllAsync(paramsModel);
 
-            return this.Ok(new DataListingsModel<JobListingModel>(totalCount, jobAds));
+            return this.Ok(data);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<JobAdDetailsModel>> Details(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<JobAdDetailsModel>> Details([FromRoute] int id)
         {
-            var jobDetails = await this.adsService.GetAsync<JobAdDetailsModel>(id);
+            JobAdDetailsModel jobDetails = await this.adsService.GetAsync<JobAdDetailsModel>(id);
 
             if (jobDetails == null)
             {
@@ -45,23 +44,24 @@
         [HttpPost]
         [Route("create")]
         [Authorize(Roles = CompanyRole)]
-        public async Task<IActionResult> Create([FromBody] JobAdBindingModel model, [FromServices] ICompanyService companyService)
+        public async Task<IActionResult> Create(
+            [FromBody] JobAdCreateModel model,
+            [FromServices] ICompanyService companyService)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             int companyId = (await companyService.GetAsync(userId)).Id;
 
-            await this.adsService
-                .CreateAsync(companyId, model.Position, model.Description, model.JobCategoryId,
-                model.JobEngagementId, model.MinSalary, model.MaxSalary, model.Location);
+            await this.adsService.CreateAsync(companyId, model);
 
             return this.Ok(new { Message = SuccessOnCreation });
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Edit(int id, [FromBody] JobAdEditModel model)
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<ActionResult> Edit([FromRoute] int id, [FromBody] JobAdEditModel model)
         {
-            //TODO: think about for editing expiration
+            // TODO: think about editing expiration
 
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 

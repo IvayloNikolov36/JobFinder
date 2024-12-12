@@ -5,12 +5,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IEducationService
+    public interface IEducationInfosService
     {
-        Task<IEnumerable<T>> AllAsync<T>(string cvId);
-
         Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationsModel);
-
-        Task<bool> DeleteAsync(int educationId);
     }
 }

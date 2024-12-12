@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers
 {
     using JobFinder.Services;
+    using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -19,8 +20,9 @@
             this.subscriptionsService = subscriptionsService;
         }
 
-        [HttpGet("jobCategory/{id}/{location}")]
-        public async Task<ActionResult> SubscribeToJobCategory(int id, string location)
+        [HttpGet]
+        [Route("jobCategory/{id}/{location}")]
+        public async Task<IActionResult> SubscribeToJobCategory([FromRoute] int id, [FromRoute] string location)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -44,12 +46,15 @@
             return this.Ok(new { Message = "Successfully subscribed for job ads with chosen category!" });
         }
 
-        [HttpGet("unsubscribe/jobCategory/{id}/{location}")]
-        public async Task<ActionResult> UnsubscribeFromJobCategory(int id, string location)
+        [HttpGet]
+        [Route("unsubscribe/jobCategory/{id}/{location}")]
+        public async Task<IActionResult> UnsubscribeFromJobCategory([FromRoute] int id, [FromRoute] string location)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isUnsubscribed = await this.subscriptionsService.UnsubscribeFromJobCategoryAsync(id, userId, location);
+            bool isUnsubscribed = await this.subscriptionsService
+                .UnsubscribeFromJobCategoryAsync(id, userId, location);
+
             if (!isUnsubscribed)
             {
                 return this.BadRequest(new { Title = "Can't unsubscribe from job ads from this caregory!" });
@@ -58,10 +63,11 @@
             return this.Ok(new { Message = "Successfully unsubscribed from job ads with chosen category!" });
         }
        
-        [HttpGet("newJobAdsByCategory")]
-        public async Task<ActionResult<IEnumerable<object>>> GetSubscribersNewJobAdsByCategory()
+        [HttpGet]
+        [Route("newJobAdsByCategory")]
+        public async Task<IActionResult> GetSubscribersNewJobAdsByCategory()
         {
-            var data = await this.subscriptionsService.GetNewJobAdsByCategoryAsync();
+            IEnumerable<JobAdsByCategoryAndLocationViewModel> data = await this.subscriptionsService.GetNewJobAdsByCategoryAsync();
 
             return this.Ok(data);
         }

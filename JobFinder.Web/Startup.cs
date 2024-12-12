@@ -33,7 +33,7 @@ namespace JobFinder.Web
         public void ConfigureServices(IServiceCollection services)
         {
             AutoMapperConfig
-                .RegisterMappings(typeof(JobAdBindingModel).Assembly);
+                .RegisterMappings(typeof(JobAdCreateModel).Assembly);
 
             services.AddSingleton(AutoMapperConfig.MapperInstance);
 

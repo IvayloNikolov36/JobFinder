@@ -1,5 +1,6 @@
 ﻿namespace JobFinder.Web.Controllers
 {
+    using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@
             this.companySubscriptionsService = companySubscriptionsService;
         }
 
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> Subscribe(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult> Subscribe([FromRoute] int id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -44,8 +45,9 @@
             return this.Ok(new { Message = "Successfully subscribed for job ads from this company!" });
         }
 
-        [HttpGet("unsubscribe/{id}")]
-        public async Task<ActionResult> Unsubscribe(int id)
+        [HttpGet]
+        [Route("unsubscribe/{id}")]
+        public async Task<ActionResult> Unsubscribe([FromRoute] int id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -60,10 +62,11 @@
         }
 
 
-        [HttpGet("latestJobs")]
-        public async Task<ActionResult<IEnumerable<object>>> GetLatestJobs()
+        [HttpGet]
+        [Route("latestJobs")]
+        public async Task<IActionResult> GetLatestJobs()
         {
-            var data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
+            IEnumerable<CompaniesSubscriptionsData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
             return this.Ok(data);
         }

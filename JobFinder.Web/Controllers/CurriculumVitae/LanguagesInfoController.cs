@@ -11,20 +11,11 @@
 
     public class LanguagesInfoController : BaseCVsController
     {
-        private readonly ILanguageInfoService languagesInfosService;
+        private readonly ILanguageInfosService languagesInfosService;
 
-        public LanguagesInfoController(ILanguageInfoService languageService)
+        public LanguagesInfoController(ILanguageInfosService languageService)
         {
             this.languagesInfosService = languageService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<LanguageInfoViewModel>>> All([FromQuery] string cvId)
-        {
-            IEnumerable<LanguageInfoViewModel> languagesInfo = await this.languagesInfosService
-                .AllAsync<LanguageInfoViewModel>(cvId);
-
-            return this.Ok(languagesInfo);
         }
       
         [HttpPut]
@@ -37,19 +28,6 @@
             UpdateResult result = await this.languagesInfosService.UpdateAsync(cvId.ToString(), languagesInfo);
 
             return this.Ok(result);
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            bool isDeleted = await this.languagesInfosService.DeleteAsync(id);
-
-            if (!isDeleted)
-            {
-                return this.BadRequest(new { Title = "Language info is not deleted!" });
-            }
-
-            return this.Ok(new { Message = "Language info successfully deleted!" });
         }
     }
 }

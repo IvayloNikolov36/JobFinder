@@ -10,6 +10,6 @@
 
         Task<bool> UnsubscribeFromJobCategoryAsync(int jobCategoryId, string userId, string location);
 
-        Task<List<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync();
+        Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync();
     }
 }

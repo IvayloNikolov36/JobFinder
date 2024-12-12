@@ -10,13 +10,15 @@
         public byte[] Generate(string htmlString)
         {
             Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
-            var htmlparser = new HtmlWorker(pdfDoc);
-            using (MemoryStream memoryStream = new MemoryStream())
+
+            HtmlWorker htmlparser = new HtmlWorker(pdfDoc);
+
+            using (MemoryStream memoryStream = new())
             {
                 PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memoryStream);
                 pdfDoc.Open();
 
-                using (var sr = new StringReader(htmlString))
+                using (StringReader sr = new StringReader(htmlString))
                 {
                     htmlparser.Parse(sr);
                 }

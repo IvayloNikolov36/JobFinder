@@ -11,19 +11,11 @@
 
     public class EducationsController : BaseCVsController
     {
-        private readonly IEducationService educationService;
+        private readonly IEducationInfosService educationService;
 
-        public EducationsController(IEducationService educationService)
+        public EducationsController(IEducationInfosService educationService)
         {
             this.educationService = educationService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<EducationViewModel>> GetAll([FromQuery] string cvId)
-        {
-            var educations = await this.educationService.AllAsync<EducationViewModel>(cvId);
-
-            return this.Ok(educations);
         }
 
         [HttpPut("{cvId:guid}/update")]
