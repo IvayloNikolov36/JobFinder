@@ -9,6 +9,7 @@ namespace JobFinder.Web
     using JobFinder.Web.Infrastructure.Filters;
     using JobFinder.Data.Repositories;
     using JobFinder.Data.Repositories.Contracts;
+    using JobFinder.Web.Infrastructure;
     using JobFinder.Services.Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -18,7 +19,7 @@ namespace JobFinder.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using System;
-    using JobFinder.Web.Infrastructure;
+    using Microsoft.OpenApi.Models;
 
     public class Startup
     {
@@ -58,11 +59,16 @@ namespace JobFinder.Web
 
             services.AddControllers();
 
+            services.AddSwaggerGen(config =>
+            {
+                config.SwaggerDoc("v1", new OpenApiInfo() { Title = "JobFinder API", Version = "v1" });
+            });
+
             services.AddHangfire(configuration => configuration
                 .Set(Configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
 
-            // Add service filters.
+            // Service Filters
             services.AddScoped<ValidateCvIdBelongsToUser>();
 
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
@@ -87,6 +93,12 @@ namespace JobFinder.Web
 
                 app.UseDeveloperExceptionPage();
                 app.SeedDatabase();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(config =>
+                {
+                    config.SwaggerEndpoint("/swagger/v1/swagger.json", "JobFinder API");
+                });
             }
 
             app.UseHttpsRedirection();
