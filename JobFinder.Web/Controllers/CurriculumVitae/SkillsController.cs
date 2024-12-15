@@ -16,9 +16,9 @@
         }
 
         [HttpPut]
-        [Route("update")]
+        [Route("{cvId}/update")]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<IActionResult> Update([FromBody] SkillsEditModel model)
+        public async Task<IActionResult> Update([FromRoute] string cvId, [FromBody] SkillsEditModel model)
         {
             bool isUpdated = await this.skillsService.UpdateAsync(model);
 

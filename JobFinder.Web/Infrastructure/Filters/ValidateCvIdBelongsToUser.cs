@@ -25,12 +25,13 @@
                 return;
             }
 
-            object id = context.ActionArguments
-                .FirstOrDefault(a => a.Key.ToLower().Contains("id")).Value;
+            object id = context
+                .ActionArguments
+                .FirstOrDefault(aa => aa.Key.ToLower().Contains("id")).Value;
 
             if (id == null)
             {
-                context.Result = controller.BadRequest(new { Title = "The CV id must be a guid value!" });
+                context.Result = controller.BadRequest(new { Title = "The CV id must be a string value!" });
             }
             else
             {
@@ -41,9 +42,10 @@
                 {
                     context.Result = controller.BadRequest(new { Title = "You can't access or modify other users CVs!" });
                 }
-            }
 
-            await next();
+                await next();
+            }
+      
         }
     }
 }

@@ -8,8 +8,6 @@
     {
         public int Id { get; set; }
 
-        public string CurriculumVitaeId { get; set; }
-
         public BasicViewModel LanguageType { get; set; }
 
         public BasicViewModel ComprehensionLevel { get; set; }
