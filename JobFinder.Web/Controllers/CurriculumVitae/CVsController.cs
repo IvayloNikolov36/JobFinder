@@ -248,7 +248,7 @@
                                 <td>Driving license</td>
                                 <td></td>");
 
-            // Aditional courses
+            // Additional courses
 
             foreach (CourseCertificateViewModel cs in data.CourseCertificates)
             {

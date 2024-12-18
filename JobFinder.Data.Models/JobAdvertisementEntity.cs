@@ -12,7 +12,7 @@
 
         [Required]
         [MinLength(20)]
-        public string Desription { get; set; }
+        public string Description { get; set; }
 
         [Required]
         public string Location { get; set; }

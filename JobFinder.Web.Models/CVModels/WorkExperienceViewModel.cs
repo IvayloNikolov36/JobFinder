@@ -21,6 +21,6 @@
 
         public string Location { get; set; }
 
-        public string AditionalDetails { get; set; }
+        public string AdditionalDetails { get; set; }
     }
 }

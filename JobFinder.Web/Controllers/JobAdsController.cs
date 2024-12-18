@@ -66,7 +66,7 @@
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             bool isEditDone = await this.adsService
-                .EditAsync(id, userId, model.Position, model.Desription);
+                .EditAsync(id, userId, model.Position, model.Description);
 
             if (!isEditDone)
             {

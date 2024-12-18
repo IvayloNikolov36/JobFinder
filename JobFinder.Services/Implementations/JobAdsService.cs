@@ -54,7 +54,7 @@
             }
 
             offerFromDb.Position = position;
-            offerFromDb.Desription = description;
+            offerFromDb.Description = description;
 
             await this.jobsRepository.SaveChangesAsync();
             return true;

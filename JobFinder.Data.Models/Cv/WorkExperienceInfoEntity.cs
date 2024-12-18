@@ -33,6 +33,6 @@
         public string Location { get; set; }
 
         [StringLength(3000, MinimumLength = 20)]
-        public string AditionalDetails { get; set; }
+        public string AdditionalDetails { get; set; }
     }
 }
