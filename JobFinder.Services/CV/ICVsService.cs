@@ -12,14 +12,14 @@
 
         Task<IEnumerable<T>> AllAsync<T>(string userId);
 
-        Task<T> GetDataAsync<T>(string cvId);
+        Task<T> GetDataAsync<T>(string id);
 
-        Task<bool> SetDataAsync(string cvId, byte[] data);
+        Task<bool> SetDataAsync(string id, byte[] data);
 
-        Task<byte[]> GetCvDataAsync(string cvId);
+        Task<byte[]> GetCvDataAsync(string id);
 
-        Task<bool> DeleteCvAsync(string id, string userId);
+        Task DeleteCvAsync(string id);
 
-        Task<string> GetOwnerId(string cvId);
+        Task<string> GetOwnerId(string id);
     }
 }

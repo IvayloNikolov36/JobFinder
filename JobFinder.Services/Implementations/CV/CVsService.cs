@@ -21,6 +21,7 @@
         private readonly IRepository<WorkExperienceInfoEntity> workExperienceRepo;
         private readonly IRepository<LanguageInfoEntity> languageInfoRepo;
         private readonly IRepository<SkillsInfoEntity> skillRepo;
+        private readonly IRepository<SkillsInfoDrivingCategoryEntity> skillsDrivingCategoriesRepo;
         private readonly IRepository<CourseCertificateEntity> courseSertificateRepo;
         private readonly IMapper mapper;
 
@@ -31,6 +32,7 @@
             IRepository<WorkExperienceInfoEntity> workExperienceRepo,
             IRepository<LanguageInfoEntity> languageInfoRepo,
             IRepository<SkillsInfoEntity> skillRepo,
+            IRepository<SkillsInfoDrivingCategoryEntity> skillsDrivingCategoriesRepo,
             IRepository<CourseCertificateEntity> courseSertificateRepo,
             IMapper mapper)
         {
@@ -40,6 +42,7 @@
             this.workExperienceRepo = workExperienceRepo;
             this.languageInfoRepo = languageInfoRepo;
             this.skillRepo = skillRepo;
+            this.skillsDrivingCategoriesRepo = skillsDrivingCategoriesRepo;
             this.courseSertificateRepo = courseSertificateRepo;
             this.mapper = mapper;
         }
@@ -116,26 +119,19 @@
             return true;
         }
 
-        public async Task<bool> DeleteCvAsync(string id, string userId)
+        public async Task DeleteCvAsync(string id)
         {
             CurriculumVitaeEntity cv = await this.repository.FindAsync(id);
-
-            if (cv.UserId != userId)
-            {
-                return false;
-            }
 
             this.personalDetailsRepo.DeleteWhere(pd => pd.CurriculumVitaeId == cv.Id);
             this.educationRepo.DeleteWhere(ed => ed.CurriculumVitaeId == cv.Id);
             this.workExperienceRepo.DeleteWhere(we => we.CurriculumVitaeId == cv.Id);
-            this.skillRepo.DeleteWhere(sk => sk.CurriculumVitaeId == cv.Id);
+            await this.DeleteSkillsInfo(cvId: id);
             this.languageInfoRepo.DeleteWhere(li => li.CurriculumVitaeId == cv.Id);
             this.courseSertificateRepo.DeleteWhere(cs => cs.CurriculumVitaeId == cv.Id);
             this.repository.Delete(cv);
 
             await this.repository.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<string> GetOwnerId(string cvId)
@@ -144,6 +140,17 @@
                 .Where(cv => cv.Id == cvId)
                 .Select(cv => cv.UserId)
                 .FirstOrDefaultAsync();
+        }
+
+        private async Task DeleteSkillsInfo(string cvId)
+        {
+            SkillsInfoEntity skillsInfoEntity = await this.skillRepo
+                .FirstOrDefaultAsync(s => s.CurriculumVitaeId == cvId);
+
+            this.skillsDrivingCategoriesRepo
+                .DeleteWhere(sdc => sdc.SkillsInfoId == skillsInfoEntity.Id);
+
+            this.skillRepo.Delete(skillsInfoEntity);
         }
     }
 }

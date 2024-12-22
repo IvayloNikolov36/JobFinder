@@ -2,6 +2,7 @@
 {
     using JobFinder.Services;
     using JobFinder.Services.CV;
+    using JobFinder.Web.Infrastructure.Filters;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
     using Microsoft.AspNetCore.Authorization;
@@ -64,15 +65,10 @@
 
         [HttpDelete]
         [Route("delete/{id}")]
+        [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> DeleteCv([FromRoute] string id)
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            bool isDeleted = await this.cvsService.DeleteCvAsync(id, userId);
-            if (!isDeleted)
-            {
-                return this.BadRequest();
-            }
+            await this.cvsService.DeleteCvAsync(id);
 
             return this.NoContent();
         }
