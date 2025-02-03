@@ -24,7 +24,7 @@
                             	GROUP BY cs.[CompanyId], c.[Name], c.[Logo]) AS x
                             LEFT JOIN Companies AS c 
                             	ON x.CompanyId = c.Id
-                            LEFT JOIN JobAds AS j 
+                            LEFT JOIN JobAdvertisements AS j 
                             	ON c.Id = j.PublisherId
                             WHERE DATEDIFF(DAY, j.CreatedOn, GETDATE()) <= 1
                             GROUP BY x.[CompanyId], x.[CompanyLogo], x.[CompanyName], x.[Subscribers]");
@@ -38,14 +38,14 @@
         public static void CreateSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)
         {
             builder.Sql(@"CREATE VIEW [dbo].[SubscriprionsByJobCategoryAndLocation] AS
-                            SELECT jcs.[JobCategoryId], jc.[Type] AS [JobCategory], jcs.[Location], 
+                            SELECT jcs.[JobCategoryId], jc.[Name] AS [JobCategory], jcs.[Location], 
                             STRING_AGG(u.[Email], '; ') AS [Subscribers]
                             FROM JobCategorySubscriptions as jcs
                             JOIN AspNetUsers AS u
                             	ON jcs.[UserId] = u.[Id]
                             JOIN JobCategories AS jc
                             	ON jcs.JobCategoryId = jc.Id 
-                            GROUP BY jcs.[JobCategoryId], jc.[Type], jcs.[Location]");
+                            GROUP BY jcs.[JobCategoryId], jc.[Name], jcs.[Location]");
         }
 
         public static void DropSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)

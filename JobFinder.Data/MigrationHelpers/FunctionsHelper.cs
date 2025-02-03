@@ -16,7 +16,7 @@
 				  	c.[Id], c.[Name], c.[Logo],
 				  	STRING_AGG(ja.[Id], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [JobAdsIds], 
 				  	STRING_AGG(ja.[Position], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [Positions]
-				  	FROM JobAds AS ja
+				  	FROM JobAdvertisements AS ja
 				  	JOIN Companies AS c 
 				  		ON ja.PublisherId = c.Id
 				  	WHERE ja.[JobCategoryId] = @jobCategoryId
