@@ -49,7 +49,7 @@
 
         public DbSet<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
 
-        public DbSet<JobCategorySubscription> JobCategorySubscriptions { get; set; }
+        public DbSet<JobsSubscription> JobsSubscriptions { get; set; }
 
         // Nomenclature Entities
 
@@ -75,13 +75,11 @@
 
         public DbSet<JobCategoriesSubscriptionsData> JobCategoriesSubscriptionsData { get; set; }
 
-        public DbSet<LatestCompanyJobAds> LatestCompanyJobAds { get; set; } // for function which returns table
+        public DbSet<LatestCompanyJobAds> LatestCompanyJobAds { get; set; } // For table value function
 
         // DB Functions
-        // [DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
-
-        public IQueryable<LatestCompanyJobAds>
-            GetLatesJobAdsForSubscribers(int jobCategoryId, string location) =>
+        [DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
+        public IQueryable<LatestCompanyJobAds> GetLatesJobAdsForSubscribers(int jobCategoryId, string location) =>
             Set<LatestCompanyJobAds>()
             .FromSqlInterpolated($"SELECT * FROM GetLatesJobAdsForSubscribers({jobCategoryId}, {location})");
 
@@ -120,10 +118,6 @@
             builder.Entity<CompanySubscriptionEntity>()
                 .HasKey(x => new { x.UserId, x.CompanyId });
 
-            builder.Entity<JobCategorySubscription>()
-                .HasAlternateKey(x => new { x.UserId, x.JobCategoryId, x.Location })
-                .HasName("IX_JobCategorySubscription_TripleAK");
-
             // FOR Database VIEWS
 
             builder.Entity<CompaniesSubscriptionsData>()
@@ -161,9 +155,8 @@
         {
             IEnumerable<EntityEntry> changedEntries = this.ChangeTracker
                 .Entries()
-                .Where(e =>
-                    e.Entity is IAuditInfo &&
-                    (e.State == EntityState.Added || e.State == EntityState.Modified));
+                .Where(e => e.Entity is IAuditInfo
+                    && (e.State == EntityState.Added || e.State == EntityState.Modified));
 
             foreach (EntityEntry entry in changedEntries)
             {

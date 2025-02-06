@@ -4,7 +4,6 @@
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -20,47 +19,32 @@
             this.subscriptionsService = subscriptionsService;
         }
 
-        [HttpGet]
-        [Route("jobCategory/{id}/{location}")]
-        public async Task<IActionResult> SubscribeToJobCategory([FromRoute] int id, [FromRoute] string location)
+        [HttpPost]
+        [Route("subscribe")]
+        public async Task<IActionResult> SubscribeForJobs([FromBody] JobSubscriptionCriteriasViewModel subscription)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isSubscribed;
+            bool isSubscribed = await this.subscriptionsService
+                .SubscribeForJobs(userId, subscription.JobCategoryId, subscription.Location);
 
-            try
-            {
-                isSubscribed = await this.subscriptionsService.SubscribeToJobCategoryAsync(id, userId, location);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return this.BadRequest(new { Title = "You already have a subscription for this category and location!" });
-            }
-            
             if (!isSubscribed)
             {
-                return this.BadRequest(new { Title = "Invalid job category!" });
+                return this.BadRequest(new { Title = "You already have a subscription for jobs with such criterias!" });
             }
 
-            return this.Ok(new { Message = "Successfully subscribed for job ads with chosen category!" });
+            return this.Ok();
         }
 
         [HttpGet]
-        [Route("unsubscribe/jobCategory/{id}/{location}")]
-        public async Task<IActionResult> UnsubscribeFromJobCategory([FromRoute] int id, [FromRoute] string location)
+        [Route("unsubscribe/{id}")]
+        public async Task<IActionResult> UnsubscribeForJobs([FromRoute] int id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isUnsubscribed = await this.subscriptionsService
-                .UnsubscribeFromJobCategoryAsync(id, userId, location);
+            bool isUnsubscribed = await this.subscriptionsService.UnsubscribeFromJobs(id);
 
-            if (!isUnsubscribed)
-            {
-                return this.BadRequest(new { Title = "Can't unsubscribe from job ads from this caregory!" });
-            }
-
-            return this.Ok(new { Message = "Successfully unsubscribed from job ads with chosen category!" });
+            return this.Ok();
         }
        
         [HttpGet]

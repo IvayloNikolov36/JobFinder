@@ -6,9 +6,9 @@
 
     public interface ISubscriptionsService
     {
-        Task<bool> SubscribeToJobCategoryAsync(int jobCategoryId, string userId, string location);
+        Task<bool> SubscribeForJobs(string userId, int? jobCategoryId, string location);
 
-        Task<bool> UnsubscribeFromJobCategoryAsync(int jobCategoryId, string userId, string location);
+        Task<bool> UnsubscribeFromJobs(int subscriptionId);
 
         Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync();
     }

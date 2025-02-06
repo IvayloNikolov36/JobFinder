@@ -4,16 +4,15 @@
     using JobFinder.Data.Models.Nomenclature;
     using System.ComponentModel.DataAnnotations;
 
-    public class JobCategorySubscription : BaseEntity<int>
+    public class JobsSubscription : BaseEntity<int>
     {
         [Required]
         public string UserId { get; set; }
         public UserEntity User { get; set; }
 
-        public int JobCategoryId { get; set; }
+        public int? JobCategoryId { get; set; }
         public JobCategoryEntity JobCategory { get; set; }
 
-        [Required]
         public string Location { get; set; }
     }
 }

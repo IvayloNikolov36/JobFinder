@@ -1,7 +1,6 @@
 ﻿namespace JobFinder.Services.Implementations
 {
     using JobFinder.Data;
-    using JobFinder.Data.Models.Nomenclature;
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
@@ -19,15 +18,9 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<bool> SubscribeToJobCategoryAsync(int jobCategoryId, string userId, string location)
-        {
-            JobCategoryEntity jobCategory = await this.dbContext.FindAsync<JobCategoryEntity>(jobCategoryId);
-            if (jobCategory == null)
-            {
-                return false;
-            }
-
-            JobCategorySubscription sub = new()
+        public async Task<bool> SubscribeForJobs(string userId, int? jobCategoryId, string location)
+        {            
+            JobsSubscription sub = new()
             {
                 UserId = userId,
                 JobCategoryId = jobCategoryId,
@@ -40,21 +33,23 @@
             return true;
         }
 
-        public async Task<bool> UnsubscribeFromJobCategoryAsync(int jobCategoryId, string userId, string location)
+        public async Task<bool> UnsubscribeFromJobs(int subscriptionId)
         {
-            JobCategorySubscription subFromDb = await this.dbContext
-                .JobCategorySubscriptions
-                .FirstOrDefaultAsync(x => x.JobCategoryId == jobCategoryId
-                                  && x.UserId == userId
-                                  && x.Location == location);
+            // TODO: refactor the code 
 
-            if (subFromDb == null)
-            {
-                return false;
-            }
+            //JobCategorySubscription subFromDb = await this.dbContext
+            //    .JobCategorySubscriptions
+            //    .FirstOrDefaultAsync(x => x.JobCategoryId == jobCategoryId
+            //                      && x.UserId == userId
+            //                      && x.Location == location);
 
-            this.dbContext.Remove(subFromDb);
-            await this.dbContext.SaveChangesAsync();
+            //if (subFromDb == null)
+            //{
+            //    return false;
+            //}
+
+            //this.dbContext.Remove(subFromDb);
+            //await this.dbContext.SaveChangesAsync();
 
             return true;
         }
