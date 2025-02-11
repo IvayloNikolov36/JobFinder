@@ -6,7 +6,7 @@
 
     public interface ISubscriptionsService
     {
-        Task<bool> SubscribeForJobs(string userId, int? jobCategoryId, string location);
+        Task SubscribeForJobs(string userId, int? jobCategoryId, string location);
 
         Task<bool> UnsubscribeFromJobs(int subscriptionId);
 

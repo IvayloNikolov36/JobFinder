@@ -20,6 +20,7 @@ namespace JobFinder.Web
     using Microsoft.Extensions.Hosting;
     using System;
     using Microsoft.OpenApi.Models;
+    using JobFinder.Web.Infrastructure.Middlewares;
 
     public class Startup
     {
@@ -83,6 +84,8 @@ namespace JobFinder.Web
             IRecurringJobManager reccuringJobManager,
             IServiceProvider serviceProvider)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (env.IsDevelopment())
             {
                 using (IServiceScope scope = app.ApplicationServices.CreateScope())
@@ -91,7 +94,6 @@ namespace JobFinder.Web
                     context.Database.EnsureCreated();
                 }
 
-                app.UseDeveloperExceptionPage();
                 app.SeedDatabase();
 
                 app.UseSwagger();

@@ -25,13 +25,8 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isSubscribed = await this.subscriptionsService
+            await this.subscriptionsService
                 .SubscribeForJobs(userId, subscription.JobCategoryId, subscription.Location);
-
-            if (!isSubscribed)
-            {
-                return this.BadRequest(new { Title = "You already have a subscription for jobs with such criterias!" });
-            }
 
             return this.Ok();
         }

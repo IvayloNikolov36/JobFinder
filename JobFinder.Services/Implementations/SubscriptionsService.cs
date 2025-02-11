@@ -1,5 +1,6 @@
 ﻿namespace JobFinder.Services.Implementations
 {
+    using JobFinder.Common.Exceptions;
     using JobFinder.Data;
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
@@ -18,8 +19,18 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<bool> SubscribeForJobs(string userId, int? jobCategoryId, string location)
-        {            
+        public async Task SubscribeForJobs(string userId, int? jobCategoryId, string location)
+        {
+            bool hasSubscription = await this.dbContext.JobsSubscriptions
+                .AnyAsync(js => js.UserId == userId
+                    && js.Location == location
+                    && js.JobCategoryId == jobCategoryId);
+
+            if (hasSubscription)
+            {
+                throw new ActionableException("You already have subscription for jobs with given criterias!");
+            }
+
             JobsSubscription sub = new()
             {
                 UserId = userId,
@@ -29,8 +40,6 @@
 
             await this.dbContext.AddAsync(sub);
             await this.dbContext.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> UnsubscribeFromJobs(int subscriptionId)
