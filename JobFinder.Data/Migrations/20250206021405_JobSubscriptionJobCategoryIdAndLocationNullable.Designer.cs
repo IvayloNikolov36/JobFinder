@@ -4484,7 +4484,6 @@ namespace JobFinder.Data.Migrations
                     b.Property<string>("Positions")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable(null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
