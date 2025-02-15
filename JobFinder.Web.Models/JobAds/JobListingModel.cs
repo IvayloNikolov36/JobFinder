@@ -8,6 +8,8 @@
     {
         public int Id { get; set; }
 
+        public int CompanyId { get; set; }
+
         public string CompanyLogo { get; set; }
 
         public string CompanyName { get; set; }
@@ -27,6 +29,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<JobAdvertisementEntity, JobListingModel>()
+                .ForMember(x => x.CompanyId, m => m.MapFrom(m => m.PublisherId))
                 .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Logo))
                 .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))

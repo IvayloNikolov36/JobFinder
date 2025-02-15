@@ -4,7 +4,6 @@
     using JobFinder.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -26,23 +25,9 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isSubscribed;
-            try
-            {
-                isSubscribed = await this.companySubscriptionsService.SubscribeAsync(id, userId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return this.BadRequest(new { Title = "Can't subscribe twice to this company!" });
-            }
+            await this.companySubscriptionsService.SubscribeAsync(id, userId);
 
-            if (!isSubscribed)
-            {
-                return this.BadRequest(new { Title = "Can't subscribe to unexisting company!" });
-            }
-
-            return this.Ok(new { Message = "Successfully subscribed for job ads from this company!" });
+            return this.Ok();
         }
 
         [HttpGet]
@@ -51,16 +36,10 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isUnsubscribed = await this.companySubscriptionsService.UnsubscribeAsync(id, userId);
+            await this.companySubscriptionsService.UnsubscribeAsync(id, userId);
 
-            if (!isUnsubscribed)
-            {
-                return this.BadRequest(new { Title = "You doesn't have un subscription to this company!" });
-            }
-
-            return this.Ok(new { Message = "Successfully unsubscribed for job ads from this company!" });
+            return this.Ok();
         }
-
 
         [HttpGet]
         [Route("latestJobs")]

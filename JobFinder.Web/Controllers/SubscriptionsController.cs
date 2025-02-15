@@ -37,7 +37,7 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            bool isUnsubscribed = await this.subscriptionsService.UnsubscribeFromJobs(id);
+            await this.subscriptionsService.UnsubscribeFromJobs(id, userId);
 
             return this.Ok();
         }

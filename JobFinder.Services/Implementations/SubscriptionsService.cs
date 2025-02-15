@@ -19,6 +19,8 @@
             this.dbContext = dbContext;
         }
 
+        // TODO: refactor all methods to use repository methods for db calls
+
         public async Task SubscribeForJobs(string userId, int? jobCategoryId, string location)
         {
             bool hasSubscription = await this.dbContext.JobsSubscriptions
@@ -42,25 +44,18 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> UnsubscribeFromJobs(int subscriptionId)
+        public async Task UnsubscribeFromJobs(int subscriptionId, string userId)
         {
-            // TODO: refactor the code 
+            JobsSubscription subFromDb = await this.dbContext.FindAsync<JobsSubscription>(subscriptionId)
+                ?? throw new ActionableException("Invalid subscription id!");
 
-            //JobCategorySubscription subFromDb = await this.dbContext
-            //    .JobCategorySubscriptions
-            //    .FirstOrDefaultAsync(x => x.JobCategoryId == jobCategoryId
-            //                      && x.UserId == userId
-            //                      && x.Location == location);
+            if (userId != subFromDb.UserId)
+            {
+                throw new UnauthorizedException("You are not allowed to remove another users' subscriptions!");
+            }
 
-            //if (subFromDb == null)
-            //{
-            //    return false;
-            //}
-
-            //this.dbContext.Remove(subFromDb);
-            //await this.dbContext.SaveChangesAsync();
-
-            return true;
+            this.dbContext.Remove(subFromDb);
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()
