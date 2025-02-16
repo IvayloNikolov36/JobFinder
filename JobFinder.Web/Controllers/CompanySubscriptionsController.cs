@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Services;
+    using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
@@ -39,6 +40,18 @@
             await this.companySubscriptionsService.UnsubscribeAsync(id, userId);
 
             return this.Ok();
+        }
+
+        [HttpGet]
+        [Route("mine")]
+        public async Task<IActionResult> GetMySubscriptions()
+        {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            IEnumerable<CompanySubscriptionViewModel> subscriptions = await this.companySubscriptionsService
+                .GetMySubscriptions(userId);
+
+            return this.Ok(subscriptions);
         }
 
         [HttpGet]

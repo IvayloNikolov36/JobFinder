@@ -4,6 +4,7 @@
     using JobFinder.Data;
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
+    using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -12,19 +13,24 @@
 
     public class SubscriptionsService : ISubscriptionsService
     {
+        private readonly IRepository<JobsSubscription> jobsSubscriptionRepository;
+        private readonly IRepository<JobCategoriesSubscriptionsData> jobCategoriesSubscriptionDataRepository;
         private readonly JobFinderDbContext dbContext;
 
-        public SubscriptionsService(JobFinderDbContext dbContext)
+        public SubscriptionsService(
+            IRepository<JobsSubscription> jobsSubscriptionRepository,
+            IRepository<JobCategoriesSubscriptionsData> jobCategoriesSubscriptionDataRepository,
+            JobFinderDbContext dbContext)
         {
+            this.jobsSubscriptionRepository = jobsSubscriptionRepository;
+            this.jobCategoriesSubscriptionDataRepository = jobCategoriesSubscriptionDataRepository;
             this.dbContext = dbContext;
         }
 
-        // TODO: refactor all methods to use repository methods for db calls
-
         public async Task SubscribeForJobs(string userId, int? jobCategoryId, string location)
         {
-            bool hasSubscription = await this.dbContext.JobsSubscriptions
-                .AnyAsync(js => js.UserId == userId
+            bool hasSubscription = await this.jobsSubscriptionRepository
+                .ExistAsync(js => js.UserId == userId
                     && js.Location == location
                     && js.JobCategoryId == jobCategoryId);
 
@@ -40,13 +46,13 @@
                 Location = location
             };
 
-            await this.dbContext.AddAsync(sub);
-            await this.dbContext.SaveChangesAsync();
+            await this.jobsSubscriptionRepository.AddAsync(sub);
+            await this.jobsSubscriptionRepository.SaveChangesAsync();
         }
 
         public async Task UnsubscribeFromJobs(int subscriptionId, string userId)
         {
-            JobsSubscription subFromDb = await this.dbContext.FindAsync<JobsSubscription>(subscriptionId)
+            JobsSubscription subFromDb = await this.jobsSubscriptionRepository.FindAsync(subscriptionId)
                 ?? throw new ActionableException("Invalid subscription id!");
 
             if (userId != subFromDb.UserId)
@@ -54,14 +60,14 @@
                 throw new UnauthorizedException("You are not allowed to remove another users' subscriptions!");
             }
 
-            this.dbContext.Remove(subFromDb);
-            await this.dbContext.SaveChangesAsync();
+            this.jobsSubscriptionRepository.Delete(subFromDb);
+            await this.jobsSubscriptionRepository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()
         {
-            List<JobCategoriesSubscriptionsData> jobCategoriesSubs = await this.dbContext.JobCategoriesSubscriptionsData
-                .AsNoTracking()
+            List<JobCategoriesSubscriptionsData> jobCategoriesSubs = await this.jobCategoriesSubscriptionDataRepository
+                .AllAsNoTracking()
                 .ToListAsync();
 
             List<JobAdsByCategoryAndLocationViewModel> result = new();

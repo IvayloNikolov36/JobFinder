@@ -1,21 +1,30 @@
 ﻿namespace JobFinder.Services.Implementations
 {
+    using AutoMapper.QueryableExtensions;
     using JobFinder.Common.Exceptions;
     using JobFinder.Data;
     using JobFinder.Data.Models;
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
+    using JobFinder.Data.Repositories.Contracts;
+    using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class CompanySubscriptionsService : ICompanySubscriptionsService
     {
         private readonly JobFinderDbContext dbContext;
+        private readonly IRepository<CompanySubscriptionEntity> companySubscriptionRepository;
 
-        public CompanySubscriptionsService(JobFinderDbContext dbContext)
+        public CompanySubscriptionsService(
+            JobFinderDbContext dbContext,
+            IRepository<CompanySubscriptionEntity> companySubscriptionRepository)
         {
             this.dbContext = dbContext;
+            this.companySubscriptionRepository = companySubscriptionRepository;
         }
 
         public async Task<IEnumerable<CompaniesSubscriptionsData>> GetLatesJobAdsAsync()
@@ -33,8 +42,8 @@
             CompanyEntity company = await this.dbContext.FindAsync<CompanyEntity>(companyId)
                 ?? throw new ActionableException($"No company with id: {companyId}");
 
-            bool hasSuchSubscricption = await this.dbContext.CompanySubscriptions
-                .AnyAsync(cs => cs.CompanyId == companyId && cs.UserId == userId);
+            bool hasSuchSubscricption = await this.companySubscriptionRepository
+                .ExistAsync(cs => cs.CompanyId == companyId && cs.UserId == userId);
 
             if (hasSuchSubscricption)
             {
@@ -53,8 +62,7 @@
 
         public async Task UnsubscribeAsync(int companyId, string userId)
         {
-            CompanySubscriptionEntity subFromDb = await this.dbContext
-                .CompanySubscriptions
+            CompanySubscriptionEntity subFromDb = await this.companySubscriptionRepository
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.CompanyId == companyId);
 
             if (subFromDb == null)
@@ -64,6 +72,14 @@
 
             this.dbContext.Remove(subFromDb);
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId)
+        {
+            return await this.companySubscriptionRepository.AllAsNoTracking()
+                .Where(cs => cs.UserId == userId)
+                .To<CompanySubscriptionViewModel>()
+                .ToListAsync();
         }
     }
 }
