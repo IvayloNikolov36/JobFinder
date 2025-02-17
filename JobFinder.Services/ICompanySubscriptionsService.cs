@@ -13,6 +13,8 @@
 
         Task UnsubscribeAsync(int companyId, string userId);
 
+        Task UnsubscribeAllAsync(string userId);
+
         Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId);
     }
 }

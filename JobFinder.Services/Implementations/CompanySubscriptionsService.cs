@@ -1,6 +1,5 @@
 ﻿namespace JobFinder.Services.Implementations
 {
-    using AutoMapper.QueryableExtensions;
     using JobFinder.Common.Exceptions;
     using JobFinder.Data;
     using JobFinder.Data.Models;
@@ -72,6 +71,13 @@
 
             this.dbContext.Remove(subFromDb);
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task UnsubscribeAllAsync(string userId)
+        {
+            this.companySubscriptionRepository.DeleteWhere(cs => cs.UserId == userId);
+
+            await this.companySubscriptionRepository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId)

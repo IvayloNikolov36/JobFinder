@@ -22,7 +22,7 @@
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult> Subscribe([FromRoute] int id)
+        public async Task<IActionResult> Subscribe([FromRoute] int id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -33,11 +33,22 @@
 
         [HttpGet]
         [Route("unsubscribe/{id}")]
-        public async Task<ActionResult> Unsubscribe([FromRoute] int id)
+        public async Task<IActionResult> Unsubscribe([FromRoute] int id)
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             await this.companySubscriptionsService.UnsubscribeAsync(id, userId);
+
+            return this.Ok();
+        }
+
+        [HttpGet]
+        [Route("unsubscribe/all")]
+        public async Task<IActionResult> UnsubscribeAll()
+        {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            await this.companySubscriptionsService.UnsubscribeAllAsync(userId);
 
             return this.Ok();
         }
