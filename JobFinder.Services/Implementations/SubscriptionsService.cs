@@ -5,10 +5,12 @@
     using JobFinder.Data.Models.Subscriptions;
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Data.Repositories.Contracts;
+    using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class SubscriptionsService : ISubscriptionsService
@@ -50,7 +52,7 @@
             await this.jobsSubscriptionRepository.SaveChangesAsync();
         }
 
-        public async Task UnsubscribeFromJobs(int subscriptionId, string userId)
+        public async Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId)
         {
             JobsSubscription subFromDb = await this.jobsSubscriptionRepository.FindAsync(subscriptionId)
                 ?? throw new ActionableException("Invalid subscription id!");
@@ -62,6 +64,21 @@
 
             this.jobsSubscriptionRepository.Delete(subFromDb);
             await this.jobsSubscriptionRepository.SaveChangesAsync();
+        }
+
+        public async Task UnsubscribeFromAllJobsWithCriterias(string userId)
+        {
+            this.jobsSubscriptionRepository.DeleteWhere(js => js.UserId == userId);
+
+            await this.jobsSubscriptionRepository.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId)
+        {
+            return await this.jobsSubscriptionRepository.AllAsNoTracking()
+                .Where(js => js.UserId == userId)
+                .To<JobSubscriptionViewModel>()
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()

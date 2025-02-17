@@ -37,11 +37,33 @@
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            await this.subscriptionsService.UnsubscribeFromJobs(id, userId);
+            await this.subscriptionsService.UnsubscribeFromJobsWithCriterias(id, userId);
 
             return this.Ok();
         }
-       
+
+        [HttpGet]
+        [Route("unsubscribe/all")]
+        public async Task<IActionResult> UnsubscribeFromAll()
+        {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            await this.subscriptionsService.UnsubscribeFromAllJobsWithCriterias(userId);
+
+            return this.Ok();
+        }
+
+        [HttpGet]
+        [Route("mine")]
+        public async Task<IActionResult> GetMyJobSubscriptions()
+        {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            IEnumerable<JobSubscriptionViewModel> subscriptions = await this.subscriptionsService.GetAllJobSubscriptions(userId);
+
+            return this.Ok(subscriptions);
+        }
+      
         [HttpGet]
         [Route("newJobAdsByCategory")]
         public async Task<IActionResult> GetSubscribersNewJobAdsByCategory()

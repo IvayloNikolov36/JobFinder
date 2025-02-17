@@ -8,7 +8,11 @@
     {
         Task SubscribeForJobs(string userId, int? jobCategoryId, string location);
 
-        Task UnsubscribeFromJobs(int subscriptionId, string userId);
+        Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId);
+
+        Task UnsubscribeFromAllJobsWithCriterias(string userId);
+
+        Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId);
 
         Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync();
     }
