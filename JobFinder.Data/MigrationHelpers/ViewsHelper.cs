@@ -37,15 +37,18 @@
 
         public static void CreateSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)
         {
-            builder.Sql(@"CREATE VIEW [dbo].[SubscriprionsByJobCategoryAndLocation] AS
-                            SELECT jcs.[JobCategoryId], jc.[Name] AS [JobCategory], jcs.[Location], 
-                            STRING_AGG(u.[Email], '; ') AS [Subscribers]
-                            FROM JobCategorySubscriptions as jcs
-                            JOIN AspNetUsers AS u
-                            	ON jcs.[UserId] = u.[Id]
-                            JOIN JobCategories AS jc
-                            	ON jcs.JobCategoryId = jc.Id 
-                            GROUP BY jcs.[JobCategoryId], jc.[Name], jcs.[Location]");
+            builder.Sql(@"CREATE VIEW [dbo].[SubscriprionsByJobCategoryAndLocation]
+                            AS
+	                            SELECT	js.[JobCategoryId]
+			                            ,jc.[Name] AS [JobCategory]
+			                            ,js.[Location]
+			                            ,STRING_AGG(u.[Email], '; ') AS [Subscribers]
+	                            FROM JobsSubscriptions as js
+	                            JOIN AspNetUsers AS u
+		                            ON js.[UserId] = u.[Id]
+	                            JOIN JobCategories AS jc
+		                            ON js.JobCategoryId = jc.Id 
+	                            GROUP BY js.[JobCategoryId], jc.[Name], js.[Location]");
         }
 
         public static void DropSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)
