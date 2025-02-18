@@ -2,6 +2,7 @@
 {
     using JobFinder.Services;
     using JobFinder.Services.CV;
+    using JobFinder.Web.Infrastructure.Extensions;
     using JobFinder.Web.Infrastructure.Filters;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;
@@ -27,7 +28,7 @@
         [Route("create")]
         public async Task<ActionResult<BasicViewModel>> Create([FromBody] CVCreateInputModel cvModel)
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             string id = await this.cvsService.CreateAsync(cvModel, userId);
 
@@ -40,7 +41,7 @@
         [Route("all")]
         public async Task<ActionResult<IEnumerable<CvListingModel>>> GetAllMineCVs()
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             IEnumerable<CvListingModel> myCvs = await this.cvsService.AllAsync<CvListingModel>(userId);
 
@@ -51,7 +52,7 @@
         [Route("{id}", Name = "GetCvData")]
         public async Task<ActionResult<CvDataViewModel>> GetCvData([FromRoute] string id)
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             CvDataViewModel cv = await this.cvsService.GetDataAsync<CvDataViewModel>(id);
 

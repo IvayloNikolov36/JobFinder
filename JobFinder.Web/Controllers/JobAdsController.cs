@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers
 {
     using JobFinder.Services;
+    using JobFinder.Web.Infrastructure.Extensions;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Authorization;
@@ -48,7 +49,7 @@
             [FromBody] JobAdCreateModel model,
             [FromServices] ICompanyService companyService)
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             int companyId = (await companyService.GetAsync(userId)).Id;
 
@@ -63,7 +64,7 @@
         {
             // TODO: think about editing expiration
 
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             bool isEditDone = await this.adsService
                 .EditAsync(id, userId, model.Position, model.Description);

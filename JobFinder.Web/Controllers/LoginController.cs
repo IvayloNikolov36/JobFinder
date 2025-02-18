@@ -13,6 +13,7 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
+    using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
     public class LoginController : ApiController
     {
@@ -33,7 +34,7 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var result = await signInManager
+            SignInResult result = await signInManager
                 .PasswordSignInAsync(userName: model.Username, model.Password, false, false);
 
             if (!result.Succeeded)

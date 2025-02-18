@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Web.Controllers
 {
     using JobFinder.Services;
+    using JobFinder.Web.Infrastructure.Extensions;
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@
         [Route("subscribe")]
         public async Task<IActionResult> SubscribeForJobs([FromBody] JobSubscriptionCriteriasViewModel subscription)
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             await this.subscriptionsService
                 .SubscribeForJobs(userId, subscription.JobCategoryId, subscription.Location);
@@ -35,7 +36,7 @@
         [Route("unsubscribe/{id}")]
         public async Task<IActionResult> UnsubscribeForJobs([FromRoute] int id)
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             await this.subscriptionsService.UnsubscribeFromJobsWithCriterias(id, userId);
 
@@ -46,7 +47,7 @@
         [Route("unsubscribe/all")]
         public async Task<IActionResult> UnsubscribeFromAll()
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             await this.subscriptionsService.UnsubscribeFromAllJobsWithCriterias(userId);
 
@@ -57,7 +58,7 @@
         [Route("mine")]
         public async Task<IActionResult> GetMyJobSubscriptions()
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = this.User.GetCurrentUserId();
 
             IEnumerable<JobSubscriptionViewModel> subscriptions = await this.subscriptionsService.GetAllJobSubscriptions(userId);
 
