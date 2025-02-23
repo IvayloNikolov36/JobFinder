@@ -20,8 +20,7 @@
 
     public class JobFinderDbContext : IdentityDbContext<UserEntity>
     {
-        public JobFinderDbContext(DbContextOptions<JobFinderDbContext> options)
-            : base(options)
+        public JobFinderDbContext(DbContextOptions<JobFinderDbContext> options) : base(options)
         {
         }
 
@@ -51,6 +50,7 @@
 
         public DbSet<JobsSubscription> JobsSubscriptions { get; set; }
 
+
         // Nomenclature Entities
 
         public DbSet<CountryEntity> Countries { get; set; }
@@ -69,6 +69,9 @@
 
         public DbSet<JobCategoryEntity> JobCategories { get; set; }
 
+        public DbSet<JobAdApplicationEntity> JobAdsApplications { get; set; }
+
+
         // For VIEWS
 
         public DbSet<CompaniesSubscriptionsData> CompaniesSubscriptionsData { get; set; }
@@ -77,7 +80,9 @@
 
         public DbSet<LatestCompanyJobAds> LatestCompanyJobAds { get; set; } // For table value function
 
+
         // DB Functions
+
         [DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
         public IQueryable<LatestCompanyJobAds> GetLatesJobAdsForSubscribers(int jobCategoryId, string location) =>
             Set<LatestCompanyJobAds>()
@@ -107,8 +112,6 @@
         {
             builder.ApplyConfiguration(new CompanyEntitySchemaDefinition());
 
-            // one to one or one to zero connections
-
             builder.Entity<UserEntity>()
                 .HasOne(u => u.Company)
                 .WithOne(c => c.User)
@@ -118,7 +121,13 @@
             builder.Entity<CompanySubscriptionEntity>()
                 .HasKey(x => new { x.UserId, x.CompanyId });
 
-            // FOR Database VIEWS
+            builder.Entity<JobAdApplicationEntity>()
+                .HasIndex(j => j.ApplicantId);
+
+            builder.Entity<JobAdApplicationEntity>()
+                .HasIndex(j => j.JobAdId);
+
+            // VIEWS
 
             builder.Entity<CompaniesSubscriptionsData>()
                 .HasNoKey()
@@ -171,6 +180,6 @@
                     entity.ModifiedOn = DateTime.UtcNow;
                 }
             }
-        }           
+        }
     }
 }
