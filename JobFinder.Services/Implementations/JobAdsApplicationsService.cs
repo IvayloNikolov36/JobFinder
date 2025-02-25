@@ -36,7 +36,7 @@ namespace JobFinder.Services.Implementations
 
             if (hasAlreadyApplied)
             {
-                throw new ActionableException("You can't applie again for this job ad!");
+                throw new ActionableException("You can not apply again for this job ad!");
             }
 
             JobAdApplicationEntity newJobAdApplicationEntity = this.mapper.Map<JobAdApplicationEntity>(jobAdApplication);
