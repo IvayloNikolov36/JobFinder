@@ -19,7 +19,7 @@ namespace JobFinder.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     JobAdId = table.Column<int>(type: "int", nullable: false),
                     ApplicantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CurriculumViateId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CurriculumVitaeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AppliedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -33,8 +33,8 @@ namespace JobFinder.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_JobAdsApplications_CurriculumVitaes_CurriculumViateId",
-                        column: x => x.CurriculumViateId,
+                        name: "FK_JobAdsApplications_CurriculumVitaes_CurriculumVitaeId",
+                        column: x => x.CurriculumVitaeId,
                         principalTable: "CurriculumVitaes",
                         principalColumn: "Id");
                     table.ForeignKey(

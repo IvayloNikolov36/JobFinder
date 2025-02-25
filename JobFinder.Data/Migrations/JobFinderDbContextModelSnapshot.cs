@@ -444,7 +444,7 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CurriculumViateId")
+                    b.Property<string>("CurriculumVitaeId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("JobAdId")
@@ -457,7 +457,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("ApplicantId");
 
-                    b.HasIndex("CurriculumViateId");
+                    b.HasIndex("CurriculumVitaeId");
 
                     b.HasIndex("JobAdId");
 
@@ -4862,9 +4862,9 @@ namespace JobFinder.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicantId");
 
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumViate")
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
                         .WithMany()
-                        .HasForeignKey("CurriculumViateId");
+                        .HasForeignKey("CurriculumVitaeId");
 
                     b.HasOne("JobFinder.Data.Models.JobAdvertisementEntity", "JobAd")
                         .WithMany()
@@ -4874,7 +4874,7 @@ namespace JobFinder.Data.Migrations
 
                     b.Navigation("Applicant");
 
-                    b.Navigation("CurriculumViate");
+                    b.Navigation("CurriculumVitae");
 
                     b.Navigation("JobAd");
                 });

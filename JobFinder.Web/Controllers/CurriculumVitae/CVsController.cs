@@ -10,7 +10,6 @@
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
-    using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -39,7 +38,7 @@
 
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<IEnumerable<CvListingModel>>> GetAllMineCVs()
+        public async Task<ActionResult<IEnumerable<CvListingModel>>> GetAllMine()
         {
             string userId = this.User.GetCurrentUserId();
 
