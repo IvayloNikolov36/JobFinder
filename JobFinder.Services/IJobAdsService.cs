@@ -2,6 +2,7 @@
 {
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.JobAds;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public interface IJobAdsService
@@ -10,9 +11,10 @@
 
         Task CreateAsync(int companyId, JobAdCreateModel model);
 
+        Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId);
+
         Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsParams paramsModel);
 
         Task<bool> EditAsync(int jobAdId, string userId, string position, string description);
-
     }
 }

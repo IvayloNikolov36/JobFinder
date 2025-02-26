@@ -6,7 +6,7 @@
     using JobFinder.Web.Models.JobAds;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using static JobFinder.Web.Infrastructure.WebConstants;
 
@@ -21,11 +21,23 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<DataListingsModel<JobListingModel>>> Get([FromQuery] JobAdsParams paramsModel)
+        public async Task<IActionResult> AllCompaniesAds([FromQuery] JobAdsParams paramsModel)
         {
-            DataListingsModel<JobListingModel> data = await this.adsService.AllAsync(paramsModel);
+            DataListingsModel<JobListingModel> ads = await this.adsService.AllAsync(paramsModel);
 
-            return this.Ok(data);
+            return this.Ok(ads);
+        }
+
+        [HttpGet]
+        [Route("company-ads")]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<IActionResult> GetCompanyAds()
+        {
+            string currentUserId = this.User.GetCurrentUserId();
+
+            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService.GetCompanyAds(currentUserId);
+
+            return this.Ok(jobAds);
         }
 
         [HttpGet]

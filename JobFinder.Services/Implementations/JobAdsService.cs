@@ -60,6 +60,14 @@
             return true;
         }
 
+        public async Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId)
+        {
+            return await this.jobsRepository.AllAsNoTracking()
+                .Where(ja => ja.Publisher.UserId == userId)
+                .To<CompanyJobAdViewModel>()
+                .ToListAsync();
+        }
+
         public async Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsParams paramsModel)
         {
             IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository.AllAsNoTracking();

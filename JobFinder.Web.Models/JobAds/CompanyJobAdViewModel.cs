@@ -1,0 +1,37 @@
+﻿using AutoMapper;
+using JobFinder.Data.Models;
+using JobFinder.Services.Mappings;
+using System;
+using System.Linq;
+
+namespace JobFinder.Web.Models.JobAds
+{
+    public class CompanyJobAdViewModel : IHaveCustomMappings
+    {
+        public int Id { get; set; }
+
+        public string Position { get; set; }
+
+        public string JobCategory { get; set; }
+
+        public string Salary { get; set; }
+
+        public string Location { get; set; }
+
+        public int ApplicationsSent { get; set; }
+
+        public int NotPreviewedApplications { get; set; }
+
+        public string PostedOn { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<JobAdvertisementEntity, CompanyJobAdViewModel>()
+                .ForMember(vm => vm.ApplicationsSent, o => o.MapFrom(e => e.JobAdApplications.Count()))
+                .ForMember(vm => vm.NotPreviewedApplications, o => o.MapFrom(e => e
+                    .JobAdApplications
+                    .Where(ja => !ja.IsPreviewed)
+                    .Count()));
+        }
+    }
+}

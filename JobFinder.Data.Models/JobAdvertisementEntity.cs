@@ -2,10 +2,16 @@
 {
     using JobFinder.Data.Models.Common;
     using JobFinder.Data.Models.Nomenclature;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class JobAdvertisementEntity : BaseEntity<int>
     {
+        public JobAdvertisementEntity()
+        {
+            this.JobAdApplications = new List<JobAdApplicationEntity>();
+        }
+
         [Required]
         [StringLength(90, MinimumLength = 6)]
         public string Position { get; set; }
@@ -33,5 +39,6 @@
 
         public CompanyEntity Publisher { get; set; }
 
+        public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
     }
 }
