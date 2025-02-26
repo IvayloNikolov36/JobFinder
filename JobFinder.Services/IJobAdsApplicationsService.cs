@@ -10,6 +10,8 @@ namespace JobFinder.Services
 
         Task<IEnumerable<JobAdApplicationViewModel>> GetAllMine(string userId);
 
-        Task<IEnumerable<JobAdApplicationViewModel>> GetJobAdApplications(int jobAdId, string userId);
+        Task<IEnumerable<JobAdApplicationViewModel>> GetUserJobsAdApplications(string userId, int jobAdId);
+
+        Task<IEnumerable<JobApplicationInfoViewModel>> GetCompanyJobAdApplications(string userId, int jobAdId);
     }
 }

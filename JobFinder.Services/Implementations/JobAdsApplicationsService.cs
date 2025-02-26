@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnauthorizedException = JobFinder.Common.Exceptions.UnauthorizedException;
 
 namespace JobFinder.Services.Implementations
 {
@@ -48,7 +49,38 @@ namespace JobFinder.Services.Implementations
             await this.jobAdsApplicationsRepository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<JobAdApplicationViewModel>> GetJobAdApplications(int jobAdId, string userId)
+        public async Task<IEnumerable<JobAdApplicationViewModel>> GetUserJobsAdApplications(string userId, int jobAdId)
+        {
+            await this.ValidateTheUserIsThePublisher(userId, jobAdId);
+
+            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
+                .Where(j => j.JobAdId == jobAdId)
+                .OrderByDescending(j => j.AppliedOn)
+                .To<JobAdApplicationViewModel>()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<JobApplicationInfoViewModel>> GetCompanyJobAdApplications(string userId, int jobAdId)
+        {
+            await this.ValidateTheUserIsThePublisher(userId, jobAdId);
+
+            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
+                .Where(j => j.JobAdId == jobAdId)
+                .To<JobApplicationInfoViewModel>()
+                .OrderByDescending(ja => ja.AppliedOn)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<JobAdApplicationViewModel>> GetAllMine(string userId)
+        {
+            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
+                .Where(j => j.ApplicantId == userId)
+                .OrderByDescending(j => j.AppliedOn)
+                .To<JobAdApplicationViewModel>()
+                .ToListAsync();
+        }
+
+        private async Task ValidateTheUserIsThePublisher(string userId, int jobAdId)
         {
             string jobAdPublisherId = await this.jobAdRepository
                 .Where(ja => ja.Id == jobAdId)
@@ -64,21 +96,6 @@ namespace JobFinder.Services.Implementations
             {
                 throw new UnauthorizedAccessException("You are not authorized to access data for other users job advertisements!");
             }
-
-            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
-                .Where(j => j.JobAdId == jobAdId)
-                .OrderByDescending(j => j.AppliedOn)
-                .To<JobAdApplicationViewModel>()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<JobAdApplicationViewModel>> GetAllMine(string userId)
-        {
-            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
-                .Where(j => j.ApplicantId == userId)
-                .OrderByDescending(j => j.AppliedOn)
-                .To<JobAdApplicationViewModel>()
-                .ToListAsync();
         }
     }
 }

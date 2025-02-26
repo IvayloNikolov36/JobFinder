@@ -22,7 +22,7 @@
 
         public string CompanyName { get; set; }
 
-        public string Salary { get; set; } //diapason
+        public string Salary { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

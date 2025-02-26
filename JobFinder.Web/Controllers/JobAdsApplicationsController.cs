@@ -1,9 +1,11 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.JobAds;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
 {
@@ -29,13 +31,26 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{jobAdId}")]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<IActionResult> GetJobAllApplications([FromRoute] int jobAdId)
+        {
+            string currentUserId = this.User.GetCurrentUserId();
+
+            IEnumerable<JobApplicationInfoViewModel> jobApplications = await this.jobAdsApplicationsService
+                .GetCompanyJobAdApplications(currentUserId, jobAdId);
+
+            return this.Ok(jobApplications);
+        }
+
+        [HttpGet]
         [Route("jobAd/{id}")]
-        public async Task<IActionResult> GetJobApplications([FromRoute] int id)
+        public async Task<IActionResult> GetUserJobsApplications([FromRoute] int id)
         {
             string currentUserId = this.User.GetCurrentUserId();
 
             IEnumerable<JobAdApplicationViewModel> jobAdsApplications = await this.jobAdsApplicationsService
-                .GetJobAdApplications(id, currentUserId);
+                .GetUserJobsAdApplications(currentUserId, id);
 
             return this.Ok(jobAdsApplications);
         }
