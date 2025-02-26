@@ -16,5 +16,9 @@ namespace JobFinder.Data.Models
         public CurriculumVitaeEntity CurriculumVitae { get; set; }
 
         public DateTime AppliedOn { get; set; }
+
+        public bool IsPreviewed { get; set; }
+
+        public DateTime? PreviewDate { get; set; }
     }
 }
