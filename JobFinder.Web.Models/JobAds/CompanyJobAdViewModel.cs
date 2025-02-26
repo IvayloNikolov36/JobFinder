@@ -22,12 +22,16 @@ namespace JobFinder.Web.Models.JobAds
 
         public int NotPreviewedApplications { get; set; }
 
-        public string PostedOn { get; set; }
+        public bool IsActive { get; set; }
+
+        public DateTime PublishDate { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<JobAdvertisementEntity, CompanyJobAdViewModel>()
                 .ForMember(vm => vm.ApplicationsSent, o => o.MapFrom(e => e.JobAdApplications.Count()))
+                .ForMember(x => x.Salary, m => m.MapFrom(
+                    m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString() + " lv."))
                 .ForMember(vm => vm.NotPreviewedApplications, o => o.MapFrom(e => e
                     .JobAdApplications
                     .Where(ja => !ja.IsPreviewed)

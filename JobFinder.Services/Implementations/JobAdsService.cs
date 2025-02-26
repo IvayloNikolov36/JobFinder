@@ -1,5 +1,6 @@
 ﻿namespace JobFinder.Services.Implementations
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -37,6 +38,8 @@
         {
             JobAdvertisementEntity jobAd = this.mapper.Map<JobAdvertisementEntity>(model);
             jobAd.PublisherId = companyId;
+            jobAd.PublishDate = DateTime.UtcNow;
+            jobAd.IsActive = true;
 
             await this.jobsRepository.AddAsync(jobAd);
 
@@ -65,6 +68,7 @@
             return await this.jobsRepository.AllAsNoTracking()
                 .Where(ja => ja.Publisher.UserId == userId)
                 .To<CompanyJobAdViewModel>()
+                .OrderByDescending(j => j.PublishDate)
                 .ToListAsync();
         }
 
