@@ -12,7 +12,9 @@
 
         Task<IEnumerable<T>> AllAsync<T>(string userId);
 
-        Task<T> GetDataAsync<T>(string id);
+        Task<T> GetOwnCvDataAsync<T>(string cvId, string currentUserId);
+
+        Task<CvPreviewDataViewModel> GetUserCvData(string cvId, string currentUserId);
 
         Task<bool> SetDataAsync(string id, byte[] data);
 

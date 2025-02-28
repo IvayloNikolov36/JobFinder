@@ -12,6 +12,8 @@
     using AutoMapper;
     using JobFinder.Web.Models.CVModels;
     using JobFinder.Data.Models.Cv;
+    using JobFinder.Common.Exceptions;
+    using JobFinder.Data.Models;
 
     public class CVsService : ICVsService
     {
@@ -23,6 +25,7 @@
         private readonly IRepository<SkillsInfoEntity> skillRepo;
         private readonly IRepository<SkillsInfoDrivingCategoryEntity> skillsDrivingCategoriesRepo;
         private readonly IRepository<CourseCertificateEntity> courseSertificateRepo;
+        private readonly IRepository<JobAdApplicationEntity> jobAdsApplicationsRepo;
         private readonly IMapper mapper;
 
         public CVsService(
@@ -34,6 +37,7 @@
             IRepository<SkillsInfoEntity> skillRepo,
             IRepository<SkillsInfoDrivingCategoryEntity> skillsDrivingCategoriesRepo,
             IRepository<CourseCertificateEntity> courseSertificateRepo,
+            IRepository<JobAdApplicationEntity> jobAdsApplicationsRepo,
             IMapper mapper)
         {
             this.repository = repository;
@@ -44,6 +48,7 @@
             this.skillRepo = skillRepo;
             this.skillsDrivingCategoriesRepo = skillsDrivingCategoriesRepo;
             this.courseSertificateRepo = courseSertificateRepo;
+            this.jobAdsApplicationsRepo = jobAdsApplicationsRepo;
             this.mapper = mapper;
         }
 
@@ -95,14 +100,48 @@
             return data;
         }
 
-        public async Task<T> GetDataAsync<T>(string cvId)
+        public async Task<T> GetOwnCvDataAsync<T>(string cvId, string currentUserId)
         {
+            string cvUserId = await this.repository
+                .Where(cv => cv.Id == cvId)
+                .Select(cv => cv.UserId)
+                .SingleOrDefaultAsync();
+
+            if (cvUserId == null)
+            {
+                throw new ActionableException("There is no cv with such id.");
+            }
+
+            if (cvUserId != currentUserId)
+            {
+                throw new UnauthorizedException("You are not allowed to access data for other user's cvs.");
+            }
+
             T data = await this.repository.AllAsNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .To<T>()
                 .SingleOrDefaultAsync();
 
             return data;
+        }
+
+        public async Task<CvPreviewDataViewModel> GetUserCvData(string cvId, string currentUserId)
+        {
+            bool isCvSentForCurrentUserJobAd = await this.jobAdsApplicationsRepo
+                .ExistAsync(jaa => jaa.CurriculumVitaeId == cvId
+                    && jaa.JobAd.Publisher.UserId == currentUserId);
+
+            if (!isCvSentForCurrentUserJobAd)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to view cv that has not been sent for one of your job ads.");
+            }
+
+            CvPreviewDataViewModel cvData = await this.repository.AllAsNoTracking()
+                .Where(cv => cv.Id == cvId)
+                .To<CvPreviewDataViewModel>()
+                .SingleOrDefaultAsync();
+
+            return cvData;
         }
 
         public async Task<bool> SetDataAsync(string cvId, byte[] data)

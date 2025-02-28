@@ -12,6 +12,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+    using static JobFinder.Web.Infrastructure.WebConstants;
 
     [Authorize]
     public class CVsController : ApiController
@@ -51,14 +52,21 @@
         [Route("{id}", Name = "GetCvData")]
         public async Task<ActionResult<CvDataViewModel>> GetCvData([FromRoute] string id)
         {
-            string userId = this.User.GetCurrentUserId();
+            string currentUserId = this.User.GetCurrentUserId();
 
-            CvDataViewModel cv = await this.cvsService.GetDataAsync<CvDataViewModel>(id);
+            CvDataViewModel cv = await this.cvsService.GetOwnCvDataAsync<CvDataViewModel>(id, currentUserId);
 
-            if (cv.OwnerId != userId)
-            {
-                return this.Unauthorized("You can't view other user's CV data!");
-            }
+            return this.Ok(cv);
+        }
+
+        [HttpGet]
+        [Route("preview/{id}")]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<ActionResult<CvDataViewModel>> GetCvPreview([FromRoute] string id)
+        {
+            string currentUserId = this.User.GetCurrentUserId();
+
+            CvPreviewDataViewModel cv = await this.cvsService.GetUserCvData(id, currentUserId);
 
             return this.Ok(cv);
         }
@@ -91,7 +99,9 @@
         [Route("generate-pdf/{id}")]
         public async Task<ActionResult> GenerateCVPdf(string id, [FromServices] IPdfGenerator pdfGenerator)
         {
-            CvDataPdfViewModel data = await this.cvsService.GetDataAsync<CvDataPdfViewModel>(id);
+            CvDataPdfViewModel data = await this.cvsService.GetOwnCvDataAsync<CvDataPdfViewModel>(
+                id,
+                this.User.GetCurrentUserId());
 
             StringBuilder sb = new();
 
