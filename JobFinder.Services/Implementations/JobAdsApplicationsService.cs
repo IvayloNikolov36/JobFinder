@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnauthorizedException = JobFinder.Common.Exceptions.UnauthorizedException;
 
 namespace JobFinder.Services.Implementations
 {
@@ -78,6 +77,31 @@ namespace JobFinder.Services.Implementations
                 .OrderByDescending(j => j.AppliedOn)
                 .To<JobAdApplicationViewModel>()
                 .ToListAsync();
+        }
+
+        public async Task SetPreviewInfo(string cvId, int jobAdId)
+        {
+            JobAdApplicationEntity application = await this.jobAdsApplicationsRepository.All()
+                .SingleOrDefaultAsync(a => a.CurriculumVitaeId == cvId
+                    && a.JobAdId == jobAdId);
+            
+            if (application == null)
+            {
+                throw new ActionableException("No application with such cv for this job.");
+            }
+
+            DateTime utcNow = DateTime.UtcNow;
+
+            if (!application.FirstPreviewDate.HasValue)
+            {
+                application.FirstPreviewDate = utcNow;
+            }
+
+            application.LatestPreviewDate = utcNow;
+
+            this.jobAdsApplicationsRepository.Update(application);
+
+            await this.jobAdsApplicationsRepository.SaveChangesAsync();
         }
 
         private async Task ValidateTheUserIsThePublisher(string userId, int jobAdId)

@@ -17,8 +17,8 @@ namespace JobFinder.Data.Models
 
         public DateTime AppliedOn { get; set; }
 
-        public bool IsPreviewed { get; set; }
+        public DateTime? FirstPreviewDate { get; set; }
 
-        public DateTime? PreviewDate { get; set; }
+        public DateTime? LatestPreviewDate { get; set; }
     }
 }

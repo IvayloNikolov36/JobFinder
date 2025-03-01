@@ -125,16 +125,9 @@
             return data;
         }
 
-        public async Task<CvPreviewDataViewModel> GetUserCvData(string cvId, string currentUserId)
+        public async Task<CvPreviewDataViewModel> GetUserCvData(string cvId, int jobAdId, string currentUserId)
         {
-            bool isCvSentForCurrentUserJobAd = await this.jobAdsApplicationsRepo
-                .ExistAsync(jaa => jaa.CurriculumVitaeId == cvId
-                    && jaa.JobAd.Publisher.UserId == currentUserId);
-
-            if (!isCvSentForCurrentUserJobAd)
-            {
-                throw new UnauthorizedAccessException("You are not allowed to view cv that has not been sent for one of your job ads.");
-            }
+            await this.ValidateCvIsSentForCurrentUsersJobAd(cvId, jobAdId, currentUserId);
 
             CvPreviewDataViewModel cvData = await this.repository.AllAsNoTracking()
                 .Where(cv => cv.Id == cvId)
@@ -179,6 +172,19 @@
                 .Where(cv => cv.Id == cvId)
                 .Select(cv => cv.UserId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task ValidateCvIsSentForCurrentUsersJobAd(string cvId, int jobAdId, string currentUserId)
+        {
+            bool isCvSentForCurrentUsersJobAd = await this.jobAdsApplicationsRepo
+                .ExistAsync(jaa => jaa.CurriculumVitaeId == cvId
+                    && jaa.JobAdId == jobAdId
+                    && jaa.JobAd.Publisher.UserId == currentUserId);
+
+            if (!isCvSentForCurrentUsersJobAd)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to view cv that has not been sent for one of your job ads.");
+            }
         }
 
         private async Task DeleteSkillsInfo(string cvId)

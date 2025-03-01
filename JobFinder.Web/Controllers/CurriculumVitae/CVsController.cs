@@ -60,13 +60,13 @@
         }
 
         [HttpGet]
-        [Route("preview/{id}")]
+        [Route("preview/{cvId}/{jobAdId}")]
         [Authorize(Roles = CompanyRole)]
-        public async Task<ActionResult<CvDataViewModel>> GetCvPreview([FromRoute] string id)
+        public async Task<ActionResult<CvDataViewModel>> GetCvPreview([FromRoute] string cvId, [FromRoute] int jobAdId)
         {
             string currentUserId = this.User.GetCurrentUserId();
 
-            CvPreviewDataViewModel cv = await this.cvsService.GetUserCvData(id, currentUserId);
+            CvPreviewDataViewModel cv = await this.cvsService.GetUserCvData(cvId, jobAdId, currentUserId);
 
             return this.Ok(cv);
         }

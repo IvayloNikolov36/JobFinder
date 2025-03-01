@@ -9,6 +9,8 @@ namespace JobFinder.Web.Models.JobAds
     {
         public int Id { get; set; }
 
+        public int JobAdId { get; set; }
+
         public string Applicant { get; set; }
 
         public string CurriculumVitaeId { get; set; }

@@ -34,7 +34,7 @@ namespace JobFinder.Web.Models.JobAds
                     m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString() + " lv."))
                 .ForMember(vm => vm.NotPreviewedApplications, o => o.MapFrom(e => e
                     .JobAdApplications
-                    .Where(ja => !ja.IsPreviewed)
+                    .Where(ja => !ja.FirstPreviewDate.HasValue)
                     .Count()));
         }
     }

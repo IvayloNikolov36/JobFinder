@@ -1,5 +1,6 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,17 @@ namespace JobFinder.Web.Controllers
             jobAdApplication.ApplicantId = this.User.GetCurrentUserId();
 
             await this.jobAdsApplicationsService.Create(jobAdApplication);
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("preview-info")]
+        [Authorize(Roles = CompanyRole)]
+        [ServiceFilter(typeof(ValidateCompanyAccessingCVSentForOwnAd))]
+        public async Task<IActionResult> SetCvPreviewed([FromBody] ApplicationPreviewInfoInputModel appModel)
+        {
+            await this.jobAdsApplicationsService.SetPreviewInfo(appModel.CvId, appModel.JobAdId);
 
             return this.Ok();
         }

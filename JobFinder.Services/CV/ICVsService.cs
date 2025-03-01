@@ -14,7 +14,7 @@
 
         Task<T> GetOwnCvDataAsync<T>(string cvId, string currentUserId);
 
-        Task<CvPreviewDataViewModel> GetUserCvData(string cvId, string currentUserId);
+        Task<CvPreviewDataViewModel> GetUserCvData(string cvId, int jobAdId, string currentUserId);
 
         Task<bool> SetDataAsync(string id, byte[] data);
 
@@ -23,5 +23,7 @@
         Task DeleteCvAsync(string id);
 
         Task<string> GetOwnerId(string id);
+
+        Task ValidateCvIsSentForCurrentUsersJobAd(string cvId, int jobAdId, string currentUserId);
     }
 }

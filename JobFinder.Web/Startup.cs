@@ -71,6 +71,7 @@ namespace JobFinder.Web
 
             // Service Filters
             services.AddScoped<ValidateCvIdBelongsToUser>();
+            services.AddScoped<ValidateCompanyAccessingCVSentForOwnAd>();
 
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
             services.AddDomainServices();
