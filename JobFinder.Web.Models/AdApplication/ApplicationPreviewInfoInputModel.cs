@@ -1,4 +1,4 @@
-﻿namespace JobFinder.Web.Models.JobAds
+﻿namespace JobFinder.Web.Models.AdApplication
 {
     public class ApplicationPreviewInfoInputModel
     {

@@ -12,9 +12,9 @@
 
         IQueryable<T> Where(Expression<Func<T, bool>> predicate);
 
-        IQueryable<T> AllAsNoTracking();
+        IQueryable<T> DbSetNoTracking();
 
-        Task<bool> ExistAsync(Expression<Func<T, bool>> predicate);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 
         Task<T> FindAsync<TKey>(TKey id);
 

@@ -2,7 +2,6 @@
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Models.AdApplication;
-using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

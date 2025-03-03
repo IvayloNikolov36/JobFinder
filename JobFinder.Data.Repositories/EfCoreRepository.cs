@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Repositories.Contracts;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -22,14 +23,14 @@
 
         public virtual IQueryable<T> All() => this.DbSet;
 
-        public virtual IQueryable<T> AllAsNoTracking() => this.DbSet.AsNoTracking();
+        public virtual IQueryable<T> DbSetNoTracking() => this.DbSet.AsNoTracking();
 
         public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
         {
             return this.DbSet.Where(predicate);
         }
 
-        public virtual Task<bool> ExistAsync(Expression<Func<T, bool>> predicate)
+        public virtual Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
             return this.DbSet.AnyAsync(predicate);
         }
@@ -45,7 +46,8 @@
 
         public virtual void Update(T entity)
         {
-            var entry = this.Context.Entry(entity);
+            EntityEntry<T> entry = this.Context.Entry(entity);
+
             if (entry.State == EntityState.Detached)
             {
                 this.DbSet.Attach(entity);

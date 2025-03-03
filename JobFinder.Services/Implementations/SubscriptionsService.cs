@@ -32,7 +32,7 @@
         public async Task SubscribeForJobs(string userId, int? jobCategoryId, string location)
         {
             bool hasSubscription = await this.jobsSubscriptionRepository
-                .ExistAsync(js => js.UserId == userId
+                .AnyAsync(js => js.UserId == userId
                     && js.Location == location
                     && js.JobCategoryId == jobCategoryId);
 
@@ -75,7 +75,7 @@
 
         public async Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId)
         {
-            return await this.jobsSubscriptionRepository.AllAsNoTracking()
+            return await this.jobsSubscriptionRepository.DbSetNoTracking()
                 .Where(js => js.UserId == userId)
                 .To<JobSubscriptionViewModel>()
                 .ToListAsync();
@@ -84,7 +84,7 @@
         public async Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()
         {
             List<JobCategoriesSubscriptionsData> jobCategoriesSubs = await this.jobCategoriesSubscriptionDataRepository
-                .AllAsNoTracking()
+                .DbSetNoTracking()
                 .ToListAsync();
 
             List<JobAdsByCategoryAndLocationViewModel> result = new();

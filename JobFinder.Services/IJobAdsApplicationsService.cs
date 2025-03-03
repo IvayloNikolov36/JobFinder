@@ -1,5 +1,4 @@
 ﻿using JobFinder.Web.Models.AdApplication;
-using JobFinder.Web.Models.JobAds;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

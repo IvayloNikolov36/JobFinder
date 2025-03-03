@@ -27,7 +27,7 @@
 
         public async Task<IEnumerable<T>> AllAsync<T>(string cvId)
         {
-            return await this.repository.AllAsNoTracking()
+            return await this.repository.DbSetNoTracking()
                 .Where(cs => cs.CurriculumVitaeId == cvId)
                 .To<T>()
                 .ToListAsync();

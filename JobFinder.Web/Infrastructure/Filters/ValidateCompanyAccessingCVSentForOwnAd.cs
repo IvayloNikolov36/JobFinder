@@ -1,5 +1,5 @@
 ﻿using JobFinder.Services.CV;
-using JobFinder.Web.Models.JobAds;
+using JobFinder.Web.Models.AdApplication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;

@@ -42,7 +42,7 @@
                 ?? throw new ActionableException($"No company with id: {companyId}");
 
             bool hasSuchSubscricption = await this.companySubscriptionRepository
-                .ExistAsync(cs => cs.CompanyId == companyId && cs.UserId == userId);
+                .AnyAsync(cs => cs.CompanyId == companyId && cs.UserId == userId);
 
             if (hasSuchSubscricption)
             {
@@ -82,7 +82,7 @@
 
         public async Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId)
         {
-            return await this.companySubscriptionRepository.AllAsNoTracking()
+            return await this.companySubscriptionRepository.DbSetNoTracking()
                 .Where(cs => cs.UserId == userId)
                 .To<CompanySubscriptionViewModel>()
                 .ToListAsync();

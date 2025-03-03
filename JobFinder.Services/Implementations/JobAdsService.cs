@@ -28,7 +28,7 @@
         public async Task<T> GetAsync<T>(int id)
         {
             return await this.jobsRepository
-                .AllAsNoTracking()
+                .DbSetNoTracking()
                 .Where(ja => ja.Id == id)
                 .To<T>()
                 .FirstOrDefaultAsync();
@@ -65,7 +65,7 @@
 
         public async Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId)
         {
-            return await this.jobsRepository.AllAsNoTracking()
+            return await this.jobsRepository.DbSetNoTracking()
                 .Where(ja => ja.Publisher.UserId == userId)
                 .To<CompanyJobAdViewModel>()
                 .OrderByDescending(j => j.PublishDate)
@@ -74,7 +74,7 @@
 
         public async Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsParams paramsModel)
         {
-            IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository.AllAsNoTracking();
+            IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository.DbSetNoTracking();
 
             if (!string.IsNullOrEmpty(paramsModel.SearchText))
             {

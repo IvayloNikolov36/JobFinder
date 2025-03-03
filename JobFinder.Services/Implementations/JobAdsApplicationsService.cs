@@ -3,7 +3,7 @@ using JobFinder.Common.Exceptions;
 using JobFinder.Data.Models;
 using JobFinder.Data.Repositories.Contracts;
 using JobFinder.Services.Mappings;
-using JobFinder.Web.Models.JobAds;
+using JobFinder.Web.Models.AdApplication;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace JobFinder.Services.Implementations
         public async Task Create(JobAdApplicationInputModel jobAdApplication)
         {
             bool hasAlreadyApplied = await this.jobAdsApplicationsRepository
-                .ExistAsync(j => j.ApplicantId == jobAdApplication.ApplicantId
+                .AnyAsync(j => j.ApplicantId == jobAdApplication.ApplicantId
                     && j.JobAdId == jobAdApplication.JobAdId);
 
             if (hasAlreadyApplied)
@@ -52,7 +52,7 @@ namespace JobFinder.Services.Implementations
         {
             await this.ValidateTheUserIsThePublisher(userId, jobAdId);
 
-            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
+            return await this.jobAdsApplicationsRepository.DbSetNoTracking()
                 .Where(j => j.JobAdId == jobAdId)
                 .OrderByDescending(j => j.AppliedOn)
                 .To<JobAdApplicationViewModel>()
@@ -63,7 +63,7 @@ namespace JobFinder.Services.Implementations
         {
             await this.ValidateTheUserIsThePublisher(userId, jobAdId);
 
-            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
+            return await this.jobAdsApplicationsRepository.DbSetNoTracking()
                 .Where(j => j.JobAdId == jobAdId)
                 .To<JobApplicationInfoViewModel>()
                 .OrderByDescending(ja => ja.AppliedOn)
@@ -72,14 +72,14 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<JobAdApplicationViewModel>> GetAllMine(string userId)
         {
-            return await this.jobAdsApplicationsRepository.AllAsNoTracking()
+            return await this.jobAdsApplicationsRepository.DbSetNoTracking()
                 .Where(j => j.ApplicantId == userId)
                 .OrderByDescending(j => j.AppliedOn)
                 .To<JobAdApplicationViewModel>()
                 .ToListAsync();
         }
 
-        public async Task SetPreviewInfo(string cvId, int jobAdId)
+        public async Task<PreviewInfoViewModel> SetPreviewInfo(string cvId, int jobAdId)
         {
             JobAdApplicationEntity application = await this.jobAdsApplicationsRepository.All()
                 .SingleOrDefaultAsync(a => a.CurriculumVitaeId == cvId
@@ -90,11 +90,14 @@ namespace JobFinder.Services.Implementations
                 throw new ActionableException("No application with such cv for this job.");
             }
 
-            application.PreviewDate = DateTime.UtcNow;
+            DateTime previewDate = DateTime.UtcNow;
+            application.PreviewDate = previewDate;
 
             this.jobAdsApplicationsRepository.Update(application);
 
             await this.jobAdsApplicationsRepository.SaveChangesAsync();
+
+            return new PreviewInfoViewModel(previewDate);
         }
 
         private async Task ValidateTheUserIsThePublisher(string userId, int jobAdId)

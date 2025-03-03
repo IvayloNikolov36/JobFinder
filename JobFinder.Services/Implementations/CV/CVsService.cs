@@ -54,12 +54,12 @@
 
         public async Task<bool> ExistsAsync(string id)
         {
-            return await this.repository.ExistAsync(x => x.Id == id);
+            return await this.repository.AnyAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<T>> AllAsync<T>(string userId)
         {
-            return await this.repository.AllAsNoTracking()
+            return await this.repository.DbSetNoTracking()
                 .Where(c => c.UserId == userId)
                 .To<T>()
                 .ToListAsync();
@@ -92,7 +92,7 @@
 
         public async Task<byte[]> GetCvDataAsync(string cvId)
         {
-            byte[] data = await this.repository.AllAsNoTracking()
+            byte[] data = await this.repository.DbSetNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .Select(cv => cv.Data)
                 .FirstOrDefaultAsync();
@@ -117,7 +117,7 @@
                 throw new UnauthorizedException("You are not allowed to access data for other user's cvs.");
             }
 
-            T data = await this.repository.AllAsNoTracking()
+            T data = await this.repository.DbSetNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .To<T>()
                 .SingleOrDefaultAsync();
@@ -129,7 +129,7 @@
         {
             await this.ValidateCvIsSentForCurrentUsersJobAd(cvId, jobAdId, currentUserId);
 
-            CvPreviewDataViewModel cvData = await this.repository.AllAsNoTracking()
+            CvPreviewDataViewModel cvData = await this.repository.DbSetNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .To<CvPreviewDataViewModel>()
                 .SingleOrDefaultAsync();
@@ -168,7 +168,7 @@
 
         public async Task<string> GetOwnerId(string cvId)
         {
-            return await this.repository.AllAsNoTracking()
+            return await this.repository.DbSetNoTracking()
                 .Where(cv => cv.Id == cvId)
                 .Select(cv => cv.UserId)
                 .FirstOrDefaultAsync();
@@ -177,7 +177,7 @@
         public async Task ValidateCvIsSentForCurrentUsersJobAd(string cvId, int jobAdId, string currentUserId)
         {
             bool isCvSentForCurrentUsersJobAd = await this.jobAdsApplicationsRepo
-                .ExistAsync(jaa => jaa.CurriculumVitaeId == cvId
+                .AnyAsync(jaa => jaa.CurriculumVitaeId == cvId
                     && jaa.JobAdId == jobAdId
                     && jaa.JobAd.Publisher.UserId == currentUserId);
 

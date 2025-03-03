@@ -3,7 +3,7 @@ using JobFinder.Data.Models;
 using JobFinder.Services.Mappings;
 using System;
 
-namespace JobFinder.Web.Models.JobAds
+namespace JobFinder.Web.Models.AdApplication
 {
     public class JobApplicationInfoViewModel : IHaveCustomMappings
     {
