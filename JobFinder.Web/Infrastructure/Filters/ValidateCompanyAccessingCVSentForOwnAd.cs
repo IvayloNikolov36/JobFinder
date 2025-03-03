@@ -1,4 +1,5 @@
 ﻿using JobFinder.Services.CV;
+using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -24,23 +25,25 @@ namespace JobFinder.Web.Infrastructure.Filters
                 return;
             }
 
-            object cvId = context
-                .ActionArguments
-                .FirstOrDefault(aa => aa.Key == "cvId").Value;
 
-            if (cvId == null)
+            if (context.ActionArguments.First().Value is not ApplicationPreviewInfoInputModel model)
+            {
+                return;
+            }
+
+            string cvId = model.CvId;
+
+            if (string.IsNullOrEmpty(cvId.Trim()))
             {
                 context.Result = controller.BadRequest(new { Title = "The cv id is required!" });
                 return;
             }
 
-            object jobAdId = context
-                .ActionArguments
-                .FirstOrDefault(aa => aa.Key == "jobAdId").Value;
+            int jobAdId = model.JobAdId;
 
-            if (jobAdId == null)
+            if (jobAdId < 1)
             {
-                context.Result = controller.BadRequest(new { Title = "The job ad id is required!" });
+                context.Result = controller.BadRequest(new { Title = "The job advertisement id is not correct!" });
                 return;
             }
 
@@ -48,10 +51,8 @@ namespace JobFinder.Web.Infrastructure.Filters
 
             try
             {
-                await this.cvsService.ValidateCvIsSentForCurrentUsersJobAd(
-                    cvId.ToString(),
-                    int.Parse(jobAdId.ToString()),
-                    currentUserId);
+                await this.cvsService
+                    .ValidateCvIsSentForCurrentUsersJobAd(cvId, jobAdId, currentUserId);
             }
             catch (UnauthorizedAccessException ex)
             {

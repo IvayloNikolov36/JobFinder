@@ -90,14 +90,7 @@ namespace JobFinder.Services.Implementations
                 throw new ActionableException("No application with such cv for this job.");
             }
 
-            DateTime utcNow = DateTime.UtcNow;
-
-            if (!application.FirstPreviewDate.HasValue)
-            {
-                application.FirstPreviewDate = utcNow;
-            }
-
-            application.LatestPreviewDate = utcNow;
+            application.PreviewDate = DateTime.UtcNow;
 
             this.jobAdsApplicationsRepository.Update(application);
 

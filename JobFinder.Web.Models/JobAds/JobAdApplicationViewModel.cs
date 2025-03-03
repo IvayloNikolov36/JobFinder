@@ -23,8 +23,6 @@ namespace JobFinder.Web.Models.JobAds
 
         public DateTime AppliedOn { get; set; }
 
-        public bool IsPreviewed { get; set; }
-
         public DateTime? PreviewDate { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

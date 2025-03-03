@@ -1,4 +1,5 @@
-﻿using JobFinder.Web.Models.JobAds;
+﻿using JobFinder.Web.Models.AdApplication;
+using JobFinder.Web.Models.JobAds;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,6 +15,6 @@ namespace JobFinder.Services
 
         Task<IEnumerable<JobApplicationInfoViewModel>> GetCompanyJobAdApplications(string userId, int jobAdId);
 
-        Task SetPreviewInfo(string cvId, int jobAdId);
+        Task<PreviewInfoViewModel> SetPreviewInfo(string cvId, int jobAdId);
     }
 }
