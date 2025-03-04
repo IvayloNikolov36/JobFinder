@@ -13,6 +13,7 @@
             this.CurriculumVitaes = new List<CurriculumVitaeEntity>();
             this.JobCategorySubscriptions = new List<JobsSubscription>();
             this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
+            this.JobAdApplications = new List<JobAdApplicationEntity>();
         }
 
         [Required]
@@ -44,5 +45,6 @@
 
         public ICollection<JobsSubscription> JobCategorySubscriptions { get; set; }
 
+        public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
     }
 }
