@@ -74,7 +74,7 @@
         [Route("{id}")]
         public async Task<ActionResult> Edit([FromRoute] int id, [FromBody] JobAdEditModel model)
         {
-            // TODO: think about editing expiration
+            // TODO: think about expiration
 
             string userId = this.User.GetCurrentUserId();
 

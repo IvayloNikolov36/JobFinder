@@ -69,7 +69,7 @@
         [Route("latestJobs")]
         public async Task<IActionResult> GetLatestJobs()
         {
-            IEnumerable<CompaniesSubscriptionsData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
+            IEnumerable<CompaniesSubscriptionsDbViewData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
             return this.Ok(data);
         }

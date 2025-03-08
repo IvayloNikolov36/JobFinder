@@ -29,6 +29,7 @@ namespace JobFinder.Web.Models.JobAds
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<JobAdvertisementEntity, CompanyJobAdViewModel>()
+                .ForMember(vm => vm.Location, o => o.MapFrom(e => e.Location.Name))
                 .ForMember(vm => vm.ApplicationsSent, o => o.MapFrom(e => e.JobAdApplications.Count()))
                 .ForMember(x => x.Salary, m => m.MapFrom(
                     m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString() + " lv."))

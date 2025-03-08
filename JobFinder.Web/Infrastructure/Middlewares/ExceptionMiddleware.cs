@@ -1,9 +1,7 @@
 ﻿using JobFinder.Common.Exceptions;
 using JobFinder.Web.Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
@@ -29,7 +27,7 @@ namespace JobFinder.Web.Infrastructure.Middlewares
             }
             catch (Exception ex)
             {
-                await this.HandleExceptionAsync(context, ex, Guid.NewGuid()); // 
+                await this.HandleExceptionAsync(context, ex, Guid.NewGuid());
             }
         }
 
@@ -37,15 +35,6 @@ namespace JobFinder.Web.Infrastructure.Middlewares
         {
             context.Response.ContentType = MediaTypeNames.Application.Json;
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-            //ControllerActionDescriptor controllerActionDescriptor = context
-            //    .GetEndpoint()
-            //    .Metadata
-            //    .GetMetadata<ControllerActionDescriptor>();
-
-            //string controllerName = controllerActionDescriptor.ControllerName;
-            //string actionName = controllerActionDescriptor.ActionName;
-            //IDictionary<string, string> routeValues = controllerActionDescriptor.RouteValues;
 
             HttpErrorResult errorResult = null;
 

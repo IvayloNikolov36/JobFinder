@@ -26,9 +26,9 @@
             this.companySubscriptionRepository = companySubscriptionRepository;
         }
 
-        public async Task<IEnumerable<CompaniesSubscriptionsData>> GetLatesJobAdsAsync()
+        public async Task<IEnumerable<CompaniesSubscriptionsDbViewData>> GetLatesJobAdsAsync()
         {
-            IEnumerable<CompaniesSubscriptionsData> data = await this.dbContext
+            IEnumerable<CompaniesSubscriptionsDbViewData> data = await this.dbContext
                 .CompaniesSubscriptionsData
                 .AsNoTracking()
                 .ToListAsync();

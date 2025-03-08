@@ -48,7 +48,7 @@
 
         public DbSet<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
 
-        public DbSet<JobsSubscription> JobsSubscriptions { get; set; }
+        public DbSet<JobsSubscriptionEntity> JobsSubscriptions { get; set; }
 
 
         // Nomenclature Entities
@@ -73,21 +73,22 @@
 
         public DbSet<CityEntity> Cities { get; set; }
 
+
         // For VIEWS
 
-        public DbSet<CompaniesSubscriptionsData> CompaniesSubscriptionsData { get; set; }
+        public DbSet<CompaniesSubscriptionsDbViewData> CompaniesSubscriptionsData { get; set; }
 
-        public DbSet<JobCategoriesSubscriptionsData> JobCategoriesSubscriptionsData { get; set; }
+        public DbSet<JobAdsSubscriptionsDbVewData> JobAdsSubscriptionsData { get; set; }
 
-        public DbSet<LatestCompanyJobAds> LatestCompanyJobAds { get; set; } // For table value function
+        public DbSet<LatestJobAdsDbFunctionResult> LatestJobAds { get; set; } // For table value function
 
 
         // DB Functions
 
         [DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
-        public IQueryable<LatestCompanyJobAds> GetLatesJobAdsForSubscribers(int jobCategoryId, string location) =>
-            Set<LatestCompanyJobAds>()
-            .FromSqlInterpolated($"SELECT * FROM GetLatesJobAdsForSubscribers({jobCategoryId}, {location})");
+        public IQueryable<LatestJobAdsDbFunctionResult> GetLatesJobAdsForSubscribers(int? jobCategoryId, int? locationId) =>
+            Set<LatestJobAdsDbFunctionResult>()
+            .FromSqlInterpolated($"SELECT * FROM GetLatesJobAdsForSubscribers({jobCategoryId}, {locationId})");
 
 
         public override int SaveChanges() => this.SaveChanges(true);
@@ -130,15 +131,15 @@
 
             // VIEWS
 
-            builder.Entity<CompaniesSubscriptionsData>()
+            builder.Entity<CompaniesSubscriptionsDbViewData>()
                 .HasNoKey()
                 .ToView("CompanySubscriptionsData", "dbo");
 
-            builder.Entity<JobCategoriesSubscriptionsData>()
+            builder.Entity<JobAdsSubscriptionsDbVewData>()
                 .HasNoKey()
                 .ToView("SubscriprionsByJobCategoryAndLocation", "dbo");
 
-            builder.Entity<LatestCompanyJobAds>()
+            builder.Entity<LatestJobAdsDbFunctionResult>()
                 .HasNoKey()
                 .ToView(null);
 

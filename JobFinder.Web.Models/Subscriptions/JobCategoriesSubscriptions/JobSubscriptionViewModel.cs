@@ -16,9 +16,9 @@ namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<JobsSubscription, JobSubscriptionViewModel>()
+            configuration.CreateMap<JobsSubscriptionEntity, JobSubscriptionViewModel>()
                 .ForMember(vm => vm.JobCategory, o => o.MapFrom(e => e.JobCategoryId.HasValue ? e.JobCategory.Name : NoPropValueSubstitution))
-                .ForMember(vm => vm.Location, o => o.MapFrom(e => e.Location == null ? NoPropValueSubstitution : e.Location));
+                .ForMember(vm => vm.Location, o => o.MapFrom(e => e.Location.Name));
         }
     }
 }

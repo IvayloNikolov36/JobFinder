@@ -15,25 +15,25 @@
 
     public class SubscriptionsService : ISubscriptionsService
     {
-        private readonly IRepository<JobsSubscription> jobsSubscriptionRepository;
-        private readonly IRepository<JobCategoriesSubscriptionsData> jobCategoriesSubscriptionDataRepository;
+        private readonly IRepository<JobAdsSubscriptionsDbVewData> jobAdsSubscriptionDataRepository;
+        private readonly IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository;
         private readonly JobFinderDbContext dbContext;
 
         public SubscriptionsService(
-            IRepository<JobsSubscription> jobsSubscriptionRepository,
-            IRepository<JobCategoriesSubscriptionsData> jobCategoriesSubscriptionDataRepository,
+            IRepository<JobAdsSubscriptionsDbVewData> jobAdsSubscriptionDataRepository,
+            IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository,
             JobFinderDbContext dbContext)
         {
+            this.jobAdsSubscriptionDataRepository = jobAdsSubscriptionDataRepository;
             this.jobsSubscriptionRepository = jobsSubscriptionRepository;
-            this.jobCategoriesSubscriptionDataRepository = jobCategoriesSubscriptionDataRepository;
             this.dbContext = dbContext;
         }
 
-        public async Task SubscribeForJobs(string userId, int? jobCategoryId, string location)
+        public async Task SubscribeForJobs(string userId, int? jobCategoryId, int? locationId)
         {
             bool hasSubscription = await this.jobsSubscriptionRepository
                 .AnyAsync(js => js.UserId == userId
-                    && js.Location == location
+                    && js.LocationId == locationId
                     && js.JobCategoryId == jobCategoryId);
 
             if (hasSubscription)
@@ -41,11 +41,11 @@
                 throw new ActionableException("You already have subscription for jobs with given criterias!");
             }
 
-            JobsSubscription sub = new()
+            JobsSubscriptionEntity sub = new()
             {
                 UserId = userId,
                 JobCategoryId = jobCategoryId,
-                Location = location
+                LocationId = locationId
             };
 
             await this.jobsSubscriptionRepository.AddAsync(sub);
@@ -54,7 +54,7 @@
 
         public async Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId)
         {
-            JobsSubscription subFromDb = await this.jobsSubscriptionRepository.FindAsync(subscriptionId)
+            JobsSubscriptionEntity subFromDb = await this.jobsSubscriptionRepository.FindAsync(subscriptionId)
                 ?? throw new ActionableException("Invalid subscription id!");
 
             if (userId != subFromDb.UserId)
@@ -81,32 +81,33 @@
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync()
+        public async Task<IEnumerable<JobAdsSubscriptionsViewModel>> GetLatestJobAdsAsync()
         {
-            List<JobCategoriesSubscriptionsData> jobCategoriesSubs = await this.jobCategoriesSubscriptionDataRepository
+            List<JobAdsSubscriptionsDbVewData> jobAdsSubscriptions = await this.jobAdsSubscriptionDataRepository
                 .DbSetNoTracking()
                 .ToListAsync();
 
-            List<JobAdsByCategoryAndLocationViewModel> result = new();
+            List<JobAdsSubscriptionsViewModel> result = [];
 
-            foreach (JobCategoriesSubscriptionsData item in jobCategoriesSubs)
+            foreach (JobAdsSubscriptionsDbVewData item in jobAdsSubscriptions)
             {
-                List<LatestCompanyJobAds> latestCompanyJobAds = await this.dbContext
-                    .GetLatesJobAdsForSubscribers(item.JobCategoryId, item.Location)
+                List<LatestJobAdsDbFunctionResult> latestJobAds = await this.dbContext
+                    .GetLatesJobAdsForSubscribers(item.JobCategoryId, item.LocationId)
                     .ToListAsync();
 
-                if (latestCompanyJobAds.Count == 0)
+                if (latestJobAds.Count == 0)
                 {
                     continue;
                 }
 
-                result.Add(new JobAdsByCategoryAndLocationViewModel
+                result.Add(new JobAdsSubscriptionsViewModel
                 {
                     JobCategoryId = item.JobCategoryId,
                     JobCategory = item.JobCategory,
+                    LocationId = item.LocationId,
                     Location = item.Location,
-                    Subscribers = item.Subscribers.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries),
-                    LatestCompanyJobAds = latestCompanyJobAds
+                    Subscribers = item.SubscribersEmails.Split(["; "], StringSplitOptions.RemoveEmptyEntries),
+                    LatestJobAds = latestJobAds
                 });
             }
 

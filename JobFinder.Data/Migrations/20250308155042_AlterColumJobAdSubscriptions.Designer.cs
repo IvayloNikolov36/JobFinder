@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308155042_AlterColumJobAdSubscriptions")]
+    partial class AlterColumJobAdSubscriptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2298,55 +2301,55 @@ namespace JobFinder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2498),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6478),
                             Name = "Sofia"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2500),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6480),
                             Name = "Plovdiv"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2501),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6481),
                             Name = "Varna"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2502),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6482),
                             Name = "Burgas"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2503),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6483),
                             Name = "Rouse"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2504),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6484),
                             Name = "Stara Zagora"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2504),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6484),
                             Name = "Pleven"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2505),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6485),
                             Name = "Gabrovo"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedOn = new DateTime(2025, 3, 8, 19, 59, 56, 685, DateTimeKind.Utc).AddTicks(2506),
+                            CreatedOn = new DateTime(2025, 3, 8, 15, 50, 41, 862, DateTimeKind.Utc).AddTicks(6486),
                             Name = "Veliko Tarnovo"
                         });
                 });
@@ -4454,7 +4457,7 @@ namespace JobFinder.Data.Migrations
                     b.ToTable("CompanySubscriptions");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.JobsSubscriptionEntity", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.JobsSubscription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -4597,19 +4600,16 @@ namespace JobFinder.Data.Migrations
                     b.ToView("CompanySubscriptionsData", "dbo");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.ViewsModels.JobAdsSubscriptionsData", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.ViewsModels.JobCategoriesSubscriptionsData", b =>
                 {
                     b.Property<string>("JobCategory")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("JobCategoryId")
+                    b.Property<int>("JobCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Subscribers")
                         .HasColumnType("nvarchar(max)");
@@ -4619,18 +4619,18 @@ namespace JobFinder.Data.Migrations
                     b.ToView("SubscriprionsByJobCategoryAndLocation", "dbo");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.ViewsModels.LatestJobAds", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.ViewsModels.LatestCompanyJobAds", b =>
                 {
-                    b.Property<int>("CompanyId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("CompanyLogoUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("JobAdsIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Logo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Positions")
@@ -5033,7 +5033,7 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.JobsSubscriptionEntity", b =>
+            modelBuilder.Entity("JobFinder.Data.Models.Subscriptions.JobsSubscription", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
                         .WithMany()

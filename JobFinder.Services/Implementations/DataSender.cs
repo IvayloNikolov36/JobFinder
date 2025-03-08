@@ -40,20 +40,20 @@
             foreach (var item in data)
             {
                 int[] jobIds = item.JobIds
-                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
                     .Select(int.Parse)
                     .ToArray();
 
                 string[] subscribers = item.Subscribers
-                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
 
                 string[] jobPositions = item.JobPositions
-                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
 
                 string[] jobLocations = item.JobLocations
-                    .Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
                 
                 
@@ -96,7 +96,7 @@
             IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService
                 .GetLatestJobAdsAsync();
 
-            foreach (var item in data)
+            foreach (JobAdsSubscriptionsViewModel item in data)
             {
                 string jobCategory = item.JobCategory;
                 string location = item.Location;
@@ -116,10 +116,10 @@
                     string companyName = info.CompanyName;
 
                     string[] positions = info.Positions
-                        .Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+                        .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries);
 
                     int[] jobAdsIds = info.JobAdsIds
-                        .Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
+                        .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
                         .Select(int.Parse)
                         .ToArray();
 

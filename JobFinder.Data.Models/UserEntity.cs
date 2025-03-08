@@ -11,7 +11,7 @@
         public UserEntity()
         {        
             this.CurriculumVitaes = new List<CurriculumVitaeEntity>();
-            this.JobCategorySubscriptions = new List<JobsSubscription>();
+            this.JobCategorySubscriptions = new List<JobsSubscriptionEntity>();
             this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
             this.JobAdApplications = new List<JobAdApplicationEntity>();
         }
@@ -43,7 +43,7 @@
 
         public ICollection<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
 
-        public ICollection<JobsSubscription> JobCategorySubscriptions { get; set; }
+        public ICollection<JobsSubscriptionEntity> JobCategorySubscriptions { get; set; }
 
         public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
     }

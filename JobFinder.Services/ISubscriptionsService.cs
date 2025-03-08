@@ -6,7 +6,7 @@
 
     public interface ISubscriptionsService
     {
-        Task SubscribeForJobs(string userId, int? jobCategoryId, string location);
+        Task SubscribeForJobs(string userId, int? jobCategoryId, int? locationId);
 
         Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId);
 
@@ -14,6 +14,6 @@
 
         Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId);
 
-        Task<IEnumerable<JobAdsByCategoryAndLocationViewModel>> GetNewJobAdsByCategoryAsync();
+        Task<IEnumerable<JobAdsSubscriptionsViewModel>> GetLatestJobAdsAsync();
     }
 }

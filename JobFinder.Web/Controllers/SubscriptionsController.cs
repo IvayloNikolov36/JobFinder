@@ -6,7 +6,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
     [Authorize]
@@ -14,8 +13,7 @@
     {
         private readonly ISubscriptionsService subscriptionsService;
 
-        public SubscriptionsController(
-            ISubscriptionsService subscriptionsService)
+        public SubscriptionsController(ISubscriptionsService subscriptionsService)
         {
             this.subscriptionsService = subscriptionsService;
         }
@@ -27,14 +25,14 @@
             string userId = this.User.GetCurrentUserId();
 
             await this.subscriptionsService
-                .SubscribeForJobs(userId, subscription.JobCategoryId, subscription.Location);
+                .SubscribeForJobs(userId, subscription.JobCategoryId, subscription.LocationId);
 
             return this.Ok();
         }
 
         [HttpGet]
         [Route("unsubscribe/{id}")]
-        public async Task<IActionResult> UnsubscribeForJobs([FromRoute] int id)
+        public async Task<IActionResult> UnsubscribeFromJobs([FromRoute] int id)
         {
             string userId = this.User.GetCurrentUserId();
 
@@ -45,7 +43,7 @@
 
         [HttpGet]
         [Route("unsubscribe/all")]
-        public async Task<IActionResult> UnsubscribeFromAll()
+        public async Task<IActionResult> UnsubscribeFromAllJobs()
         {
             string userId = this.User.GetCurrentUserId();
 
@@ -66,10 +64,10 @@
         }
       
         [HttpGet]
-        [Route("newJobAdsByCategory")]
-        public async Task<IActionResult> GetSubscribersNewJobAdsByCategory()
+        [Route("new-ads")]
+        public async Task<IActionResult> GetSubscribersNewJobAds()
         {
-            IEnumerable<JobAdsByCategoryAndLocationViewModel> data = await this.subscriptionsService.GetNewJobAdsByCategoryAsync();
+            IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService.GetLatestJobAdsAsync();
 
             return this.Ok(data);
         }

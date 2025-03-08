@@ -7,6 +7,7 @@ namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions
         [Range(1, int.MaxValue)]
         public int? JobCategoryId { get; set; }
 
-        public string Location { get; set; }
+        [Range(1, int.MaxValue)]
+        public int? LocationId { get; set; }
     }
 }

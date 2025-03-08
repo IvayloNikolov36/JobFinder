@@ -31,7 +31,7 @@
 
             if (attachments?.Any() == true)
             {
-                foreach (var attachment in attachments)
+                foreach (EmailAttachment attachment in attachments)
                 {
                     message.AddAttachment(attachment.FileName,
                         Convert.ToBase64String(attachment.Content),

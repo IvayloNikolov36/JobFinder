@@ -1,6 +1,6 @@
 ﻿namespace JobFinder.Data.Models.ViewsModels
 {
-    public class CompaniesSubscriptionsData
+    public class CompaniesSubscriptionsDbViewData
     {
         public int CompanyId { get; set; }
 
