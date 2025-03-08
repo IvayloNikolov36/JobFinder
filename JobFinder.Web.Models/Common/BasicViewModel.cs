@@ -13,7 +13,8 @@ namespace JobFinder.Web.Models.Common
         IMapFrom<LanguageLevelEntity>,
         IMapFrom<DrivingCategoryEntity>,
         IMapFrom<JobEngagementEntity>,
-        IMapFrom<JobCategoryEntity>
+        IMapFrom<JobCategoryEntity>,
+        IMapFrom<CityEntity>
     {
         public BasicViewModel()
         {

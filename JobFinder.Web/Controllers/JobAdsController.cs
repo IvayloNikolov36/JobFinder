@@ -20,8 +20,8 @@
             this.adsService = adsService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AllCompaniesAds([FromQuery] JobAdsParams paramsModel)
+        [HttpPost]
+        public async Task<IActionResult> AllAds([FromBody] JobAdsParams paramsModel)
         {
             DataListingsModel<JobListingModel> ads = await this.adsService.AllAsync(paramsModel);
 

@@ -36,7 +36,8 @@
                 .ForMember(x => x.Salary, m => m.MapFrom(
                     m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString() + " lv."))
                 .ForMember(x => x.JobEngagement, m => m.MapFrom(m => m.JobEngagement.Name))
-                .ForMember(x => x.JobCategory, m => m.MapFrom(m => m.JobCategory.Name));
+                .ForMember(x => x.JobCategory, m => m.MapFrom(m => m.JobCategory.Name))
+                .ForMember(x => x.Location, m => m.MapFrom(m => m.Location.Name));
         }
 
     }

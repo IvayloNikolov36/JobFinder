@@ -71,6 +71,7 @@
 
         public DbSet<JobAdApplicationEntity> JobAdsApplications { get; set; }
 
+        public DbSet<CityEntity> Cities { get; set; }
 
         // For VIEWS
 
@@ -158,6 +159,7 @@
             LanguageTypesSeeder.Seed(builder);
             LanguageLevelsSeeder.Seed(builder);
             DrivingCategorySeeder.Seed(builder);
+            CitiesSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

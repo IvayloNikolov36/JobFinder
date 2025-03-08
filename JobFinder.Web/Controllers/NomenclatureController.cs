@@ -104,5 +104,14 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok(data);
         }
+
+        [HttpGet]
+        [Route("cities")]
+        public async Task<IActionResult> GetCities()
+        {
+            IEnumerable<BasicViewModel> cities = await this.nomenclatureService.GetCities();
+
+            return this.Ok(cities);
+        }
     }
 }

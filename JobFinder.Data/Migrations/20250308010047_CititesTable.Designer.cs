@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308010047_CititesTable")]
+    partial class CititesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -491,8 +494,9 @@ namespace JobFinder.Data.Migrations
                     b.Property<int>("JobEngagementId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("MaxSalary")
                         .HasColumnType("int");
@@ -519,8 +523,6 @@ namespace JobFinder.Data.Migrations
                     b.HasIndex("JobCategoryId");
 
                     b.HasIndex("JobEngagementId");
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("PublisherId");
 
@@ -2298,55 +2300,55 @@ namespace JobFinder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(260),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Sofia"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(264),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Plovdiv"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(266),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Varna"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(267),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Burgas"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(269),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Rouse"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(270),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Stara Zagora"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(271),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Pleven"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(273),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Gabrovo"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedOn = new DateTime(2025, 3, 8, 1, 53, 7, 19, DateTimeKind.Utc).AddTicks(274),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Veliko Tarnovo"
                         });
                 });
@@ -4981,12 +4983,6 @@ namespace JobFinder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.Nomenclature.CityEntity", "Location")
-                        .WithMany("JobAdvertisements")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("JobFinder.Data.Models.CompanyEntity", "Publisher")
                         .WithMany("JobAds")
                         .HasForeignKey("PublisherId")
@@ -4996,8 +4992,6 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("JobCategory");
 
                     b.Navigation("JobEngagement");
-
-                    b.Navigation("Location");
 
                     b.Navigation("Publisher");
                 });
@@ -5134,11 +5128,6 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CitizenshipEntity", b =>
                 {
                     b.Navigation("PersonalInfos");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CityEntity", b =>
-                {
-                    b.Navigation("JobAdvertisements");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.CountryEntity", b =>

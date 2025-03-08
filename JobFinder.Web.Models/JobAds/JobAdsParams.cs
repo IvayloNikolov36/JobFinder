@@ -2,17 +2,20 @@
 {
     public class JobAdsParams
     {
-        public int Page { get; set; } = 1;
+        private const int InitialPage = 1;
+        private const int DefaultItemsPerPage = 10;
 
-        public int Items { get; set; } = 10;
+        public int Page { get; set; } = InitialPage;
 
-        public string SearchText { get; set; }
+        public int Items { get; set; } = DefaultItemsPerPage;
 
-        public int CategoryId { get; set; } = 0;
+        public string SearchText { get; set; } = string.Empty;
 
-        public int EngagementId { get; set; } = 0;
+        public int? CategoryId { get; set; }
 
-        public string Location { get; set; }
+        public int? EngagementId { get; set; }
+
+        public int? LocationId { get; set; }
 
         public string SortBy { get; set; }
 

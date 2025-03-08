@@ -25,5 +25,7 @@ namespace JobFinder.Services
         Task<IEnumerable<BasicViewModel>> GetLanguageLevels();
 
         Task<IEnumerable<BasicViewModel>> GetDrivingCategories();
+
+        Task<IEnumerable<BasicViewModel>> GetCities();
     }
 }

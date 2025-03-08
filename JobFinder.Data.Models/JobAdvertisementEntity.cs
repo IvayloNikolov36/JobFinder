@@ -21,8 +21,8 @@
         [MinLength(20)]
         public string Description { get; set; }
 
-        [Required]
-        public string Location { get; set; }
+        public int LocationId { get; set; }
+        public CityEntity Location { get; set; }
 
         public int? MinSalary { get; set; }
 

@@ -76,7 +76,7 @@
         {
             IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository.DbSetNoTracking();
 
-            if (!string.IsNullOrEmpty(paramsModel.SearchText))
+            if (!string.IsNullOrEmpty(paramsModel.SearchText?.Trim()))
             {
                 paramsModel.SearchText = paramsModel.SearchText.ToLower();
 
@@ -84,19 +84,19 @@
                         || j.Publisher.Name.ToLower().Contains(paramsModel.SearchText));
             }
 
-            if (paramsModel.EngagementId != 0)
+            if (paramsModel.EngagementId.HasValue)
             {
-                jobs = this.FilterByEngagement(jobs, paramsModel.EngagementId);
+                jobs = this.FilterByEngagement(jobs, paramsModel.EngagementId.Value);
             }
 
-            if (paramsModel.CategoryId != 0)
+            if (paramsModel.CategoryId.HasValue)
             {
-                jobs = this.FilteredByCategory(jobs, paramsModel.CategoryId);
+                jobs = this.FilteredByCategory(jobs, paramsModel.CategoryId.Value);
             }
 
-            if (!string.IsNullOrEmpty(paramsModel.Location))
+            if (paramsModel.LocationId.HasValue)
             {
-                jobs = this.FilterByLocation(jobs, paramsModel.Location);
+                jobs = this.FilterByLocation(jobs, paramsModel.LocationId.Value);
             }
 
             if (!string.IsNullOrEmpty(paramsModel.SortBy) && paramsModel.SortBy == "Salary")
@@ -123,23 +123,23 @@
 
         private IQueryable<JobAdvertisementEntity> FilteredByCategory(
             IQueryable<JobAdvertisementEntity> jobAds,
-            int? jobCategoryId)
+            int jobCategoryId)
         {
             return jobAds.Where(j => j.JobCategoryId == jobCategoryId);
         }
 
         private IQueryable<JobAdvertisementEntity> FilterByEngagement(
             IQueryable<JobAdvertisementEntity> jobAds,
-            int? jobEngagementId)
+            int jobEngagementId)
         {
             return jobAds.Where(j => j.JobEngagementId == jobEngagementId);
         }
 
         private IQueryable<JobAdvertisementEntity> FilterByLocation(
             IQueryable<JobAdvertisementEntity> jobAds,
-            string location)
+            int locationId)
         {
-            return jobAds.Where(j => j.Location == location);
+            return jobAds.Where(j => j.LocationId == locationId);
         }
 
         // Sort methods

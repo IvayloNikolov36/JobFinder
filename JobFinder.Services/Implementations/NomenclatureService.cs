@@ -20,6 +20,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<LanguageTypeEntity> languageTypesRepository;
         private readonly IRepository<LanguageLevelEntity> languageLevelsRepository;
         private readonly IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository;
+        private readonly IRepository<CityEntity> citiesRepository;
 
         public NomenclatureService(
             IRepository<CountryEntity> countriesRepository,
@@ -31,7 +32,8 @@ namespace JobFinder.Services.Implementations
             IRepository<EducationLevelEntity> educationLevelsRepository,
             IRepository<LanguageTypeEntity> languageTypesRepository,
             IRepository<LanguageLevelEntity> languageLevelsRepository,
-            IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository)
+            IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository,
+            IRepository<CityEntity> citiesRepository)
         {
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;
@@ -43,106 +45,94 @@ namespace JobFinder.Services.Implementations
             this.languageTypesRepository = languageTypesRepository;
             this.languageLevelsRepository = languageLevelsRepository;
             this.drivingCategoryTypesRepository = drivingCategoryTypesRepository;
+            this.citiesRepository = citiesRepository;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCountries()
         {
-            BasicViewModel[] countries = await this.countriesRepository
+            return await this.countriesRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return countries;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCitizenships()
         {
-            BasicViewModel[] countries = await this.citizenshipRepository
+            return await this.citizenshipRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return countries;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetGender()
         {
-            BasicViewModel[] gender = await this.genderRepository
+            return await this.genderRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return gender;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetBusinessSector()
         {
-            BasicViewModel[] data = await this.businessSectorRepository
+            return await this.businessSectorRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return data;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetJobCategories()
         {
-            BasicViewModel[] data = await this.jobCategoryRepository
+            return await this.jobCategoryRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return data;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetJobEngagements()
         {
-            BasicViewModel[] data = await this.jobEngagementRepository
+            return await this.jobEngagementRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return data;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetEducationLevels()
         {
-            BasicViewModel[] data = await this.educationLevelsRepository
+            return await this.educationLevelsRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return data;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetLanguageTypes()
         {
-            BasicViewModel[] data = await this.languageTypesRepository
+            return await this.languageTypesRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return data;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetLanguageLevels()
         {
-            BasicViewModel[] data = await this.languageLevelsRepository
+            return await this.languageLevelsRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
-
-            return data;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetDrivingCategories()
         {
-            BasicViewModel[] data = await this.drivingCategoryTypesRepository
+            return await this.drivingCategoryTypesRepository
                 .DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
+        }
 
-            return data;
+        public async Task<IEnumerable<BasicViewModel>> GetCities()
+        {
+            return await this.citiesRepository.DbSetNoTracking()
+                .To<BasicViewModel>()
+                .ToArrayAsync();
         }
     }
 }
