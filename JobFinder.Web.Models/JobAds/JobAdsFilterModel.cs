@@ -1,6 +1,6 @@
 ﻿namespace JobFinder.Web.Models.JobAds
 {
-    public class JobAdsParams
+    public class JobAdsFilterModel
     {
         private const int InitialPage = 1;
         private const int DefaultItemsPerPage = 10;

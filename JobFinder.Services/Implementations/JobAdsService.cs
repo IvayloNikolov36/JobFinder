@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using JobFinder.Common.Exceptions;
     using JobFinder.Data.Models;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.Mappings;
@@ -46,21 +47,27 @@
             await this.jobsRepository.SaveChangesAsync();
         }
 
-        public async Task<bool> EditAsync(int jobAdId, string userId, string position, string description)
+        public async Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel)
         {
             JobAdvertisementEntity offerFromDb = await this.jobsRepository.FindAsync(jobAdId);
-            bool isUserPublisher = userId == offerFromDb.Publisher.User.Id;
 
-            if (offerFromDb == null || !isUserPublisher)
+            if (offerFromDb == null)
             {
-                return false;
+                throw new ActionableException("Job ad with such id is not found!");
             }
 
-            offerFromDb.Position = position;
-            offerFromDb.Description = description;
+            bool isUserPublisher = userId == offerFromDb.Publisher.User.Id;
+
+            if (!isUserPublisher)
+            {
+                throw new ActionableException("You can edit only your own ads!");
+            }
+
+            this.mapper.Map(editModel, offerFromDb);
+
+            this.jobsRepository.Update(offerFromDb);
 
             await this.jobsRepository.SaveChangesAsync();
-            return true;
         }
 
         public async Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId)
@@ -72,47 +79,47 @@
                 .ToListAsync();
         }
 
-        public async Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsParams paramsModel)
+        public async Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsFilterModel model)
         {
             IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository.DbSetNoTracking();
 
-            if (!string.IsNullOrEmpty(paramsModel.SearchText?.Trim()))
+            if (!string.IsNullOrEmpty(model.SearchText?.Trim()))
             {
-                paramsModel.SearchText = paramsModel.SearchText.ToLower();
+                model.SearchText = model.SearchText.ToLower();
 
-                jobs = jobs.Where(j => j.Position.ToLower().Contains(paramsModel.SearchText)
-                        || j.Publisher.Name.ToLower().Contains(paramsModel.SearchText));
+                jobs = jobs.Where(j => j.Position.ToLower().Contains(model.SearchText)
+                        || j.Publisher.Name.ToLower().Contains(model.SearchText));
             }
 
-            if (paramsModel.EngagementId.HasValue)
+            if (model.EngagementId.HasValue)
             {
-                jobs = this.FilterByEngagement(jobs, paramsModel.EngagementId.Value);
+                jobs = this.FilterByEngagement(jobs, model.EngagementId.Value);
             }
 
-            if (paramsModel.CategoryId.HasValue)
+            if (model.CategoryId.HasValue)
             {
-                jobs = this.FilteredByCategory(jobs, paramsModel.CategoryId.Value);
+                jobs = this.FilteredByCategory(jobs, model.CategoryId.Value);
             }
 
-            if (paramsModel.LocationId.HasValue)
+            if (model.LocationId.HasValue)
             {
-                jobs = this.FilterByLocation(jobs, paramsModel.LocationId.Value);
+                jobs = this.FilterByLocation(jobs, model.LocationId.Value);
             }
 
-            if (!string.IsNullOrEmpty(paramsModel.SortBy) && paramsModel.SortBy == "Salary")
+            if (!string.IsNullOrEmpty(model.SortBy) && model.SortBy == "Salary")
             {
-                jobs = this.SortBySalary(jobs, (bool)paramsModel.IsAscending);
+                jobs = this.SortBySalary(jobs, (bool)model.IsAscending);
             }
 
-            if (!string.IsNullOrEmpty(paramsModel.SortBy) && paramsModel.SortBy == "Published")
+            if (!string.IsNullOrEmpty(model.SortBy) && model.SortBy == "Published")
             {
-                jobs = this.SortByPublishDate(jobs, (bool)paramsModel.IsAscending);
+                jobs = this.SortByPublishDate(jobs, (bool)model.IsAscending);
             }
 
             int totalCount = await jobs.CountAsync();
 
-            IEnumerable<JobListingModel> jobAds = await jobs.Skip((paramsModel.Page - 1) * paramsModel.Items)
-               .Take(paramsModel.Items)
+            IEnumerable<JobListingModel> jobAds = await jobs.Skip((model.Page - 1) * model.Items)
+               .Take(model.Items)
                .To<JobListingModel>()
                .ToListAsync();
 

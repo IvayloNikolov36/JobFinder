@@ -13,8 +13,8 @@
 
         Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId);
 
-        Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsParams paramsModel);
+        Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsFilterModel model);
 
-        Task<bool> EditAsync(int jobAdId, string userId, string position, string description);
+        Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel);
     }
 }

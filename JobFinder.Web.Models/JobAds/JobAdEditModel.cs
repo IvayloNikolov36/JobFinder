@@ -1,8 +1,10 @@
 ﻿namespace JobFinder.Web.Models.JobAds
 {
+    using JobFinder.Data.Models;
+    using JobFinder.Services.Mappings;
     using System.ComponentModel.DataAnnotations;
 
-    public class JobAdEditModel
+    public class JobAdEditModel : IMapTo<JobAdvertisementEntity>
     {
         [Required]
         [StringLength(90, MinimumLength = 6)]
@@ -12,6 +14,14 @@
         [MinLength(20)]
         public string Description { get; set; }
 
-        public string PublisherId { get; set; }
+        public int? MinSalary { get; set; }
+
+        public int? MaxSalary { get; set; }
+
+        public int JobCategoryId { get; set; }
+
+        public int JobEngagementId { get; set; }
+
+        public int LocationId { get; set; }
     }
 }

@@ -21,7 +21,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AllAds([FromBody] JobAdsParams paramsModel)
+        public async Task<IActionResult> AllAds([FromBody] JobAdsFilterModel paramsModel)
         {
             DataListingsModel<JobListingModel> ads = await this.adsService.AllAsync(paramsModel);
 
@@ -74,19 +74,13 @@
         [Route("{id}")]
         public async Task<ActionResult> Edit([FromRoute] int id, [FromBody] JobAdEditModel model)
         {
-            // TODO: think about expiration
+            // TODO: think about expiration - create reccuring job for HangFire to set job ads to status expired after a period of time
 
             string userId = this.User.GetCurrentUserId();
 
-            bool isEditDone = await this.adsService
-                .EditAsync(id, userId, model.Position, model.Description);
+            await this.adsService.EditAsync(id, userId, model);
 
-            if (!isEditDone)
-            {
-                return this.BadRequest(new { Message = CantEditAd });
-            }
-
-            return this.Ok(new { Message = UpdatedAd });
+            return this.Ok();
         }
 
     }
