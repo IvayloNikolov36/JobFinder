@@ -2,6 +2,7 @@
 {
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
+    using Microsoft.Extensions.Configuration;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,26 +11,31 @@
 
     public class DataSender : IDataSender
     {
+        private const string JobAdDetailsLink = "https://localhost:44375/JobAds/";
+        private const string CompanyDetailsUrl = "https://localhost:44375/company/";
+
         private readonly ISubscriptionsService subscriptionsService;
         private readonly ICompanySubscriptionsService companySubscriptionsService;
         private readonly IEmailSender emailSender;
-
-        private const string JobAdDetailsLink = "https://localhost:4100/jobs/";
-        private const string CompanyDetailsUrl = "https://localhost:4100/company/";
+        private readonly string sentFromEmail;
+        private readonly string sentFromName;
 
         public DataSender(
             ICompanySubscriptionsService companySubscriptionsService, 
             ISubscriptionsService subscriptionsService, 
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             this.subscriptionsService = subscriptionsService;
             this.companySubscriptionsService = companySubscriptionsService;
             this.emailSender = emailSender;
+            this.sentFromEmail = configuration.GetSection("AppAccount:email").Value;
+            this.sentFromName = configuration.GetSection("AppAccount:name").Value;
         }
 
         public async Task SendLatestJobAdsBySubscribedCompanies()
         {
-            IEnumerable<CompaniesSubscriptionsData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
+            IEnumerable<CompaniesSubscriptionsDbViewData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
             foreach (var item in data)
             {
@@ -80,15 +86,15 @@
                 foreach (string userEmail in subscribers)
                 {
                     await this.emailSender
-                        .SendEmailAsync("jobFinder@abv.bg", "JobFinder", userEmail, subject, sb.ToString());
+                        .SendEmailAsync(this.sentFromEmail, this.sentFromName, userEmail, subject, sb.ToString());
                 }
             }
         }
 
         public async Task SendLatestJobAdsBySubscribedCategoriesAndLocations()
         {
-            IEnumerable<JobAdsByCategoryAndLocationViewModel> data = await this.subscriptionsService
-                .GetNewJobAdsByCategoryAsync();
+            IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService
+                .GetLatestJobAdsAsync();
 
             foreach (var item in data)
             {
@@ -103,11 +109,11 @@
                 sb.AppendLine(@$"<table style=""width: 100%"">");
 
                 int line = 0;
-                foreach (LatestCompanyJobAds info in item.LatestCompanyJobAds)
+                foreach (LatestJobAdsDbFunctionResult info in item.LatestJobAds)
                 {
                     line++;
-                    int companyId = info.Id;
-                    string companyName = info.Name;
+                    int companyId = info.CompanyId;
+                    string companyName = info.CompanyName;
 
                     string[] positions = info.Positions
                         .Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
@@ -125,7 +131,7 @@
                                       < td><a href=""{JobAdDetailsLink}{jobAdsIds[i]}"" style=""text-decoration:none"">{position}</a></td>
                                       <td>{location}</td>
                                       <td><a href=""{CompanyDetailsUrl}{companyId}"" style=""text-decoration:none"">{companyName}</a></td>
-                                      <td style=""text-align:right;""><img src=""{info.Logo}"" alt=""CompanyLogo"" width=""90"" height=""90""></td>
+                                      <td style=""text-align:right;""><img src=""{info.CompanyLogoUrl}"" alt=""CompanyLogo"" width=""90"" height=""90""></td>
                                     </tr>");
                     }
                 }
@@ -134,10 +140,9 @@
 
                 foreach (string subscriberEmail in subscribers)
                 {
-                    // TODO: get the email and name from config file
                     await this.emailSender.SendEmailAsync(
-                        from: "jobFinder@abv.bg",
-                        fromName: "JobFinder",
+                        from: this.sentFromEmail,
+                        fromName: this.sentFromName,
                         to: subscriberEmail,
                         subject: emailSubject,
                         htmlContent: sb.ToString());
