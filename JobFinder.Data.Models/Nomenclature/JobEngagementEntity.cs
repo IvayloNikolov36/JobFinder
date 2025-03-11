@@ -2,8 +2,7 @@
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class JobEngagementEntity : BaseEntity<int>
+    public class JobEngagementEntity : BaseNomenclatureEntity<int>
     {
-        public string Name { get; set; }
     }
 }

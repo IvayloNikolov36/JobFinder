@@ -1,5 +1,4 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Data.Models.Nomenclature;
+﻿using JobFinder.Data.Models.Nomenclature;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
@@ -39,7 +38,8 @@ namespace JobFinder.Data.Seeders
                 new LanguageTypeEntity { Name = "Spanish", Id = 28 },
                 new LanguageTypeEntity { Name = "Swedish", Id = 29 },
                 new LanguageTypeEntity { Name = "Turkish", Id = 30 },
-                new LanguageTypeEntity { Name = "Ukrainian", Id = 31 });
+                new LanguageTypeEntity { Name = "Ukrainian", Id = 31 }
+            );
         }
     }
 }

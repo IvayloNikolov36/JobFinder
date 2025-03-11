@@ -2,8 +2,7 @@
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class LanguageLevelEntity : BaseEntity<int>
+    public class LanguageLevelEntity : BaseNomenclatureEntity<int>
     {
-        public string Name { get; set; }
     }
 }

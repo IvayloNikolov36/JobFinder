@@ -28,6 +28,9 @@
 
         public int? MaxSalary { get; set; }
 
+        public int? CurrencyId { get; set; }
+        public CurrencyEntity Currency { get; set; }
+
         public int JobCategoryId { get; set; }
         public JobCategoryEntity JobCategory { get; set; }
 

@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250310230808_CurrenciesTable")]
+    partial class CurrenciesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -478,9 +481,6 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CurrencyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -518,8 +518,6 @@ namespace JobFinder.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
 
                     b.HasIndex("JobCategoryId");
 
@@ -2306,55 +2304,55 @@ namespace JobFinder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4215),
                             Name = "Sofia"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4219),
                             Name = "Plovdiv"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4221),
                             Name = "Varna"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4223),
                             Name = "Burgas"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4224),
                             Name = "Rouse"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4226),
                             Name = "Stara Zagora"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4228),
                             Name = "Pleven"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4229),
                             Name = "Gabrovo"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4231),
                             Name = "Veliko Tarnovo"
                         });
                 });
@@ -3874,19 +3872,19 @@ namespace JobFinder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4275),
                             Name = "BGN"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4277),
                             Name = "EUR"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2025, 3, 10, 23, 8, 6, 643, DateTimeKind.Utc).AddTicks(4279),
                             Name = "USD"
                         });
                 });
@@ -5032,10 +5030,6 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.JobAdvertisementEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Nomenclature.CurrencyEntity", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId");
-
                     b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
                         .WithMany()
                         .HasForeignKey("JobCategoryId")
@@ -5059,8 +5053,6 @@ namespace JobFinder.Data.Migrations
                         .HasForeignKey("PublisherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Currency");
 
                     b.Navigation("JobCategory");
 

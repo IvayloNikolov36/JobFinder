@@ -4,14 +4,12 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class EducationLevelEntity : BaseEntity<int>
+    public class EducationLevelEntity : BaseNomenclatureEntity<int>
     {
         public EducationLevelEntity()
         {
             this.Educations = new List<EducationInfoEntity>();
         }
-
-        public string Name { get; set; }
 
         public ICollection<EducationInfoEntity> Educations { get; set; }
     }

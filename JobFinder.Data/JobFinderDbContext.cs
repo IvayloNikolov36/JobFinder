@@ -73,6 +73,8 @@
 
         public DbSet<CityEntity> Cities { get; set; }
 
+        public DbSet<CurrencyEntity> Currencies { get; set; }
+
 
         // For VIEWS
 
@@ -161,6 +163,7 @@
             LanguageLevelsSeeder.Seed(builder);
             DrivingCategorySeeder.Seed(builder);
             CitiesSeeder.Seed(builder);
+            CurrenciesSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

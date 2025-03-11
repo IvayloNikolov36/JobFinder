@@ -4,14 +4,12 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class GenderEntity : BaseEntity<int>
+    public class GenderEntity : BaseNomenclatureEntity<int>
     {
         public GenderEntity()
         {
             this.PersonalInfos = new List<PersonalInfoEntity>();
         }
-
-        public string Name { get; set; }
 
         public ICollection<PersonalInfoEntity> PersonalInfos { get; set; }
     }
