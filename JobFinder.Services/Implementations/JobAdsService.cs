@@ -37,6 +37,13 @@
 
         public async Task CreateAsync(int companyId, JobAdCreateModel model)
         {
+            bool hasSalaryValue = model.MinSalary.HasValue || model.MaxSalary.HasValue;
+
+            if (hasSalaryValue && !model.CurrencyId.HasValue)
+            {
+                throw new ActionableException("You have to specify currency type!");
+            }
+
             JobAdvertisementEntity jobAd = this.mapper.Map<JobAdvertisementEntity>(model);
             jobAd.PublisherId = companyId;
             jobAd.PublishDate = DateTime.UtcNow;
