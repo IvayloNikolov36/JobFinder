@@ -4,7 +4,7 @@
     using JobFinder.Data.Models;
     using JobFinder.Services.Mappings;
 
-    public class JobListingModel : IMapFrom<JobAdvertisementEntity>, IHaveCustomMappings
+    public class JobListingModel : IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -22,7 +22,11 @@
 
         public string JobEngagement { get; set; }
 
-        public string Salary { get; set; }
+        public int? MinSalary { get; set; }
+
+        public int? MaxSalary { get; set; }
+
+        public string Currency { get; set; }
 
         public string Location { get; set; }
 
@@ -33,8 +37,7 @@
                 .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Logo))
                 .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))
-                .ForMember(x => x.Salary, m => m.MapFrom(
-                    m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString() + " lv."))
+                .ForMember(x => x.Currency, m => m.MapFrom(m => m.Currency.Name))
                 .ForMember(x => x.JobEngagement, m => m.MapFrom(m => m.JobEngagement.Name))
                 .ForMember(x => x.JobCategory, m => m.MapFrom(m => m.JobCategory.Name))
                 .ForMember(x => x.Location, m => m.MapFrom(m => m.Location.Name));

@@ -14,7 +14,11 @@ namespace JobFinder.Web.Models.JobAds
 
         public string JobCategory { get; set; }
 
-        public string Salary { get; set; }
+        public int? MinSalary { get; set; }
+
+        public int? MaxSalary { get; set; }
+
+        public string Currency { get; set; }
 
         public string Location { get; set; }
 
@@ -31,8 +35,7 @@ namespace JobFinder.Web.Models.JobAds
             configuration.CreateMap<JobAdvertisementEntity, CompanyJobAdViewModel>()
                 .ForMember(vm => vm.Location, o => o.MapFrom(e => e.Location.Name))
                 .ForMember(vm => vm.ApplicationsSent, o => o.MapFrom(e => e.JobAdApplications.Count()))
-                .ForMember(x => x.Salary, m => m.MapFrom(
-                    m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString() + " lv."))
+                .ForMember(x => x.Currency, m => m.MapFrom(m => m.Currency.Name))
                 .ForMember(vm => vm.NotPreviewedApplications, o => o.MapFrom(e => e
                     .JobAdApplications
                     .Where(ja => !ja.PreviewDate.HasValue)

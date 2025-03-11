@@ -113,5 +113,14 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok(cities);
         }
+
+        [HttpGet]
+        [Route("currencies")]
+        public async Task<IActionResult> GetCurrencies()
+        {
+            IEnumerable<BasicViewModel> currencies = await this.nomenclatureService.GetCurrencies();
+
+            return this.Ok(currencies);
+        }
     }
 }

@@ -22,7 +22,11 @@
 
         public string CompanyName { get; set; }
 
-        public string Salary { get; set; }
+        public int? MinSalary { get; set; }
+
+        public int? MaxSalary { get; set; }
+
+        public string Currency { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -30,9 +34,7 @@
                 .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Logo))
                 .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))
-                // TODO: think about DTO and setting the salary from a BRule and extend the logic
-                .ForMember(x => x.Salary, m => m.MapFrom(
-                    m => m.MinSalary.ToString() + " - " + m.MaxSalary.ToString() + " lv."))
+                .ForMember(x => x.Currency, m => m.MapFrom(m => m.Currency.Name))
                 .ForMember(x => x.JobEngagement, m => m.MapFrom(m => m.JobEngagement.Name));
         }
     }

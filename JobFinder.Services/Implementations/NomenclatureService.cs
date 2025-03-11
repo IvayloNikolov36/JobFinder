@@ -21,6 +21,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<LanguageLevelEntity> languageLevelsRepository;
         private readonly IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository;
         private readonly IRepository<CityEntity> citiesRepository;
+        private readonly IRepository<CurrencyEntity> currenciesRepository;
 
         public NomenclatureService(
             IRepository<CountryEntity> countriesRepository,
@@ -33,7 +34,8 @@ namespace JobFinder.Services.Implementations
             IRepository<LanguageTypeEntity> languageTypesRepository,
             IRepository<LanguageLevelEntity> languageLevelsRepository,
             IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository,
-            IRepository<CityEntity> citiesRepository)
+            IRepository<CityEntity> citiesRepository,
+            IRepository<CurrencyEntity> currenciesRepository)
         {
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;
@@ -46,6 +48,7 @@ namespace JobFinder.Services.Implementations
             this.languageLevelsRepository = languageLevelsRepository;
             this.drivingCategoryTypesRepository = drivingCategoryTypesRepository;
             this.citiesRepository = citiesRepository;
+            this.currenciesRepository = currenciesRepository;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCountries()
@@ -131,6 +134,13 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetCities()
         {
             return await this.citiesRepository.DbSetNoTracking()
+                .To<BasicViewModel>()
+                .ToArrayAsync();
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetCurrencies()
+        {
+            return await this.currenciesRepository.DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
         }

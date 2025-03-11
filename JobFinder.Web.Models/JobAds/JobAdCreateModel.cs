@@ -23,5 +23,7 @@
         public int? MinSalary { get; set; }
 
         public int? MaxSalary { get; set; }
+
+        public int? CurrencyId { get; set; }
     }
 }
