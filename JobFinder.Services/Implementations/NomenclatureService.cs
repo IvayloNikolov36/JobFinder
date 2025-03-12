@@ -22,6 +22,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository;
         private readonly IRepository<CityEntity> citiesRepository;
         private readonly IRepository<CurrencyEntity> currenciesRepository;
+        private readonly IRepository<ReccuringTypeEntity> reccuringTypesRepository;
 
         public NomenclatureService(
             IRepository<CountryEntity> countriesRepository,
@@ -35,7 +36,8 @@ namespace JobFinder.Services.Implementations
             IRepository<LanguageLevelEntity> languageLevelsRepository,
             IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository,
             IRepository<CityEntity> citiesRepository,
-            IRepository<CurrencyEntity> currenciesRepository)
+            IRepository<CurrencyEntity> currenciesRepository,
+            IRepository<ReccuringTypeEntity> reccuringTypesRepository)
         {
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;
@@ -49,6 +51,8 @@ namespace JobFinder.Services.Implementations
             this.drivingCategoryTypesRepository = drivingCategoryTypesRepository;
             this.citiesRepository = citiesRepository;
             this.currenciesRepository = currenciesRepository;
+            this.reccuringTypesRepository = reccuringTypesRepository;
+            this.reccuringTypesRepository = reccuringTypesRepository;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCountries()
@@ -141,6 +145,13 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetCurrencies()
         {
             return await this.currenciesRepository.DbSetNoTracking()
+                .To<BasicViewModel>()
+                .ToArrayAsync();
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetReccuringTypes()
+        {
+            return await this.reccuringTypesRepository.DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
         }

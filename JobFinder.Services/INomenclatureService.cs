@@ -29,5 +29,7 @@ namespace JobFinder.Services
         Task<IEnumerable<BasicViewModel>> GetCities();
 
         Task<IEnumerable<BasicViewModel>> GetCurrencies();
+
+        Task<IEnumerable<BasicViewModel>> GetReccuringTypes();
     }
 }

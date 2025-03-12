@@ -122,5 +122,14 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok(currencies);
         }
+
+        [HttpGet]
+        [Route("reccuring-types")]
+        public async Task<IActionResult> GetReccuringTypes()
+        {
+            IEnumerable<BasicViewModel> reccuringTypes = await this.nomenclatureService.GetReccuringTypes();
+
+            return this.Ok(reccuringTypes);
+        }
     }
 }
