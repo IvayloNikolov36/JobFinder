@@ -1,10 +1,9 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Data.Models.Nomenclature;
+﻿using JobFinder.Data.Models.Nomenclature;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
 {
-    class EducationLevelSeeder
+    static class EducationLevelSeeder
     {
         public static void Seed(ModelBuilder builder)
         {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
 {
-    public class CitizenshipsSeeder
+    static class CitizenshipsSeeder
     {
         public static void Seed(ModelBuilder builder)
         {

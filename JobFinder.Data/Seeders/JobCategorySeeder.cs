@@ -1,10 +1,9 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Data.Models.Nomenclature;
+﻿using JobFinder.Data.Models.Nomenclature;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
 {
-    public class JobCategorySeeder
+    static class JobCategorySeeder
     {
         public static void Seed(ModelBuilder builder)
         {

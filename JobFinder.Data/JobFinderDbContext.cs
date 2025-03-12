@@ -75,6 +75,8 @@
 
         public DbSet<CurrencyEntity> Currencies { get; set; }
 
+        public DbSet<ReccuringTypeEntity> ReccuringTypes { get; set; }
+
 
         // For VIEWS
 
@@ -164,6 +166,7 @@
             DrivingCategorySeeder.Seed(builder);
             CitiesSeeder.Seed(builder);
             CurrenciesSeeder.Seed(builder);
+            ReccuringTypesSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

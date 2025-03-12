@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
 {
-    public class CurrenciesSeeder
+    static class CurrenciesSeeder
     {
         public static void Seed(ModelBuilder builder)
         {

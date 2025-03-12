@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Data.Seeders
 {
-    public class LanguageTypesSeeder
+    static class LanguageTypesSeeder
     {
         public static void Seed(ModelBuilder builder)
         {
