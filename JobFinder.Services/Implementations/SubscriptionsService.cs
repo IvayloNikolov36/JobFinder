@@ -1,5 +1,6 @@
 ﻿namespace JobFinder.Services.Implementations
 {
+    using AutoMapper;
     using JobFinder.Common.Exceptions;
     using JobFinder.Data;
     using JobFinder.Data.Models.Subscriptions;
@@ -18,37 +19,36 @@
         private readonly IRepository<JobAdsSubscriptionsDbVewData> jobAdsSubscriptionDataRepository;
         private readonly IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository;
         private readonly JobFinderDbContext dbContext;
+        private readonly IMapper mapper;
 
         public SubscriptionsService(
             IRepository<JobAdsSubscriptionsDbVewData> jobAdsSubscriptionDataRepository,
             IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository,
-            JobFinderDbContext dbContext)
+            JobFinderDbContext dbContext,
+            IMapper mapper)
         {
             this.jobAdsSubscriptionDataRepository = jobAdsSubscriptionDataRepository;
             this.jobsSubscriptionRepository = jobsSubscriptionRepository;
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
-        public async Task SubscribeForJobs(string userId, int? jobCategoryId, int? locationId)
+        public async Task SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
         {
-            bool hasSubscription = await this.jobsSubscriptionRepository
-                .AnyAsync(js => js.UserId == userId
-                    && js.LocationId == locationId
-                    && js.JobCategoryId == jobCategoryId);
+            this.ValidateJobsSubscriptionProperties(subscription);
 
-            if (hasSubscription)
+            bool hasSuchSubscription = await this.HasSubscriptionWithSameCriterias(userId, subscription);
+
+            if (hasSuchSubscription)
             {
                 throw new ActionableException("You already have subscription for jobs with given criterias!");
             }
 
-            JobsSubscriptionEntity sub = new()
-            {
-                UserId = userId,
-                JobCategoryId = jobCategoryId,
-                LocationId = locationId
-            };
+            JobsSubscriptionEntity subscriptionEntity = this.mapper.Map<JobsSubscriptionEntity>(subscription);
+            subscriptionEntity.UserId = userId;
 
-            await this.jobsSubscriptionRepository.AddAsync(sub);
+            await this.jobsSubscriptionRepository.AddAsync(subscriptionEntity);
+
             await this.jobsSubscriptionRepository.SaveChangesAsync();
         }
 
@@ -112,6 +112,34 @@
             }
 
             return result;
+        }
+
+        // TODO: candidate for a Business Rule
+        private void ValidateJobsSubscriptionProperties(JobSubscriptionCriteriasViewModel subscription)
+        {
+            bool hasAnyCriteriaSpecified = subscription.JobCategoryId.HasValue
+                || subscription.JobEngagementId.HasValue
+                || subscription.LocationId.HasValue
+                || subscription.Intership
+                || subscription.SpecifiedSalary
+                || !string.IsNullOrEmpty(subscription.SearchTerm.Trim());
+
+            if (!hasAnyCriteriaSpecified)
+            {
+                throw new ActionableException("No criterias specified for a subscription!");
+            }
+        }
+
+        private async Task<bool> HasSubscriptionWithSameCriterias(string userId, JobSubscriptionCriteriasViewModel subscription)
+        {
+            return await this.jobsSubscriptionRepository
+                .AnyAsync(js => js.UserId == userId
+                    && js.JobCategoryId == subscription.JobCategoryId
+                    && js.JobEngagementId == subscription.JobEngagementId
+                    && js.LocationId == subscription.LocationId
+                    && js.Intership == subscription.Intership
+                    && js.SpecifiedSalary == subscription.SpecifiedSalary
+                    && js.SearchTerm == subscription.SearchTerm);
         }
     }
 }

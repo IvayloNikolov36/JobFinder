@@ -26,6 +26,6 @@
 
         public bool SpecifiedSalary { get; set; }
 
-        public string SearchTerm { get; set; } = null;
+        public string SearchTerm { get; set; }
     }
 }

@@ -24,8 +24,7 @@
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.subscriptionsService
-                .SubscribeForJobs(userId, subscription.JobCategoryId, subscription.LocationId);
+            await this.subscriptionsService.SubscribeForJobs(userId, subscription);
 
             return this.Ok();
         }
