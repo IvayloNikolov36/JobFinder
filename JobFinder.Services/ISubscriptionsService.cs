@@ -6,7 +6,7 @@
 
     public interface ISubscriptionsService
     {
-        Task SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription);
+        Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription);
 
         Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId);
 

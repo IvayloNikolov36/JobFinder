@@ -39,7 +39,9 @@ namespace JobFinder.Web
             services.AddSingleton(AutoMapperConfig.MapperInstance);
 
             services.AddDbContext<JobFinderDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             services.AddIdentity<UserEntity, IdentityRole>().AddEntityFrameworkStores<JobFinderDbContext>();
 

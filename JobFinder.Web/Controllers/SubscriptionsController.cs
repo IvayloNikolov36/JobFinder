@@ -24,9 +24,9 @@
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.subscriptionsService.SubscribeForJobs(userId, subscription);
+            JobSubscriptionViewModel createdSubscription = await this.subscriptionsService.SubscribeForJobs(userId, subscription);
 
-            return this.Ok();
+            return this.Ok(createdSubscription);
         }
 
         [HttpGet]

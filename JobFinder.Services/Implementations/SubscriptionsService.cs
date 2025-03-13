@@ -33,7 +33,7 @@
             this.mapper = mapper;
         }
 
-        public async Task SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
+        public async Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
         {
             this.ValidateJobsSubscriptionProperties(subscription);
 
@@ -50,6 +50,13 @@
             await this.jobsSubscriptionRepository.AddAsync(subscriptionEntity);
 
             await this.jobsSubscriptionRepository.SaveChangesAsync();
+
+            JobSubscriptionViewModel result = await this.jobsSubscriptionRepository.DbSetNoTracking()
+                .Where(x => x.Id == subscriptionEntity.Id)
+                .To<JobSubscriptionViewModel>()
+                .SingleOrDefaultAsync();
+
+            return result;
         }
 
         public async Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId)
@@ -132,6 +139,9 @@
 
         private async Task<bool> HasSubscriptionWithSameCriterias(string userId, JobSubscriptionCriteriasViewModel subscription)
         {
+            string trimmedSearchTerm = subscription.SearchTerm?.Trim();
+            string search = trimmedSearchTerm == string.Empty ? null : trimmedSearchTerm;
+
             return await this.jobsSubscriptionRepository
                 .AnyAsync(js => js.UserId == userId
                     && js.JobCategoryId == subscription.JobCategoryId
@@ -139,7 +149,7 @@
                     && js.LocationId == subscription.LocationId
                     && js.Intership == subscription.Intership
                     && js.SpecifiedSalary == subscription.SpecifiedSalary
-                    && js.SearchTerm == subscription.SearchTerm);
+                    && js.SearchTerm == search);
         }
     }
 }
