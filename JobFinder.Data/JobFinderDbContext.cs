@@ -89,10 +89,24 @@
 
         // DB Functions
 
-        [DbFunction("GetLatesJobAdsForSubscribers", Schema = "dbo")]
-        public IQueryable<LatestJobAdsDbFunctionResult> GetLatesJobAdsForSubscribers(int? jobCategoryId, int? locationId) =>
+        [DbFunction("udf_GetLatesJobAdsForSubscribers", Schema = "dbo")]
+        public IQueryable<LatestJobAdsDbFunctionResult> GetLatesJobAdsForSubscribersDbFunction(
+                int reccuringTypeId,
+                int? jobCategoryId,
+                int? jobEngagementId,
+                int? locationId,
+                string searchTerm,
+                bool intership,
+                bool specifiedSalary) =>
             Set<LatestJobAdsDbFunctionResult>()
-            .FromSqlInterpolated($"SELECT * FROM GetLatesJobAdsForSubscribers({jobCategoryId}, {locationId})");
+                .FromSqlInterpolated(@$"SELECT * FROM [udf_GetLatesJobAdsForSubscribers] (
+                    {reccuringTypeId},
+                    {jobCategoryId},
+                    {jobEngagementId},
+                    {locationId},
+                    {searchTerm},
+                    {intership},
+                    {specifiedSalary})");
 
 
         public override int SaveChanges() => this.SaveChanges(true);
@@ -141,7 +155,7 @@
 
             builder.Entity<JobAdsSubscriptionsDbVewData>()
                 .HasNoKey()
-                .ToView("SubscriprionsByJobCategoryAndLocation", "dbo");
+                .ToView("view_JobSubscriptions", "dbo");
 
             builder.Entity<LatestJobAdsDbFunctionResult>()
                 .HasNoKey()

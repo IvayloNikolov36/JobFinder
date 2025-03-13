@@ -99,7 +99,14 @@
             foreach (JobAdsSubscriptionsDbVewData item in jobAdsSubscriptions)
             {
                 List<LatestJobAdsDbFunctionResult> latestJobAds = await this.dbContext
-                    .GetLatesJobAdsForSubscribers(item.JobCategoryId, item.LocationId)
+                    .GetLatesJobAdsForSubscribersDbFunction(
+                        item.ReccuringTypeId,
+                        item.JobCategoryId,
+                        item.JobEngagementId,
+                        item.LocationId,
+                        item.SearchTerm,
+                        item.Intership,
+                        item.SpecifiedSalary)
                     .ToListAsync();
 
                 if (latestJobAds.Count == 0)
@@ -109,6 +116,7 @@
 
                 result.Add(new JobAdsSubscriptionsViewModel
                 {
+                    // TODO: fill the model with other data
                     JobCategoryId = item.JobCategoryId,
                     JobCategory = item.JobCategory,
                     LocationId = item.LocationId,

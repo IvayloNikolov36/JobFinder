@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Data.MigrationHelpers
 {
     using Microsoft.EntityFrameworkCore.Migrations;
+    using System;
 
     public static class ViewsHelper
     {
@@ -35,6 +36,7 @@
             builder.Sql("DROP VIEW [dbo].[CompanySubscriptionsData]");
         }
 
+        [Obsolete]
         public static void CreateSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)
         {
             builder.Sql(@"CREATE OR ALTER VIEW [dbo].[SubscriprionsByJobCategoryAndLocation]
@@ -54,9 +56,55 @@
 	                GROUP BY js.[JobCategoryId], jc.[Name], js.[LocationId], ci.[Name]");
         }
 
+        [Obsolete]
         public static void DropSubscriprionsByJobCategoryAndLocationView(MigrationBuilder builder)
         {
             builder.Sql("DROP VIEW [dbo].[SubscriprionsByJobCategoryAndLocation]");
+        }
+
+        public static void Create_View_JobSubscriptions(MigrationBuilder builder)
+        {
+            builder.Sql(@"CREATE OR ALTER VIEW [dbo].[view_JobSubscriptions]
+                            AS
+	                            SELECT	js.ReccuringTypeId
+			                            ,rt.[Name] AS [ReccuringType]
+			                            ,js.[JobCategoryId]
+			                            ,jc.[Name] AS [JobCategory]
+			                            ,js.[JobEngagementId]
+			                            ,je.[Name] AS [JobEngagement]
+			                            ,js.[LocationId]
+			                            ,ci.[Name] AS [Location]
+			                            ,js.[SearchTerm]
+			                            ,js.[Intership]
+			                            ,js.[SpecifiedSalary]
+			                            ,STRING_AGG(u.[Email], '; ') AS [SubscribersEmails]
+	                            FROM JobsSubscriptions AS js
+	                            JOIN ReccuringTypes AS rt
+		                            ON js.ReccuringTypeId = rt.[Id]
+	                            LEFT JOIN JobCategories AS jc
+		                            ON js.JobCategoryId = jc.[Id]
+	                            LEFT JOIN JobEngagements AS je
+		                            ON js.JobEngagementId = je.[Id]
+	                            LEFT JOIN Cities AS ci
+		                            ON js.LocationId = ci.[Id]
+	                            JOIN AspNetUsers AS u
+		                            ON js.[UserId] = u.[Id]
+	                            GROUP BY js.[ReccuringTypeId]
+			                            ,rt.[Name]
+			                            ,js.[JobCategoryId]
+			                            ,jc.[Name]
+			                            ,js.[JobEngagementId]
+			                            ,je.[Name]
+			                            ,js.[LocationId]
+			                            ,ci.[Name]
+			                            ,js.[SearchTerm]
+			                            ,js.[Intership]
+			                            ,js.[SpecifiedSalary]");
+        }
+
+        public static void Drop_View_JobSubscriptions(MigrationBuilder builder)
+        {
+            builder.Sql("DROP VIEW [dbo].[view_JobSubscriptions]");
         }
     }
 }

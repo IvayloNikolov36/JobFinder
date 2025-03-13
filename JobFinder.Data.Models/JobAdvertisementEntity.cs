@@ -42,6 +42,8 @@
 
         public DateTime PublishDate { get; set; }
 
+        public bool Intership { get; set; }
+
         public bool IsActive { get; set; }
 
         public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
