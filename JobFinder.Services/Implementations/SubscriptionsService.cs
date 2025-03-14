@@ -88,7 +88,7 @@
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<JobAdsSubscriptionsViewModel>> GetLatestJobAdsAsync()
+        public async Task<IEnumerable<JobAdsSubscriptionsViewModel>> GetLatestJobAdsAsync(int recurringTypeId)
         {
             List<JobAdsSubscriptionsDbVewData> jobAdsSubscriptions = await this.jobAdsSubscriptionDataRepository
                 .DbSetNoTracking()

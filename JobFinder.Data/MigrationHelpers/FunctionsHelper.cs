@@ -109,7 +109,7 @@
 											ON cs.CompanyId = c.Id
 										LEFT JOIN AspNetUsers AS u
 											ON cs.UserId = u.Id
-										--WHERE cs.RecurringTypeId = @recurringTypeId
+										WHERE cs.RecuringTypeId = @recurringTypeId
 										GROUP BY cs.[CompanyId], c.[Name], c.[Logo]
 								) AS x
 								LEFT JOIN Companies AS c 

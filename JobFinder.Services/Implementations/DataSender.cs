@@ -33,9 +33,10 @@
             this.sentFromName = configuration.GetSection("AppAccount:name").Value;
         }
 
-        public async Task SendLatestJobAdsForCompanySubscriptions()
+        public async Task SendLatestJobAdsForCompanySubscriptions(int recurringTypeId)
         {
-            IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
+            IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.companySubscriptionsService
+                .GetLatesJobAdsAsync(recurringTypeId);
 
             foreach (var item in data)
             {
@@ -91,10 +92,12 @@
             }
         }
 
-        public async Task SendLatestJobAdsForJobSubscriptions()
+        public async Task SendLatestJobAdsForJobSubscriptions(int recurringTypeId)
         {
+            // TODO: get data from jobSubscriptions table only for the right reccuringType
+
             IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService
-                .GetLatestJobAdsAsync();
+                .GetLatestJobAdsAsync(recurringTypeId);
 
             foreach (JobAdsSubscriptionsViewModel item in data)
             {

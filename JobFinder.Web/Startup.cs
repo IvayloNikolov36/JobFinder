@@ -22,6 +22,9 @@ namespace JobFinder.Web
     using Microsoft.OpenApi.Models;
     using System;
     using System.Linq;
+    using JobFinder.Services;
+    using JobFinder.Web.Models.Common;
+    using System.Collections.Generic;
 
     public class Startup
     {
@@ -135,21 +138,22 @@ namespace JobFinder.Web
             string firstDayOfTheMonthCronExpression = "0 0 1 * *";
 
             string[] cronExpressions = [dailyCronExpression, everySundayCronExpression, firstDayOfTheMonthCronExpression];
-            string[] recurringTypes = ["Daily", "Weekly", "Monthly"];
+
+            BasicViewModel[] recurringTypes = serviceProvider.GetService<INomenclatureService>().GetRecurringTypesSync().ToArray();
 
             int index = 0;
             foreach (string cronExpression in cronExpressions)
             {
-                string reccuringType = recurringTypes[index++];
+                BasicViewModel recurringType = recurringTypes[index++];
 
                 reccuringJobManager.AddOrUpdate(
-                    $"sending_{reccuringType}_JobAdsByCompany",
-                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForCompanySubscriptions(),
+                    $"sending_{recurringType.Name}_JobAdsByCompany",
+                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForCompanySubscriptions(recurringType.Id),
                     cronExpression);
 
                 reccuringJobManager.AddOrUpdate(
-                    $"sending_{reccuringType}_JobAdsByCriterias",
-                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForJobSubscriptions(),
+                    $"sending_{recurringType.Name}_JobAdsByCriterias",
+                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForJobSubscriptions(recurringType.Id),
                     cronExpression);
             }
         }

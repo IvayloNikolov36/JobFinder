@@ -4,6 +4,7 @@ using JobFinder.Services.Mappings;
 using JobFinder.Web.Models.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobFinder.Services.Implementations
@@ -154,6 +155,13 @@ namespace JobFinder.Services.Implementations
             return await this.reccuringTypesRepository.DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
+        }
+
+        public IEnumerable<BasicViewModel> GetRecurringTypesSync()
+        {
+            return this.reccuringTypesRepository.DbSetNoTracking()
+                .To<BasicViewModel>()
+                .ToList();
         }
     }
 }

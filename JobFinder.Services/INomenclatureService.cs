@@ -31,5 +31,7 @@ namespace JobFinder.Services
         Task<IEnumerable<BasicViewModel>> GetCurrencies();
 
         Task<IEnumerable<BasicViewModel>> GetReccuringTypes();
+
+        IEnumerable<BasicViewModel> GetRecurringTypesSync();
     }
 }

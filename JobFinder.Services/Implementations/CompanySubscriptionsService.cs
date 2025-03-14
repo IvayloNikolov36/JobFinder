@@ -26,11 +26,10 @@
             this.companySubscriptionRepository = companySubscriptionRepository;
         }
 
-        public async Task<IEnumerable<CompaniesSubscriptionsFunctionResult>> GetLatesJobAdsAsync()
+        public async Task<IEnumerable<CompaniesSubscriptionsFunctionResult>> GetLatesJobAdsAsync(int recurringTypeId)
         {
             IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.dbContext
-                .CompaniesSubscriptions
-                .AsNoTracking()
+                .GetLatesJobAdsForCompanySubscriptionsDbFunction(recurringTypeId)
                 .ToListAsync();
 
             return data;
