@@ -77,14 +77,16 @@
 
         public DbSet<ReccuringTypeEntity> ReccuringTypes { get; set; }
 
-
         // For VIEWS
-
-        public DbSet<CompaniesSubscriptionsDbViewData> CompaniesSubscriptionsData { get; set; }
 
         public DbSet<JobAdsSubscriptionsDbVewData> JobAdsSubscriptionsData { get; set; }
 
-        public DbSet<LatestJobAdsDbFunctionResult> LatestJobAds { get; set; } // For table value function
+
+        // For table value function
+
+        public DbSet<LatestJobAdsDbFunctionResult> LatestJobAds { get; set; }
+
+        public DbSet<CompaniesSubscriptionsFunctionResult> CompaniesSubscriptions { get; set; }
 
 
         // DB Functions
@@ -107,6 +109,12 @@
                     {searchTerm},
                     {intership},
                     {specifiedSalary})");
+
+
+        [DbFunction("udf_GetLatestJobAdsForCompanySubscriptions", Schema = "dbo")]
+        public IQueryable<CompaniesSubscriptionsFunctionResult> GetLatesJobAdsForCompanySubscriptionsDbFunction(int recurringTypeId) =>
+            Set<CompaniesSubscriptionsFunctionResult>()
+            .FromSqlInterpolated(@$"SELECT * FROM [udf_GetLatestJobAdsForCompanySubscriptions] ({recurringTypeId})");
 
 
         public override int SaveChanges() => this.SaveChanges(true);
@@ -147,19 +155,23 @@
             builder.Entity<JobAdApplicationEntity>()
                 .HasIndex(j => j.JobAdId);
 
-            // VIEWS
 
-            builder.Entity<CompaniesSubscriptionsDbViewData>()
-                .HasNoKey()
-                .ToView("CompanySubscriptionsData", "dbo");
+            // VIEWS
 
             builder.Entity<JobAdsSubscriptionsDbVewData>()
                 .HasNoKey()
                 .ToView("view_JobSubscriptions", "dbo");
 
+            // FUNCTIONS
+
             builder.Entity<LatestJobAdsDbFunctionResult>()
                 .HasNoKey()
                 .ToView(null);
+
+            builder.Entity<CompaniesSubscriptionsFunctionResult>()
+                .HasNoKey()
+                .ToView(null);
+
 
             this.SeedData(builder);
 

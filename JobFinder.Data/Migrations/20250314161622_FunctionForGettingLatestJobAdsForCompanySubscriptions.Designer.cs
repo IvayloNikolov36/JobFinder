@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250314161622_FunctionForGettingLatestJobAdsForCompanySubscriptions")]
+    partial class FunctionForGettingLatestJobAdsForCompanySubscriptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4551,14 +4554,14 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RecuringTypeId")
+                    b.Property<int>("ReccuringTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "CompanyId");
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("RecuringTypeId");
+                    b.HasIndex("ReccuringTypeId");
 
                     b.ToTable("CompanySubscriptions");
                 });
@@ -5177,9 +5180,9 @@ namespace JobFinder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobFinder.Data.Models.Nomenclature.ReccuringTypeEntity", "RecuringType")
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.ReccuringTypeEntity", "ReccuringType")
                         .WithMany("CompanySubscriptions")
-                        .HasForeignKey("RecuringTypeId")
+                        .HasForeignKey("ReccuringTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -5191,7 +5194,7 @@ namespace JobFinder.Data.Migrations
 
                     b.Navigation("Company");
 
-                    b.Navigation("RecuringType");
+                    b.Navigation("ReccuringType");
 
                     b.Navigation("User");
                 });

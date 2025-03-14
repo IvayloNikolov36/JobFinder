@@ -26,10 +26,10 @@
             this.companySubscriptionRepository = companySubscriptionRepository;
         }
 
-        public async Task<IEnumerable<CompaniesSubscriptionsDbViewData>> GetLatesJobAdsAsync()
+        public async Task<IEnumerable<CompaniesSubscriptionsFunctionResult>> GetLatesJobAdsAsync()
         {
-            IEnumerable<CompaniesSubscriptionsDbViewData> data = await this.dbContext
-                .CompaniesSubscriptionsData
+            IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.dbContext
+                .CompaniesSubscriptions
                 .AsNoTracking()
                 .ToListAsync();
 

@@ -7,7 +7,7 @@
 
     public interface ICompanySubscriptionsService
     {
-        Task<IEnumerable<CompaniesSubscriptionsDbViewData>> GetLatesJobAdsAsync();
+        Task<IEnumerable<CompaniesSubscriptionsFunctionResult>> GetLatesJobAdsAsync();
 
         Task SubscribeAsync(int companyId, string userId);
 

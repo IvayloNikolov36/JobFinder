@@ -5,6 +5,7 @@
 
     public static class ViewsHelper
     {
+        [Obsolete]
         public static void CreateCompaniesSubscriptionsDataView(MigrationBuilder builder)
         {
             builder.Sql(@"CREATE VIEW [dbo].[CompanySubscriptionsData] AS
@@ -31,6 +32,7 @@
                             GROUP BY x.[CompanyId], x.[CompanyLogo], x.[CompanyName], x.[Subscribers]");
         }
 
+        [Obsolete]
         public static void DropCompaniesSubscriptionsDataView(MigrationBuilder builder)
         {
             builder.Sql("DROP VIEW [dbo].[CompanySubscriptionsData]");

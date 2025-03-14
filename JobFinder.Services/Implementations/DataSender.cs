@@ -35,7 +35,7 @@
 
         public async Task SendLatestJobAdsForCompanySubscriptions()
         {
-            IEnumerable<CompaniesSubscriptionsDbViewData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
+            IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
             foreach (var item in data)
             {
