@@ -10,6 +10,7 @@ namespace JobFinder.Web
     using JobFinder.Data.Repositories;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Web.Infrastructure;
+    using JobFinder.Web.Infrastructure.Middlewares;
     using JobFinder.Services.Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -18,9 +19,9 @@ namespace JobFinder.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using System;
     using Microsoft.OpenApi.Models;
-    using JobFinder.Web.Infrastructure.Middlewares;
+    using System;
+    using System.Linq;
 
     public class Startup
     {
@@ -129,16 +130,28 @@ namespace JobFinder.Web
         {
             app.UseHangfireDashboard();
 
-            reccuringJobManager.AddOrUpdate(
-                "sendingLatestJobAdsByCompany",
-                () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsBySubscribedCompanies(),
-                "0 0 */1 * *");
+            string dailyCronExpression = "0 0 * * *";
+            string everySundayCronExpression = "0 0 * * SUN";
+            string firstDayOfTheMonthCronExpression = "0 0 1 * *";
 
-            reccuringJobManager.AddOrUpdate(
-                "sendingLatestJobAdsByCategoryAndLocation",
-                () => serviceProvider.GetService<IDataSender>()
-                    .SendLatestJobAdsBySubscribedCategoriesAndLocations(),
-                "0 0 */1 * *");
+            string[] cronExpressions = [dailyCronExpression, everySundayCronExpression, firstDayOfTheMonthCronExpression];
+            string[] recurringTypes = ["Daily", "Weekly", "Monthly"];
+
+            int index = 0;
+            foreach (string cronExpression in cronExpressions)
+            {
+                string reccuringType = recurringTypes[index++];
+
+                reccuringJobManager.AddOrUpdate(
+                    $"sending_{reccuringType}_JobAdsByCompany",
+                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForCompanySubscriptions(),
+                    cronExpression);
+
+                reccuringJobManager.AddOrUpdate(
+                    $"sending_{reccuringType}_JobAdsByCriterias",
+                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForJobSubscriptions(),
+                    cronExpression);
+            }
         }
     }
 }

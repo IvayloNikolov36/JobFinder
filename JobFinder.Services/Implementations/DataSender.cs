@@ -33,7 +33,7 @@
             this.sentFromName = configuration.GetSection("AppAccount:name").Value;
         }
 
-        public async Task SendLatestJobAdsBySubscribedCompanies()
+        public async Task SendLatestJobAdsForCompanySubscriptions()
         {
             IEnumerable<CompaniesSubscriptionsDbViewData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
@@ -91,7 +91,7 @@
             }
         }
 
-        public async Task SendLatestJobAdsBySubscribedCategoriesAndLocations()
+        public async Task SendLatestJobAdsForJobSubscriptions()
         {
             IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService
                 .GetLatestJobAdsAsync();

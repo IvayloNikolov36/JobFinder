@@ -4,8 +4,8 @@
 
     public interface IDataSender
     {
-        Task SendLatestJobAdsBySubscribedCompanies();
+        Task SendLatestJobAdsForCompanySubscriptions();
 
-        Task SendLatestJobAdsBySubscribedCategoriesAndLocations();
+        Task SendLatestJobAdsForJobSubscriptions();
     }
 }
