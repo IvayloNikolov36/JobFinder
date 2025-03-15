@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250315222510_LatestCompanyJobAdsForSubscribersView")]
+    partial class LatestCompanyJobAdsForSubscribersView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4731,7 +4734,7 @@ namespace JobFinder.Data.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("view_latestCompanyJobsForSubscribers", "dbo");
+                    b.ToView(null, (string)null);
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.ViewsModels.JobAdsSubscriptionsDbVewData", b =>

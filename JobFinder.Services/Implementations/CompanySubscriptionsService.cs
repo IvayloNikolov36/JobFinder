@@ -26,13 +26,11 @@
             this.companySubscriptionRepository = companySubscriptionRepository;
         }
 
-        public async Task<IEnumerable<CompaniesSubscriptionsFunctionResult>> GetLatesJobAdsAsync(int recurringTypeId)
+        public async Task<IEnumerable<CompanyJobAdsForSubscribersViewData>> GetLatesJobAdsAsync()
         {
-            IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.dbContext
-                .GetLatesJobAdsForCompanySubscriptionsDbFunction(recurringTypeId)
+            return await this.dbContext
+                .CompanyJobAdsForSubscribersView
                 .ToListAsync();
-
-            return data;
         }
 
         public async Task SubscribeAsync(int companyId, string userId)

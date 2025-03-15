@@ -85,6 +85,7 @@
             builder.Sql("DROP FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] ");
         }
 
+		[Obsolete]
 		public static void Create_UDF_GetLatestJobAdsForCompanySubscriptions(MigrationBuilder builder)
 		{
 			builder
@@ -130,6 +131,7 @@
 										 ,x.[Subscribers]");
 		}
 
+		[Obsolete]
 		public static void Drop_UDF_GetLatestJobAdsForCompanySubscriptions(MigrationBuilder builder)
 		{
 			builder.Sql("DROP FUNCTION [dbo].[udf_GetLatestJobAdsForCompanySubscriptions]");

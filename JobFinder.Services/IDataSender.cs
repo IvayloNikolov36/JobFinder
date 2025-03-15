@@ -4,7 +4,7 @@
 
     public interface IDataSender
     {
-        Task SendLatestJobAdsForCompanySubscriptions(int recurringTypeId);
+        Task SendLatestJobAdsForCompanySubscriptions();
 
         Task SendLatestJobAdsForJobSubscriptions(int recurringTypeId);
     }

@@ -1,18 +1,20 @@
-﻿namespace JobFinder.Services.Messages
-{
-    using JobFinder.Data.Models.ViewsModels;
-    using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
-    using Microsoft.Extensions.Configuration;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+﻿using JobFinder.Data.Models.ViewsModels;
+using JobFinder.Services.Messages;
+using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace JobFinder.Services.Implementations
+{
     public class DataSender : IDataSender
     {
         private const string JobAdDetailsLink = "https://localhost:44375/JobAds/";
         private const string CompanyDetailsUrl = "https://localhost:44375/company/";
+        private const char DataSeparator = ';';
 
         private readonly ISubscriptionsService subscriptionsService;
         private readonly ICompanySubscriptionsService companySubscriptionsService;
@@ -21,8 +23,8 @@
         private readonly string sentFromName;
 
         public DataSender(
-            ICompanySubscriptionsService companySubscriptionsService, 
-            ISubscriptionsService subscriptionsService, 
+            ICompanySubscriptionsService companySubscriptionsService,
+            ISubscriptionsService subscriptionsService,
             IEmailSender emailSender,
             IConfiguration configuration)
         {
@@ -33,31 +35,33 @@
             this.sentFromName = configuration.GetSection("AppAccount:name").Value;
         }
 
-        public async Task SendLatestJobAdsForCompanySubscriptions(int recurringTypeId)
+        public async Task SendLatestJobAdsForCompanySubscriptions()
         {
-            IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.companySubscriptionsService
-                .GetLatesJobAdsAsync(recurringTypeId);
+            IEnumerable<CompanyJobAdsForSubscribersViewData> data = await this.companySubscriptionsService
+                .GetLatesJobAdsAsync();
 
             foreach (var item in data)
             {
-                int[] jobIds = item.JobIds
-                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
+                int[] jobIds = item.JobAdIds
+                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
                     .Select(int.Parse)
                     .ToArray();
 
                 string[] subscribers = item.Subscribers
-                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
+                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
 
-                string[] jobPositions = item.JobPositions
-                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
+                string[] jobPositions = item.Positions
+                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
 
-                string[] jobLocations = item.JobLocations
-                    .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
+                string[] jobLocations = item.Locations
+                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
-                
-                
+
+                // TODO: parse the data for job engagements, categories, salaries and place it in the html
+
+
                 StringBuilder sb = new();
                 sb.AppendLine(@$"<table style=""width: 100%"">");
 
@@ -107,7 +111,7 @@
 
                 StringBuilder sb = new();
                 string emailSubject = $"Latest job ads from {jobCategory} category in {location}.";
-                
+
                 sb.AppendLine(@$"<div><h4>{emailSubject}</h4><div>");
                 sb.AppendLine(@$"<table style=""width: 100%"">");
 
@@ -119,10 +123,10 @@
                     string companyName = info.CompanyName;
 
                     string[] positions = info.Positions
-                        .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries);
+                        .Split(["; "], StringSplitOptions.RemoveEmptyEntries);
 
                     int[] jobAdsIds = info.JobAdsIds
-                        .Split([ "; " ], StringSplitOptions.RemoveEmptyEntries)
+                        .Split(["; "], StringSplitOptions.RemoveEmptyEntries)
                         .Select(int.Parse)
                         .ToArray();
 

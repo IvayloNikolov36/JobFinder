@@ -81,12 +81,12 @@
 
         public DbSet<JobAdsSubscriptionsDbVewData> JobAdsSubscriptionsData { get; set; }
 
+        public DbSet<CompanyJobAdsForSubscribersViewData> CompanyJobAdsForSubscribersView { get; set; }
+
 
         // For table value function
 
         public DbSet<LatestJobAdsDbFunctionResult> LatestJobAds { get; set; }
-
-        public DbSet<CompaniesSubscriptionsFunctionResult> CompaniesSubscriptions { get; set; }
 
 
         // DB Functions
@@ -109,13 +109,6 @@
                     {searchTerm},
                     {intership},
                     {specifiedSalary})");
-
-
-        [DbFunction("udf_GetLatestJobAdsForCompanySubscriptions", Schema = "dbo")]
-        public IQueryable<CompaniesSubscriptionsFunctionResult> GetLatesJobAdsForCompanySubscriptionsDbFunction(int recurringTypeId) =>
-            Set<CompaniesSubscriptionsFunctionResult>()
-            .FromSqlInterpolated(@$"SELECT * FROM [udf_GetLatestJobAdsForCompanySubscriptions] ({recurringTypeId})");
-
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -162,16 +155,16 @@
                 .HasNoKey()
                 .ToView("view_JobSubscriptions", "dbo");
 
+            builder.Entity<CompanyJobAdsForSubscribersViewData>()
+                .HasNoKey()
+                .ToView("view_latestCompanyJobsForSubscribers", "dbo");
+
+
             // FUNCTIONS
 
             builder.Entity<LatestJobAdsDbFunctionResult>()
                 .HasNoKey()
                 .ToView(null);
-
-            builder.Entity<CompaniesSubscriptionsFunctionResult>()
-                .HasNoKey()
-                .ToView(null);
-
 
             this.SeedData(builder);
 

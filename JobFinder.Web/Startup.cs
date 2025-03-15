@@ -134,6 +134,12 @@ namespace JobFinder.Web
             app.UseHangfireDashboard();
 
             string dailyCronExpression = "0 0 * * *";
+
+            reccuringJobManager.AddOrUpdate(
+                $"sending_Latest_CompanyJobAds",
+                () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForCompanySubscriptions(),
+                dailyCronExpression);
+
             string everySundayCronExpression = "0 0 * * SUN";
             string firstDayOfTheMonthCronExpression = "0 0 1 * *";
 
@@ -145,11 +151,6 @@ namespace JobFinder.Web
             foreach (string cronExpression in cronExpressions)
             {
                 BasicViewModel recurringType = recurringTypes[index++];
-
-                reccuringJobManager.AddOrUpdate(
-                    $"sending_{recurringType.Name}_JobAdsByCompany",
-                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForCompanySubscriptions(recurringType.Id),
-                    cronExpression);
 
                 reccuringJobManager.AddOrUpdate(
                     $"sending_{recurringType.Name}_JobAdsByCriterias",

@@ -66,10 +66,10 @@
         }
 
         [HttpGet]
-        [Route("latestJobs/{recuringTypeId}")]
-        public async Task<IActionResult> GetLatestJobs([FromRoute] int recuringTypeId)
+        [Route("latestJobs")]
+        public async Task<IActionResult> GetLatestJobs()
         {
-            IEnumerable<CompaniesSubscriptionsFunctionResult> data = await this.companySubscriptionsService.GetLatesJobAdsAsync(recuringTypeId);
+            IEnumerable<CompanyJobAdsForSubscribersViewData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
 
             return this.Ok(data);
         }
