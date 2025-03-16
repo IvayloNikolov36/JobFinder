@@ -4,15 +4,13 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
+    // TODO: typo - rename everywhere
     public class ReccuringTypeEntity : BaseNomenclatureEntity<int>
     {
         public ReccuringTypeEntity()
         {
-            this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
             this.JobSubscriptions = new List<JobsSubscriptionEntity>();
         }
-
-        public ICollection<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
 
         public ICollection<JobsSubscriptionEntity> JobSubscriptions { get; set; }
     }
