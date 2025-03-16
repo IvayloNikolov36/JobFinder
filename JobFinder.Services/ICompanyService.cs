@@ -1,10 +1,12 @@
-﻿namespace JobFinder.Services
-{
-    using JobFinder.Data.Models;
-    using System.Threading.Tasks;
+﻿using JobFinder.Web.Models.Company;
+using System.Threading.Tasks;
 
+namespace JobFinder.Services
+{
     public interface ICompanyService
     {
-        Task<CompanyEntity> GetAsync(string userId);
+        Task<int> GetCompanyId(string userId);
+
+        Task<CompanyDetailsUserViewModel> Details(int companyId, string currentUserId);
     }
 }

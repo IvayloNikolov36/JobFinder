@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Data.Models
 {
     using JobFinder.Data.Models.Common;
+    using JobFinder.Data.Models.Subscriptions;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -9,6 +10,7 @@
         public CompanyEntity()
         {
             this.JobAds = new List<JobAdvertisementEntity>();
+            this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
         }
 
         [Required]
@@ -26,6 +28,8 @@
 
         public UserEntity User { get; set; }
 
-        public ICollection<JobAdvertisementEntity> JobAds { get; set; } 
+        public ICollection<JobAdvertisementEntity> JobAds { get; set; }
+
+        public ICollection<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
     }
 }

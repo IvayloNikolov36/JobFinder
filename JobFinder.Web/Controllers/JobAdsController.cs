@@ -63,11 +63,11 @@
         {
             string userId = this.User.GetCurrentUserId();
 
-            int companyId = (await companyService.GetAsync(userId)).Id;
+            int companyId = await companyService.GetCompanyId(userId);
 
             await this.adsService.CreateAsync(companyId, model);
 
-            return this.Ok(new { Message = SuccessOnCreation });
+            return this.Ok();
         }
 
         [HttpPut]
