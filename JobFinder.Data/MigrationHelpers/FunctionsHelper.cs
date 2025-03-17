@@ -87,6 +87,7 @@ namespace JobFinder.Data.MigrationHelpers
             builder.Sql("DROP FUNCTION [dbo].[udf_GetLatestJobAdsForCompanySubscriptions]");
         }
 
+		[Obsolete]
         public static void Create_UDF_GetLatesJobAdsForSubscribers(MigrationBuilder builder)
         {
             builder.Sql(
@@ -132,9 +133,10 @@ namespace JobFinder.Data.MigrationHelpers
 						 ,c.[Logo]");
         }
 
+		[Obsolete]
         public static void Drop_UDF_GetLatesJobAdsForSubscribers(MigrationBuilder builder)
         {
-            builder.Sql("DROP FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] ");
+            builder.Sql("DROP FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers]");
         }
 
         public static void Create_UDF_GetJobSubscriptions(MigrationBuilder builder)
@@ -167,6 +169,56 @@ namespace JobFinder.Data.MigrationHelpers
         public static void Drop_UDF_GetJobSubscriptions(MigrationBuilder builder)
         {
             builder.Sql("DROP FUNCTION [dbo].[udf_GetJobSubscriptions]");
+        }
+
+        public static void Create_UDF_GetLatesJobAdsForSubscribers_v2(MigrationBuilder builder)
+		{
+			builder.Sql(@"CREATE OR ALTER FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] 
+				(@reccuringTypeId INT
+				 ,@jobCategoryId INT
+				 ,@jobEngagementId INT
+				 ,@locationId INT
+				 ,@searchTerm NVARCHAR(90)
+				 ,@intership BIT
+				 ,@specifiedSalary BIT
+				)
+				RETURNS TABLE
+				AS
+				RETURN 
+				SELECT
+					c.[Id] AS [CompanyId]
+					,c.[Name] AS [CompanyName]
+					,c.[Logo] AS [CompanyLogoUrl]
+					,STRING_AGG(ja.[Id], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [JobAdsIds]
+					,STRING_AGG(ja.[Position], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [Positions]
+				FROM JobAdvertisements AS ja
+				JOIN Companies AS c 
+					ON ja.PublisherId = c.Id
+				WHERE ja.[JobCategoryId] = @jobCategoryId
+					AND ja.[JobEngagementId] = @jobEngagementId
+					AND
+					(@searchTerm IS NULL OR (ja.[Position] LIKE '%' + @searchTerm + '%'))
+ 					AND
+					(
+						@specifiedSalary = 0
+						OR (@specifiedSalary = 1 AND (ja.MinSalary IS NOT NULL OR ja.MaxSalary IS NOT NULL))
+					)										
+					AND ja.[Intership] = @intership
+					AND ja.[LocationId] = @locationId
+					AND DATEDIFF(DAY, ja.[CreatedOn], GETUTCDATE()) <=
+						CASE
+							WHEN @jobCategoryId = 1 THEN 1
+							WHEN @jobCategoryId = 2 THEN 7
+							WHEN @jobCategoryId = 3 THEN 31
+						END		 								
+				GROUP BY c.[Id]
+						 ,c.[Name]
+						 ,c.[Logo]");
+		}
+
+        public static void Drop_UDF_GetLatesJobAdsForSubscribers_v2(MigrationBuilder builder)
+        {
+            builder.Sql("DROP FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers]");
         }
     }
 }
