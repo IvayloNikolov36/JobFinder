@@ -64,7 +64,7 @@
       
         [HttpGet]
         [Route("new-ads/{recurringTypeId}")]
-        public async Task<IActionResult> GetSubscribersNewJobAds([FromRoute] int recurringTypeId)
+        public async Task<IActionResult> GetLatestJobAdsForSubscribers([FromRoute] int recurringTypeId)
         {
             IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService.GetLatestJobAdsAsync(recurringTypeId);
 

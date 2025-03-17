@@ -16,13 +16,13 @@
 
     public class SubscriptionsService : ISubscriptionsService
     {
-        private readonly IRepository<JobAdsSubscriptionsDbVewData> jobAdsSubscriptionDataRepository;
+        private readonly IRepository<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptionDataRepository;
         private readonly IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository;
         private readonly JobFinderDbContext dbContext;
         private readonly IMapper mapper;
 
         public SubscriptionsService(
-            IRepository<JobAdsSubscriptionsDbVewData> jobAdsSubscriptionDataRepository,
+            IRepository<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptionDataRepository,
             IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository,
             JobFinderDbContext dbContext,
             IMapper mapper)
@@ -35,6 +35,11 @@
 
         public async Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
         {
+            if (subscription.SearchTerm?.Trim() == string.Empty)
+            {
+                subscription.SearchTerm = null;
+            }
+
             this.ValidateJobsSubscriptionProperties(subscription);
 
             bool hasSuchSubscription = await this.HasSubscriptionWithSameCriterias(userId, subscription);
@@ -90,17 +95,22 @@
 
         public async Task<IEnumerable<JobAdsSubscriptionsViewModel>> GetLatestJobAdsAsync(int recurringTypeId)
         {
-            List<JobAdsSubscriptionsDbVewData> jobAdsSubscriptions = await this.jobAdsSubscriptionDataRepository
-                .DbSetNoTracking()
+            List<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptions = await this.dbContext
+                .GetJobAdsSubscriptionsDbFunction(recurringTypeId)
                 .ToListAsync();
 
-            List<JobAdsSubscriptionsViewModel> result = [];
+            if (jobAdsSubscriptions.Count == 0)
+            {
+                return [];
+            }
 
-            foreach (JobAdsSubscriptionsDbVewData item in jobAdsSubscriptions)
+            List<JobAdsSubscriptionsViewModel> result = [];
+          
+            foreach (JobAdsSubscriptionsDbFunctionResult item in jobAdsSubscriptions)
             {
                 List<LatestJobAdsDbFunctionResult> latestJobAds = await this.dbContext
                     .GetLatesJobAdsForSubscribersDbFunction(
-                        item.ReccuringTypeId,
+                        recurringTypeId,
                         item.JobCategoryId,
                         item.JobEngagementId,
                         item.LocationId,
@@ -116,11 +126,8 @@
 
                 result.Add(new JobAdsSubscriptionsViewModel
                 {
-                    // TODO: fill the model with other data
                     JobCategoryId = item.JobCategoryId,
-                    JobCategory = item.JobCategory,
                     LocationId = item.LocationId,
-                    Location = item.Location,
                     Subscribers = item.SubscribersEmails.Split(["; "], StringSplitOptions.RemoveEmptyEntries),
                     LatestJobAds = latestJobAds
                 });
@@ -137,7 +144,7 @@
                 || subscription.LocationId.HasValue
                 || subscription.Intership
                 || subscription.SpecifiedSalary
-                || !string.IsNullOrEmpty(subscription.SearchTerm.Trim());
+                || !string.IsNullOrEmpty(subscription.SearchTerm);
 
             if (!hasAnyCriteriaSpecified)
             {

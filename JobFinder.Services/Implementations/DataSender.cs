@@ -1,5 +1,6 @@
 ﻿using JobFinder.Data.Models.ViewsModels;
 using JobFinder.Services.Messages;
+using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -18,6 +19,7 @@ namespace JobFinder.Services.Implementations
 
         private readonly ISubscriptionsService subscriptionsService;
         private readonly ICompanySubscriptionsService companySubscriptionsService;
+        private readonly INomenclatureService nomenclatureService;
         private readonly IEmailSender emailSender;
         private readonly string sentFromEmail;
         private readonly string sentFromName;
@@ -25,11 +27,13 @@ namespace JobFinder.Services.Implementations
         public DataSender(
             ICompanySubscriptionsService companySubscriptionsService,
             ISubscriptionsService subscriptionsService,
+            INomenclatureService nomenclatureService,
             IEmailSender emailSender,
             IConfiguration configuration)
         {
             this.subscriptionsService = subscriptionsService;
             this.companySubscriptionsService = companySubscriptionsService;
+            this.nomenclatureService = nomenclatureService;
             this.emailSender = emailSender;
             this.sentFromEmail = configuration.GetSection("AppAccount:email").Value;
             this.sentFromName = configuration.GetSection("AppAccount:name").Value;
@@ -98,19 +102,21 @@ namespace JobFinder.Services.Implementations
 
         public async Task SendLatestJobAdsForJobSubscriptions(int recurringTypeId)
         {
-            // TODO: get data from jobSubscriptions table only for the right reccuringType
-
             IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService
                 .GetLatestJobAdsAsync(recurringTypeId);
 
+            IEnumerable<BasicViewModel> jobCategories = await this.nomenclatureService.GetJobCategories();
+            IEnumerable<BasicViewModel> locations = await this.nomenclatureService.GetCities();
+
             foreach (JobAdsSubscriptionsViewModel item in data)
             {
-                string jobCategory = item.JobCategory;
-                string location = item.Location;
+                string jobCategory = jobCategories.FirstOrDefault(jc => jc.Id == item.JobCategoryId)?.Name;
+                string location = locations.FirstOrDefault(jc => jc.Id == item.LocationId)?.Name;
+
                 string[] subscribers = item.Subscribers;
 
                 StringBuilder sb = new();
-                string emailSubject = $"Latest job ads from {jobCategory} category in {location}.";
+                string emailSubject = $"Latest job ads in {jobCategory} category for {location}.";
 
                 sb.AppendLine(@$"<div><h4>{emailSubject}</h4><div>");
                 sb.AppendLine(@$"<table style=""width: 100%"">");
@@ -135,11 +141,22 @@ namespace JobFinder.Services.Implementations
                         string position = positions[i];
 
                         sb.AppendLine(@$"<tr style=""border-bottom:1px solid black"">
-                                      < td><a href=""{JobAdDetailsLink}{jobAdsIds[i]}"" style=""text-decoration:none"">{position}</a></td>
+                                      <td>
+                                        <a href=""{JobAdDetailsLink}{jobAdsIds[i]}"" style=""text-decoration:none"">
+                                            {position}
+                                        </a>
+                                      </td>
                                       <td>{location}</td>
-                                      <td><a href=""{CompanyDetailsUrl}{companyId}"" style=""text-decoration:none"">{companyName}</a></td>
-                                      <td style=""text-align:right;""><img src=""{info.CompanyLogoUrl}"" alt=""CompanyLogo"" width=""90"" height=""90""></td>
-                                    </tr>");
+                                      <td>
+                                        <a href=""{CompanyDetailsUrl}{companyId}"" style=""text-decoration:none"">
+                                            {companyName}
+                                        </a>
+                                      </td>
+                                      <td style=""text-align:right;"">
+                                        <img src=""{info.CompanyLogoUrl}"" alt=""CompanyLogo"" width=""90"" height=""90"">
+                                      </td>
+                                    </tr>"
+                        );
                     }
                 }
 

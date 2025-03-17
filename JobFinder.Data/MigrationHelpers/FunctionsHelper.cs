@@ -1,14 +1,14 @@
-﻿namespace JobFinder.Data.MigrationHelpers
-{
-	using Microsoft.EntityFrameworkCore.Migrations;
-    using System;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
+namespace JobFinder.Data.MigrationHelpers
+{
     public static class FunctionsHelper
     {
-		[Obsolete]
-		public static void CreateGetLatesJobAdsForSubscribersFunction(MigrationBuilder builder)
-		{
-			builder.Sql(
+        [Obsolete]
+        public static void CreateGetLatesJobAdsForSubscribersFunction(MigrationBuilder builder)
+        {
+            builder.Sql(
                 @"CREATE OR ALTER FUNCTION [dbo].[GetLatesJobAdsForSubscribers] 
 				(@jobCategoryId INT, @locationId INT)
 				RETURNS TABLE
@@ -27,13 +27,65 @@
 				AND ja.[LocationId] = @locationId
 				AND DATEDIFF(DAY, ja.[CreatedOn], GETUTCDATE()) <= 30
 				GROUP BY c.[Id], c.[Name], c.[Logo]");
-		}
+        }
 
-		[Obsolete]
-		public static void DropGetLatesJobAdsForSubscribersFunction(MigrationBuilder builder)
-		{
-			builder.Sql("DROP FUNCTION [dbo].[GetLatesJobAdsForSubscribers]");
-		}
+        [Obsolete]
+        public static void DropGetLatesJobAdsForSubscribersFunction(MigrationBuilder builder)
+        {
+            builder.Sql("DROP FUNCTION [dbo].[GetLatesJobAdsForSubscribers]");
+        }
+
+        [Obsolete]
+        public static void Create_UDF_GetLatestJobAdsForCompanySubscriptions(MigrationBuilder builder)
+        {
+            builder
+                .Sql(@"CREATE OR ALTER FUNCTION [dbo].[udf_GetLatestJobAdsForCompanySubscriptions] (@recurringTypeId INT)
+							RETURNS TABLE
+							AS
+							RETURN 
+							SELECT x.[CompanyId]
+							   ,x.[CompanyName]
+							   ,x.[CompanyLogo]
+							   ,x.[Subscribers]
+							   ,STRING_AGG(j.Id, '; ') AS [JobIds]
+							   ,STRING_AGG(j.Position, '; ') AS [JobPositions]
+							   ,STRING_AGG(l.[Name], '; ') AS [JobLocations]
+							FROM
+								(SELECT cs.[CompanyId]
+										,c.[Name] AS [CompanyName]
+										,c.[Logo] AS [CompanyLogo]
+										,STRING_AGG(u.Email, '; ') AS [Subscribers]
+										FROM CompanySubscriptions AS cs
+										LEFT JOIN Companies AS c 
+											ON cs.CompanyId = c.Id
+										LEFT JOIN AspNetUsers AS u
+											ON cs.UserId = u.Id
+										WHERE cs.RecuringTypeId = @recurringTypeId
+										GROUP BY cs.[CompanyId], c.[Name], c.[Logo]
+								) AS x
+								LEFT JOIN Companies AS c 
+									ON x.CompanyId = c.Id
+								LEFT JOIN JobAdvertisements AS j 
+									ON c.Id = j.PublisherId
+								JOIN Cities AS l
+									ON j.LocationId = l.Id
+								WHERE DATEDIFF(DAY, j.CreatedOn, GETDATE()) <= 
+									CASE
+										WHEN @recurringTypeId = 1 THEN 1
+										WHEN @recurringTypeId = 2 THEN 7
+										WHEN @recurringTypeId = 3 THEN 31
+									END
+								GROUP BY x.[CompanyId]
+										 ,x.[CompanyLogo]
+										 ,x.[CompanyName]
+										 ,x.[Subscribers]");
+        }
+
+        [Obsolete]
+        public static void Drop_UDF_GetLatestJobAdsForCompanySubscriptions(MigrationBuilder builder)
+        {
+            builder.Sql("DROP FUNCTION [dbo].[udf_GetLatestJobAdsForCompanySubscriptions]");
+        }
 
         public static void Create_UDF_GetLatesJobAdsForSubscribers(MigrationBuilder builder)
         {
@@ -85,56 +137,36 @@
             builder.Sql("DROP FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] ");
         }
 
-		[Obsolete]
-		public static void Create_UDF_GetLatestJobAdsForCompanySubscriptions(MigrationBuilder builder)
-		{
-			builder
-				.Sql(@"CREATE OR ALTER FUNCTION [dbo].[udf_GetLatestJobAdsForCompanySubscriptions] (@recurringTypeId INT)
-							RETURNS TABLE
-							AS
-							RETURN 
-							SELECT x.[CompanyId]
-							   ,x.[CompanyName]
-							   ,x.[CompanyLogo]
-							   ,x.[Subscribers]
-							   ,STRING_AGG(j.Id, '; ') AS [JobIds]
-							   ,STRING_AGG(j.Position, '; ') AS [JobPositions]
-							   ,STRING_AGG(l.[Name], '; ') AS [JobLocations]
-							FROM
-								(SELECT cs.[CompanyId]
-										,c.[Name] AS [CompanyName]
-										,c.[Logo] AS [CompanyLogo]
-										,STRING_AGG(u.Email, '; ') AS [Subscribers]
-										FROM CompanySubscriptions AS cs
-										LEFT JOIN Companies AS c 
-											ON cs.CompanyId = c.Id
-										LEFT JOIN AspNetUsers AS u
-											ON cs.UserId = u.Id
-										WHERE cs.RecuringTypeId = @recurringTypeId
-										GROUP BY cs.[CompanyId], c.[Name], c.[Logo]
-								) AS x
-								LEFT JOIN Companies AS c 
-									ON x.CompanyId = c.Id
-								LEFT JOIN JobAdvertisements AS j 
-									ON c.Id = j.PublisherId
-								JOIN Cities AS l
-									ON j.LocationId = l.Id
-								WHERE DATEDIFF(DAY, j.CreatedOn, GETDATE()) <= 
-									CASE
-										WHEN @recurringTypeId = 1 THEN 1
-										WHEN @recurringTypeId = 2 THEN 7
-										WHEN @recurringTypeId = 3 THEN 31
-									END
-								GROUP BY x.[CompanyId]
-										 ,x.[CompanyLogo]
-										 ,x.[CompanyName]
-										 ,x.[Subscribers]");
-		}
+        public static void Create_UDF_GetJobSubscriptions(MigrationBuilder builder)
+        {
+            builder.Sql(
+                @"CREATE OR ALTER FUNCTION [dbo].[udf_GetJobSubscriptions] (@recurringTypeId INT)
+					RETURNS TABLE
+					AS
+						RETURN
+						SELECT	js.[JobCategoryId]
+								,js.[JobEngagementId]
+								,js.[LocationId]
+								,js.[SearchTerm]
+								,js.[Intership]
+								,js.[SpecifiedSalary]
+								,STRING_AGG(u.[Email], '; ') AS [SubscribersEmails]
+						FROM JobsSubscriptions AS js
+						JOIN AspNetUsers AS u
+							ON js.[UserId] = u.[Id]
+						WHERE ReccuringTypeId = @recurringTypeId
+						GROUP BY js.[JobCategoryId]
+								,js.[JobEngagementId]
+								,js.[LocationId]
+								,js.[SearchTerm]
+								,js.[Intership]
+								,js.[SpecifiedSalary]"
+            );
+        }
 
-		[Obsolete]
-		public static void Drop_UDF_GetLatestJobAdsForCompanySubscriptions(MigrationBuilder builder)
-		{
-			builder.Sql("DROP FUNCTION [dbo].[udf_GetLatestJobAdsForCompanySubscriptions]");
-		}
+        public static void Drop_UDF_GetJobSubscriptions(MigrationBuilder builder)
+        {
+            builder.Sql("DROP FUNCTION [dbo].[udf_GetJobSubscriptions]");
+        }
     }
 }

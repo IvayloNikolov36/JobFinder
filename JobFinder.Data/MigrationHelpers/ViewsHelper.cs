@@ -64,6 +64,7 @@
             builder.Sql("DROP VIEW [dbo].[SubscriprionsByJobCategoryAndLocation]");
         }
 
+        [Obsolete]
         public static void Create_View_JobSubscriptions(MigrationBuilder builder)
         {
             builder.Sql(@"CREATE OR ALTER VIEW [dbo].[view_JobSubscriptions]
@@ -104,6 +105,7 @@
 			                            ,js.[SpecifiedSalary]");
         }
 
+        [Obsolete]
         public static void Drop_View_JobSubscriptions(MigrationBuilder builder)
         {
             builder.Sql("DROP VIEW [dbo].[view_JobSubscriptions]");
@@ -161,12 +163,12 @@
 						,x.[JobEngagements]
 						,x.[Salaries]
 						,x.[JobAdIds]"
-			);
+            );
         }
 
         public static void Drop_View_LatestCompanyJobsForSubscribers(MigrationBuilder builder)
-		{
-			builder.Sql("DROP VIEW [dbo].[view_latestCompanyJobsForSubscribers]");
-		}
+        {
+            builder.Sql("DROP VIEW [dbo].[view_latestCompanyJobsForSubscribers]");
+        }
     }
 }
