@@ -13,7 +13,7 @@ namespace JobFinder.Data.Seeders
                 new JobEngagementEntity { Name = "Permanent", Id = 3 },
                 new JobEngagementEntity { Name = "Temporary", Id = 4 },
                 new JobEngagementEntity { Name = "Intership", Id = 5 },
-                new JobEngagementEntity { Name = "SuitableForStudents", Id = 6 },
+                new JobEngagementEntity { Name = "Suitable for students", Id = 6 },
                 new JobEngagementEntity
                 {
                     Name = "Suitable for candidates with no expirience",
