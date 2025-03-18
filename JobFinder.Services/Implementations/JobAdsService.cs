@@ -11,6 +11,7 @@
     using JobFinder.Services.Mappings;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.JobAds;
+    using JobFinder.Web.Models.Subscriptions;
     using Microsoft.EntityFrameworkCore;
 
     public class JobAdsService : IJobAdsService
@@ -131,6 +132,14 @@
                .ToListAsync();
 
             return new DataListingsModel<JobListingModel>(totalCount, jobAds);
+        }
+
+        public async Task<IEnumerable<JobAdDetailsForSubscriber>> GetDetails(IEnumerable<int> ids)
+        {
+            return await this.jobsRepository.DbSetNoTracking()
+                .Where(ja => ids.Contains(ja.Id))
+                .To<JobAdDetailsForSubscriber>()
+                .ToListAsync();
         }
 
         // Filter methods

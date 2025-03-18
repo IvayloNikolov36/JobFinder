@@ -150,7 +150,7 @@ namespace JobFinder.Services.Implementations
                 .ToArrayAsync();
         }
 
-        public async Task<IEnumerable<BasicViewModel>> GetReccuringTypes()
+        public async Task<IEnumerable<BasicViewModel>> GetRecurringTypes()
         {
             return await this.reccuringTypesRepository.DbSetNoTracking()
                 .To<BasicViewModel>()

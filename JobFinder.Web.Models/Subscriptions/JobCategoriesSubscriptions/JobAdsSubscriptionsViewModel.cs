@@ -1,16 +1,21 @@
-﻿namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions
-{
-    using JobFinder.Data.Models.ViewsModels;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions
+{   
     public class JobAdsSubscriptionsViewModel
     {
-        public int? JobCategoryId { get; set; }
+        public required string JobCategory { get; set; }
 
-        public int? LocationId { get; set; }
+        public required string JobEngagement { get; set; }
 
-        public string[] Subscribers { get; set; }
+        public required string Location { get; set; }
 
-        public IEnumerable<LatestJobAdsDbFunctionResult> LatestJobAds { get; set; }
+        public required string SearchTerm { get; set; }
+
+        public required bool SpecifiedSalary { get; set; }
+
+        public required bool Intership { get; set; }
+
+        public required IEnumerable<JobAdDetailsForSubscriber> JobAds { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 {
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.JobAds;
+    using JobFinder.Web.Models.Subscriptions;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -16,5 +17,7 @@
         Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsFilterModel model);
 
         Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel);
+
+        Task<IEnumerable<JobAdDetailsForSubscriber>> GetDetails(IEnumerable<int> ids);
     }
 }

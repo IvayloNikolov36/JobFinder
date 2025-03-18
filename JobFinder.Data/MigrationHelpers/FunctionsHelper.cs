@@ -173,7 +173,8 @@ namespace JobFinder.Data.MigrationHelpers
 
         public static void Create_UDF_GetLatesJobAdsForSubscribers_v2(MigrationBuilder builder)
 		{
-			builder.Sql(@"CREATE OR ALTER FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] 
+			builder.Sql(@"
+				CREATE OR ALTER FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] 
 				(@reccuringTypeId INT
 				 ,@jobCategoryId INT
 				 ,@jobEngagementId INT
@@ -186,14 +187,9 @@ namespace JobFinder.Data.MigrationHelpers
 				AS
 				RETURN 
 				SELECT
-					c.[Id] AS [CompanyId]
-					,c.[Name] AS [CompanyName]
-					,c.[Logo] AS [CompanyLogoUrl]
-					,STRING_AGG(ja.[Id], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [JobAdsIds]
-					,STRING_AGG(ja.[Position], '; ') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [Positions]
+					ja.[PublisherId] AS [CompanyId]
+					,STRING_AGG(ja.[Id], ';') WITHIN GROUP(ORDER BY ja.[Id] DESC) AS [JobAdsIds]
 				FROM JobAdvertisements AS ja
-				JOIN Companies AS c 
-					ON ja.PublisherId = c.Id
 				WHERE ja.[JobCategoryId] = @jobCategoryId
 					AND ja.[JobEngagementId] = @jobEngagementId
 					AND
@@ -211,9 +207,7 @@ namespace JobFinder.Data.MigrationHelpers
 							WHEN @jobCategoryId = 2 THEN 7
 							WHEN @jobCategoryId = 3 THEN 31
 						END		 								
-				GROUP BY c.[Id]
-						 ,c.[Name]
-						 ,c.[Logo]");
+				GROUP BY ja.[PublisherId]");
 		}
 
         public static void Drop_UDF_GetLatesJobAdsForSubscribers_v2(MigrationBuilder builder)

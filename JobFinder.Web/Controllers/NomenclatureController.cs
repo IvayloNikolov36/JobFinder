@@ -127,7 +127,7 @@ namespace JobFinder.Web.Controllers
         [Route("reccuring-types")]
         public async Task<IActionResult> GetReccuringTypes()
         {
-            IEnumerable<BasicViewModel> reccuringTypes = await this.nomenclatureService.GetReccuringTypes();
+            IEnumerable<BasicViewModel> reccuringTypes = await this.nomenclatureService.GetRecurringTypes();
 
             return this.Ok(reccuringTypes);
         }

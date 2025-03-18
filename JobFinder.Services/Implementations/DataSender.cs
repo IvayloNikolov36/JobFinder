@@ -1,6 +1,7 @@
 ﻿using JobFinder.Data.Models.ViewsModels;
 using JobFinder.Services.Messages;
 using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.Subscriptions;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -102,77 +103,100 @@ namespace JobFinder.Services.Implementations
 
         public async Task SendLatestJobAdsForJobSubscriptions(int recurringTypeId)
         {
-            IEnumerable<JobAdsSubscriptionsViewModel> data = await this.subscriptionsService
+            IDictionary<string, List<JobAdsSubscriptionsViewModel>> data = await this.subscriptionsService
                 .GetLatestJobAdsAsync(recurringTypeId);
 
-            IEnumerable<BasicViewModel> jobCategories = await this.nomenclatureService.GetJobCategories();
-            IEnumerable<BasicViewModel> locations = await this.nomenclatureService.GetCities();
+            IEnumerable<BasicViewModel> recurringTypes = await this.nomenclatureService.GetRecurringTypes();
+            string recurringType = recurringTypes.FirstOrDefault(rt => rt.Id == recurringTypeId)?.Name;
 
-            foreach (JobAdsSubscriptionsViewModel item in data)
+            foreach (KeyValuePair<string, List<JobAdsSubscriptionsViewModel>> jobAdsBySubscriber in data)
             {
-                string jobCategory = jobCategories.FirstOrDefault(jc => jc.Id == item.JobCategoryId)?.Name;
-                string location = locations.FirstOrDefault(jc => jc.Id == item.LocationId)?.Name;
+                string subscriber = jobAdsBySubscriber.Key;
+                List<JobAdsSubscriptionsViewModel> subscriptionsJobAds = jobAdsBySubscriber.Value;
 
-                string[] subscribers = item.Subscribers;
+                string title = $"{recurringType} Job Ads";
+                StringBuilder sb = new($"<div><h4>{title}</h4><div>");
 
-                StringBuilder sb = new();
-                string emailSubject = $"Latest job ads in {jobCategory} category for {location}.";
-
-                sb.AppendLine(@$"<div><h4>{emailSubject}</h4><div>");
-                sb.AppendLine(@$"<table style=""width: 100%"">");
-
-                int line = 0;
-                foreach (LatestJobAdsDbFunctionResult info in item.LatestJobAds)
+                foreach (JobAdsSubscriptionsViewModel item in subscriptionsJobAds)
                 {
-                    line++;
-                    int companyId = info.CompanyId;
-                    string companyName = info.CompanyName;
+                    string criterias = this.GetCriteriasText(item);
 
-                    string[] positions = info.Positions
-                        .Split(["; "], StringSplitOptions.RemoveEmptyEntries);
+                    sb.AppendLine(@$"<div><h6>{criterias}</h6><div>");
 
-                    int[] jobAdsIds = info.JobAdsIds
-                        .Split(["; "], StringSplitOptions.RemoveEmptyEntries)
-                        .Select(int.Parse)
-                        .ToArray();
+                    sb.AppendLine(@$"<table style=""width: 100%"">");
 
-                    for (int i = 0; i < positions.Length; i++)
+                    foreach (JobAdDetailsForSubscriber jobAd in item.JobAds)
                     {
-                        string position = positions[i];
-
-                        sb.AppendLine(@$"<tr style=""border-bottom:1px solid black"">
-                                      <td>
-                                        <a href=""{JobAdDetailsLink}{jobAdsIds[i]}"" style=""text-decoration:none"">
-                                            {position}
-                                        </a>
-                                      </td>
-                                      <td>{location}</td>
-                                      <td>
-                                        <a href=""{CompanyDetailsUrl}{companyId}"" style=""text-decoration:none"">
-                                            {companyName}
-                                        </a>
-                                      </td>
-                                      <td style=""text-align:right;"">
-                                        <img src=""{info.CompanyLogoUrl}"" alt=""CompanyLogo"" width=""90"" height=""90"">
-                                      </td>
-                                    </tr>"
-                        );
+                        sb.AppendLine(this.GetJobAdTableRow(jobAd));
                     }
+
+                    sb.AppendLine("</table>");
                 }
 
-                sb.AppendLine("</table>");
-
-                foreach (string subscriberEmail in subscribers)
-                {
-                    await this.emailSender.SendEmailAsync(
-                        from: this.sentFromEmail,
-                        fromName: this.sentFromName,
-                        to: subscriberEmail,
-                        subject: emailSubject,
-                        htmlContent: sb.ToString());
-                }
+                await this.emailSender.SendEmailAsync(
+                    from: this.sentFromEmail,
+                    fromName: this.sentFromName,
+                    to: subscriber,
+                    subject: title,
+                    htmlContent: sb.ToString());
             }
         }
 
+        private string GetJobAdTableRow(JobAdDetailsForSubscriber jobAd)
+        {
+            return @$"<tr style=""border-bottom:1px solid black"">
+                        <td>
+                        <a href=""{JobAdDetailsLink}{jobAd.Id}"" style=""text-decoration:none"">
+                            {jobAd.Position}
+                        </a>
+                        </td>
+                        <td>{jobAd.Location}</td>
+                        <td>
+                        <a href=""{CompanyDetailsUrl}{jobAd.Company.Id}"" style=""text-decoration:none"">
+                            {jobAd.Company.Name}
+                        </a>
+                        </td>
+                        <td style=""text-align:right;"">
+                        <img src=""{jobAd.Company.Logo}"" alt=""CompanyLogo"" width=""90"" height=""90"">
+                        </td>
+                     </tr>";
+        }
+
+        private string GetCriteriasText(JobAdsSubscriptionsViewModel item)
+        {
+            string content = string.Empty;
+
+            if (item.JobCategory != null)
+            {
+                content += $"Job Category: {item.JobCategory}";
+            }
+
+            if (item.JobEngagement != null)
+            {
+                content += $", Job Engagement: {item.JobEngagement}";
+            }
+
+            if (item.Location != null)
+            {
+                content += $", Location: {item.Location}";
+            }
+
+            if (item.SearchTerm != null)
+            {
+                content += $", For Jobs with Titles that contains: {item.SearchTerm}";
+            }
+
+            if (item.Intership)
+            {
+                content += " Only Intership";
+            }
+
+            if (item.SpecifiedSalary)
+            {
+                content += "; with specified salary range";
+            }
+
+            return content.TrimStart([',', ' ']);
+        }
     }
 }

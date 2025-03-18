@@ -7,6 +7,8 @@
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Services.Mappings;
+    using JobFinder.Web.Models.Common;
+    using JobFinder.Web.Models.Subscriptions;
     using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -16,18 +18,21 @@
 
     public class SubscriptionsService : ISubscriptionsService
     {
-        private readonly IRepository<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptionDataRepository;
+        private readonly IJobAdsService jobAdsService;
+        private readonly INomenclatureService nomenclatureService;
         private readonly IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository;
         private readonly JobFinderDbContext dbContext;
         private readonly IMapper mapper;
 
         public SubscriptionsService(
-            IRepository<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptionDataRepository,
+            IJobAdsService jobAdsService,
+            INomenclatureService nomenclatureService,
             IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository,
             JobFinderDbContext dbContext,
             IMapper mapper)
         {
-            this.jobAdsSubscriptionDataRepository = jobAdsSubscriptionDataRepository;
+            this.jobAdsService = jobAdsService;
+            this.nomenclatureService = nomenclatureService;
             this.jobsSubscriptionRepository = jobsSubscriptionRepository;
             this.dbContext = dbContext;
             this.mapper = mapper;
@@ -93,7 +98,7 @@
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<JobAdsSubscriptionsViewModel>> GetLatestJobAdsAsync(int recurringTypeId)
+        public async Task<IDictionary<string, List<JobAdsSubscriptionsViewModel>>> GetLatestJobAdsAsync(int recurringTypeId)
         {
             List<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptions = await this.dbContext
                 .GetJobAdsSubscriptionsDbFunction(recurringTypeId)
@@ -101,11 +106,15 @@
 
             if (jobAdsSubscriptions.Count == 0)
             {
-                return [];
+                return new Dictionary<string, List<JobAdsSubscriptionsViewModel>>(0);
             }
 
-            List<JobAdsSubscriptionsViewModel> result = [];
-          
+            IEnumerable<BasicViewModel> locations = await this.nomenclatureService.GetCities();
+            IEnumerable<BasicViewModel> jobCategoris = await this.nomenclatureService.GetJobCategories();
+            IEnumerable<BasicViewModel> jobEngagements = await this.nomenclatureService.GetJobEngagements();
+
+            Dictionary<string, List<JobAdsSubscriptionsViewModel>> result = [];
+
             foreach (JobAdsSubscriptionsDbFunctionResult item in jobAdsSubscriptions)
             {
                 List<LatestJobAdsDbFunctionResult> latestJobAds = await this.dbContext
@@ -124,13 +133,39 @@
                     continue;
                 }
 
-                result.Add(new JobAdsSubscriptionsViewModel
+                string[] subscribers = item.SubscribersEmails.Split(["; "], StringSplitOptions.RemoveEmptyEntries);
+
+                IEnumerable<int> jobAdsIds = latestJobAds
+                    .SelectMany(x => x.JobAdsIds
+                        .Split([";"], StringSplitOptions.RemoveEmptyEntries)
+                        .Select(int.Parse));
+
+                // TODO: create memoization for jobAds
+                IEnumerable<JobAdDetailsForSubscriber> jobAds = await this.jobAdsService.GetDetails(jobAdsIds);
+                string jobCategory = jobCategoris.FirstOrDefault(jc => jc.Id == item.JobCategoryId)?.Name;
+                string jobEngagement = jobEngagements.FirstOrDefault(je => je.Id == item.JobEngagementId)?.Name;
+                string location = locations.FirstOrDefault(l => l.Id == item.LocationId)?.Name;
+
+                foreach (string subscriberEmail in subscribers)
                 {
-                    JobCategoryId = item.JobCategoryId,
-                    LocationId = item.LocationId,
-                    Subscribers = item.SubscribersEmails.Split(["; "], StringSplitOptions.RemoveEmptyEntries),
-                    LatestJobAds = latestJobAds
-                });
+                    if (!result.ContainsKey(subscriberEmail))
+                    {
+                        result.Add(subscriberEmail, new List<JobAdsSubscriptionsViewModel>());
+                    }
+
+                    JobAdsSubscriptionsViewModel model = new()
+                    {
+                        JobCategory = jobCategoris.FirstOrDefault(jc => jc.Id == item.JobCategoryId)?.Name,
+                        JobEngagement = jobEngagements.FirstOrDefault(je => je.Id == item.JobEngagementId)?.Name,
+                        Location = locations.FirstOrDefault(l => l.Id == item.LocationId)?.Name,
+                        SearchTerm = item.SearchTerm,
+                        SpecifiedSalary = item.SpecifiedSalary,
+                        Intership = item.Intership,
+                        JobAds = jobAds
+                    };
+
+                    result[subscriberEmail].Add(model);
+                }
             }
 
             return result;

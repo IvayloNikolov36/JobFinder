@@ -14,6 +14,6 @@
 
         Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId);
 
-        Task<IEnumerable<JobAdsSubscriptionsViewModel>> GetLatestJobAdsAsync(int recurringTypeId);
+        Task<IDictionary<string, List<JobAdsSubscriptionsViewModel>>> GetLatestJobAdsAsync(int recurringTypeId);
     }
 }
