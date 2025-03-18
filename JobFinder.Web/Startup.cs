@@ -88,7 +88,7 @@ namespace JobFinder.Web
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            IRecurringJobManager reccuringJobManager,
+            IRecurringJobManager recurringJobManager,
             IServiceProvider serviceProvider)
         {
             app.UseMiddleware<ExceptionMiddleware>();
@@ -118,7 +118,7 @@ namespace JobFinder.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
-            this.ConfigureHangfire(app, reccuringJobManager, serviceProvider);
+            this.ConfigureHangfire(app, recurringJobManager, serviceProvider);
 
             app.UseEndpoints(endpoints =>
             {
@@ -128,14 +128,14 @@ namespace JobFinder.Web
 
         private void ConfigureHangfire(
             IApplicationBuilder app,
-            IRecurringJobManager reccuringJobManager,
+            IRecurringJobManager recurringJobManager,
             IServiceProvider serviceProvider)
         {
             app.UseHangfireDashboard();
 
             string dailyCronExpression = "0 0 * * *";
 
-            reccuringJobManager.AddOrUpdate(
+            recurringJobManager.AddOrUpdate(
                 $"sending_Latest_CompanyJobAds",
                 () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForCompanySubscriptions(),
                 dailyCronExpression);
@@ -152,7 +152,7 @@ namespace JobFinder.Web
             {
                 BasicViewModel recurringType = recurringTypes[index++];
 
-                reccuringJobManager.AddOrUpdate(
+                recurringJobManager.AddOrUpdate(
                     $"sending_{recurringType.Name}_JobAdsByCriterias",
                     () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForJobSubscriptions(recurringType.Id),
                     cronExpression);

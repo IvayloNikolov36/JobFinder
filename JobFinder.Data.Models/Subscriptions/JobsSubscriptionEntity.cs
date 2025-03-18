@@ -6,8 +6,8 @@
 
     public class JobsSubscriptionEntity : BaseEntity<int>
     {
-        public int ReccuringTypeId { get; set; }
-        public ReccuringTypeEntity ReccuringType { get; set; }
+        public int RecurringTypeId { get; set; }
+        public RecurringTypeEntity RecurringType { get; set; }
 
         [Required]
         public string UserId { get; set; }

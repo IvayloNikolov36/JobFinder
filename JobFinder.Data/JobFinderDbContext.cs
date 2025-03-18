@@ -75,7 +75,7 @@
 
         public DbSet<CurrencyEntity> Currencies { get; set; }
 
-        public DbSet<ReccuringTypeEntity> ReccuringTypes { get; set; }
+        public DbSet<RecurringTypeEntity> RecurringTypes { get; set; }
 
         // For VIEWS
 
@@ -92,14 +92,14 @@
         // DB Functions
 
         [DbFunction("udf_GetJobSubscriptions", Schema = "dbo")]
-        public IQueryable<JobAdsSubscriptionsDbFunctionResult> GetJobAdsSubscriptionsDbFunction(int reccuringTypeId) =>
+        public IQueryable<JobAdsSubscriptionsDbFunctionResult> GetJobAdsSubscriptionsDbFunction(int recurringTypeId) =>
             Set<JobAdsSubscriptionsDbFunctionResult>()
-            .FromSqlInterpolated(@$"SELECT * FROM [udf_GetJobSubscriptions] ({reccuringTypeId})");
+            .FromSqlInterpolated(@$"SELECT * FROM [udf_GetJobSubscriptions] ({recurringTypeId})");
 
 
         [DbFunction("udf_GetLatesJobAdsForSubscribers", Schema = "dbo")]
         public IQueryable<LatestJobAdsDbFunctionResult> GetLatesJobAdsForSubscribersDbFunction(
-                int reccuringTypeId,
+                int recurringTypeId,
                 int? jobCategoryId,
                 int? jobEngagementId,
                 int? locationId,
@@ -108,7 +108,7 @@
                 bool specifiedSalary) =>
             Set<LatestJobAdsDbFunctionResult>()
             .FromSqlInterpolated(@$"SELECT * FROM [udf_GetLatesJobAdsForSubscribers] (
-                {reccuringTypeId},
+                {recurringTypeId},
                 {jobCategoryId},
                 {jobEngagementId},
                 {locationId},
@@ -194,7 +194,7 @@
             DrivingCategorySeeder.Seed(builder);
             CitiesSeeder.Seed(builder);
             CurrenciesSeeder.Seed(builder);
-            ReccuringTypesSeeder.Seed(builder);
+            RecurringTypesSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

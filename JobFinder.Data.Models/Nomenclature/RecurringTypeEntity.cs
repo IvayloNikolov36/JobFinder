@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace JobFinder.Data.Models.Nomenclature
 {
     // TODO: typo - rename everywhere
-    public class ReccuringTypeEntity : BaseNomenclatureEntity<int>
+    public class RecurringTypeEntity : BaseNomenclatureEntity<int>
     {
-        public ReccuringTypeEntity()
+        public RecurringTypeEntity()
         {
             this.JobSubscriptions = new List<JobsSubscriptionEntity>();
         }

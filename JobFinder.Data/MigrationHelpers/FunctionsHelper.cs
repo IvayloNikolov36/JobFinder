@@ -92,7 +92,7 @@ namespace JobFinder.Data.MigrationHelpers
         {
             builder.Sql(
                 @"CREATE OR ALTER FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] 
-				(@reccuringTypeId INT
+				(@recurringTypeId INT
 				 ,@jobCategoryId INT
 				 ,@jobEngagementId INT
 				 ,@locationId INT
@@ -156,7 +156,7 @@ namespace JobFinder.Data.MigrationHelpers
 						FROM JobsSubscriptions AS js
 						JOIN AspNetUsers AS u
 							ON js.[UserId] = u.[Id]
-						WHERE ReccuringTypeId = @recurringTypeId
+						WHERE RecurringTypeId = @recurringTypeId
 						GROUP BY js.[JobCategoryId]
 								,js.[JobEngagementId]
 								,js.[LocationId]
@@ -175,7 +175,7 @@ namespace JobFinder.Data.MigrationHelpers
 		{
 			builder.Sql(@"
 				CREATE OR ALTER FUNCTION [dbo].[udf_GetLatesJobAdsForSubscribers] 
-				(@reccuringTypeId INT
+				(@recurringTypeId INT
 				 ,@jobCategoryId INT
 				 ,@jobEngagementId INT
 				 ,@locationId INT
@@ -203,9 +203,9 @@ namespace JobFinder.Data.MigrationHelpers
 					AND ja.[LocationId] = @locationId
 					AND DATEDIFF(DAY, ja.[CreatedOn], GETUTCDATE()) <=
 						CASE
-							WHEN @jobCategoryId = 1 THEN 1
-							WHEN @jobCategoryId = 2 THEN 7
-							WHEN @jobCategoryId = 3 THEN 31
+							WHEN @recurringTypeId = 1 THEN 1
+							WHEN @recurringTypeId = 2 THEN 7
+							WHEN @recurringTypeId = 3 THEN 31
 						END		 								
 				GROUP BY ja.[PublisherId]");
 		}

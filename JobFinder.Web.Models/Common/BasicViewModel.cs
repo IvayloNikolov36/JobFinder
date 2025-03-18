@@ -16,7 +16,7 @@ namespace JobFinder.Web.Models.Common
         IMapFrom<JobCategoryEntity>,
         IMapFrom<CityEntity>,
         IMapFrom<CurrencyEntity>,
-        IMapFrom<ReccuringTypeEntity>
+        IMapFrom<RecurringTypeEntity>
     {
         public BasicViewModel()
         {

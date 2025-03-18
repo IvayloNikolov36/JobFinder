@@ -23,7 +23,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository;
         private readonly IRepository<CityEntity> citiesRepository;
         private readonly IRepository<CurrencyEntity> currenciesRepository;
-        private readonly IRepository<ReccuringTypeEntity> reccuringTypesRepository;
+        private readonly IRepository<RecurringTypeEntity> recurringTypesRepository;
 
         public NomenclatureService(
             IRepository<CountryEntity> countriesRepository,
@@ -38,7 +38,7 @@ namespace JobFinder.Services.Implementations
             IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository,
             IRepository<CityEntity> citiesRepository,
             IRepository<CurrencyEntity> currenciesRepository,
-            IRepository<ReccuringTypeEntity> reccuringTypesRepository)
+            IRepository<RecurringTypeEntity> recurringTypesRepository)
         {
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;
@@ -52,8 +52,8 @@ namespace JobFinder.Services.Implementations
             this.drivingCategoryTypesRepository = drivingCategoryTypesRepository;
             this.citiesRepository = citiesRepository;
             this.currenciesRepository = currenciesRepository;
-            this.reccuringTypesRepository = reccuringTypesRepository;
-            this.reccuringTypesRepository = reccuringTypesRepository;
+            this.recurringTypesRepository = recurringTypesRepository;
+            this.recurringTypesRepository = recurringTypesRepository;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCountries()
@@ -152,14 +152,14 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<BasicViewModel>> GetRecurringTypes()
         {
-            return await this.reccuringTypesRepository.DbSetNoTracking()
+            return await this.recurringTypesRepository.DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToArrayAsync();
         }
 
         public IEnumerable<BasicViewModel> GetRecurringTypesSync()
         {
-            return this.reccuringTypesRepository.DbSetNoTracking()
+            return this.recurringTypesRepository.DbSetNoTracking()
                 .To<BasicViewModel>()
                 .ToList();
         }

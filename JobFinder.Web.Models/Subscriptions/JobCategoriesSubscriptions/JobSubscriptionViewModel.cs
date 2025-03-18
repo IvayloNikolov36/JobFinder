@@ -10,7 +10,7 @@ namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions
 
         public int Id { get; set; }
 
-        public string ReccuringType { get; set; }
+        public string RecurringType { get; set; }
 
         public string JobCategory { get; set; }
 
@@ -27,7 +27,7 @@ namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<JobsSubscriptionEntity, JobSubscriptionViewModel>()
-                .ForMember(vm => vm.ReccuringType, o => o.MapFrom(e => e.ReccuringType.Name))
+                .ForMember(vm => vm.RecurringType, o => o.MapFrom(e => e.RecurringType.Name))
                 .ForMember(vm => vm.JobCategory, o => o.MapFrom(e => e.JobCategoryId.HasValue ? e.JobCategory.Name : NoPropValueSubstitution))
                 .ForMember(vm => vm.JobEngagement, o => o.MapFrom(e => e.JobEngagementId.HasValue ? e.JobEngagement.Name : NoPropValueSubstitution))
                 .ForMember(vm => vm.Location, o => o.MapFrom(e => e.LocationId.HasValue ? e.Location.Name : NoPropValueSubstitution));
