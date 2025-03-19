@@ -77,18 +77,21 @@ namespace JobFinder.Services.Implementations
             await this.jobsRepository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId)
+        public async Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId)
         {
-            return await this.jobsRepository.DbSetNoTracking()
-                .Where(ja => ja.Publisher.UserId == userId)
-                .To<CompanyJobAdViewModel>()
-                .OrderByDescending(j => j.PublishDate)
-                .ToListAsync();
+            return await this.GetFilteredCompanyAds(userId, null);
         }
 
-        public async Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsFilterModel model)
+        public async Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId, bool active)
         {
-            IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository.DbSetNoTracking();
+            return await this.GetFilteredCompanyAds(userId, active);
+        }
+
+        public async Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model)
+        {
+            IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository
+                .DbSetNoTracking()
+                .Where(ja => ja.IsActive);
 
             if (!string.IsNullOrEmpty(model.SearchText?.Trim()))
             {
@@ -235,13 +238,28 @@ namespace JobFinder.Services.Implementations
             // TODO: think about a different approach - generating a enum from the db table and using it here
 
             int[] validJobEngagementIds = [1, 2, 4, 5];
-            string[] validJobEngagements = [ "Full time", "Part time", "Temporary", "Suitable for students"];
+            string[] validJobEngagements = ["Full time", "Part time", "Temporary", "Suitable for students"];
 
             if (intership && !validJobEngagementIds.Contains(jobEngagementId))
             {
                 throw new ActionableException(
                     $"When selecting Intership, you have to select one of these Job Engagements: {string.Join(", ", validJobEngagements)}");
             }
+        }
+
+        private async Task<IEnumerable<CompanyJobAdViewModel>> GetFilteredCompanyAds(string userId, bool? active)
+        {
+            IQueryable<JobAdvertisementEntity> query = this.jobsRepository.DbSetNoTracking()
+                .Where(ja => ja.Publisher.UserId == userId);
+
+            if (active.HasValue)
+            {
+                query = query.Where(ja => ja.IsActive == active);
+            }
+
+            return await query.OrderByDescending(j => j.PublishDate)
+                .To<CompanyJobAdViewModel>()
+                .ToListAsync();
         }
     }
 }

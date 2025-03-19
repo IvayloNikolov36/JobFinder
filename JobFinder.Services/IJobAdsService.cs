@@ -12,14 +12,16 @@
 
         Task CreateAsync(int companyId, JobAdCreateModel model);
 
-        Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId);
+        Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId);
 
-        Task<DataListingsModel<JobListingModel>> AllAsync(JobAdsFilterModel model);
+        Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string currentUserId, bool active);
+
+        Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model);
 
         Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel);
 
         Task<IEnumerable<JobAdDetailsForSubscriber>> GetDetails(IEnumerable<int> ids);
 
-        Task DeactivateAds();
+        Task DeactivateAds();     
     }
 }

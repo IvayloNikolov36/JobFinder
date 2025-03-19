@@ -23,19 +23,30 @@
         [HttpPost]
         public async Task<IActionResult> AllAds([FromBody] JobAdsFilterModel paramsModel)
         {
-            DataListingsModel<JobListingModel> ads = await this.adsService.AllAsync(paramsModel);
+            DataListingsModel<JobListingModel> ads = await this.adsService.AllActiveAsync(paramsModel);
 
             return this.Ok(ads);
         }
 
         [HttpGet]
-        [Route("company-ads")]
+        [Route("company/all")]
         [Authorize(Roles = CompanyRole)]
-        public async Task<IActionResult> GetCompanyAds()
+        public async Task<IActionResult> GetAllCompanyAds()
         {
             string currentUserId = this.User.GetCurrentUserId();
 
-            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService.GetCompanyAds(currentUserId);
+            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService.GetAllCompanyAds(currentUserId);
+
+            return this.Ok(jobAds);
+        }
+
+        [HttpGet]
+        [Route("company/{active}")]
+        public async Task<IActionResult> GetCompanyAds([FromRoute] bool active)
+        {
+            string currentUserId = this.User.GetCurrentUserId();
+
+            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService.GetCompanyAds(currentUserId, active);
 
             return this.Ok(jobAds);
         }
