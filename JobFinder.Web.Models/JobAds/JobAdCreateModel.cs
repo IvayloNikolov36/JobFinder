@@ -25,5 +25,7 @@
         public int? MaxSalary { get; set; }
 
         public int? CurrencyId { get; set; }
+
+        public bool Intership { get; set; }
     }
 }

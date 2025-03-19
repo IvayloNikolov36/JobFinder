@@ -8,16 +8,15 @@ namespace JobFinder.Data.Seeders
         public static void Seed(ModelBuilder builder)
         {
             builder.Entity<JobEngagementEntity>().HasData(
-                new JobEngagementEntity { Name = "FullTime", Id = 1 },
-                new JobEngagementEntity { Name = "PartTime", Id = 2 },
+                new JobEngagementEntity { Name = "Full time", Id = 1 },
+                new JobEngagementEntity { Name = "Part time", Id = 2 },
                 new JobEngagementEntity { Name = "Permanent", Id = 3 },
                 new JobEngagementEntity { Name = "Temporary", Id = 4 },
-                new JobEngagementEntity { Name = "Intership", Id = 5 },
-                new JobEngagementEntity { Name = "Suitable for students", Id = 6 },
+                new JobEngagementEntity { Name = "Suitable for students", Id = 5 },
                 new JobEngagementEntity
                 {
                     Name = "Suitable for candidates with no expirience",
-                    Id = 7
+                    Id = 6
                 });
         }
     }
