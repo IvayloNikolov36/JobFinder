@@ -141,6 +141,17 @@ namespace JobFinder.Services.Implementations
                 .ToListAsync();
         }
 
+        public async Task DeactivateAds()
+        {
+            // TODO: get the days from a Busines Rule
+
+            DateTime date = DateTime.UtcNow.AddDays(-30);
+
+            await this.jobsRepository.All()
+                .Where(ja => ja.IsActive && ja.PublishDate <= date)
+                .ExecuteUpdateAsync(s => s.SetProperty(ja => ja.IsActive, ja => !ja.IsActive));
+        }
+
         // Filter methods
 
         private IQueryable<JobAdvertisementEntity> FilteredByCategory(

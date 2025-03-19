@@ -24,7 +24,6 @@ namespace JobFinder.Web
     using System.Linq;
     using JobFinder.Services;
     using JobFinder.Web.Models.Common;
-    using System.Collections.Generic;
 
     public class Startup
     {
@@ -134,6 +133,13 @@ namespace JobFinder.Web
             app.UseHangfireDashboard();
 
             string dailyCronExpression = "0 0 * * *";
+
+            // TODO: think about extension methods for every job
+
+            recurringJobManager.AddOrUpdate(
+                "deactivating_JobAdvertisements_Published_MoreThan_30_DaysAgo",
+                () => serviceProvider.GetService<IJobAdsService>().DeactivateAds(),
+                dailyCronExpression);
 
             recurringJobManager.AddOrUpdate(
                 $"sending_Latest_CompanyJobAds",

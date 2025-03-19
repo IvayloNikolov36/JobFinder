@@ -74,8 +74,6 @@
         [Route("{id}")]
         public async Task<ActionResult> Edit([FromRoute] int id, [FromBody] JobAdEditModel model)
         {
-            // TODO: think about expiration - create recurring job for HangFire to set job ads to status expired after a period of time
-
             string userId = this.User.GetCurrentUserId();
 
             await this.adsService.EditAsync(id, userId, model);
@@ -83,5 +81,13 @@
             return this.Ok();
         }
 
+        [HttpGet]
+        [Route("deactivate")]
+        public async Task<IActionResult> DeactivateAds()
+        {
+            await this.adsService.DeactivateAds();
+
+            return this.Ok();
+        }
     }
 }
