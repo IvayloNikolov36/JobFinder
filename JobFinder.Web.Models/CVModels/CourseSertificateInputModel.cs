@@ -6,11 +6,9 @@
 
     public class CourseSertificateInputModel : IMapTo<CourseCertificateEntity>
     {
-        [Required]
         [StringLength(100, MinimumLength = 5)]
         public string CourseName { get; set; }
 
-        [Required]
         [Url]
         public string CertificateUrl { get; set; }
     }
