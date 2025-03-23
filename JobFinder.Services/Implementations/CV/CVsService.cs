@@ -67,6 +67,8 @@
 
         public async Task<string> CreateAsync(CVCreateInputModel cvModel, string userId)
         {
+            this.ValidateCoursesCertificatsInfo(cvModel.CourseCertificates);
+
             CurriculumVitaeEntity cvEntity = new();
 
             this.mapper.Map(cvModel, cvEntity);
@@ -88,6 +90,11 @@
             await this.repository.SaveChangesAsync();
 
             return cvEntity.Id;
+        }
+
+        private void ValidateCoursesCertificatsInfo(IEnumerable<CourseSertificateInputModel> courseCertificates)
+        {
+            // TODO: create a validation
         }
 
         public async Task<byte[]> GetCvDataAsync(string cvId)

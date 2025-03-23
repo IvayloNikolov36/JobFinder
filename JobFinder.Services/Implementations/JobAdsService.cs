@@ -116,14 +116,24 @@ namespace JobFinder.Services.Implementations
                 jobs = this.FilterByLocation(jobs, model.LocationId.Value);
             }
 
+            if (model.Intership)
+            {
+                jobs = jobs.Where(ja => ja.Intership);
+            }
+
+            if (model.SpecifiedSalary)
+            {
+                jobs = jobs.Where(ja => ja.MinSalary.HasValue && ja.MaxSalary.HasValue);
+            }
+
             if (!string.IsNullOrEmpty(model.SortBy) && model.SortBy == "Salary")
             {
-                jobs = this.SortBySalary(jobs, (bool)model.IsAscending);
+                jobs = this.SortBySalary(jobs, model.IsAscending);
             }
 
             if (!string.IsNullOrEmpty(model.SortBy) && model.SortBy == "Published")
             {
-                jobs = this.SortByPublishDate(jobs, (bool)model.IsAscending);
+                jobs = this.SortByPublishDate(jobs, model.IsAscending);
             }
 
             int totalCount = await jobs.CountAsync();

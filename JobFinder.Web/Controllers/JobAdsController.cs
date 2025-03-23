@@ -21,7 +21,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AllAds([FromBody] JobAdsFilterModel paramsModel)
+        public async Task<IActionResult> AllActiveAds([FromBody] JobAdsFilterModel paramsModel)
         {
             DataListingsModel<JobListingModel> ads = await this.adsService.AllActiveAsync(paramsModel);
 

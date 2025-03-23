@@ -19,6 +19,10 @@
 
         public string SortBy { get; set; }
 
-        public bool IsAscending { get; set; }
+        public bool IsAscending { get; set; } = false;
+
+        public bool SpecifiedSalary { get; set; } = false;
+
+        public bool Intership { get; set; } = false;
     }
 }
