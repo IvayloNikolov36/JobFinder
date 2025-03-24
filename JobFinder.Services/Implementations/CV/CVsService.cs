@@ -67,7 +67,7 @@
 
         public async Task<string> CreateAsync(CVCreateInputModel cvModel, string userId)
         {
-            this.ValidateCoursesCertificatsInfo(cvModel.CourseCertificates);
+            this.ValidateCoursesCertificatesInfo(cvModel.CourseCertificates);
 
             CurriculumVitaeEntity cvEntity = new();
 
@@ -92,9 +92,25 @@
             return cvEntity.Id;
         }
 
-        private void ValidateCoursesCertificatsInfo(IEnumerable<CourseSertificateInputModel> courseCertificates)
+        private void ValidateCoursesCertificatesInfo(IEnumerable<CourseSertificateInputModel> courseCertificates)
         {
-            // TODO: create a validation
+            if (courseCertificates == null)
+            {
+                throw new ActionableException("CourseCertificats cannot be null!");
+            }
+
+            foreach (CourseSertificateInputModel courseInfo in courseCertificates)
+            {
+                if (string.IsNullOrWhiteSpace(courseInfo?.CourseName))
+                {
+                    throw new ActionableException("Course name cannot be null, empty string or whitespace!");
+                }
+
+                if (courseInfo?.CertificateUrl == null)
+                {
+                    throw new ActionableException("Course certificate url cannot be null!");
+                }
+            }
         }
 
         public async Task<byte[]> GetCvDataAsync(string cvId)

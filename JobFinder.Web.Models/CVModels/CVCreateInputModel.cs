@@ -34,6 +34,6 @@ namespace JobFinder.Web.Models.CVModels
         [Required]
         public SkillsInputModel Skills { get; set; }
 
-        public IEnumerable<CourseSertificateInputModel> CourseCertificates { get; set; }
+        public IEnumerable<CourseSertificateInputModel> CourseCertificates { get; set; } = [];
     }
 }
