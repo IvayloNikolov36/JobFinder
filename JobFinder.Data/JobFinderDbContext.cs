@@ -156,6 +156,12 @@
             builder.Entity<JobAdApplicationEntity>()
                 .HasIndex(j => j.JobAdId);
 
+            builder.Entity<JobAdvertisementEntity>()
+                .ToTable(t => t.HasCheckConstraint("CHK_JobAdvertisements_MinSalary_MaxSalary_Currency",
+                     @"(CurrencyId IS NOT NULL AND MinSalary IS NOT NULL AND MaxSalary IS NOT NULL AND MinSalary <= MaxSalary)
+                        OR (CurrencyId IS NULL AND MinSalary IS NULL AND MaxSalary IS NULL)
+                     ")
+                );
 
             // VIEWS
 

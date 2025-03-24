@@ -25,7 +25,7 @@ namespace JobFinder.Web.Models.Subscriptions
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            // TODO: check the generated query and set check constraint for min and max salary
+            // TODO: check the generated query
 
             configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsForSubscriber>()
                 .ForMember(vm => vm.Salary, o => o.MapFrom(e => e.MinSalary.HasValue
