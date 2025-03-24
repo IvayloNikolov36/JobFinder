@@ -22,5 +22,10 @@
         public const string HttpPut = "PUT";
         public const string HttpPatch = "PATCH";
         public const string HttpDelete = "DELETE";
+
+        // CRONS
+        public const string DailyCronExpression = "0 0 * * *";
+        public const string EverySundayCronExpression = "0 0 * * SUN";
+        public const string FirstDayOfTheMonthCronExpression = "0 0 1 * *";
     }
 }

@@ -4,6 +4,7 @@ namespace JobFinder.Web
     using JobFinder.Data;
     using JobFinder.Data.Models;
     using JobFinder.Services.Mappings;
+    using JobFinder.Services.Messages;
     using JobFinder.Web.Infrastructure.Extensions;
     using JobFinder.Web.Models.JobAds;
     using JobFinder.Web.Infrastructure.Filters;
@@ -11,7 +12,6 @@ namespace JobFinder.Web
     using JobFinder.Data.Repositories.Contracts;
     using JobFinder.Web.Infrastructure;
     using JobFinder.Web.Infrastructure.Middlewares;
-    using JobFinder.Services.Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -21,9 +21,6 @@ namespace JobFinder.Web
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
     using System;
-    using System.Linq;
-    using JobFinder.Services;
-    using JobFinder.Web.Models.Common;
 
     public class Startup
     {
@@ -74,7 +71,9 @@ namespace JobFinder.Web
                 .Set(Configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
 
+
             // Service Filters
+
             services.AddScoped<ValidateCvIdBelongsToUser>();
             services.AddScoped<ValidateCompanyAccessingCVSentForOwnAd>();
 
@@ -131,38 +130,9 @@ namespace JobFinder.Web
             IServiceProvider serviceProvider)
         {
             app.UseHangfireDashboard();
-
-            string dailyCronExpression = "0 0 * * *";
-
-            // TODO: think about extension methods for every job
-
-            recurringJobManager.AddOrUpdate(
-                "deactivating_JobAdvertisements_Published_MoreThan_30_DaysAgo",
-                () => serviceProvider.GetService<IJobAdsService>().DeactivateAds(),
-                dailyCronExpression);
-
-            recurringJobManager.AddOrUpdate(
-                $"sending_Latest_CompanyJobAds",
-                () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForCompanySubscriptions(),
-                dailyCronExpression);
-
-            string everySundayCronExpression = "0 0 * * SUN";
-            string firstDayOfTheMonthCronExpression = "0 0 1 * *";
-
-            string[] cronExpressions = [dailyCronExpression, everySundayCronExpression, firstDayOfTheMonthCronExpression];
-
-            BasicViewModel[] recurringTypes = serviceProvider.GetService<INomenclatureService>().GetRecurringTypesSync().ToArray();
-
-            int index = 0;
-            foreach (string cronExpression in cronExpressions)
-            {
-                BasicViewModel recurringType = recurringTypes[index++];
-
-                recurringJobManager.AddOrUpdate(
-                    $"sending_{recurringType.Name}_JobAdsByCriterias",
-                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForJobSubscriptions(recurringType.Id),
-                    cronExpression);
-            }
+            recurringJobManager.RegisterDeactiveJobAdvertisements(serviceProvider);
+            recurringJobManager.RegisterSendLatestCompanyJobAdvertisements(serviceProvider);
+            recurringJobManager.RegisterSendingJobAdvertisementsBySubscriptions(serviceProvider);
         }
     }
 }

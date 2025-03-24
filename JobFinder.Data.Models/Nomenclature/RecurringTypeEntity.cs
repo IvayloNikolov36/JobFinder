@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    // TODO: typo - rename everywhere
     public class RecurringTypeEntity : BaseNomenclatureEntity<int>
     {
         public RecurringTypeEntity()
