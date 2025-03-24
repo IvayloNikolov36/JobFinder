@@ -1,37 +1,39 @@
-﻿using JobFinder.Data.Models.Nomenclature;
+﻿using AutoMapper;
+using JobFinder.Business.JobAds;
+using JobFinder.Common.Exceptions;
+using JobFinder.Data.Models;
+using JobFinder.Data.Repositories.Contracts;
+using JobFinder.Services.Mappings;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.JobAds;
+using JobFinder.Web.Models.Subscriptions;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobFinder.Services.Implementations
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using JobFinder.Common.Exceptions;
-    using JobFinder.Data.Models;
-    using JobFinder.Data.Repositories.Contracts;
-    using JobFinder.Services.Mappings;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.JobAds;
-    using JobFinder.Web.Models.Subscriptions;
-    using Microsoft.EntityFrameworkCore;
-
     public class JobAdsService : IJobAdsService
     {
-        private readonly IRepository<JobAdvertisementEntity> jobsRepository;
+        private readonly IRepository<JobAdvertisementEntity> jobAdsRepository;
+        private readonly IJobAdvertisementsRules jobAdsRules;
         private readonly IMapper mapper;
 
         public JobAdsService(
-            IRepository<JobAdvertisementEntity> jobsRepository,
+            IRepository<JobAdvertisementEntity> jobAdsRepository,
+            IJobAdvertisementsRules jobAdsRules,
             IMapper mapper)
         {
-            this.jobsRepository = jobsRepository;
+            this.jobAdsRepository = jobAdsRepository;
+            this.jobAdsRules = jobAdsRules;
             this.mapper = mapper;
         }
 
         public async Task<T> GetAsync<T>(int id)
         {
-            return await this.jobsRepository
+            return await this.jobAdsRepository
                 .DbSetNoTracking()
                 .Where(ja => ja.Id == id)
                 .To<T>()
@@ -40,23 +42,22 @@ namespace JobFinder.Services.Implementations
 
         public async Task CreateAsync(int companyId, JobAdCreateModel model)
         {
-            this.ValidateSalaryProperties(model.MinSalary, model.MaxSalary, model.CurrencyId);
-
-            this.ValidateIntership(model.Intership, model.JobEngagementId);
+            this.jobAdsRules.ValidateSalaryProperties(model.MinSalary, model.MaxSalary, model.CurrencyId);
+            this.jobAdsRules.ValidateIntership(model.Intership, model.JobEngagementId);
 
             JobAdvertisementEntity jobAd = this.mapper.Map<JobAdvertisementEntity>(model);
             jobAd.PublisherId = companyId;
             jobAd.PublishDate = DateTime.UtcNow;
             jobAd.IsActive = true;
 
-            await this.jobsRepository.AddAsync(jobAd);
+            await this.jobAdsRepository.AddAsync(jobAd);
 
-            await this.jobsRepository.SaveChangesAsync();
+            await this.jobAdsRepository.SaveChangesAsync();
         }
 
         public async Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel)
         {
-            JobAdvertisementEntity offerFromDb = await this.jobsRepository.FindAsync(jobAdId);
+            JobAdvertisementEntity offerFromDb = await this.jobAdsRepository.FindAsync(jobAdId);
 
             if (offerFromDb == null)
             {
@@ -72,9 +73,9 @@ namespace JobFinder.Services.Implementations
 
             this.mapper.Map(editModel, offerFromDb);
 
-            this.jobsRepository.Update(offerFromDb);
+            this.jobAdsRepository.Update(offerFromDb);
 
-            await this.jobsRepository.SaveChangesAsync();
+            await this.jobAdsRepository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId)
@@ -89,7 +90,7 @@ namespace JobFinder.Services.Implementations
 
         public async Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model)
         {
-            IQueryable<JobAdvertisementEntity> jobs = this.jobsRepository
+            IQueryable<JobAdvertisementEntity> jobs = this.jobAdsRepository
                 .DbSetNoTracking()
                 .Where(ja => ja.IsActive);
 
@@ -148,7 +149,7 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<JobAdDetailsForSubscriber>> GetDetails(IEnumerable<int> ids)
         {
-            return await this.jobsRepository.DbSetNoTracking()
+            return await this.jobAdsRepository.DbSetNoTracking()
                 .Where(ja => ids.Contains(ja.Id))
                 .To<JobAdDetailsForSubscriber>()
                 .ToListAsync();
@@ -156,11 +157,11 @@ namespace JobFinder.Services.Implementations
 
         public async Task DeactivateAds()
         {
-            // TODO: get the days from a Busines Rule
+            int expirationAfterDays = this.jobAdsRules.GetDaysExpiration();
 
-            DateTime date = DateTime.UtcNow.AddDays(-30);
+            DateTime date = DateTime.UtcNow.AddDays(-expirationAfterDays);
 
-            await this.jobsRepository.All()
+            await this.jobAdsRepository.All()
                 .Where(ja => ja.IsActive && ja.PublishDate <= date)
                 .ExecuteUpdateAsync(s => s.SetProperty(ja => ja.IsActive, ja => !ja.IsActive));
         }
@@ -208,58 +209,9 @@ namespace JobFinder.Services.Implementations
                 : jobAds.OrderByDescending(j => j.CreatedOn);
         }
 
-        // TODO: candidate for Busines rule
-        private void ValidateSalaryProperties(int? minSalary, int? maxSalary, int? currencyId)
-        {
-            if (maxSalary < minSalary)
-            {
-                throw new ActionableException("Max Salary must be equal to or grater than Min Salary!");
-            }
-
-            bool isIncompleteSalaryDiapason = (minSalary.HasValue && !maxSalary.HasValue)
-                || (!minSalary.HasValue && maxSalary.HasValue);
-
-            if (isIncompleteSalaryDiapason)
-            {
-                throw new ActionableException("You have to specify both min and max salary!");
-            }
-
-            bool hasSalaryDiapason = minSalary.HasValue && maxSalary.HasValue;
-
-            if (hasSalaryDiapason && !currencyId.HasValue)
-            {
-                throw new ActionableException("You have to specify currency type!");
-            }
-
-            if (!hasSalaryDiapason && currencyId.HasValue)
-            {
-                throw new ActionableException("You specified currency but forgot to specify min and max salary.");
-            }
-        }
-
-        // TODO: candidate for Business Rule
-        private void ValidateIntership(bool intership, int jobEngagementId)
-        {
-            if (!intership)
-            {
-                return;
-            }
-
-            // TODO: think about a different approach - generating a enum from the db table and using it here
-
-            int[] validJobEngagementIds = [1, 2, 4, 5];
-            string[] validJobEngagements = ["Full time", "Part time", "Temporary", "Suitable for students"];
-
-            if (intership && !validJobEngagementIds.Contains(jobEngagementId))
-            {
-                throw new ActionableException(
-                    $"When selecting Intership, you have to select one of these Job Engagements: {string.Join(", ", validJobEngagements)}");
-            }
-        }
-
         private async Task<IEnumerable<CompanyJobAdViewModel>> GetFilteredCompanyAds(string userId, bool? active)
         {
-            IQueryable<JobAdvertisementEntity> query = this.jobsRepository.DbSetNoTracking()
+            IQueryable<JobAdvertisementEntity> query = this.jobAdsRepository.DbSetNoTracking()
                 .Where(ja => ja.Publisher.UserId == userId);
 
             if (active.HasValue)

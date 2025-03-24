@@ -1,6 +1,7 @@
 ﻿namespace JobFinder.Services.Implementations
 {
     using AutoMapper;
+    using JobFinder.Business.JobSubscriptions;
     using JobFinder.Common.Exceptions;
     using JobFinder.Data;
     using JobFinder.Data.Models.Subscriptions;
@@ -21,6 +22,7 @@
         private readonly IJobAdsService jobAdsService;
         private readonly INomenclatureService nomenclatureService;
         private readonly IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository;
+        private readonly IJobSubscriptionsRules jobSubscriptionsRules;
         private readonly JobFinderDbContext dbContext;
         private readonly IMapper mapper;
 
@@ -28,12 +30,14 @@
             IJobAdsService jobAdsService,
             INomenclatureService nomenclatureService,
             IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository,
+            IJobSubscriptionsRules jobSubscriptionsRules,
             JobFinderDbContext dbContext,
             IMapper mapper)
         {
             this.jobAdsService = jobAdsService;
             this.nomenclatureService = nomenclatureService;
             this.jobsSubscriptionRepository = jobsSubscriptionRepository;
+            this.jobSubscriptionsRules = jobSubscriptionsRules;
             this.dbContext = dbContext;
             this.mapper = mapper;
         }
@@ -45,7 +49,7 @@
                 subscription.SearchTerm = null;
             }
 
-            this.ValidateJobsSubscriptionProperties(subscription);
+            this.jobSubscriptionsRules.ValidateJobsSubscriptionProperties(subscription);
 
             bool hasSuchSubscription = await this.HasSubscriptionWithSameCriterias(userId, subscription);
 
@@ -169,22 +173,6 @@
             }
 
             return result;
-        }
-
-        // TODO: candidate for a Business Rule
-        private void ValidateJobsSubscriptionProperties(JobSubscriptionCriteriasViewModel subscription)
-        {
-            bool hasAnyCriteriaSpecified = subscription.JobCategoryId.HasValue
-                || subscription.JobEngagementId.HasValue
-                || subscription.LocationId.HasValue
-                || subscription.Intership
-                || subscription.SpecifiedSalary
-                || !string.IsNullOrEmpty(subscription.SearchTerm);
-
-            if (!hasAnyCriteriaSpecified)
-            {
-                throw new ActionableException("No criterias specified for a subscription!");
-            }
         }
 
         private async Task<bool> HasSubscriptionWithSameCriterias(string userId, JobSubscriptionCriteriasViewModel subscription)

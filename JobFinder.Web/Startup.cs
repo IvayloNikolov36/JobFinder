@@ -21,6 +21,8 @@ namespace JobFinder.Web
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
     using System;
+    using JobFinder.Business.JobAds;
+    using JobFinder.Business.JobSubscriptions;
 
     public class Startup
     {
@@ -76,6 +78,10 @@ namespace JobFinder.Web
 
             services.AddScoped<ValidateCvIdBelongsToUser>();
             services.AddScoped<ValidateCompanyAccessingCVSentForOwnAd>();
+
+            // Busines Rules
+            services.AddSingleton<IJobAdvertisementsRules, JobAdvertisementsRules>();
+            services.AddSingleton<IJobSubscriptionsRules, JobsubscriptionsRules>();
 
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
             services.AddDomainServices();
