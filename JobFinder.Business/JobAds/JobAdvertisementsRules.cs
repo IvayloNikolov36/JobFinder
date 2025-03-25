@@ -1,5 +1,6 @@
 ﻿
 using JobFinder.Common.Exceptions;
+using System.Linq;
 
 namespace JobFinder.Business.JobAds
 {

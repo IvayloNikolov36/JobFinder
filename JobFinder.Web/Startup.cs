@@ -73,18 +73,10 @@ namespace JobFinder.Web
                 .Set(Configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
 
-
-            // Service Filters
-
-            services.AddScoped<ValidateCvIdBelongsToUser>();
-            services.AddScoped<ValidateCompanyAccessingCVSentForOwnAd>();
-
-            // Busines Rules
-            services.AddSingleton<IJobAdvertisementsRules, JobAdvertisementsRules>();
-            services.AddSingleton<IJobSubscriptionsRules, JobsubscriptionsRules>();
-
-            services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
-            services.AddDomainServices();
+            services.AddServiceFilters()
+                .AddBusinessServices()
+                .AddRepositories()
+                .AddDomainServices();
 
             services.AddTransient<IEmailSender, SendGridEmailSender>();
         }

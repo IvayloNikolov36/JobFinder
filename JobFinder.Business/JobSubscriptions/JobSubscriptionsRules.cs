@@ -3,7 +3,7 @@ using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 
 namespace JobFinder.Business.JobSubscriptions
 {
-    public class JobsubscriptionsRules : IJobSubscriptionsRules
+    public class JobSubscriptionsRules : IJobSubscriptionsRules
     {
         public void ValidateJobsSubscriptionProperties(JobSubscriptionCriteriasViewModel subscription)
         {
