@@ -1,6 +1,7 @@
 ﻿
 using JobFinder.Common.Exceptions;
 using System.Linq;
+using static JobFinder.Common.MessageConstants;
 
 namespace JobFinder.Business.JobAds
 {
@@ -12,27 +13,32 @@ namespace JobFinder.Business.JobAds
         {
             if (maxSalary < minSalary)
             {
-                throw new ActionableException("Max Salary must be equal to or grater than Min Salary!");
+                throw new ActionableException(MaxSalaryRestriction);
             }
 
-            bool isIncompleteSalaryDiapason = (minSalary.HasValue && !maxSalary.HasValue)
-                || (!minSalary.HasValue && maxSalary.HasValue);
+            bool noSalarySpecified = !minSalary.HasValue && !maxSalary.HasValue;
 
-            if (isIncompleteSalaryDiapason)
+            if (currencyId.HasValue)
             {
-                throw new ActionableException("You have to specify both min and max salary!");
+                if (noSalarySpecified)
+                {
+                    throw new ActionableException(SpecifyMinAndMaxSalary);
+                }             
+                if (!minSalary.HasValue)
+                {
+                    throw new ActionableException(SpecifyMinSalary);
+                }
+                if (!maxSalary.HasValue)
+                {
+                    throw new ActionableException(SpecifyMaxSalary);
+                }                             
             }
-
-            bool hasSalaryDiapason = minSalary.HasValue && maxSalary.HasValue;
-
-            if (hasSalaryDiapason && !currencyId.HasValue)
+            else
             {
-                throw new ActionableException("You have to specify currency type!");
-            }
-
-            if (!hasSalaryDiapason && currencyId.HasValue)
-            {
-                throw new ActionableException("You specified currency but forgot to specify min and max salary.");
+                if (minSalary.HasValue || maxSalary.HasValue)
+                {
+                    throw new ActionableException(SpecifyCurrency);
+                }
             }
         }
 
@@ -50,8 +56,7 @@ namespace JobFinder.Business.JobAds
 
             if (intership && !validJobEngagementIds.Contains(jobEngagementId))
             {
-                throw new ActionableException(
-                    $"When selecting Intership, you have to select one of these Job Engagements: {string.Join(", ", validJobEngagements)}");
+                throw new ActionableException(string.Format(IntershipAppropriateEngagements, string.Join(", ", validJobEngagements)));
             }
         }
 

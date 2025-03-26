@@ -44,11 +44,6 @@
 
         public async Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
         {
-            if (subscription.SearchTerm?.Trim() == string.Empty)
-            {
-                subscription.SearchTerm = null;
-            }
-
             this.jobSubscriptionsRules.ValidateJobsSubscriptionProperties(subscription);
 
             bool hasSuchSubscription = await this.HasSubscriptionWithSameCriterias(userId, subscription);

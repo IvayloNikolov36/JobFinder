@@ -1,5 +1,6 @@
 ﻿using JobFinder.Common.Exceptions;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
+using static JobFinder.Common.MessageConstants;
 
 namespace JobFinder.Business.JobSubscriptions
 {
@@ -12,11 +13,11 @@ namespace JobFinder.Business.JobSubscriptions
                 || subscription.LocationId.HasValue
                 || subscription.Intership
                 || subscription.SpecifiedSalary
-                || !string.IsNullOrEmpty(subscription.SearchTerm);
+                || !string.IsNullOrEmpty(subscription.SearchTerm?.Trim());
 
             if (!hasAnyCriteriaSpecified)
             {
-                throw new ActionableException("No criterias specified for a subscription!");
+                throw new ActionableException(NoSubscriptionCriterias);
             }
         }
     }
