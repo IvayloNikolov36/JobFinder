@@ -11,7 +11,6 @@
 
         public DateTime FromDate { get; set; }
 
-        // TODO: make validator Todate to be after FromDate
         public DateTime? ToDate { get; set; }
 
         [Required]

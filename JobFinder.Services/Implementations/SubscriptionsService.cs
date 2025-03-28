@@ -109,10 +109,11 @@
             }
 
             IEnumerable<BasicViewModel> locations = await this.nomenclatureService.GetCities();
-            IEnumerable<BasicViewModel> jobCategoris = await this.nomenclatureService.GetJobCategories();
+            IEnumerable<BasicViewModel> jobCategories = await this.nomenclatureService.GetJobCategories();
             IEnumerable<BasicViewModel> jobEngagements = await this.nomenclatureService.GetJobEngagements();
 
             Dictionary<string, List<JobAdsSubscriptionsViewModel>> result = [];
+            Dictionary<int, JobAdDetailsForSubscriber> jobDetailsById = [];
 
             foreach (JobAdsSubscriptionsDbFunctionResult item in jobAdsSubscriptions)
             {
@@ -134,16 +135,11 @@
 
                 string[] subscribers = item.SubscribersEmails.Split(["; "], StringSplitOptions.RemoveEmptyEntries);
 
-                IEnumerable<int> jobAdsIds = latestJobAds
+                int[] jobAdsIds = latestJobAds
                     .SelectMany(x => x.JobAdsIds
                         .Split([";"], StringSplitOptions.RemoveEmptyEntries)
-                        .Select(int.Parse));
-
-                // TODO: create memoization for jobAds
-                IEnumerable<JobAdDetailsForSubscriber> jobAds = await this.jobAdsService.GetDetails(jobAdsIds);
-                string jobCategory = jobCategoris.FirstOrDefault(jc => jc.Id == item.JobCategoryId)?.Name;
-                string jobEngagement = jobEngagements.FirstOrDefault(je => je.Id == item.JobEngagementId)?.Name;
-                string location = locations.FirstOrDefault(l => l.Id == item.LocationId)?.Name;
+                        .Select(int.Parse))
+                    .ToArray();
 
                 foreach (string subscriberEmail in subscribers)
                 {
@@ -154,13 +150,13 @@
 
                     JobAdsSubscriptionsViewModel model = new()
                     {
-                        JobCategory = jobCategoris.FirstOrDefault(jc => jc.Id == item.JobCategoryId)?.Name,
+                        JobCategory = jobCategories.FirstOrDefault(jc => jc.Id == item.JobCategoryId)?.Name,
                         JobEngagement = jobEngagements.FirstOrDefault(je => je.Id == item.JobEngagementId)?.Name,
                         Location = locations.FirstOrDefault(l => l.Id == item.LocationId)?.Name,
                         SearchTerm = item.SearchTerm,
                         SpecifiedSalary = item.SpecifiedSalary,
                         Intership = item.Intership,
-                        JobAds = jobAds
+                        JobAds = await this.GetJobAdsDetails(jobAdsIds, jobDetailsById)
                     };
 
                     result[subscriberEmail].Add(model);
@@ -168,6 +164,30 @@
             }
 
             return result;
+        }
+
+        private async Task<List<JobAdDetailsForSubscriber>> GetJobAdsDetails(int[] jobAdsIds, Dictionary<int, JobAdDetailsForSubscriber> jobDetailsById)
+        {
+            List<JobAdDetailsForSubscriber> jobAdsDetails = new(jobAdsIds.Length);
+
+            foreach (int adId in jobAdsIds)
+            {
+                JobAdDetailsForSubscriber jobAdDetails;
+
+                if (!jobDetailsById.ContainsKey(adId))
+                {
+                    jobAdDetails = await this.jobAdsService.GetDetails(adId);
+                    jobDetailsById.Add(adId, jobAdDetails);
+                }
+                else
+                {
+                    jobAdDetails = jobDetailsById[adId];
+                }
+
+                jobAdsDetails.Add(jobAdDetails);
+            }
+
+            return jobAdsDetails;
         }
 
         private async Task<bool> HasSubscriptionWithSameCriterias(string userId, JobSubscriptionCriteriasViewModel subscription)

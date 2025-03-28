@@ -20,7 +20,7 @@
 
         Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel);
 
-        Task<IEnumerable<JobAdDetailsForSubscriber>> GetDetails(IEnumerable<int> ids);
+        Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId);
 
         Task DeactivateAds();     
     }

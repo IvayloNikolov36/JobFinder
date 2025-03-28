@@ -147,12 +147,14 @@ namespace JobFinder.Services.Implementations
             return new DataListingsModel<JobListingModel>(totalCount, jobAds);
         }
 
-        public async Task<IEnumerable<JobAdDetailsForSubscriber>> GetDetails(IEnumerable<int> ids)
+        public async Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId)
         {
-            return await this.jobAdsRepository.DbSetNoTracking()
-                .Where(ja => ids.Contains(ja.Id))
+            JobAdDetailsForSubscriber details = await this.jobAdsRepository.DbSetNoTracking()
+                .Where(ja => ja.Id == jobAdId)
                 .To<JobAdDetailsForSubscriber>()
-                .ToListAsync();
+                .SingleOrDefaultAsync();
+
+            return details ?? throw new ActionableException($"There is no job ad with id: {jobAdId}!");
         }
 
         public async Task DeactivateAds()
