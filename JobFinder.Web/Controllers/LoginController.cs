@@ -14,6 +14,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+    using static JobFinder.Common.MessageConstants;
 
     public class LoginController : ApiController
     {
@@ -34,18 +35,17 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            SignInResult result = await signInManager
-                .PasswordSignInAsync(userName: model.Username, model.Password, false, false);
+            SignInResult result = await signInManager.PasswordSignInAsync(userName: model.Email, model.Password, false, false);
 
             if (!result.Succeeded)
             {
-                return this.BadRequest(new { Title = "Username and/or password are invalid." });
+                return this.BadRequest(new { Title = InvalidEmailOrPassword });
             }
 
-            UserEntity user = await this.userManager.FindByNameAsync(model.Username);
+            UserEntity user = await this.userManager.FindByNameAsync(model.Email);
             IList<string> roles = await this.userManager.GetRolesAsync(user);
 
-            List<Claim> claims = new()
+            List<Claim> claims = new(roles.Count + 1)
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
@@ -55,20 +55,20 @@
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
+            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(this.configuration["JwtSecurityKey"]));
             SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken token = new(
-                issuer: configuration["JwtIssuer"],
-                audience: configuration["JwtAudience"],
+                issuer: this.configuration["JwtIssuer"],
+                audience: this.configuration["JwtAudience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(Convert.ToInt32(configuration["JwtExpiryInDays"])),
+                expires: DateTime.UtcNow.AddDays(Convert.ToInt32(this.configuration["JwtExpiryInDays"])),
                 signingCredentials: credentials
             );
 
             LoginResult loginResult = new()
             {
-                Message = "Successfully logged in!",
+                Message = LoginSuccess,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Username = user.UserName,
                 Id = user.Id,

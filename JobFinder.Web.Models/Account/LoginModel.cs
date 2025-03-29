@@ -1,15 +1,18 @@
-﻿namespace JobFinder.Web.Models.Account
-{
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using static JobFinder.Common.Constants;
+using static JobFinder.Common.MessageConstants;
 
+namespace JobFinder.Web.Models.Account
+{
     public class LoginModel
     {
         [Required]
-        public string Username { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required]
+        [StringLength(PasswordMaxLength, ErrorMessage = ErrorModelPropertyMessage, MinimumLength = PasswordMinLength)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        public bool RememberMe { get; set; }
     }
 }
