@@ -4,7 +4,7 @@
 
     public class RegisterResult
     {
-        public bool Successful { get; set; }
+        public bool Successful { get; set; } = false;
 
         public string Message { get; set; }
 

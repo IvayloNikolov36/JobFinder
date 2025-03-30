@@ -10,7 +10,5 @@
         public const string IntershipAppropriateEngagements = "When selecting Intership, you have to select one of these Job Engagements: {0}";
         public const string NoSubscriptionCriterias = "No criterias specified for a subscription!";
         public const string ErrorModelPropertyMessage = "The {0} must be at least {2} and at max {1} characters long.";
-        public const string InvalidEmailOrPassword = "Email and/or password are invalid!";
-        public const string LoginSuccess = "Successfully logged in!";
     }
 }

@@ -14,7 +14,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-    using static JobFinder.Common.MessageConstants;
+    using static JobFinder.Web.Infrastructure.WebConstants;
 
     public class LoginController : ApiController
     {

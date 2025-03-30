@@ -1,16 +1,16 @@
-﻿namespace JobFinder.Web.Controllers
-{
-    using AutoMapper;
-    using JobFinder.Data.Models;
-    using JobFinder.Web.Models.Account;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using static JobFinder.Web.Infrastructure.WebConstants;
+﻿using AutoMapper;
+using JobFinder.Data.Models;
+using JobFinder.Web.Models.Account;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
+namespace JobFinder.Web.Controllers
+{
     public class RegisterController : ApiController
     {
         private readonly UserManager<UserEntity> userManager;
@@ -43,7 +43,7 @@
                 return this.BadRequest(requestResult);
             }
 
-            requestResult = new RegisterResult { Successful = true, Message = "Successfully registered!" };
+            requestResult = new RegisterResult { Successful = true, Message = RegisterSuccess };
 
             return this.Ok(requestResult);
         }
@@ -64,23 +64,23 @@
             }
             catch (Exception)
             {
-                return this.BadRequest(new { Title = "There is already a company with this name or bulstat!" });
+                return this.BadRequest(new RegisterResult { Errors = [ExistingCompany] });
             }
 
             if (!result.Succeeded)
             {
                 IEnumerable<string> errors = result.Errors.Select(x => x.Description);
 
-                return this.BadRequest(new RegisterResult { Successful = false, Errors = errors });
+                return this.BadRequest(new RegisterResult { Errors = errors });
             }
 
             IdentityResult addRoleResult = await this.userManager.AddToRoleAsync(newUser, CompanyRole);
             if (!addRoleResult.Succeeded)
             {
-                return this.BadRequest(new RegisterResult { Successful = false });
+                return this.BadRequest(new RegisterResult { Errors = [CanNotAddCompanyRole] });
             }
 
-            return this.Ok(new RegisterResult { Successful = true, Message = "Successfully registered!" });
+            return this.Ok(new RegisterResult { Successful = true, Message = RegisterSuccess });
         }
     }
 }
