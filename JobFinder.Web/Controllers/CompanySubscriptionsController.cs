@@ -26,7 +26,7 @@
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.companySubscriptionsService.SubscribeAsync(id, userId);
+            await this.companySubscriptionsService.Subscribe(id, userId);
 
             return this.Ok();
         }
@@ -37,7 +37,7 @@
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.companySubscriptionsService.UnsubscribeAsync(id, userId);
+            await this.companySubscriptionsService.Unsubscribe(id, userId);
 
             return this.Ok();
         }
@@ -48,7 +48,7 @@
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.companySubscriptionsService.UnsubscribeAllAsync(userId);
+            await this.companySubscriptionsService.UnsubscribeAll(userId);
 
             return this.Ok();
         }
@@ -69,7 +69,7 @@
         [Route("latestJobs")]
         public async Task<IActionResult> GetLatestJobs()
         {
-            IEnumerable<CompanyJobAdsForSubscribersViewData> data = await this.companySubscriptionsService.GetLatesJobAdsAsync();
+            IEnumerable<CompanyJobAdsForSubscribersViewData> data = await this.companySubscriptionsService.GetLatesJobAds();
 
             return this.Ok(data);
         }

@@ -2,7 +2,7 @@
 using JobFinder.Business.JobAds;
 using JobFinder.Common.Exceptions;
 using JobFinder.Data.Models;
-using JobFinder.Data.Repositories.Contracts;
+using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;

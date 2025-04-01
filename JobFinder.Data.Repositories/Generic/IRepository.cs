@@ -1,11 +1,7 @@
-﻿namespace JobFinder.Data.Repositories.Contracts
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
+namespace JobFinder.DataAccess.Generic
+{
     public interface IRepository<T> : IDisposable where T : class
     {
         IQueryable<T> All();

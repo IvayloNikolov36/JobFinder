@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using JobFinder.Common.Exceptions;
 using JobFinder.Data.Models;
-using JobFinder.Data.Repositories.Contracts;
+using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Web.Models.AdApplication;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JobFinder.Services.Implementations
 {

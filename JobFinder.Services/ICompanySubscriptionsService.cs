@@ -7,13 +7,13 @@
 
     public interface ICompanySubscriptionsService
     {
-        Task<IEnumerable<CompanyJobAdsForSubscribersViewData>> GetLatesJobAdsAsync();
+        Task<IEnumerable<CompanyJobAdsForSubscribersViewData>> GetLatesJobAds();
 
-        Task SubscribeAsync(int companyId, string userId);
+        Task Subscribe(int companyId, string userId);
 
-        Task UnsubscribeAsync(int companyId, string userId);
+        Task Unsubscribe(int companyId, string userId);
 
-        Task UnsubscribeAllAsync(string userId);
+        Task UnsubscribeAll(string userId);
 
         Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId);
     }

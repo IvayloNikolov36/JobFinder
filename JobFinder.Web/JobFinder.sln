@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobFinder.Web.Models", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobFinder.Data.Models", "..\JobFinder.Data.Models\JobFinder.Data.Models.csproj", "{F6166838-3BD0-4C72-B943-F1C72354139F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobFinder.Data.Repositories", "..\JobFinder.Data.Repositories\JobFinder.Data.Repositories.csproj", "{B8958A62-AE79-4E44-A9D4-C3D3F02D4E98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobFinder.DataAccess", "..\JobFinder.Data.Repositories\JobFinder.DataAccess.csproj", "{B8958A62-AE79-4E44-A9D4-C3D3F02D4E98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobFinder.Services.Messaging", "..\JobFinder.Services.Messaging\JobFinder.Services.Messaging.csproj", "{5228EF4A-87B4-4235-A5E5-F204C83AAE17}"
 EndProject

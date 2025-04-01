@@ -1,11 +1,8 @@
 ﻿using JobFinder.Data.Models.Nomenclature;
-using JobFinder.Data.Repositories.Contracts;
+using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Web.Models.Common;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JobFinder.Services.Implementations
 {

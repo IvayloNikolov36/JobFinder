@@ -1,16 +1,13 @@
-﻿namespace JobFinder.Services.Implementations.CV
-{
-    using AutoMapper;
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Repositories.Contracts;
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.CVModels;
-    using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+﻿using AutoMapper;
+using JobFinder.Data.Models.CV;
+using JobFinder.DataAccess.Generic;
+using JobFinder.Services.CV;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.CVModels;
+using Microsoft.EntityFrameworkCore;
 
+namespace JobFinder.Services.Implementations.CV
+{
     public class WorkExperienceInfosService : IWorkExperienceInfosService
     {
         private readonly IRepository<WorkExperienceInfoEntity> repository;

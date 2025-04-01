@@ -1,17 +1,17 @@
-﻿namespace JobFinder.Web.Infrastructure.Extensions
-{
-    using JobFinder.Business;
-    using JobFinder.Data.Repositories.Contracts;
-    using JobFinder.Data.Repositories;
-    using JobFinder.Services;
-    using JobFinder.Web.Infrastructure.Filters;
-    using Microsoft.Extensions.DependencyInjection;
-    using System.Linq;
-    using System.Reflection;
-    using JobFinder.Web.Infrastructure.Models;
-    using System.Collections.Generic;
-    using System;
+﻿using JobFinder.Business;
+using JobFinder.DataAccess.Generic;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Services;
+using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Infrastructure.Models;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
+namespace JobFinder.Web.Infrastructure.Extensions
+{
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDomainServices(
@@ -43,6 +43,7 @@
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
+            services.AddScoped<IEntityFrameworkUnitOfWork, EntityFrameworkUnitOfWork>();
 
             return services;
         }

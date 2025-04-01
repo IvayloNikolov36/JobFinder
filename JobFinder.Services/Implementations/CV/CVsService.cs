@@ -8,12 +8,12 @@
     using System;
     using System.Linq;
     using JobFinder.Services.Mappings;
-    using JobFinder.Data.Repositories.Contracts;
     using AutoMapper;
     using JobFinder.Web.Models.CVModels;
     using JobFinder.Data.Models.Cv;
     using JobFinder.Common.Exceptions;
     using JobFinder.Data.Models;
+    using JobFinder.DataAccess.Generic;
 
     public class CVsService : ICVsService
     {

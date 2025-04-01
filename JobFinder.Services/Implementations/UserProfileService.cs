@@ -1,5 +1,5 @@
 ﻿using JobFinder.Data.Models;
-using JobFinder.Data.Repositories.Contracts;
+using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Web.Models.UserProfile;
 using Microsoft.EntityFrameworkCore;

@@ -1,44 +1,36 @@
-﻿namespace JobFinder.Services.Implementations
-{
-    using AutoMapper;
-    using JobFinder.Business.JobSubscriptions;
-    using JobFinder.Common.Exceptions;
-    using JobFinder.Data;
-    using JobFinder.Data.Models.Subscriptions;
-    using JobFinder.Data.Models.ViewsModels;
-    using JobFinder.Data.Repositories.Contracts;
-    using JobFinder.Services.Mappings;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.Subscriptions;
-    using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
-    using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+﻿using AutoMapper;
+using JobFinder.Business.JobSubscriptions;
+using JobFinder.Common.Exceptions;
+using JobFinder.Data.Models.Subscriptions;
+using JobFinder.Data.Models.ViewsModels;
+using JobFinder.DataAccess.Generic;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.Subscriptions;
+using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 
+namespace JobFinder.Services.Implementations
+{
     public class SubscriptionsService : ISubscriptionsService
     {
         private readonly IJobAdsService jobAdsService;
         private readonly INomenclatureService nomenclatureService;
-        private readonly IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository;
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IJobSubscriptionsRules jobSubscriptionsRules;
-        private readonly JobFinderDbContext dbContext;
         private readonly IMapper mapper;
 
         public SubscriptionsService(
             IJobAdsService jobAdsService,
             INomenclatureService nomenclatureService,
             IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository,
+            IEntityFrameworkUnitOfWork unitOfWork,
             IJobSubscriptionsRules jobSubscriptionsRules,
-            JobFinderDbContext dbContext,
             IMapper mapper)
         {
             this.jobAdsService = jobAdsService;
             this.nomenclatureService = nomenclatureService;
-            this.jobsSubscriptionRepository = jobsSubscriptionRepository;
+            this.unitOfWork = unitOfWork;
             this.jobSubscriptionsRules = jobSubscriptionsRules;
-            this.dbContext = dbContext;
             this.mapper = mapper;
         }
 
@@ -46,64 +38,46 @@
         {
             this.jobSubscriptionsRules.ValidateJobsSubscriptionProperties(subscription);
 
-            bool hasSuchSubscription = await this.HasSubscriptionWithSameCriterias(userId, subscription);
-
+            bool hasSuchSubscription = await this.unitOfWork.JobAdSubscriptionsRepository.Any(userId, subscription);
             if (hasSuchSubscription)
             {
                 throw new ActionableException("You already have subscription for jobs with given criterias!");
             }
+            
+            subscription.UserId = userId;
 
-            JobsSubscriptionEntity subscriptionEntity = this.mapper.Map<JobsSubscriptionEntity>(subscription);
-            subscriptionEntity.UserId = userId;
+            await this.unitOfWork.JobAdSubscriptionsRepository.Add(subscription);
 
-            await this.jobsSubscriptionRepository.AddAsync(subscriptionEntity);
+            await this.unitOfWork.SaveChanges();
 
-            await this.jobsSubscriptionRepository.SaveChangesAsync();
-
-            JobSubscriptionViewModel result = await this.jobsSubscriptionRepository.DbSetNoTracking()
-                .Where(x => x.Id == subscriptionEntity.Id)
-                .To<JobSubscriptionViewModel>()
-                .SingleOrDefaultAsync();
-
-            return result;
+            // TODO: create when saveChanges is invoked with passed DTO, to return get the created id from the DTO
+            // return await this.unitOfWork.JobAdSubscriptionsRepository.GetDetails(subscription.Id);
+            return await this.unitOfWork.JobAdSubscriptionsRepository.GetLastSubscriptionDetails(userId);
         }
 
         public async Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId)
         {
-            JobsSubscriptionEntity subFromDb = await this.jobsSubscriptionRepository.FindAsync(subscriptionId)
-                ?? throw new ActionableException("Invalid subscription id!");
-
-            if (userId != subFromDb.UserId)
-            {
-                throw new UnauthorizedException("You are not allowed to remove another users' subscriptions!");
-            }
-
-            this.jobsSubscriptionRepository.Delete(subFromDb);
-            await this.jobsSubscriptionRepository.SaveChangesAsync();
+            await this.unitOfWork.JobAdSubscriptionsRepository.Delete(subscriptionId, userId);
+            await this.unitOfWork.SaveChanges();
         }
 
         public async Task UnsubscribeFromAllJobsWithCriterias(string userId)
         {
-            this.jobsSubscriptionRepository.DeleteWhere(js => js.UserId == userId);
-
-            await this.jobsSubscriptionRepository.SaveChangesAsync();
+            this.unitOfWork.JobAdSubscriptionsRepository.DeleteAll(userId);
+            await this.unitOfWork.SaveChanges();
         }
 
         public async Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId)
         {
-            return await this.jobsSubscriptionRepository.DbSetNoTracking()
-                .Where(js => js.UserId == userId)
-                .To<JobSubscriptionViewModel>()
-                .ToListAsync();
+            return await this.unitOfWork.JobAdSubscriptionsRepository.GetAll(userId);          
         }
 
         public async Task<IDictionary<string, List<JobAdsSubscriptionsViewModel>>> GetLatestJobAdsAsync(int recurringTypeId)
         {
-            List<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptions = await this.dbContext
-                .GetJobAdsSubscriptionsDbFunction(recurringTypeId)
-                .ToListAsync();
+            IEnumerable<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptions = await this.unitOfWork.JobAdSubscriptionsRepository
+                .GetAll(recurringTypeId);
 
-            if (jobAdsSubscriptions.Count == 0)
+            if (!jobAdsSubscriptions.Any())
             {
                 return new Dictionary<string, List<JobAdsSubscriptionsViewModel>>(0);
             }
@@ -117,18 +91,10 @@
 
             foreach (JobAdsSubscriptionsDbFunctionResult item in jobAdsSubscriptions)
             {
-                List<LatestJobAdsDbFunctionResult> latestJobAds = await this.dbContext
-                    .GetLatesJobAdsForSubscribersDbFunction(
-                        recurringTypeId,
-                        item.JobCategoryId,
-                        item.JobEngagementId,
-                        item.LocationId,
-                        item.SearchTerm,
-                        item.Intership,
-                        item.SpecifiedSalary)
-                    .ToListAsync();
+                IEnumerable<LatestJobAdsDbFunctionResult> latestJobAds = await this.unitOfWork.JobAdSubscriptionsRepository
+                    .GetLatestAdsForSubscriptions(recurringTypeId, item);
 
-                if (latestJobAds.Count == 0)
+                if (!latestJobAds.Any())
                 {
                     continue;
                 }
@@ -188,21 +154,6 @@
             }
 
             return jobAdsDetails;
-        }
-
-        private async Task<bool> HasSubscriptionWithSameCriterias(string userId, JobSubscriptionCriteriasViewModel subscription)
-        {
-            string trimmedSearchTerm = subscription.SearchTerm?.Trim();
-            string search = trimmedSearchTerm == string.Empty ? null : trimmedSearchTerm;
-
-            return await this.jobsSubscriptionRepository
-                .AnyAsync(js => js.UserId == userId
-                    && js.JobCategoryId == subscription.JobCategoryId
-                    && js.JobEngagementId == subscription.JobEngagementId
-                    && js.LocationId == subscription.LocationId
-                    && js.Intership == subscription.Intership
-                    && js.SpecifiedSalary == subscription.SpecifiedSalary
-                    && js.SearchTerm == search);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     using AutoMapper;
     using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Repositories.Contracts;
+    using JobFinder.DataAccess.Generic;  
     using JobFinder.Services.CV;
     using JobFinder.Web.Models.Common;
     using JobFinder.Web.Models.CVModels;

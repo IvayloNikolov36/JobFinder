@@ -1,29 +1,24 @@
+using Hangfire;
+using JobFinder.Data;
+using JobFinder.Data.Models;
+using JobFinder.Services.Mappings;
+using JobFinder.Services.Messages;
+using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Models.JobAds;
+using JobFinder.Web.Infrastructure;
+using JobFinder.Web.Infrastructure.Middlewares;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System;
+
 namespace JobFinder.Web
 {
-    using Hangfire;
-    using JobFinder.Data;
-    using JobFinder.Data.Models;
-    using JobFinder.Services.Mappings;
-    using JobFinder.Services.Messages;
-    using JobFinder.Web.Infrastructure.Extensions;
-    using JobFinder.Web.Models.JobAds;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Data.Repositories;
-    using JobFinder.Data.Repositories.Contracts;
-    using JobFinder.Web.Infrastructure;
-    using JobFinder.Web.Infrastructure.Middlewares;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.OpenApi.Models;
-    using System;
-    using JobFinder.Business.JobAds;
-    using JobFinder.Business.JobSubscriptions;
-
     public class Startup
     {
         public Startup(IConfiguration configuration)

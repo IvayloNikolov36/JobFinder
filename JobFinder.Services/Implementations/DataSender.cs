@@ -4,11 +4,7 @@ using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.Subscriptions;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace JobFinder.Services.Implementations
 {
@@ -43,7 +39,7 @@ namespace JobFinder.Services.Implementations
         public async Task SendLatestJobAdsForCompanySubscriptions()
         {
             IEnumerable<CompanyJobAdsForSubscribersViewData> data = await this.companySubscriptionsService
-                .GetLatesJobAdsAsync();
+                .GetLatesJobAds();
 
             foreach (var item in data)
             {
