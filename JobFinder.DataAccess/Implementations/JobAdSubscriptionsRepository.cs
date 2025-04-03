@@ -8,6 +8,7 @@ using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Common.Exceptions;
 using AutoMapper;
+using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.DataAccess.Implementations
 {
@@ -51,13 +52,13 @@ namespace JobFinder.DataAccess.Implementations
                     .ToListAsync();
         }
 
-        public async Task<bool> Any(string userId, JobSubscriptionCriteriasViewModel subscription)
+        public async Task<bool> Any(JobSubscriptionCriteriasDTO subscription)
         {
             string trimmedSearchTerm = subscription.SearchTerm?.Trim();
             string search = trimmedSearchTerm == string.Empty ? null : trimmedSearchTerm;
 
             return await this.DbSet
-                .AnyAsync(js => js.UserId == userId
+                .AnyAsync(js => js.UserId == subscription.UserId
                     && js.JobCategoryId == subscription.JobCategoryId
                     && js.JobEngagementId == subscription.JobEngagementId
                     && js.LocationId == subscription.LocationId
@@ -91,7 +92,7 @@ namespace JobFinder.DataAccess.Implementations
             base.Delete(subFromDb);
         }
 
-        public async Task Add(JobSubscriptionCriteriasViewModel subscription)
+        public async Task Add(JobSubscriptionCriteriasDTO subscription)
         {
             JobsSubscriptionEntity subscriptionEntity = this.mapper.Map<JobsSubscriptionEntity>(subscription);
 

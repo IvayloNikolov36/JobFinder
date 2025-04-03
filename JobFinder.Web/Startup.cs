@@ -16,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using JobFinder.Data.Models.Subscriptions;
+using System.Reflection;
 
 namespace JobFinder.Web
 {
@@ -30,8 +32,7 @@ namespace JobFinder.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            AutoMapperConfig
-                .RegisterMappings(typeof(JobAdCreateModel).Assembly);
+            AutoMapperConfig.RegisterMappings(this.GetAssembliesForAutomapper());
 
             services.AddSingleton(AutoMapperConfig.MapperInstance);
 
@@ -127,5 +128,8 @@ namespace JobFinder.Web
             recurringJobManager.RegisterSendLatestCompanyJobAdvertisements(serviceProvider);
             recurringJobManager.RegisterSendingJobAdvertisementsBySubscriptions(serviceProvider);
         }
+
+        private Assembly[] GetAssembliesForAutomapper()
+            => [typeof(JobAdCreateModel).Assembly, typeof(JobsSubscriptionEntity).Assembly];
     }
 }

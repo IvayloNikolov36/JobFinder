@@ -1,10 +1,10 @@
-﻿namespace JobFinder.Data.Models.Subscriptions
-{
-    using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Nomenclature;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Data.Models.Common;
+using JobFinder.Data.Models.Nomenclature;
+using System.ComponentModel.DataAnnotations;
 
-    public class JobsSubscriptionEntity : BaseEntity<int>
+namespace JobFinder.Data.Models.Subscriptions
+{
+    public partial class JobsSubscriptionEntity : BaseEntity<int>
     {
         public int RecurringTypeId { get; set; }
         public RecurringTypeEntity RecurringType { get; set; }

@@ -1,4 +1,5 @@
 ﻿using JobFinder.Data.Models.ViewsModels;
+using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 
 namespace JobFinder.DataAccess.Contracts
@@ -15,13 +16,13 @@ namespace JobFinder.DataAccess.Contracts
             int recurringTypeId,
             JobAdsSubscriptionsDbFunctionResult subscriptionCriterias);
 
-        Task<bool> Any(string userId, JobSubscriptionCriteriasViewModel subscription);
+        Task<bool> Any(JobSubscriptionCriteriasDTO subscription);
 
         void DeleteAll(string userId);
 
         Task Delete(int subscriptionId, string userId);
 
-        Task Add(JobSubscriptionCriteriasViewModel subscription);
+        Task Add(JobSubscriptionCriteriasDTO subscription);
 
         Task<JobSubscriptionViewModel> GetDetails(int subscriptionId);
 

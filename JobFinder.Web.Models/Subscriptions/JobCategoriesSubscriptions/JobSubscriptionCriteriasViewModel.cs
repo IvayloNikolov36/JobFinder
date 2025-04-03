@@ -24,8 +24,5 @@ namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions
         public bool SpecifiedSalary { get; set; }
 
         public string SearchTerm { get; set; }
-
-        // TODO: remove it when DTO is created
-        public string UserId { get; set; }
     }
 }

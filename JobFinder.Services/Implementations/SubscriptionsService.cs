@@ -38,18 +38,17 @@ namespace JobFinder.Services.Implementations
         public async Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
         {
             JobSubscriptionCriteriasDTO subscriptionDto = this.mapper.Map<JobSubscriptionCriteriasDTO>(subscription);
+            subscriptionDto.UserId = userId;
 
             this.jobSubscriptionsRules.ValidateJobsSubscriptionProperties(subscriptionDto);
 
-            bool hasSuchSubscription = await this.unitOfWork.JobAdSubscriptionsRepository.Any(userId, subscription);
+            bool hasSuchSubscription = await this.unitOfWork.JobAdSubscriptionsRepository.Any(subscriptionDto);
             if (hasSuchSubscription)
             {
                 throw new ActionableException("You already have subscription for jobs with given criterias!");
             }
-            
-            subscription.UserId = userId;
 
-            await this.unitOfWork.JobAdSubscriptionsRepository.Add(subscription);
+            await this.unitOfWork.JobAdSubscriptionsRepository.Add(subscriptionDto);
 
             await this.unitOfWork.SaveChanges();
 
