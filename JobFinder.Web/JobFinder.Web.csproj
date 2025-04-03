@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JobFinder.Business\JobFinder.Business.csproj" />
+    <ProjectReference Include="..\JobFinder.DataAccess\JobFinder.DataAccess.csproj" />
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Messaging\JobFinder.Services.Messaging.csproj" />
