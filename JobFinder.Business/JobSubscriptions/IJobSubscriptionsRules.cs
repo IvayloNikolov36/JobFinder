@@ -1,9 +1,9 @@
-﻿using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
+﻿using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.Business.JobSubscriptions
 {
     public interface IJobSubscriptionsRules
     {
-        void ValidateJobsSubscriptionProperties(JobSubscriptionCriteriasViewModel subscription);
+        void ValidateJobsSubscriptionProperties(JobSubscriptionCriteriasDTO subscription);
     }
 }

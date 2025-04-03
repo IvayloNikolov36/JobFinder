@@ -4,14 +4,11 @@ using JobFinder.Common.Exceptions;
 using JobFinder.Data.Models;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;
 using JobFinder.Web.Models.Subscriptions;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JobFinder.Services.Implementations
 {
@@ -42,7 +39,10 @@ namespace JobFinder.Services.Implementations
 
         public async Task CreateAsync(int companyId, JobAdCreateModel model)
         {
-            this.jobAdsRules.ValidateSalaryProperties(model.MinSalary, model.MaxSalary, model.CurrencyId);
+            SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(model);
+
+            this.jobAdsRules.ValidateSalaryProperties(salaryProperties);
+
             this.jobAdsRules.ValidateIntership(model.Intership, model.JobEngagementId);
 
             JobAdvertisementEntity jobAd = this.mapper.Map<JobAdvertisementEntity>(model);

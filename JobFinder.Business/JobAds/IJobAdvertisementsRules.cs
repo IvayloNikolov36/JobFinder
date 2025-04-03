@@ -1,8 +1,10 @@
-﻿namespace JobFinder.Business.JobAds
+﻿using JobFinder.Transfer.DTOs;
+
+namespace JobFinder.Business.JobAds
 {
     public interface IJobAdvertisementsRules
     {
-        void ValidateSalaryProperties(int? minSalary, int? maxSalary, int? currencyId);
+        void ValidateSalaryProperties(SalaryPropertiesDTO salaryProperties);
 
         void ValidateIntership(bool intership, int jobEngagementId);
 

@@ -8,6 +8,7 @@
     <ProjectReference Include="..\JobFinder.Common\JobFinder.Common.csproj" />
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
+    <ProjectReference Include="..\JobFinder.Transfer\JobFinder.Transfer.csproj" />
   </ItemGroup>
 
 </Project>

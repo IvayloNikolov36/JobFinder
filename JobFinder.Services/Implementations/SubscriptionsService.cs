@@ -5,6 +5,7 @@ using JobFinder.Data.Models.Subscriptions;
 using JobFinder.Data.Models.ViewsModels;
 using JobFinder.DataAccess.Generic;
 using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.Subscriptions;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
@@ -36,7 +37,9 @@ namespace JobFinder.Services.Implementations
 
         public async Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
         {
-            this.jobSubscriptionsRules.ValidateJobsSubscriptionProperties(subscription);
+            JobSubscriptionCriteriasDTO subscriptionDto = this.mapper.Map<JobSubscriptionCriteriasDTO>(subscription);
+
+            this.jobSubscriptionsRules.ValidateJobsSubscriptionProperties(subscriptionDto);
 
             bool hasSuchSubscription = await this.unitOfWork.JobAdSubscriptionsRepository.Any(userId, subscription);
             if (hasSuchSubscription)

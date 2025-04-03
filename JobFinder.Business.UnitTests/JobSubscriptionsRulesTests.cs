@@ -1,5 +1,6 @@
 ﻿using JobFinder.Business.JobSubscriptions;
 using JobFinder.Common.Exceptions;
+using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 using NUnit.Framework;
 using static JobFinder.Common.MessageConstants;
@@ -38,7 +39,7 @@ namespace JobFinder.Business.UnitTests
             bool specifiedSalary,
             string searchText)
         {
-            JobSubscriptionCriteriasViewModel subscriptionCriterias = new()
+            JobSubscriptionCriteriasDTO subscriptionCriterias = new()
             {
                 RecurringTypeId = ValidRecurringTypeId,
                 JobCategoryId = categoryId,
@@ -70,7 +71,7 @@ namespace JobFinder.Business.UnitTests
             bool specifiedSalary,
             string searchText)
         {
-            JobSubscriptionCriteriasViewModel subscriptionCriterias = new()
+            JobSubscriptionCriteriasDTO subscriptionCriterias = new()
             {
                 RecurringTypeId = ValidRecurringTypeId,
                 JobCategoryId = categoryId,
@@ -96,7 +97,7 @@ namespace JobFinder.Business.UnitTests
             bool specifiedSalary,
             string searchText)
         {
-            JobSubscriptionCriteriasViewModel subscriptionCriterias = new()
+            JobSubscriptionCriteriasDTO subscriptionCriterias = new()
             {
                 RecurringTypeId = ValidRecurringTypeId,
                 JobCategoryId = categoryId,
@@ -119,7 +120,7 @@ namespace JobFinder.Business.UnitTests
             bool specifiedSalary,
             string searchText)
         {
-            JobSubscriptionCriteriasViewModel subscriptionCriterias = new()
+            JobSubscriptionCriteriasDTO subscriptionCriterias = new()
             {
                 RecurringTypeId = ValidRecurringTypeId,
                 JobCategoryId = categoryId,

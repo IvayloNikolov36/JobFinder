@@ -1,6 +1,7 @@
 ﻿using JobFinder.Business.JobAds;
 using JobFinder.Common.Enums;
 using JobFinder.Common.Exceptions;
+using JobFinder.Transfer.DTOs;
 using NUnit.Framework;
 using static JobFinder.Common.MessageConstants;
 
@@ -32,7 +33,14 @@ namespace JobFinder.Business.UnitTests
             int? currencyTypeId,
             string message)
         {
-            Assert.That(() => this.rules.ValidateSalaryProperties(minSalary, maxSalary, currencyTypeId),
+            SalaryPropertiesDTO salaryProperties = new SalaryPropertiesDTO
+            {
+                MinSalary = minSalary,
+                MaxSalary = maxSalary,
+                HasCurrencyType = currencyTypeId.HasValue
+            };
+
+            Assert.That(() => this.rules.ValidateSalaryProperties(salaryProperties),
                 Throws.TypeOf<ActionableException>().With.Message.EqualTo(message));
         }
 
@@ -44,7 +52,14 @@ namespace JobFinder.Business.UnitTests
             int? maxSalary,
             int? currencyTypeId)
         {
-            Assert.DoesNotThrow(() => this.rules.ValidateSalaryProperties(minSalary, maxSalary, currencyTypeId));
+            SalaryPropertiesDTO salaryProperties = new SalaryPropertiesDTO
+            {
+                MinSalary = minSalary,
+                MaxSalary = maxSalary,
+                HasCurrencyType = currencyTypeId.HasValue
+            };
+
+            Assert.DoesNotThrow(() => this.rules.ValidateSalaryProperties(salaryProperties));
         }
 
         [TestCase((int)JobEngagementEnum.FullTime)]

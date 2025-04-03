@@ -1,10 +1,12 @@
 ﻿namespace JobFinder.Web.Models.JobAds
 {
+    using AutoMapper;
     using JobFinder.Data.Models;
     using JobFinder.Services.Mappings;
+    using JobFinder.Transfer.DTOs;
     using System.ComponentModel.DataAnnotations;
 
-    public class JobAdCreateModel : IMapTo<JobAdvertisementEntity>
+    public class JobAdCreateModel : IMapTo<JobAdvertisementEntity>, IHaveCustomMappings
     {
         [Required]
         [StringLength(90, MinimumLength = 6)]
@@ -27,5 +29,11 @@
         public int? CurrencyId { get; set; }
 
         public bool Intership { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<JobAdCreateModel, SalaryPropertiesDTO>()
+                .ForMember(dto => dto.HasCurrencyType, o => o.MapFrom(vm => vm.CurrencyId.HasValue));
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using JobFinder.Common.Exceptions;
+using JobFinder.Transfer.DTOs;
 using System.Linq;
 using static JobFinder.Common.MessageConstants;
 
@@ -9,33 +10,33 @@ namespace JobFinder.Business.JobAds
     {
         private const int DaysExpiration = 30;
 
-        public void ValidateSalaryProperties(int? minSalary, int? maxSalary, int? currencyId)
+        public void ValidateSalaryProperties(SalaryPropertiesDTO salaryProperties)
         {
-            if (maxSalary < minSalary)
+            if (salaryProperties.MaxSalary < salaryProperties.MinSalary)
             {
                 throw new ActionableException(MaxSalaryRestriction);
             }
 
-            bool noSalarySpecified = !minSalary.HasValue && !maxSalary.HasValue;
+            bool noSalarySpecified = !salaryProperties.MinSalary.HasValue && !salaryProperties.MaxSalary.HasValue;
 
-            if (currencyId.HasValue)
+            if (salaryProperties.HasCurrencyType)
             {
                 if (noSalarySpecified)
                 {
                     throw new ActionableException(SpecifyMinAndMaxSalary);
                 }             
-                if (!minSalary.HasValue)
+                if (!salaryProperties.MinSalary.HasValue)
                 {
                     throw new ActionableException(SpecifyMinSalary);
                 }
-                if (!maxSalary.HasValue)
+                if (!salaryProperties.MaxSalary.HasValue)
                 {
                     throw new ActionableException(SpecifyMaxSalary);
                 }                             
             }
             else
             {
-                if (minSalary.HasValue || maxSalary.HasValue)
+                if (salaryProperties.MinSalary.HasValue || salaryProperties.MaxSalary.HasValue)
                 {
                     throw new ActionableException(SpecifyCurrency);
                 }
