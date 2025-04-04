@@ -50,11 +50,9 @@ namespace JobFinder.Services.Implementations
 
             await this.unitOfWork.JobAdSubscriptionsRepository.Add(subscriptionDto);
 
-            await this.unitOfWork.SaveChanges();
+            await this.unitOfWork.SaveChanges<JobSubscriptionCriteriasDTO, int>(subscriptionDto);
 
-            // TODO: create when saveChanges is invoked with passed DTO, to return get the created id from the DTO
-            // return await this.unitOfWork.JobAdSubscriptionsRepository.GetDetails(subscription.Id);
-            return await this.unitOfWork.JobAdSubscriptionsRepository.GetLastSubscriptionDetails(userId);
+            return await this.unitOfWork.JobAdSubscriptionsRepository.GetDetails(subscriptionDto.Id);
         }
 
         public async Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId)
@@ -71,7 +69,7 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId)
         {
-            return await this.unitOfWork.JobAdSubscriptionsRepository.GetAll(userId);          
+            return await this.unitOfWork.JobAdSubscriptionsRepository.GetAll(userId);
         }
 
         public async Task<IDictionary<string, List<JobAdsSubscriptionsViewModel>>> GetLatestJobAdsAsync(int recurringTypeId)

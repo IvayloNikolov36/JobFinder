@@ -1,10 +1,10 @@
-﻿namespace JobFinder.Data.Models.Subscriptions
-{
-    using JobFinder.Data.Models.Common;
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Transfer.Common;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-    public class CompanySubscriptionEntity : IAuditInfo
+namespace JobFinder.Data.Models.Subscriptions
+{
+    public class CompanySubscriptionEntity : IAudit
     {
         [Required]
         public string UserId { get; set; }

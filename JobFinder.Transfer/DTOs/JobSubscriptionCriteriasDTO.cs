@@ -1,6 +1,8 @@
-﻿namespace JobFinder.Transfer.DTOs
+﻿using JobFinder.Transfer.Common;
+
+namespace JobFinder.Transfer.DTOs
 {
-    public class JobSubscriptionCriteriasDTO
+    public class JobSubscriptionCriteriasDTO : IUniquelyIdentified<int>
     {
         public int RecurringTypeId { get; set; }
 
@@ -17,5 +19,8 @@
         public string SearchTerm { get; set; }
 
         public string UserId { get; set; }
+
+        public int Id { get; set; }
+        public Guid UniqueIdentificator { get; set; }
     }
 }

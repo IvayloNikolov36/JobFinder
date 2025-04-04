@@ -25,8 +25,5 @@ namespace JobFinder.DataAccess.Contracts
         Task Add(JobSubscriptionCriteriasDTO subscription);
 
         Task<JobSubscriptionViewModel> GetDetails(int subscriptionId);
-
-        // TODO: remove it
-        Task<JobSubscriptionViewModel> GetLastSubscriptionDetails(string userId);
     }
 }

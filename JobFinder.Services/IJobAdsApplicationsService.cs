@@ -1,6 +1,4 @@
 ﻿using JobFinder.Web.Models.AdApplication;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace JobFinder.Services
 {

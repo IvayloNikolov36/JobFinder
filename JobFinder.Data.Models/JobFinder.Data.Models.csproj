@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JobFinder.Common\JobFinder.Common.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
     <ProjectReference Include="..\JobFinder.Transfer\JobFinder.Transfer.csproj" />
   </ItemGroup>

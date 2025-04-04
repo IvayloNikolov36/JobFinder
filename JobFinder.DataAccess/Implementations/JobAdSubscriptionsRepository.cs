@@ -98,16 +98,5 @@ namespace JobFinder.DataAccess.Implementations
 
             await base.AddAsync(subscriptionEntity);
         }
-
-        // TODO: remove after saveChanges with DTO is implemented
-
-        public async Task<JobSubscriptionViewModel> GetLastSubscriptionDetails(string userId)
-        {
-            return await this.DbSet.AsNoTracking()
-                .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.CreatedOn)
-                .To<JobSubscriptionViewModel>()
-                .FirstOrDefaultAsync();
-        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace JobFinder.Data
 {
     using JobFinder.Data.Models;
-    using JobFinder.Data.Models.Common;
     using JobFinder.Data.Models.Cv;
     using JobFinder.Data.Models.CV;
     using JobFinder.Data.Models.Nomenclature;
@@ -9,6 +8,7 @@
     using JobFinder.Data.Models.ViewsModels;
     using JobFinder.Data.SchemaDefinitions;
     using JobFinder.Data.Seeders;
+    using JobFinder.Transfer.Common;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -207,12 +207,12 @@
         {
             IEnumerable<EntityEntry> changedEntries = this.ChangeTracker
                 .Entries()
-                .Where(e => e.Entity is IAuditInfo
+                .Where(e => e.Entity is IAudit
                     && (e.State == EntityState.Added || e.State == EntityState.Modified));
 
             foreach (EntityEntry entry in changedEntries)
             {
-                IAuditInfo entity = (IAuditInfo)entry.Entity;
+                IAudit entity = (IAudit)entry.Entity;
 
                 if (entry.State == EntityState.Added && entity.CreatedOn == default)
                 {
