@@ -2,7 +2,6 @@
 using JobFinder.Business.JobSubscriptions;
 using JobFinder.Common.Exceptions;
 using JobFinder.Data.Models.Subscriptions;
-using JobFinder.Data.Models.ViewsModels;
 using JobFinder.DataAccess.Generic;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
@@ -52,7 +51,10 @@ namespace JobFinder.Services.Implementations
 
             await this.unitOfWork.SaveChanges<JobSubscriptionCriteriasDTO, int>(subscriptionDto);
 
-            return await this.unitOfWork.JobAdSubscriptionsRepository.GetDetails(subscriptionDto.Id);
+            JobSubscriptionDTO subscriptionDetails = await this.unitOfWork.JobAdSubscriptionsRepository
+                .GetDetails(subscriptionDto.Id);
+
+            return this.mapper.Map<JobSubscriptionViewModel>(subscriptionDetails);
         }
 
         public async Task UnsubscribeFromJobsWithCriterias(int subscriptionId, string userId)
@@ -69,12 +71,17 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId)
         {
-            return await this.unitOfWork.JobAdSubscriptionsRepository.GetAll(userId);
+            IEnumerable<JobSubscriptionDTO> subscriptions = await this.unitOfWork
+                .JobAdSubscriptionsRepository
+                .GetAll(userId);
+
+            return this.mapper.Map<IEnumerable<JobSubscriptionViewModel>>(subscriptions);
         }
 
         public async Task<IDictionary<string, List<JobAdsSubscriptionsViewModel>>> GetLatestJobAdsAsync(int recurringTypeId)
         {
-            IEnumerable<JobAdsSubscriptionsDbFunctionResult> jobAdsSubscriptions = await this.unitOfWork.JobAdSubscriptionsRepository
+            IEnumerable<JobAdsSubscriptionDTO> jobAdsSubscriptions = await this.unitOfWork
+                .JobAdSubscriptionsRepository
                 .GetAll(recurringTypeId);
 
             if (!jobAdsSubscriptions.Any())
@@ -89,9 +96,10 @@ namespace JobFinder.Services.Implementations
             Dictionary<string, List<JobAdsSubscriptionsViewModel>> result = [];
             Dictionary<int, JobAdDetailsForSubscriber> jobDetailsById = [];
 
-            foreach (JobAdsSubscriptionsDbFunctionResult item in jobAdsSubscriptions)
+            foreach (JobAdsSubscriptionDTO item in jobAdsSubscriptions)
             {
-                IEnumerable<LatestJobAdsDbFunctionResult> latestJobAds = await this.unitOfWork.JobAdSubscriptionsRepository
+                IEnumerable<LatestJobAdsDTO> latestJobAds = await this.unitOfWork
+                    .JobAdSubscriptionsRepository
                     .GetLatestAdsForSubscriptions(recurringTypeId, item);
 
                 if (!latestJobAds.Any())

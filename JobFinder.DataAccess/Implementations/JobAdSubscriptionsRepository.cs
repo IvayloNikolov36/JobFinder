@@ -1,14 +1,12 @@
-﻿using JobFinder.Data.Models.Subscriptions;
-using JobFinder.Data.Models.ViewsModels;
+﻿using AutoMapper;
+using JobFinder.Data.Models.Subscriptions;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.Data;
-using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
-using Microsoft.EntityFrameworkCore;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Common.Exceptions;
-using AutoMapper;
 using JobFinder.Transfer.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations
 {
@@ -21,24 +19,25 @@ namespace JobFinder.DataAccess.Implementations
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<JobAdsSubscriptionsDbFunctionResult>> GetAll(int recurringTypeId)
+        public async Task<IEnumerable<JobAdsSubscriptionDTO>> GetAll(int recurringTypeId)
         {
             return await this.Context
                 .GetJobAdsSubscriptionsDbFunction(recurringTypeId)
+                .To<JobAdsSubscriptionDTO>()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<JobSubscriptionViewModel>> GetAll(string userId)
+        public async Task<IEnumerable<JobSubscriptionDTO>> GetAll(string userId)
         {
             return await this.DbSet.AsNoTracking()
                 .Where(js => js.UserId == userId)
-                .To<JobSubscriptionViewModel>()
+                .To<JobSubscriptionDTO>()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<LatestJobAdsDbFunctionResult>> GetLatestAdsForSubscriptions(
+        public async Task<IEnumerable<LatestJobAdsDTO>> GetLatestAdsForSubscriptions(
             int recurringTypeId,
-            JobAdsSubscriptionsDbFunctionResult subscriptionCriterias)
+            JobAdsSubscriptionDTO subscriptionCriterias)
         {
             return await this.Context
                     .GetLatesJobAdsForSubscribersDbFunction(
@@ -49,6 +48,7 @@ namespace JobFinder.DataAccess.Implementations
                         subscriptionCriterias.SearchTerm,
                         subscriptionCriterias.Intership,
                         subscriptionCriterias.SpecifiedSalary)
+                    .To<LatestJobAdsDTO>()
                     .ToListAsync();
         }
 
@@ -72,11 +72,11 @@ namespace JobFinder.DataAccess.Implementations
             this.DeleteWhere(js => js.UserId == userId);
         }
 
-        public Task<JobSubscriptionViewModel> GetDetails(int subscriptionId)
+        public Task<JobSubscriptionDTO> GetDetails(int subscriptionId)
         {
             return this.DbSet.AsNoTracking()
                 .Where(x => x.Id == subscriptionId)
-                .To<JobSubscriptionViewModel>()
+                .To<JobSubscriptionDTO>()
                 .SingleOrDefaultAsync();
         }
 

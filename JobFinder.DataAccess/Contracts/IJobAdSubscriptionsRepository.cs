@@ -1,20 +1,16 @@
-﻿using JobFinder.Data.Models.ViewsModels;
-using JobFinder.Transfer.DTOs;
-using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
+﻿using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.DataAccess.Contracts
 {
     public interface IJobAdSubscriptionsRepository
     {
-        // TODO: create all to work with DTOs instead of view models
+        Task<IEnumerable<JobAdsSubscriptionDTO>> GetAll(int recurringTypeId);
 
-        Task<IEnumerable<JobAdsSubscriptionsDbFunctionResult>> GetAll(int recurringTypeId);
+        Task<IEnumerable<JobSubscriptionDTO>> GetAll(string userId);
 
-        Task<IEnumerable<JobSubscriptionViewModel>> GetAll(string userId);
-
-        Task<IEnumerable<LatestJobAdsDbFunctionResult>> GetLatestAdsForSubscriptions(
+        Task<IEnumerable<LatestJobAdsDTO>> GetLatestAdsForSubscriptions(
             int recurringTypeId,
-            JobAdsSubscriptionsDbFunctionResult subscriptionCriterias);
+            JobAdsSubscriptionDTO subscriptionCriterias);
 
         Task<bool> Any(JobSubscriptionCriteriasDTO subscription);
 
@@ -24,6 +20,6 @@ namespace JobFinder.DataAccess.Contracts
 
         Task Add(JobSubscriptionCriteriasDTO subscription);
 
-        Task<JobSubscriptionViewModel> GetDetails(int subscriptionId);
+        Task<JobSubscriptionDTO> GetDetails(int subscriptionId);
     }
 }

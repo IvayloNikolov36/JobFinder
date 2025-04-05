@@ -1,9 +1,11 @@
-﻿namespace JobFinder.Data.Models.ViewsModels
-{
-    public class LatestJobAdsDbFunctionResult
-    {
-        public int CompanyId { get; set; }
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs;
 
-        public string JobAdsIds { get; set; }
-    }
+namespace JobFinder.Data.Models.ViewsModels;
+
+public class LatestJobAdsDbFunctionResult : IMapTo<LatestJobAdsDTO>
+{
+    public int CompanyId { get; set; }
+
+    public string JobAdsIds { get; set; }
 }
