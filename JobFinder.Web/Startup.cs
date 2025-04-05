@@ -18,6 +18,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using JobFinder.Data.Models.Subscriptions;
 using System.Reflection;
+using JobFinder.Data.Models.ViewsModels;
 
 namespace JobFinder.Web
 {
@@ -130,6 +131,8 @@ namespace JobFinder.Web
         }
 
         private Assembly[] GetAssembliesForAutomapper()
-            => [typeof(JobAdCreateModel).Assembly, typeof(JobsSubscriptionEntity).Assembly];
+            => [typeof(JobAdCreateViewModel).Assembly,
+                typeof(JobsSubscriptionEntity).Assembly,
+                typeof(CompanyJobAdsForSubscribersViewData).Assembly];
     }
 }

@@ -1,9 +1,6 @@
-﻿using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs;
-
-namespace JobFinder.Data.Models.ViewsModels
+﻿namespace JobFinder.Transfer.DTOs
 {
-    public class CompanyJobAdsForSubscribersViewData : IMapTo<CompanyJobAdsForSubscribersDTO>
+    public class CompanyJobAdsForSubscribersDTO
     {
         public int CompanyId { get; set; }
 

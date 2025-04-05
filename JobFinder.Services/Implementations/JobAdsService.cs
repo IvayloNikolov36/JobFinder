@@ -37,7 +37,7 @@ namespace JobFinder.Services.Implementations
                 .FirstOrDefaultAsync();
         }
 
-        public async Task CreateAsync(int companyId, JobAdCreateModel model)
+        public async Task CreateAsync(int companyId, JobAdCreateViewModel model)
         {
             SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(model);
 

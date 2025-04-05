@@ -1,14 +1,11 @@
-﻿namespace JobFinder.Web.Controllers
-{
-    using JobFinder.Data.Models.ViewsModels;
-    using JobFinder.Services;
-    using JobFinder.Web.Infrastructure.Extensions;
-    using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services;
+using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
+namespace JobFinder.Web.Controllers
+{
     [Authorize]
     public class CompanySubscriptionsController : ApiController
     {
@@ -69,9 +66,10 @@
         [Route("latestJobs")]
         public async Task<IActionResult> GetLatestJobs()
         {
-            IEnumerable<CompanyJobAdsForSubscribersViewData> data = await this.companySubscriptionsService.GetLatesJobAds();
+            IEnumerable<CompanyJobAdsForSubscribersViewModel> jobs = await this.companySubscriptionsService
+                .GetLatesJobAds();
 
-            return this.Ok(data);
+            return this.Ok(jobs);
         }
     }
 }

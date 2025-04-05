@@ -1,20 +1,16 @@
-﻿namespace JobFinder.Services
+﻿using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
+
+namespace JobFinder.Services;
+
+public interface ICompanySubscriptionsService
 {
-    using JobFinder.Data.Models.ViewsModels;
-    using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+    Task<IEnumerable<CompanyJobAdsForSubscribersViewModel>> GetLatesJobAds();
 
-    public interface ICompanySubscriptionsService
-    {
-        Task<IEnumerable<CompanyJobAdsForSubscribersViewData>> GetLatesJobAds();
+    Task Subscribe(int companyId, string userId);
 
-        Task Subscribe(int companyId, string userId);
+    Task Unsubscribe(int companyId, string userId);
 
-        Task Unsubscribe(int companyId, string userId);
+    Task UnsubscribeAll(string userId);
 
-        Task UnsubscribeAll(string userId);
-
-        Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId);
-    }
+    Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId);
 }

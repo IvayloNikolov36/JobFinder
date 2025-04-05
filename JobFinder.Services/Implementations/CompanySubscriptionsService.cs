@@ -1,5 +1,7 @@
-﻿using JobFinder.Data.Models.ViewsModels;
+﻿using AutoMapper;
+using JobFinder.Data.Models.ViewsModels;
 using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
 
 namespace JobFinder.Services.Implementations
@@ -7,15 +9,22 @@ namespace JobFinder.Services.Implementations
     public class CompanySubscriptionsService : ICompanySubscriptionsService
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public CompanySubscriptionsService(IEntityFrameworkUnitOfWork unitOfWork)
+        public CompanySubscriptionsService(
+            IEntityFrameworkUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<CompanyJobAdsForSubscribersViewData>> GetLatesJobAds()
+        public async Task<IEnumerable<CompanyJobAdsForSubscribersViewModel>> GetLatesJobAds()
         {
-            return await this.unitOfWork.CompanySubscriptionsRepository.GetCompanyAdsBySubscriptions();
+            IEnumerable<CompanyJobAdsForSubscribersDTO> jobAds = await this.unitOfWork.CompanySubscriptionsRepository
+                .GetCompanyAdsBySubscriptions();
+
+            return this.mapper.Map<IEnumerable<CompanyJobAdsForSubscribersViewModel>>(jobAds);
         }
 
         public async Task Subscribe(int companyId, string userId)
@@ -38,7 +47,10 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId)
         {
-            return await this.unitOfWork.CompanySubscriptionsRepository.GetMySubscriptions(userId);
+            IEnumerable<CompanySubscriptionDTO> subscriptions = await this.unitOfWork.CompanySubscriptionsRepository
+                .GetMySubscriptions(userId);
+
+            return this.mapper.Map<IEnumerable<CompanySubscriptionViewModel>>(subscriptions);
         }
     }
 }

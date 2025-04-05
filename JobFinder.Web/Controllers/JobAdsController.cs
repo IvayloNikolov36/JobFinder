@@ -69,7 +69,7 @@
         [Route("create")]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> Create(
-            [FromBody] JobAdCreateModel model,
+            [FromBody] JobAdCreateViewModel model,
             [FromServices] ICompanyService companyService)
         {
             string userId = this.User.GetCurrentUserId();

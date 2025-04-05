@@ -2,33 +2,34 @@
 using JobFinder.Data;
 using JobFinder.Data.Models;
 using JobFinder.Data.Models.Subscriptions;
-using JobFinder.Data.Models.ViewsModels;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
-using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
+using JobFinder.Transfer.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations
 {
     public class CompanySubscriptionsRepository : EfCoreRepository<CompanySubscriptionEntity>, ICompanySubscriptionsRepository
     {
-        public CompanySubscriptionsRepository(JobFinderDbContext context) : base(context)
+        public CompanySubscriptionsRepository(JobFinderDbContext context)
+            : base(context)
         {
         }
 
-        public async Task<IEnumerable<CompanyJobAdsForSubscribersViewData>> GetCompanyAdsBySubscriptions()
+        public async Task<IEnumerable<CompanyJobAdsForSubscribersDTO>> GetCompanyAdsBySubscriptions()
         {
             return await this.Context
                 .CompanyJobAdsForSubscribersView
+                .To<CompanyJobAdsForSubscribersDTO>()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId)
+        public async Task<IEnumerable<CompanySubscriptionDTO>> GetMySubscriptions(string userId)
         {
             return await this.DbSet.AsNoTracking()
                 .Where(cs => cs.UserId == userId)
-                .To<CompanySubscriptionViewModel>()
+                .To<CompanySubscriptionDTO>()
                 .ToListAsync();
         }
 

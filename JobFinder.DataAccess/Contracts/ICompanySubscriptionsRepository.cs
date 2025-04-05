@@ -1,15 +1,13 @@
 ﻿using JobFinder.Data.Models.ViewsModels;
-using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
+using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.DataAccess.Contracts
 {
     public interface ICompanySubscriptionsRepository
     {
-        // TODO: create all to work with DTOs instead of view models
+        Task<IEnumerable<CompanyJobAdsForSubscribersDTO>> GetCompanyAdsBySubscriptions();
 
-        Task<IEnumerable<CompanyJobAdsForSubscribersViewData>> GetCompanyAdsBySubscriptions();
-
-        Task<IEnumerable<CompanySubscriptionViewModel>> GetMySubscriptions(string userId);
+        Task<IEnumerable<CompanySubscriptionDTO>> GetMySubscriptions(string userId);
 
         Task Subscribe(string userId, int companyId);
 

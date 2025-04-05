@@ -1,9 +1,9 @@
-﻿using JobFinder.Data.Models.Subscriptions;
-using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.Web.Models.Subscriptions.CompanySubscriptions
 {
-    public class CompanySubscriptionViewModel : IMapFrom<CompanySubscriptionEntity>
+    public class CompanySubscriptionViewModel : IMapFrom<CompanySubscriptionDTO>
     {
         public int CompanyId { get; set; }
 

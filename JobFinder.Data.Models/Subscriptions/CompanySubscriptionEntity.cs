@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Data.Models.Subscriptions
 {
-    public class CompanySubscriptionEntity : IAudit
+    public partial class CompanySubscriptionEntity : IAudit
     {
         [Required]
         public string UserId { get; set; }

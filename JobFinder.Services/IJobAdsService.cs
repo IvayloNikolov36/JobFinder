@@ -10,7 +10,7 @@
     {
         Task<T> GetAsync<T>(int id);
 
-        Task CreateAsync(int companyId, JobAdCreateModel model);
+        Task CreateAsync(int companyId, JobAdCreateViewModel model);
 
         Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId);
 

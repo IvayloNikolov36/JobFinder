@@ -2,6 +2,7 @@
 using JobFinder.Services.Messages;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.Subscriptions;
+using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 using Microsoft.Extensions.Configuration;
 using System.Text;
@@ -38,10 +39,10 @@ namespace JobFinder.Services.Implementations
 
         public async Task SendLatestJobAdsForCompanySubscriptions()
         {
-            IEnumerable<CompanyJobAdsForSubscribersViewData> data = await this.companySubscriptionsService
+            IEnumerable<CompanyJobAdsForSubscribersViewModel> data = await this.companySubscriptionsService
                 .GetLatesJobAds();
 
-            foreach (var item in data)
+            foreach (CompanyJobAdsForSubscribersViewModel item in data)
             {
                 int[] jobIds = item.JobAdIds
                     .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
