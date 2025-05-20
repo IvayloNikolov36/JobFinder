@@ -1,5 +1,4 @@
-﻿using JobFinder.Data.Models.ViewsModels;
-using JobFinder.Services.Messages;
+﻿using JobFinder.Services.Messages;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.Subscriptions;
 using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
@@ -44,25 +43,15 @@ namespace JobFinder.Services.Implementations
 
             foreach (CompanyJobAdsForSubscribersViewModel item in data)
             {
-                int[] jobIds = item.JobAdIds
-                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
-                    .Select(int.Parse)
-                    .ToArray();
+                int[] jobIds = this.GetStringArrayData(item.JobAdIds).Select(int.Parse).ToArray();
+                string[] subscribers = this.GetStringArrayData(item.Subscribers);
+                string[] positions = this.GetStringArrayData(item.Positions);
+                string[] locations = this.GetStringArrayData(item.Locations);
+                string[] engagements = this.GetStringArrayData(item.JobEngagements); ;
+                string[] categories = this.GetStringArrayData(item.JobCategories);
+                string[] salaries = this.GetStringArrayData(item.Salaries);
 
-                string[] subscribers = item.Subscribers
-                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
-                    .ToArray();
-
-                string[] jobPositions = item.Positions
-                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
-                    .ToArray();
-
-                string[] jobLocations = item.Locations
-                    .Split([DataSeparator], StringSplitOptions.RemoveEmptyEntries)
-                    .ToArray();
-
-                // TODO: parse the data for job engagements, categories, salaries and place it in the html
-
+                // place it in the html
 
                 StringBuilder sb = new();
                 sb.AppendLine(@$"<table style=""width: 100%"">");
@@ -70,8 +59,8 @@ namespace JobFinder.Services.Implementations
                 for (int i = 0; i < jobIds.Length; i++)
                 {
                     int jobId = jobIds[i];
-                    string position = jobPositions[i];
-                    string location = jobLocations[i];
+                    string position = positions[i];
+                    string location = locations[i];
 
                     //string backgroundStyle = string.Empty;
                     //if (i % 2 == 0)
@@ -194,6 +183,13 @@ namespace JobFinder.Services.Implementations
             }
 
             return content.TrimStart([',', ' ']);
+        }
+
+        private string[] GetStringArrayData(string stringLine, char separator = DataSeparator)
+        {
+            return stringLine
+                .Split([separator], StringSplitOptions.RemoveEmptyEntries)
+                .ToArray();
         }
     }
 }
