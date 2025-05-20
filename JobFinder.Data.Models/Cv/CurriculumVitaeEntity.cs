@@ -17,8 +17,9 @@ namespace JobFinder.Data.Models.CV
         }
 
         public string UserId { get; set; }
-
         public UserEntity User { get; set; }
+
+        public bool AnonymousProfileActivated { get; set; }
 
         [Required]
         [StringLength(20, MinimumLength = 5)]

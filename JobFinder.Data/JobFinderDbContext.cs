@@ -147,6 +147,10 @@
                 .HasForeignKey<CompanyEntity>(c => c.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
+            builder.Entity<CurriculumVitaeEntity>()
+                .Property(cv => cv.AnonymousProfileActivated)
+                .HasDefaultValue(false);
+
             builder.Entity<CompanySubscriptionEntity>()
                 .HasKey(x => new { x.UserId, x.CompanyId });
 

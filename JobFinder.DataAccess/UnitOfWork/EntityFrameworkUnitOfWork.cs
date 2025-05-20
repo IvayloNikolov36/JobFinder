@@ -15,6 +15,11 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         private ICompanySubscriptionsRepository companySubscriptionsRepository;
         private IJobAdSubscriptionsRepository jobAdSubscriptionsRepository;
+        private ICurriculumVitaeRepository curriculumVitaeRepository;
+        private IWorkExperienceRepository workExperienceRepository;
+        private IEducationInfoRepository educationInfoRepository;
+        private ILanguageInfoRepository languageInfoRepository;
+        private ICoursesCertificateInfoRepository coursesCertificateInfoRepository;
 
         public EntityFrameworkUnitOfWork(JobFinderDbContext dbContext, IMapper mapper)
         {
@@ -27,7 +32,6 @@ namespace JobFinder.DataAccess.UnitOfWork
             get
             {
                 this.companySubscriptionsRepository ??= new CompanySubscriptionsRepository(this.dbContext);
-
                 return this.companySubscriptionsRepository;
             }
         }
@@ -37,8 +41,52 @@ namespace JobFinder.DataAccess.UnitOfWork
             get
             {
                 this.jobAdSubscriptionsRepository ??= new JobAdSubscriptionsRepository(this.dbContext, this.mapper);
-
                 return this.jobAdSubscriptionsRepository;
+            }
+        }
+
+        public ICurriculumVitaeRepository CurriculumVitaeRepository
+        {
+            get
+            {
+                this.curriculumVitaeRepository ??= new CurriculumVitaeRepository(this.dbContext);
+                return this.curriculumVitaeRepository;
+            }
+        }
+
+        public IWorkExperienceRepository WorkExperienceRepository
+        {
+            get
+            {
+                this.workExperienceRepository ??= new WorkExperienceRepository(this.dbContext);
+                return this.workExperienceRepository;
+            }
+        }
+
+        public IEducationInfoRepository EducationInfoRepository
+        {
+            get
+            {
+                this.educationInfoRepository ??= new EducationInfoRepository(this.dbContext);
+                return this.educationInfoRepository;
+            }
+        }
+
+        public ILanguageInfoRepository LanguageInfoRepository
+        {
+            get
+            {
+                this.languageInfoRepository ??= new LanguageInfoRepository(this.dbContext);
+                return this.languageInfoRepository;
+            }
+        }
+
+        public ICoursesCertificateInfoRepository CoursesCertificateInfoRepository
+        {
+            get
+            {
+                this.coursesCertificateInfoRepository ??= new CoursesCertificateInfoRepository(this.dbContext);
+                return this.coursesCertificateInfoRepository;
             }
         }
 
@@ -65,7 +113,7 @@ namespace JobFinder.DataAccess.UnitOfWork
             foreach (DTO dto in dtosToPopulateId)
             {
                 this.Traverse(entitiesToInsert, dto);
-            }                
+            }
         }
 
         private void Traverse<IdType>(IList<IAuditInfo<IdType>> entitiesToInsert, IUniquelyIdentified<IdType> dto)
@@ -77,7 +125,7 @@ namespace JobFinder.DataAccess.UnitOfWork
             {
                 dto.Id = entity.Id;
             }
-                
+
 
             if (typeof(IAuditInfo<IdType>).IsAssignableFrom(dto.GetType()))
             {
@@ -91,7 +139,7 @@ namespace JobFinder.DataAccess.UnitOfWork
             foreach (IUniquelyIdentified<IdType> dtoChild in dtoChildren)
             {
                 this.Traverse(entitiesToInsert, dtoChild);
-            }               
+            }
         }
 
         private IEnumerable<IUniquelyIdentified<IdType>> GetAllChildren<IdType>(IUniquelyIdentified<IdType> dto)

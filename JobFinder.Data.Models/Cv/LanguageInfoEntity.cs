@@ -11,6 +11,8 @@
 
         public CurriculumVitaeEntity CurriculumVitae { get; set; }
 
+        public bool? IncludeInAnonymousProfile { get; set; }
+
         [Required]
         public int LanguageTypeId { get; set; }
 

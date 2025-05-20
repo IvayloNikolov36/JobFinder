@@ -9,6 +9,17 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         IJobAdSubscriptionsRepository JobAdSubscriptionsRepository { get; }
 
+        ICurriculumVitaeRepository CurriculumVitaeRepository { get; }
+
+        IWorkExperienceRepository WorkExperienceRepository { get; }
+
+        IEducationInfoRepository EducationInfoRepository { get; }
+
+        ILanguageInfoRepository LanguageInfoRepository { get; }
+
+        ICoursesCertificateInfoRepository CoursesCertificateInfoRepository {  get; }
+
+
         Task SaveChanges();
 
         Task SaveChanges<DTO, IdType>(DTO dtoToPopulateId) where DTO : IUniquelyIdentified<IdType>;
