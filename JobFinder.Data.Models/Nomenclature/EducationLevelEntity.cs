@@ -2,15 +2,14 @@
 using JobFinder.Data.Models.CV;
 using System.Collections.Generic;
 
-namespace JobFinder.Data.Models.Nomenclature
-{
-    public class EducationLevelEntity : BaseNomenclatureEntity<int>
-    {
-        public EducationLevelEntity()
-        {
-            this.Educations = new List<EducationInfoEntity>();
-        }
+namespace JobFinder.Data.Models.Nomenclature;
 
-        public ICollection<EducationInfoEntity> Educations { get; set; }
+public partial class EducationLevelEntity : BaseNomenclatureEntity<int>
+{
+    public EducationLevelEntity()
+    {
+        this.Educations = new List<EducationInfoEntity>();
     }
+
+    public ICollection<EducationInfoEntity> Educations { get; set; }
 }

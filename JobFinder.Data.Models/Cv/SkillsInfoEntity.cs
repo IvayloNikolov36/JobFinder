@@ -1,11 +1,11 @@
-﻿namespace JobFinder.Data.Models.CV
-{
-    using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Cv;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Data.Models.Common;
+using JobFinder.Data.Models.Cv;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-    public class SkillsInfoEntity : BaseEntity<int>
+namespace JobFinder.Data.Models.CV
+{
+    public partial class SkillsInfoEntity : BaseEntity<int>
     {
         public SkillsInfoEntity()
         {

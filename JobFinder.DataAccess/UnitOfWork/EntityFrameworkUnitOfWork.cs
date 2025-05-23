@@ -49,7 +49,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.curriculumVitaeRepository ??= new CurriculumVitaeRepository(this.dbContext);
+                this.curriculumVitaeRepository ??= new CurriculumVitaeRepository(this.dbContext, mapper);
                 return this.curriculumVitaeRepository;
             }
         }

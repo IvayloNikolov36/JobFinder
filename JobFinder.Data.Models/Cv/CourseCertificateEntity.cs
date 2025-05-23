@@ -1,9 +1,9 @@
-﻿namespace JobFinder.Data.Models.CV
-{
-    using JobFinder.Data.Models.Common;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Data.Models.Common;
+using System.ComponentModel.DataAnnotations;
 
-    public class CourseCertificateEntity : BaseEntity<int>
+namespace JobFinder.Data.Models.CV
+{
+    public partial class CourseCertificateEntity : BaseEntity<int>
     {
         [Required]
         public string CurriculumVitaeId { get; set; }

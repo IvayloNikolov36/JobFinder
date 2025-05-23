@@ -1,8 +1,7 @@
 ﻿using JobFinder.Data.Models.Common;
 
-namespace JobFinder.Data.Models.Nomenclature
+namespace JobFinder.Data.Models.Nomenclature;
+
+public partial class LanguageLevelEntity : BaseNomenclatureEntity<int>
 {
-    public class LanguageLevelEntity : BaseNomenclatureEntity<int>
-    {
-    }
 }

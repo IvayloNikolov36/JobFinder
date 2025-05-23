@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class GenderEntity : BaseNomenclatureEntity<int>
+    public partial class GenderEntity : BaseNomenclatureEntity<int>
     {
         public GenderEntity()
         {

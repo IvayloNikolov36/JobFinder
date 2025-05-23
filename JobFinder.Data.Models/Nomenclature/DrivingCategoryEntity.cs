@@ -2,10 +2,9 @@
 using JobFinder.Data.Models.Cv;
 using System.Collections.Generic;
 
-namespace JobFinder.Data.Models.Nomenclature
+namespace JobFinder.Data.Models.Nomenclature;
+
+public partial class DrivingCategoryEntity : BaseNomenclatureEntity<int>
 {
-    public class DrivingCategoryEntity : BaseNomenclatureEntity<int>
-    {
-        public ICollection<SkillsInfoDrivingCategoryEntity> SkillsInfoDrivingCategories { get; set; }
-    }
+    public ICollection<SkillsInfoDrivingCategoryEntity> SkillsInfoDrivingCategories { get; set; }
 }

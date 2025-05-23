@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class CitizenshipEntity : BaseNomenclatureEntity<int>
+    public partial class CitizenshipEntity : BaseNomenclatureEntity<int>
     {
         public CitizenshipEntity()
         {

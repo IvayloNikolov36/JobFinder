@@ -26,5 +26,17 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok();
         }
+
+        [HttpGet]
+        [Route("view")]
+        public async Task<IActionResult> GetMyAnonymousProfileData()
+        {
+            string userId = this.User.GetCurrentUserId(); // "fc196a9b-e035-4081-938a-07cc40ae94d4";
+
+            AnonymousProfileCvDataViewModel anonymousCvData = await this.anonymousProfileService
+                .GetAnonymousProfileData(userId);
+
+            return this.Ok(anonymousCvData);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using JobFinder.Common.Exceptions;
+﻿using AutoMapper;
+using JobFinder.Common.Exceptions;
 using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -10,8 +11,8 @@ namespace JobFinder.DataAccess.Generic
     {
         public EfCoreRepository(JobFinderDbContext context)
         {
-            Context = context ?? throw new ArgumentNullException(nameof(context));
-            DbSet = Context.Set<T>();
+            this.Context = context ?? throw new ArgumentNullException(nameof(context));
+            this.DbSet = this.Context.Set<T>();
         }
 
         protected DbSet<T> DbSet { get; set; }

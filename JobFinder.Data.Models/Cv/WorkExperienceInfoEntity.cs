@@ -1,11 +1,11 @@
-﻿namespace JobFinder.Data.Models.CV
-{
-    using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Nomenclature;
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Data.Models.Common;
+using JobFinder.Data.Models.Nomenclature;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-    public class WorkExperienceInfoEntity : BaseEntity<int>
+namespace JobFinder.Data.Models.CV
+{
+    public partial class WorkExperienceInfoEntity : BaseEntity<int>
     {
         [Required]
         public string CurriculumVitaeId { get; set; }
