@@ -1,8 +1,8 @@
-﻿using JobFinder.Common.Exceptions;
-using JobFinder.Data;
+﻿using JobFinder.Data;
 using JobFinder.Data.Models.CV;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
@@ -14,19 +14,17 @@ public class CoursesCertificateInfoRepository
 
     }
 
-    public async Task SetIncludeInAnonymousProfile(string cvId, int courseCertificateInfoId)
+    public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> courseCertificateInfoIds)
     {
-        CourseCertificateEntity course = await this.DbSet.FindAsync(courseCertificateInfoId);
-
-        base.ValidateForExistence(course, "CourseCertificateInfo");
-
-        if (course.CurriculumVitaeId != cvId)
+        CourseCertificateEntity[] courses = await this.DbSet
+            .Where(c => courseCertificateInfoIds.Contains(c.Id))
+            .ToArrayAsync();
+        
+        foreach (CourseCertificateEntity course in courses)
         {
-            throw new ActionableException("You can't modify foreign user cv details!");
-        }
+            course.IncludeInAnonymousProfile = true;
+        } 
 
-        course.IncludeInAnonymousProfile = true;
-
-        this.DbSet.Update(course);
+        this.DbSet.UpdateRange(courses);
     }
 }

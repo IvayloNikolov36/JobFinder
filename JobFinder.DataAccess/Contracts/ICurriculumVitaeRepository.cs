@@ -7,4 +7,6 @@ public interface ICurriculumVitaeRepository
     Task<string> GetUserId(string curriculumVitaeId);
 
     Task<AnonymousProfileCvDataDTO> GetAnonymousProfileCvData(string userId);
+
+    Task SetAnonymousProfileCreated(string cvId);
 }

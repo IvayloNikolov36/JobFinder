@@ -2,5 +2,5 @@
 
 public interface IWorkExperienceRepository
 {
-    Task SetIncludeInAnonymousProfile(string cvId, int workExperienceId);
+    Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> workExperienceId);
 }

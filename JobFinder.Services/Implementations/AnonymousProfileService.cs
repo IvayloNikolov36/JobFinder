@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using JobFinder.Common.Exceptions;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.AnonymousProfile;
@@ -17,42 +16,24 @@ public class AnonymousProfileService : IAnonymousProfileService
         this.mapper = mapper;
     }
 
-    public async Task Create(string userId, AnonymousProfileCreateViewModel profile)
+    public async Task Activate(string cvId, AnonymousProfileCreateViewModel profile)
     {
-        string cvUserId = await this.unitOfWork
-            .CurriculumVitaeRepository
-            .GetUserId(profile.CurriculumVitaeId);
+        await this.unitOfWork.CurriculumVitaeRepository.SetAnonymousProfileCreated(cvId);
 
-        if (userId != cvUserId)
-        {
-            throw new ActionableException("You can activate anonymous profile for foreign curriculum vitae!");
-        }
+        await this.unitOfWork.WorkExperienceRepository
+            .SetIncludeInAnonymousProfile(cvId, profile.WorkExpiriencesInfo);
 
-        // TODO: set in cv entity that has created anonymous profile (set bit to 1)
-        
-        foreach (int workExperienceInfoId in profile.WorkExpiriencesInfo)
-        {
-            await this.unitOfWork.WorkExperienceRepository
-                .SetIncludeInAnonymousProfile(profile.CurriculumVitaeId, workExperienceInfoId);
-        }
+        await this.unitOfWork.EducationInfoRepository
+            .SetIncludeInAnonymousProfile(cvId, profile.EducationsInfo);
 
-        foreach (int educationInfoId in profile.EducationsInfo)
-        {
-            await this.unitOfWork.EducationInfoRepository
-                .SetIncludeInAnonymousProfile(profile.CurriculumVitaeId, educationInfoId);
-        }
+        await this.unitOfWork.LanguageInfoRepository
+            .SetIncludeInAnonymousProfile(cvId, profile.LanguagesInfo);
 
-        foreach (int languageInfoId in profile.LanguagesInfo)
-        {
-            await this.unitOfWork.LanguageInfoRepository
-                .SetIncludeInAnonymousProfile(profile.CurriculumVitaeId, languageInfoId);
-        }
+        await this.unitOfWork.CoursesCertificateInfoRepository
+            .SetIncludeInAnonymousProfile(cvId, profile.CoursesInfo);
 
-        foreach (int courseInfoId in profile.CoursesInfo)
-        {
-            await this.unitOfWork.CoursesCertificateInfoRepository
-                .SetIncludeInAnonymousProfile(profile.CurriculumVitaeId, courseInfoId);
-        }
+        await this.unitOfWork.CurriculumVitaeRepository
+            .SetAnonymousProfileCreated(cvId);
 
         await this.unitOfWork.SaveChanges();
     }

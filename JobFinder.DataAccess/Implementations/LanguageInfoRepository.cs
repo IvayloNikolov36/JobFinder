@@ -1,8 +1,8 @@
-﻿using JobFinder.Common.Exceptions;
-using JobFinder.Data;
+﻿using JobFinder.Data;
 using JobFinder.Data.Models.CV;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
@@ -13,19 +13,17 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
 
     }
 
-    public async Task SetIncludeInAnonymousProfile(string cvId, int languageInfoId)
+    public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> languageInfoIds)
     {
-        LanguageInfoEntity languageInfo = await this.DbSet.FindAsync(languageInfoId);
+        LanguageInfoEntity[] languageInfos = await this.DbSet
+            .Where(li => languageInfoIds.Contains(li.Id))
+            .ToArrayAsync();
 
-        base.ValidateForExistence(languageInfo, "LanguageInfo");
-
-        if (languageInfo.CurriculumVitaeId != cvId)
+        foreach (LanguageInfoEntity languageInfo in languageInfos)
         {
-            throw new ActionableException("You can't modify foreign user cv details!");
+            languageInfo.IncludeInAnonymousProfile = true;
         }
 
-        languageInfo.IncludeInAnonymousProfile = true;
-
-        this.DbSet.Update(languageInfo);
+        this.DbSet.UpdateRange(languageInfos);
     }
 }

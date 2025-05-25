@@ -2,5 +2,5 @@
 
 public interface IEducationInfoRepository
 {
-    Task SetIncludeInAnonymousProfile(string cvId, int educationInfoId);
+    Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> educationInfoIds);
 }

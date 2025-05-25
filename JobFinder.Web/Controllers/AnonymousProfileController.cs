@@ -1,5 +1,6 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Models.AnonymousProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,13 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPost]
-        [Route("activate")]
-        public async Task<IActionResult> Activate(AnonymousProfileCreateViewModel profile)
+        [Route("{cvId:guid}/activate")]
+        [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
+        public async Task<IActionResult> Activate(
+            [FromRoute] Guid cvId,
+            [FromBody] AnonymousProfileCreateViewModel profile)
         {
-            string currentUserId = this.User.GetCurrentUserId();
-
-            await this.anonymousProfileService.Create(currentUserId, profile);
+            await this.anonymousProfileService.Activate(cvId.ToString(), profile);
 
             return this.Ok();
         }

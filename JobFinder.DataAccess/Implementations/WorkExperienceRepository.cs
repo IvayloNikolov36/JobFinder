@@ -1,8 +1,8 @@
-﻿using JobFinder.Common.Exceptions;
-using JobFinder.Data;
+﻿using JobFinder.Data;
 using JobFinder.Data.Models.CV;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
@@ -13,19 +13,17 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
 
     }
 
-    public async Task SetIncludeInAnonymousProfile(string cvId, int workExperienceId)
+    public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> workExperienceIds)
     {
-        WorkExperienceInfoEntity workExperience = await this.DbSet.FindAsync(workExperienceId);
+        WorkExperienceInfoEntity[] workExperienceEntities = await this.DbSet
+            .Where(we => workExperienceIds.Contains(we.Id))
+            .ToArrayAsync();
 
-        base.ValidateForExistence(workExperience, "WorkExperienceInfo");
-
-        if (workExperience.CurriculumVitaeId != cvId)
+        foreach (WorkExperienceInfoEntity workExperience in workExperienceEntities)
         {
-            throw new ActionableException("You can't modify foreign user cv details!");
+            workExperience.IncludeInAnonymousProfile = true;
         }
 
-        workExperience.IncludeInAnonymousProfile = true;
-
-        this.DbSet.Update(workExperience);
+        this.DbSet.UpdateRange(workExperienceEntities);
     }
 }

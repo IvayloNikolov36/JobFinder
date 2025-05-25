@@ -2,5 +2,5 @@
 
 public interface ICoursesCertificateInfoRepository
 {
-    Task SetIncludeInAnonymousProfile(string cvId, int courseCertificateInfoId);
+    Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> courseCertificateInfoIds);
 }
