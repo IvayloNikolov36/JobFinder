@@ -27,7 +27,7 @@ namespace JobFinder.Web.Models.CVModels
 
         public SkillsViewModel Skills { get; set; }
 
-        public IEnumerable<CourseCertificateViewModel> CourseCertificates { get; set; }
+        public IEnumerable<CourseInfoViewModel> CourseCertificates { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

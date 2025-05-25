@@ -25,7 +25,7 @@ namespace JobFinder.Web.Models.UserProfile
         {
             configuration.CreateMap<UserEntity, UserProfileDataViewModel>()
                 .ForMember(vm => vm.FullName, o => o.MapFrom(e => e.FirstName + " " + e.LastName))
-                // TODO: think about for picture url and phone in user profile table
+                // TODO: think about for picture url in user profile table
                 .ForMember(vm => vm.PictureUrl, o => o.MapFrom(e => e.CurriculumVitaes
                     .Select(c => c.PictureUrl)
                     .FirstOrDefault()))

@@ -10,7 +10,6 @@ using JobFinder.Web.Infrastructure.Middlewares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using JobFinder.Data.Models.Subscriptions;
 using System.Reflection;
 using JobFinder.Data.Models.ViewsModels;
 
@@ -126,7 +125,7 @@ namespace JobFinder.Web
 
         private Assembly[] GetAssembliesForAutomapper()
             => [typeof(JobAdCreateViewModel).Assembly,
-                typeof(JobsSubscriptionEntity).Assembly,
+                typeof(UserEntity).Assembly,
                 typeof(CompanyJobAdsForSubscribersViewData).Assembly];
     }
 }

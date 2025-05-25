@@ -2,6 +2,8 @@
 
 public class LanguageInfoDTO
 {
+    public int Id { get; set; }
+
     public BasicDTO LanguageType { get; set; }
 
     public BasicDTO ComprehensionLevel { get; set; }

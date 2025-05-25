@@ -6,7 +6,7 @@ public class AnonymousProfileCvDataDTO
 {
     public required string Id { get; set; }
 
-    public required PersonalInfoDTO PersonalDetails { get; set; }
+    public required PersonalInfoAnonymousProfileDTO PersonalInfo { get; set; }
 
     public required IEnumerable<EducationInfoDTO> EducationInfo { get; set; }
 
@@ -16,5 +16,5 @@ public class AnonymousProfileCvDataDTO
 
     public required SkillsInfoDTO SkillsInfo { get; set; }
 
-    public required IEnumerable<CourseCertificateDTO> CourseCertificates { get; set; }
+    public required IEnumerable<CourseCertificateDTO> CoursesInfo { get; set; }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Data.Models.CV
 {    
-    public class CurriculumVitaeEntity : BaseEntity<string>
+    public partial class CurriculumVitaeEntity : BaseEntity<string>
     {
         public CurriculumVitaeEntity()
         {
@@ -31,6 +31,7 @@ namespace JobFinder.Data.Models.CV
 
         public byte[] Data { get; set; }
 
+        // TODO: rename it to PersonalInfo
         public PersonalInfoEntity PersonalDetails { get; set; }
 
         public SkillsInfoEntity Skills { get; set; }

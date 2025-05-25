@@ -3,6 +3,7 @@ using JobFinder.Data;
 using JobFinder.Data.Models.CV;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
+using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.CV;
 using Microsoft.EntityFrameworkCore;
@@ -34,21 +35,7 @@ public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>
     {
         return await this.DbSet
             .Where(cv => cv.UserId == userId && cv.AnonymousProfileActivated)
-            .Select(cv => new AnonymousProfileCvDataDTO
-            {
-                // TODO: fix the mappings -> BasicDTOs are null
-                Id = cv.Id,
-                PersonalDetails = this.mapper.Map<PersonalInfoDTO>(cv.PersonalDetails),
-                WorkExperienceInfo = this.mapper.Map<IEnumerable<WorkExperienceInfoDTO>>(
-                    cv.WorkExperiences.Where(we => we.IncludeInAnonymousProfile == true)),
-                EducationInfo = this.mapper.Map<IEnumerable<EducationInfoDTO>>(
-                    cv.Educations.Where(e => e.IncludeInAnonymousProfile == true)),
-                LanguagesInfo = this.mapper.Map<IEnumerable<LanguageInfoDTO>>(
-                    cv.LanguagesInfo.Where(li => li.IncludeInAnonymousProfile == true)),
-                CourseCertificates = this.mapper.Map<IEnumerable<CourseCertificateDTO>>(
-                    cv.CourseCertificates.Where(cs => cs.IncludeInAnonymousProfile == true)),
-                SkillsInfo = this.mapper.Map<SkillsInfoDTO>(cv.Skills)
-            })
+            .To<AnonymousProfileCvDataDTO>()
             .SingleOrDefaultAsync();
     }
 }

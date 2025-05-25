@@ -256,7 +256,7 @@
 
             // Additional courses
 
-            foreach (CourseCertificateViewModel cs in data.CourseCertificates)
+            foreach (CourseInfoViewModel cs in data.CourseCertificates)
             {
                 sb.AppendFormat(@$"<tr>
                                     <td>{cs.CourseName}</td>

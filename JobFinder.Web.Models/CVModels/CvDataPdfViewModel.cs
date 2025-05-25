@@ -20,7 +20,7 @@
 
         public ICollection<LanguageInfoViewModel> LanguagesInfo { get; set; }
 
-        public ICollection<CourseCertificateViewModel> CourseCertificates { get; set; }
+        public ICollection<CourseInfoViewModel> CourseCertificates { get; set; }
 
     }
 }

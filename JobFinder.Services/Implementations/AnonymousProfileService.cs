@@ -14,6 +14,7 @@ public class AnonymousProfileService : IAnonymousProfileService
     public AnonymousProfileService(IEntityFrameworkUnitOfWork unitOfWork, IMapper mapper)
     {
         this.unitOfWork = unitOfWork;
+        this.mapper = mapper;
     }
 
     public async Task Create(string userId, AnonymousProfileCreateViewModel profile)

@@ -1,7 +1,9 @@
 ﻿namespace JobFinder.Transfer.DTOs.CV;
 
-public class PersonalInfoDTO
+public class PersonalInfoAnonymousProfileDTO
 {
+    public int Id { get; set; }
+
     public BasicDTO Gender { get; set; }
 
     public BasicDTO Citizenship { get; set; }

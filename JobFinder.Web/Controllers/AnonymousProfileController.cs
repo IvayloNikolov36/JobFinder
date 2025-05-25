@@ -31,7 +31,7 @@ namespace JobFinder.Web.Controllers
         [Route("view")]
         public async Task<IActionResult> GetMyAnonymousProfileData()
         {
-            string userId = this.User.GetCurrentUserId(); // "fc196a9b-e035-4081-938a-07cc40ae94d4";
+            string userId = this.User.GetCurrentUserId();
 
             AnonymousProfileCvDataViewModel anonymousCvData = await this.anonymousProfileService
                 .GetAnonymousProfileData(userId);

@@ -2,6 +2,8 @@
 
 public class SkillsInfoDTO
 {
+    public int Id { get; set; }
+
     public string ComputerSkills { get; set; }
 
     public string OtherSkills { get; set; }

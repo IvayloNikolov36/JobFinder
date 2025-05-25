@@ -3,6 +3,6 @@ using JobFinder.Transfer.DTOs.CV;
 
 namespace JobFinder.Data.Models.CV;
 
-public partial class PersonalInfoEntity : IMapTo<PersonalInfoDTO>
+public partial class PersonalInfoEntity : IMapTo<PersonalInfoAnonymousProfileDTO>
 {
 }
