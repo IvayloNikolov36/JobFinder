@@ -4,7 +4,7 @@ namespace JobFinder.Services;
 
 public interface IAnonymousProfileService
 {
-    Task Activate(string userId, AnonymousProfileCreateViewModel profile);
+    Task Activate(string cvId, string userId, AnonymousProfileCreateViewModel profile);
 
     Task<AnonymousProfileCvDataViewModel> GetAnonymousProfileData(string userId);
 }

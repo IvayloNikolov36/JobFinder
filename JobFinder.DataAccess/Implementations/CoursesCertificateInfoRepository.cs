@@ -17,12 +17,12 @@ public class CoursesCertificateInfoRepository
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> courseCertificateInfoIds)
     {
         CourseCertificateEntity[] courses = await this.DbSet
-            .Where(c => courseCertificateInfoIds.Contains(c.Id))
+            .Where(c => c.CurriculumVitaeId == cvId)
             .ToArrayAsync();
         
         foreach (CourseCertificateEntity course in courses)
         {
-            course.IncludeInAnonymousProfile = true;
+            course.IncludeInAnonymousProfile = courseCertificateInfoIds.Contains(course.Id);
         } 
 
         this.DbSet.UpdateRange(courses);

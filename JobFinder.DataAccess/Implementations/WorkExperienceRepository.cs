@@ -16,12 +16,12 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> workExperienceIds)
     {
         WorkExperienceInfoEntity[] workExperienceEntities = await this.DbSet
-            .Where(we => workExperienceIds.Contains(we.Id))
+            .Where(we => we.CurriculumVitaeId == cvId)
             .ToArrayAsync();
 
         foreach (WorkExperienceInfoEntity workExperience in workExperienceEntities)
         {
-            workExperience.IncludeInAnonymousProfile = true;
+            workExperience.IncludeInAnonymousProfile = workExperienceIds.Contains(workExperience.Id);           
         }
 
         this.DbSet.UpdateRange(workExperienceEntities);

@@ -16,12 +16,12 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> languageInfoIds)
     {
         LanguageInfoEntity[] languageInfos = await this.DbSet
-            .Where(li => languageInfoIds.Contains(li.Id))
+            .Where(li => li.CurriculumVitaeId == cvId)
             .ToArrayAsync();
 
         foreach (LanguageInfoEntity languageInfo in languageInfos)
         {
-            languageInfo.IncludeInAnonymousProfile = true;
+            languageInfo.IncludeInAnonymousProfile = languageInfoIds.Contains(languageInfo.Id);
         }
 
         this.DbSet.UpdateRange(languageInfos);

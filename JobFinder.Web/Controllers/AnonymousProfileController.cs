@@ -24,7 +24,9 @@ namespace JobFinder.Web.Controllers
             [FromRoute] Guid cvId,
             [FromBody] AnonymousProfileCreateViewModel profile)
         {
-            await this.anonymousProfileService.Activate(cvId.ToString(), profile);
+            string userId = this.User.GetCurrentUserId();
+
+            await this.anonymousProfileService.Activate(cvId.ToString(), userId, profile);
 
             return this.Ok();
         }

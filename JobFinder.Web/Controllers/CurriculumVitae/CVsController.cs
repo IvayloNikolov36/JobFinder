@@ -1,19 +1,16 @@
-﻿namespace JobFinder.Web.Controllers.CurriculumVitae
-{
-    using JobFinder.Services;
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Infrastructure.Extensions;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.CVModels;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading.Tasks;
-    using static JobFinder.Web.Infrastructure.WebConstants;
+﻿using JobFinder.Services;
+using JobFinder.Services.CV;
+using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.CVModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
+namespace JobFinder.Web.Controllers.CurriculumVitae
+{
     [Authorize]
     public class CVsController : ApiController
     {

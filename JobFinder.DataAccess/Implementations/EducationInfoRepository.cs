@@ -16,12 +16,12 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> educationInfoIds)
     {
         EducationInfoEntity[] educationInfos = await this.DbSet
-            .Where(e => educationInfoIds.Contains(e.Id))
+            .Where(e => e.CurriculumVitaeId == cvId)
             .ToArrayAsync();
 
         foreach (EducationInfoEntity educationInfo in educationInfos)
         {
-            educationInfo.IncludeInAnonymousProfile = true;
+            educationInfo.IncludeInAnonymousProfile = educationInfoIds.Contains(educationInfo.Id);
         }
 
         this.DbSet.UpdateRange(educationInfos);

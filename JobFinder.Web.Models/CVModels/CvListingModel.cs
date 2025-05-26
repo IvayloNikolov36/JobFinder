@@ -1,15 +1,16 @@
-﻿namespace JobFinder.Web.Models.CVModels
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Data.Models.CV;
+using System;
+
+namespace JobFinder.Web.Models.CVModels;
+
+public class CvListingModel : IMapFrom<CurriculumVitaeEntity>
 {
-    using JobFinder.Services.Mappings;
-    using JobFinder.Data.Models.CV;
-    using System;
+    public string Id { get; set; }
 
-    public class CvListingModel : IMapFrom<CurriculumVitaeEntity>
-    {
-        public string Id { get; set; }
+    public string Name { get; set; }
 
-        public string Name { get; set; }
+    public DateTime CreatedOn { get; set; }
 
-        public DateTime CreatedOn { get; set; }
-    }
+    public bool AnonymousProfileActivated { get; set; }
 }

@@ -42,4 +42,10 @@ public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>
 
         this.DbSet.Update(cvEntity);
     }
+
+    public async Task<bool> HasAnyCvWithActivatedAnonymousProfile(string userId)
+    {
+        return await this.DbSet
+            .AnyAsync(cv => cv.UserId == userId && cv.AnonymousProfileActivated);
+    }
 }
