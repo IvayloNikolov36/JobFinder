@@ -1,9 +1,7 @@
-﻿namespace JobFinder.Services.CV
-{
-    using JobFinder.Web.Models.CVModels;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using JobFinder.Web.Models.CVModels;
 
+namespace JobFinder.Services.CV
+{
     public interface ICVsService
     {
         Task<bool> ExistsAsync(string id);
@@ -11,6 +9,8 @@
         Task<string> CreateAsync(CVCreateInputModel cvModel, string userId);
 
         Task<IEnumerable<T>> AllAsync<T>(string userId);
+
+        Task<MyCvDataViewModel> GetOwnCvData(string cvId, string userId);
 
         Task<T> GetOwnCvDataAsync<T>(string cvId, string currentUserId);
 

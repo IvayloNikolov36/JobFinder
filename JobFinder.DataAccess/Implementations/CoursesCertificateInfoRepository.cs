@@ -27,4 +27,18 @@ public class CoursesCertificateInfoRepository
 
         this.DbSet.UpdateRange(courses);
     }
+
+    public async Task DisassociateFromAnonymousProfile(string cvId)
+    {
+        CourseCertificateEntity[] courses = await this.DbSet
+            .Where(c => c.CurriculumVitaeId == cvId)
+            .ToArrayAsync();
+
+        foreach (CourseCertificateEntity course in courses)
+        {
+            course.IncludeInAnonymousProfile = null;
+        }
+
+        this.DbSet.UpdateRange(courses);
+    }
 }

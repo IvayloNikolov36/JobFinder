@@ -26,4 +26,19 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
 
         this.DbSet.UpdateRange(languageInfos);
     }
+
+
+    public async Task DisassociateFromAnonymousProfile(string cvId)
+    {
+        LanguageInfoEntity[] languageInfos = await this.DbSet
+            .Where(li => li.CurriculumVitaeId == cvId)
+            .ToArrayAsync();
+
+        foreach (LanguageInfoEntity languageInfo in languageInfos)
+        {
+            languageInfo.IncludeInAnonymousProfile = null;
+        }
+
+        this.DbSet.UpdateRange(languageInfos);
+    }
 }

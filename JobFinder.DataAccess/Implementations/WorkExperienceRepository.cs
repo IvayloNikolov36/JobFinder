@@ -26,4 +26,18 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
 
         this.DbSet.UpdateRange(workExperienceEntities);
     }
+
+    public async Task DisassociateFromAnonymousProfile(string cvId)
+    {
+        WorkExperienceInfoEntity[] workExperienceEntities = await this.DbSet
+            .Where(we => we.CurriculumVitaeId == cvId)
+            .ToArrayAsync();
+
+        foreach (WorkExperienceInfoEntity workExperience in workExperienceEntities)
+        {
+            workExperience.IncludeInAnonymousProfile = null;
+        }
+
+        this.DbSet.UpdateRange(workExperienceEntities);
+    }
 }

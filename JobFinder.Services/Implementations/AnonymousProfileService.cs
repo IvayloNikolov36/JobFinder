@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Business.CurriculumVitaes;
+using JobFinder.Common.Exceptions;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.AnonymousProfile;
@@ -41,7 +42,27 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.CoursesCertificateInfoRepository
             .SetIncludeInAnonymousProfile(cvId, profile.CoursesInfo);
 
-        await this.unitOfWork.CurriculumVitaeRepository.SetAnonymousProfileCreated(cvId);
+        await this.unitOfWork.CurriculumVitaeRepository.SetAnonymousProfileActivated(cvId);
+
+        await this.unitOfWork.SaveChanges();
+    }
+
+    public async Task Deactivate(string cvId)
+    {
+        bool hasAlreadyActivated = await this.unitOfWork.CurriculumVitaeRepository
+            .HasActivatedAnonymousProfile(cvId);
+
+        if (!hasAlreadyActivated)
+        {
+            throw new ActionableException("You don't have an activated anonymous profile!");
+        }
+
+        await this.unitOfWork.WorkExperienceRepository.DisassociateFromAnonymousProfile(cvId);
+        await this.unitOfWork.EducationInfoRepository.DisassociateFromAnonymousProfile(cvId);
+        await this.unitOfWork.LanguageInfoRepository.DisassociateFromAnonymousProfile(cvId);
+        await this.unitOfWork.CoursesCertificateInfoRepository.DisassociateFromAnonymousProfile(cvId);
+
+        await this.unitOfWork.CurriculumVitaeRepository.DeactivateAnonymousProfile(cvId);
 
         await this.unitOfWork.SaveChanges();
     }

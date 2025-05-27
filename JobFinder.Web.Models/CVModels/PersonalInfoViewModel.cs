@@ -1,11 +1,14 @@
 ﻿using JobFinder.Data.Models.CV;
 using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.CV;
 using JobFinder.Web.Models.Common;
 using System;
 
 namespace JobFinder.Web.Models.CVModels;
 
-public class PersonalInfoViewModel : IMapFrom<PersonalInfoEntity>
+public class PersonalInfoViewModel :
+    IMapFrom<PersonalInfoDTO>,
+    IMapFrom<PersonalInfoEntity>
 {
     public int Id { get; set; }
 

@@ -26,4 +26,19 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
 
         this.DbSet.UpdateRange(educationInfos);
     }
+
+
+    public async Task DisassociateFromAnonymousProfile(string cvId)
+    {
+        EducationInfoEntity[] educationInfos = await this.DbSet
+            .Where(e => e.CurriculumVitaeId == cvId)
+            .ToArrayAsync();
+
+        foreach (EducationInfoEntity educationInfo in educationInfos)
+        {
+            educationInfo.IncludeInAnonymousProfile = null;
+        }
+
+        this.DbSet.UpdateRange(educationInfos);
+    }
 }

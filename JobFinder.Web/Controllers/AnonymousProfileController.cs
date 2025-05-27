@@ -32,6 +32,16 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{cvId:guid}/deactivate")]
+        [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
+        public async Task<IActionResult> Deactivate([FromRoute] Guid cvId)
+        {
+            await this.anonymousProfileService.Deactivate(cvId.ToString());
+
+            return this.Ok();
+        }
+
+        [HttpGet]
         [Route("view")]
         public async Task<IActionResult> GetMyAnonymousProfileData()
         {

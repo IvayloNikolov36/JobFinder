@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.CV;
 using System.Linq;
 
 namespace JobFinder.Data.Models.CV;
 
-public partial class CurriculumVitaeEntity : IHaveCustomMappings
+public partial class CurriculumVitaeEntity : 
+    IMapTo<MyCvDataDTO>,
+    IHaveCustomMappings 
 {
     public void CreateMappings(IProfileExpression configuration)
     {

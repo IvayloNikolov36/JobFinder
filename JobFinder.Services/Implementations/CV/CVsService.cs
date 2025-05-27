@@ -1,22 +1,23 @@
-﻿namespace JobFinder.Services.Implementations.CV
-{
-    using JobFinder.Services.CV;
-    using System.Threading.Tasks;
-    using JobFinder.Data.Models.CV;
-    using System.Collections.Generic;
-    using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Linq;
-    using JobFinder.Services.Mappings;
-    using AutoMapper;
-    using JobFinder.Web.Models.CVModels;
-    using JobFinder.Data.Models.Cv;
-    using JobFinder.Common.Exceptions;
-    using JobFinder.Data.Models;
-    using JobFinder.DataAccess.Generic;
+﻿using JobFinder.Services.CV;
+using JobFinder.Data.Models.CV;
+using Microsoft.EntityFrameworkCore;
+using JobFinder.Services.Mappings;
+using AutoMapper;
+using JobFinder.Web.Models.CVModels;
+using JobFinder.Data.Models.Cv;
+using JobFinder.Common.Exceptions;
+using JobFinder.Data.Models;
+using JobFinder.DataAccess.Generic;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Transfer.DTOs.CV;
 
+namespace JobFinder.Services.Implementations.CV
+{
     public class CVsService : ICVsService
     {
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
+        // TODO: refactor and remove those repos
         private readonly IRepository<CurriculumVitaeEntity> repository;
         private readonly IRepository<PersonalInfoEntity> personalDetailsRepo;
         private readonly IRepository<EducationInfoEntity> educationRepo;
@@ -26,9 +27,10 @@
         private readonly IRepository<SkillsInfoDrivingCategoryEntity> skillsDrivingCategoriesRepo;
         private readonly IRepository<CourseCertificateEntity> courseSertificateRepo;
         private readonly IRepository<JobAdApplicationEntity> jobAdsApplicationsRepo;
-        private readonly IMapper mapper;
 
         public CVsService(
+            IEntityFrameworkUnitOfWork unitOfWork,
+            IMapper mapper,
             IRepository<CurriculumVitaeEntity> repository,
             IRepository<PersonalInfoEntity> personalDetailsRepo,
             IRepository<EducationInfoEntity> educationRepo,
@@ -37,9 +39,9 @@
             IRepository<SkillsInfoEntity> skillRepo,
             IRepository<SkillsInfoDrivingCategoryEntity> skillsDrivingCategoriesRepo,
             IRepository<CourseCertificateEntity> courseSertificateRepo,
-            IRepository<JobAdApplicationEntity> jobAdsApplicationsRepo,
-            IMapper mapper)
+            IRepository<JobAdApplicationEntity> jobAdsApplicationsRepo)
         {
+            this.unitOfWork = unitOfWork;
             this.repository = repository;
             this.personalDetailsRepo = personalDetailsRepo;
             this.educationRepo = educationRepo;
@@ -121,6 +123,20 @@
                 .FirstOrDefaultAsync();
 
             return data;
+        }
+
+        public async Task<MyCvDataViewModel> GetOwnCvData(string cvId, string userId)
+        {
+            MyCvDataDTO cvDataDto = await this.unitOfWork.CurriculumVitaeRepository.GetMyCvData(cvId);
+
+            MyCvDataViewModel cvData = this.mapper.Map<MyCvDataViewModel>(cvDataDto);
+
+            bool hasAnyAnonymousProfileActivated = await this.unitOfWork.CurriculumVitaeRepository
+                .HasAnyCvWithActivatedAnonymousProfile(userId);
+
+            cvData.CanActivateAnonymousProfile = !hasAnyAnonymousProfileActivated;
+
+            return cvData;
         }
 
         public async Task<T> GetOwnCvDataAsync<T>(string cvId, string currentUserId)

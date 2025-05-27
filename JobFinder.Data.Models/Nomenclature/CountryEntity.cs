@@ -2,15 +2,14 @@
 using JobFinder.Data.Models.CV;
 using System.Collections.Generic;
 
-namespace JobFinder.Data.Models.Nomenclature
-{
-    public class CountryEntity : BaseNomenclatureEntity<int>
-    {
-        public CountryEntity()
-        {
-            this.PersonalInfos = new List<PersonalInfoEntity>();
-        }
+namespace JobFinder.Data.Models.Nomenclature;
 
-        public ICollection<PersonalInfoEntity> PersonalInfos { get; set; }
+public partial class CountryEntity : BaseNomenclatureEntity<int>
+{
+    public CountryEntity()
+    {
+        this.PersonalInfos = new List<PersonalInfoEntity>();
     }
+
+    public ICollection<PersonalInfoEntity> PersonalInfos { get; set; }
 }

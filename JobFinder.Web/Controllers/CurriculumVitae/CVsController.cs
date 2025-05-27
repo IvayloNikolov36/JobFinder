@@ -31,7 +31,7 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
 
             var resultObject = new { id };
 
-            return this.CreatedAtRoute("GetCvData", resultObject, resultObject);
+            return this.CreatedAtRoute("GetOwnCvData", resultObject, resultObject);
         }
 
         [HttpGet]
@@ -46,12 +46,13 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
         }
 
         [HttpGet]
-        [Route("{id}", Name = "GetCvData")]
-        public async Task<ActionResult<CvDataViewModel>> GetCvData([FromRoute] string id)
+        [Route("{cvId:guid}", Name = "GetOwnCvData")]
+        [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
+        public async Task<ActionResult<CvDataViewModel>> GetOwnCvData([FromRoute] Guid cvId)
         {
-            string currentUserId = this.User.GetCurrentUserId();
-
-            CvDataViewModel cv = await this.cvsService.GetOwnCvDataAsync<CvDataViewModel>(id, currentUserId);
+            MyCvDataViewModel cv = await this.cvsService.GetOwnCvData(
+                cvId.ToString(),
+                this.User.GetCurrentUserId());
 
             return this.Ok(cv);
         }
