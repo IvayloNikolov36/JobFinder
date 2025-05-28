@@ -9,6 +9,8 @@ public class LanguageInfoViewModel : IMapFrom<LanguageInfoEntity>, IMapFrom<Lang
 {
     public int Id { get; set; }
 
+    public bool? IncludeInAnonymousProfile { get; set; }
+
     public BasicViewModel LanguageType { get; set; }
 
     public BasicViewModel ComprehensionLevel { get; set; }

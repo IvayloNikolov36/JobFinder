@@ -10,6 +10,8 @@ public class EducationViewModel : IMapFrom<EducationInfoEntity>, IMapFrom<Educat
 {
     public int Id { get; set; }
 
+    public bool? IncludeInAnonymousProfile { get; set; }
+
     public DateTime FromDate { get; set; }
 
     public DateTime? ToDate { get; set; }
