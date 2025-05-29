@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using JobFinder.Common.Exceptions;
+﻿using JobFinder.Common.Exceptions;
 using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

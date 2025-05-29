@@ -24,7 +24,7 @@
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<EducationEditModel> educationsModel)
         {
-            UpdateResult result = await this.educationService.UpdateAsync(cvId.ToString(), educationsModel);
+            UpdateResult result = await this.educationService.Update(cvId.ToString(), educationsModel);
 
             return this.Ok(result);
         }

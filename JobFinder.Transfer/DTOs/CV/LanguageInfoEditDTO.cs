@@ -1,9 +1,8 @@
-﻿using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.CV;
+﻿using JobFinder.Transfer.Common;
 
-namespace JobFinder.Web.Models.CVModels;
+namespace JobFinder.Transfer.DTOs.CV;
 
-public class LanguageInfoEditModel : IMapTo<LanguageInfoEditDTO>
+public class LanguageInfoEditDTO : IIdentity
 {
     public int Id { get; set; }
 

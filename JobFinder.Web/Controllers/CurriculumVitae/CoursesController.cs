@@ -1,19 +1,16 @@
-﻿namespace JobFinder.Web.Controllers.CurriculumVitae
-{
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.CVModels;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services.CV;
+using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.CVModels;
+using Microsoft.AspNetCore.Mvc;
 
+namespace JobFinder.Web.Controllers.CurriculumVitae
+{
     public class CoursesController : BaseCVsController
     {
-        private readonly ICoursesSertificatesService coursesService;
+        private readonly ICoursesCertificatesService coursesService;
 
-        public CoursesController(ICoursesSertificatesService coursesService)
+        public CoursesController(ICoursesCertificatesService coursesService)
         {
             this.coursesService = coursesService;
         }
@@ -25,7 +22,7 @@
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<CourseSertificateEditModel> coursesInfo)
         {
-            UpdateResult result = await this.coursesService.UpdateAsync(cvId.ToString(), coursesInfo);
+            UpdateResult result = await this.coursesService.Update(cvId.ToString(), coursesInfo);
 
             return this.Ok(result);
         }

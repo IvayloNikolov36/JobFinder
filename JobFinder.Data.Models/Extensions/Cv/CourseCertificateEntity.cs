@@ -3,6 +3,9 @@ using JobFinder.Transfer.DTOs.CV;
 
 namespace JobFinder.Data.Models.CV;
 
-public partial class CourseCertificateEntity : IMapTo<CourseCertificateDTO>
+public partial class CourseCertificateEntity : IMapFrom<CourseCertificateSimpleDTO>,
+    IMapTo<CourseCertificateDTO>,
+    IMapTo<CourseCertificateSimpleDTO>
 {
+
 }

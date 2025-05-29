@@ -1,10 +1,10 @@
-﻿namespace JobFinder.Web.Models.CVModels
-{
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Services.Mappings;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.CV;
+using System.ComponentModel.DataAnnotations;
 
-    public class CourseSertificateEditModel : IMapTo<CourseCertificateEntity>
+namespace JobFinder.Web.Models.CVModels
+{
+    public class CourseSertificateEditModel : IMapTo<CourseCertificateSimpleDTO>
     {
         public int Id { get; set; }
 

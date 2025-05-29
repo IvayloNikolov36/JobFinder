@@ -3,6 +3,9 @@ using JobFinder.Transfer.DTOs.CV;
 
 namespace JobFinder.Data.Models.CV;
 
-public partial class EducationInfoEntity : IMapTo<EducationInfoDTO>
+public partial class EducationInfoEntity : IMapFrom<EducationInfoEditDTO>,
+    IMapTo<EducationInfoDTO>,
+    IMapTo<EducationInfoEditDTO>
 {
+
 }

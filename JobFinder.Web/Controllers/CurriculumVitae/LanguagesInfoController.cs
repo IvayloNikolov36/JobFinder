@@ -25,7 +25,7 @@
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<LanguageInfoEditModel> languagesInfo)
         {
-            UpdateResult result = await this.languagesInfosService.UpdateAsync(cvId.ToString(), languagesInfo);
+            UpdateResult result = await this.languagesInfosService.Update(cvId.ToString(), languagesInfo);
 
             return this.Ok(result);
         }

@@ -7,6 +7,6 @@
 
     public interface IEducationInfosService
     {
-        Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<EducationEditModel> educationsModel);
+        Task<UpdateResult> Update(string cvId, IEnumerable<EducationEditModel> educationsModel);
     }
 }

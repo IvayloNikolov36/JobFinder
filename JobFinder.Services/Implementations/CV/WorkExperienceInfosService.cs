@@ -1,77 +1,37 @@
 ﻿using AutoMapper;
-using JobFinder.Data.Models.CV;
-using JobFinder.DataAccess.Generic;
+using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services.CV;
+using JobFinder.Transfer.DTOs.CV;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.CVModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Services.Implementations.CV
 {
     public class WorkExperienceInfosService : IWorkExperienceInfosService
     {
-        private readonly IRepository<WorkExperienceInfoEntity> repository;
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
         public WorkExperienceInfosService(
-            IRepository<WorkExperienceInfoEntity> repository,
+            IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
         public async Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<WorkExperienceEditModel> workExperienceModels)
         {
-            List<WorkExperienceInfoEntity> workExperienceEntitiesFromDB = await this.repository
-                .Where(we => we.CurriculumVitaeId == cvId)
-                .ToListAsync();
+            IEnumerable<WorkExperienceInfoEditDTO> workExperienceInfoDTOs = this.mapper
+                .Map<IEnumerable<WorkExperienceInfoEditDTO>>(workExperienceModels);
 
-            IEnumerable<WorkExperienceEditModel> workExperinceToAdd = workExperienceModels
-                .Where(wem => !workExperienceEntitiesFromDB.Any(wee => wee.Id == wem.Id));
+            IEnumerable<WorkExperienceInfoEditDTO> addedItems = await this.unitOfWork
+                .WorkExperienceRepository
+                .Update(cvId, workExperienceInfoDTOs);
 
-            List<WorkExperienceInfoEntity> entitiesToAdd = null;
-            if (workExperinceToAdd.Any())
-            {
-                entitiesToAdd = new List<WorkExperienceInfoEntity>();
-                foreach (WorkExperienceEditModel model in workExperinceToAdd)
-                {
-                    WorkExperienceInfoEntity entityToAdd = this.mapper.Map<WorkExperienceInfoEntity>(model);
-                    entityToAdd.Id = 0;
-                    entityToAdd.CurriculumVitaeId = cvId;
-                    entitiesToAdd.Add(entityToAdd);
-                }
+            await this.unitOfWork.SaveChanges();
 
-                await this.repository.AddRangeAsync(entitiesToAdd);
-            }
-
-            IEnumerable<WorkExperienceInfoEntity> entitiesToRemove = workExperienceEntitiesFromDB
-                .Where(we => !workExperienceModels.Any(wem => wem.Id == we.Id));
-
-            if (entitiesToRemove.Any())
-            {
-                this.repository.DeleteRange(entitiesToRemove);
-            }
-
-            IEnumerable<WorkExperienceInfoEntity> entitiesToUpdate = workExperienceEntitiesFromDB
-                .Where(we => workExperienceModels.Any(m => m.Id == we.Id));
-
-            if (entitiesToUpdate.Any())
-            {
-                foreach (WorkExperienceInfoEntity item in entitiesToUpdate)
-                {
-                    WorkExperienceEditModel correspondingModel = workExperienceModels
-                        .First(m => m.Id == item.Id);
-
-                    this.mapper.Map(correspondingModel, item);
-                }
-
-                this.repository.UpdateRange(entitiesToUpdate);
-            }
-
-            await this.repository.SaveChangesAsync();
-
-            return new UpdateResult(entitiesToAdd);
+            return new UpdateResult(addedItems);
         }
     }
 }

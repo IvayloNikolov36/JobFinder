@@ -58,7 +58,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.workExperienceRepository ??= new WorkExperienceRepository(this.dbContext);
+                this.workExperienceRepository ??= new WorkExperienceRepository(this.dbContext, this.mapper);
                 return this.workExperienceRepository;
             }
         }
@@ -67,7 +67,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.educationInfoRepository ??= new EducationInfoRepository(this.dbContext);
+                this.educationInfoRepository ??= new EducationInfoRepository(this.dbContext, this.mapper);
                 return this.educationInfoRepository;
             }
         }
@@ -76,7 +76,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.languageInfoRepository ??= new LanguageInfoRepository(this.dbContext);
+                this.languageInfoRepository ??= new LanguageInfoRepository(this.dbContext, this.mapper);
                 return this.languageInfoRepository;
             }
         }
@@ -85,7 +85,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.coursesCertificateInfoRepository ??= new CoursesCertificateInfoRepository(this.dbContext);
+                this.coursesCertificateInfoRepository ??= new CoursesCertificateInfoRepository(this.dbContext, this.mapper);
                 return this.coursesCertificateInfoRepository;
             }
         }

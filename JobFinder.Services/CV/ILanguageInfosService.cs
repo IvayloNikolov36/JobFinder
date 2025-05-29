@@ -7,6 +7,6 @@
 
     public interface ILanguageInfosService
     {
-        Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfo);
+        Task<UpdateResult> Update(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfo);
     }
 }

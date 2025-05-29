@@ -1,12 +1,6 @@
 ﻿namespace JobFinder.Transfer.DTOs.CV;
 
-public class CourseCertificateDTO
+public class CourseCertificateDTO : CourseCertificateSimpleDTO
 {
-    public int Id { get; set; }
-
     public bool? IncludeInAnonymousProfile { get; set; }
-
-    public string CourseName { get; set; }
-
-    public string CertificateUrl { get; set; }
 }
