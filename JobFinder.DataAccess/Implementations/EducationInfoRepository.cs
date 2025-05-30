@@ -95,4 +95,9 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
 
         this.DbSet.UpdateRange(educationInfos);
     }
+
+    public void Delete(string cvId)
+    {
+        base.DeleteWhere(e => e.CurriculumVitaeId == cvId);
+    }
 }

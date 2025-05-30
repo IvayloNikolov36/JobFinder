@@ -116,4 +116,9 @@ public class CoursesCertificateInfoRepository
 
         this.DbSet.Remove(courseCertificateFromDb);
     }
+
+    public void Delete(string cvId)
+    {
+        base.DeleteWhere(cs => cs.CurriculumVitaeId == cvId);
+    }
 }

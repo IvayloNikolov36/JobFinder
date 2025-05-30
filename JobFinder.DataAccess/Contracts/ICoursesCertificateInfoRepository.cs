@@ -15,4 +15,6 @@ public interface ICoursesCertificateInfoRepository
     Task DisassociateFromAnonymousProfile(string cvId);
 
     Task Delete(int id);
+
+    void Delete(string cvId);
 }

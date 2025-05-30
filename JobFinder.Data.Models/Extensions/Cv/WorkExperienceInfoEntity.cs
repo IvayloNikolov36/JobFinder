@@ -5,7 +5,8 @@ namespace JobFinder.Data.Models.CV;
 
 public partial class WorkExperienceInfoEntity : IMapFrom<WorkExperienceInfoEditDTO>,
     IMapTo<WorkExperienceInfoDTO>,
-    IMapTo<WorkExperienceInfoEditDTO>
+    IMapTo<WorkExperienceInfoEditDTO>,
+    IMapFrom<WorkExperienceInfoInputDTO>
 {
 
 }

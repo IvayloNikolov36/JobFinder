@@ -11,6 +11,8 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         ICurriculumVitaeRepository CurriculumVitaeRepository { get; }
 
+        IPersonalInfoRepository PersonalInfoRepository { get; }
+
         IWorkExperienceRepository WorkExperienceRepository { get; }
 
         IEducationInfoRepository EducationInfoRepository { get; }
@@ -19,6 +21,11 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         ICoursesCertificateInfoRepository CoursesCertificateInfoRepository {  get; }
 
+        ISkillsInfoDrivingCategoryRepository SkillsInfoDrivingCategoryRepository { get; }
+
+        ISkillsInfoRepository SkillsInfoRepository { get; }
+
+        IJobAdApplicationsRepository JobAdApplicationsRepository { get; }
 
         Task SaveChanges();
 

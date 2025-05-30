@@ -9,4 +9,6 @@ public interface ILanguageInfoRepository
     Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> languageInfoIds);
 
     Task DisassociateFromAnonymousProfile(string cvId);
+
+    void Delete(string cvId);
 }

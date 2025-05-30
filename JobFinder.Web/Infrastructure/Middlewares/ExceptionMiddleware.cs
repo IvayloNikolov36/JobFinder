@@ -1,11 +1,8 @@
 ﻿using JobFinder.Common.Exceptions;
 using JobFinder.Web.Infrastructure.Models;
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace JobFinder.Web.Infrastructure.Middlewares
 {

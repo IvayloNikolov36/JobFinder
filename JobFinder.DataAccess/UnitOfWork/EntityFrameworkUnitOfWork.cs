@@ -20,6 +20,10 @@ namespace JobFinder.DataAccess.UnitOfWork
         private IEducationInfoRepository educationInfoRepository;
         private ILanguageInfoRepository languageInfoRepository;
         private ICoursesCertificateInfoRepository coursesCertificateInfoRepository;
+        private IPersonalInfoRepository personalInfoRepository;
+        private ISkillsInfoDrivingCategoryRepository skillsInfoDrivingCategoryRepository;
+        private ISkillsInfoRepository skillsInfoRepository;
+        private IJobAdApplicationsRepository jobAdApplicationRepository;
 
         public EntityFrameworkUnitOfWork(JobFinderDbContext dbContext, IMapper mapper)
         {
@@ -49,7 +53,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.curriculumVitaeRepository ??= new CurriculumVitaeRepository(this.dbContext);
+                this.curriculumVitaeRepository ??= new CurriculumVitaeRepository(this.dbContext, this.mapper);
                 return this.curriculumVitaeRepository;
             }
         }
@@ -87,6 +91,42 @@ namespace JobFinder.DataAccess.UnitOfWork
             {
                 this.coursesCertificateInfoRepository ??= new CoursesCertificateInfoRepository(this.dbContext, this.mapper);
                 return this.coursesCertificateInfoRepository;
+            }
+        }
+
+        public IPersonalInfoRepository PersonalInfoRepository
+        {
+            get
+            {
+                this.personalInfoRepository ??= new PersonalInfoRepository(this.dbContext);
+                return this.personalInfoRepository;
+            }
+        }
+        
+        public ISkillsInfoDrivingCategoryRepository SkillsInfoDrivingCategoryRepository
+        {
+            get
+            {
+                this.skillsInfoDrivingCategoryRepository ??= new SkillsInfoDrivingCategoryRepository(this.dbContext);
+                return this.skillsInfoDrivingCategoryRepository;
+            }
+        }
+
+        public ISkillsInfoRepository SkillsInfoRepository
+        {
+            get
+            {
+                this.skillsInfoRepository ??= new SkillsInfoRepository(this.dbContext);
+                return this.skillsInfoRepository;
+            }
+        }
+
+        public IJobAdApplicationsRepository JobAdApplicationsRepository
+        {
+            get
+            {
+                this.jobAdApplicationRepository ??= new JobAdApplicationsRepository(this.dbContext);
+                return this.jobAdApplicationRepository;
             }
         }
 

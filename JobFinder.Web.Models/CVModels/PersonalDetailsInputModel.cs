@@ -1,11 +1,11 @@
-﻿namespace JobFinder.Web.Models.CVModels
-{
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Services.Mappings;
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.CV;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-    public class PersonalDetailsInputModel : IMapTo<PersonalInfoEntity>
+namespace JobFinder.Web.Models.CVModels
+{
+    public class PersonalDetailsInputModel : IMapTo<PersonalInfoInputDTO>
     {
 
         [Required]

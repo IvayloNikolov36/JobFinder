@@ -2,10 +2,7 @@
 using JobFinder.Web.Models.AdApplication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace JobFinder.Web.Infrastructure.Filters
 {
@@ -43,7 +40,7 @@ namespace JobFinder.Web.Infrastructure.Filters
 
             if (jobAdId < 1)
             {
-                context.Result = controller.BadRequest(new { Title = "The job advertisement id is not correct!" });
+                context.Result = controller.BadRequest(new { Title = "Invalid Job Ad Id!" });
                 return;
             }
 
@@ -52,9 +49,9 @@ namespace JobFinder.Web.Infrastructure.Filters
             try
             {
                 await this.cvsService
-                    .ValidateCvIsSentForCurrentUsersJobAd(cvId, jobAdId, currentUserId);
+                    .ValidateApplicationIsSentForCurrentUserJobAd(cvId, jobAdId, currentUserId);
             }
-            catch (UnauthorizedAccessException ex)
+            catch (Exception ex)
             {
                 context.Result = controller.BadRequest(ex.Message);
                 return;

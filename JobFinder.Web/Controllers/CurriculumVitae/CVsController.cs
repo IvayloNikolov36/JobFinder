@@ -2,6 +2,7 @@
 using JobFinder.Services.CV;
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.AdApplication;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.CVModels;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +41,7 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
         {
             string userId = this.User.GetCurrentUserId();
 
-            IEnumerable<CvListingModel> myCvs = await this.cvsService.AllAsync<CvListingModel>(userId);
+            IEnumerable<CvListingModel> myCvs = await this.cvsService.All(userId);
 
             return this.Ok(myCvs);
         }
@@ -58,13 +59,12 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
         }
 
         [HttpGet]
-        [Route("preview/{cvId}/{jobAdId}")]
+        [Route("preview/{CvId}/{JobAdId}")]
         [Authorize(Roles = CompanyRole)]
-        public async Task<ActionResult<CvDataViewModel>> GetCvPreview([FromRoute] string cvId, [FromRoute] int jobAdId)
+        [ServiceFilter(typeof(ValidateCompanyAccessingCVSentForOwnAd))]
+        public async Task<ActionResult<CvDataViewModel>> GetCvPreview([FromRoute] ApplicationPreviewInfoInputModel model)
         {
-            string currentUserId = this.User.GetCurrentUserId();
-
-            CvPreviewDataViewModel cv = await this.cvsService.GetUserCvData(cvId, jobAdId, currentUserId);
+            CvPreviewDataViewModel cv = await this.cvsService.GetUserCvData(model.CvId);
 
             return this.Ok(cv);
         }
@@ -74,7 +74,7 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> DeleteCv([FromRoute] string id)
         {
-            await this.cvsService.DeleteCvAsync(id);
+            await this.cvsService.Delete(id);
 
             return this.NoContent();
         }
@@ -93,11 +93,13 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
         }
 
 
+        // TODO: refactor - move logic to a service
         [HttpGet]
         [Route("generate-pdf/{id}")]
+        [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<ActionResult> GenerateCVPdf(string id, [FromServices] IPdfGenerator pdfGenerator)
         {
-            CvDataPdfViewModel data = await this.cvsService.GetOwnCvDataAsync<CvDataPdfViewModel>(
+            MyCvDataViewModel data = await this.cvsService.GetOwnCvData(
                 id,
                 this.User.GetCurrentUserId());
 
@@ -268,13 +270,9 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
 
             byte[] cvData = pdfGenerator.Generate(sb.ToString());
 
-            bool isDataSet = await this.cvsService.SetDataAsync(id, cvData);
-            if (!isDataSet)
-            {
-                return this.BadRequest();
-            }
+            await this.cvsService.SetData(id, cvData);
 
-            return this.Ok(new { Message = "Successfuly created cv pdf!"});
+            return this.Ok();
         }
     }
 }

@@ -102,4 +102,9 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
 
         this.DbSet.UpdateRange(languageInfos);
     }
+
+    public void Delete(string cvId)
+    {
+        base.DeleteWhere(l => l.CurriculumVitaeId == cvId);
+    }
 }

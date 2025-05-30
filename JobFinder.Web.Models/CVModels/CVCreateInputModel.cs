@@ -1,12 +1,12 @@
 ﻿using JobFinder.Common.DataAnnotations;
-using JobFinder.Data.Models.CV;
 using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.CV;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Web.Models.CVModels
 {
-    public class CVCreateInputModel : IMapTo<CurriculumVitaeEntity>
+    public class CVCreateInputModel : IMapTo<CVCreateDTO>
     {
         [Required]
         [StringLength(20, MinimumLength = 5)]

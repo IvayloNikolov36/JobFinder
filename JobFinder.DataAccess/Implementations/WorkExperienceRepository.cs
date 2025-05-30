@@ -96,4 +96,9 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
 
         this.DbSet.UpdateRange(workExperienceEntities);
     }
+
+    public void Delete(string cvId)
+    {
+        base.DeleteWhere(we => we.CurriculumVitaeId == cvId);
+    }
 }

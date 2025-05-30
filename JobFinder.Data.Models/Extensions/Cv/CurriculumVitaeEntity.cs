@@ -6,9 +6,10 @@ using System.Linq;
 
 namespace JobFinder.Data.Models.CV;
 
-public partial class CurriculumVitaeEntity : 
+public partial class CurriculumVitaeEntity : IMapFrom<CVCreateDTO>,
     IMapTo<MyCvDataDTO>,
-    IHaveCustomMappings 
+    IMapTo<CVListingDTO>,
+    IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
     {

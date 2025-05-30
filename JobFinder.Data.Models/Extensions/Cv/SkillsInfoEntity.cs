@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace JobFinder.Data.Models.CV;
 
-public partial class SkillsInfoEntity : IHaveCustomMappings
+public partial class SkillsInfoEntity : IMapFrom<SkillsInfoInputDTO>, IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
     {

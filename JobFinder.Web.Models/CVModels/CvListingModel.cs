@@ -1,10 +1,10 @@
 ﻿using JobFinder.Services.Mappings;
-using JobFinder.Data.Models.CV;
+using JobFinder.Transfer.DTOs.CV;
 using System;
 
 namespace JobFinder.Web.Models.CVModels;
 
-public class CvListingModel : IMapFrom<CurriculumVitaeEntity>
+public class CvListingModel : IMapFrom<CVListingDTO>
 {
     public string Id { get; set; }
 

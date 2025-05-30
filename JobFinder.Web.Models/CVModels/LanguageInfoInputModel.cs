@@ -1,9 +1,9 @@
-﻿namespace JobFinder.Web.Models.CVModels
-{
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.CV;
 
-    public class LanguageInfoInputModel : IMapTo<LanguageInfoEntity>
+namespace JobFinder.Web.Models.CVModels
+{
+    public class LanguageInfoInputModel : IMapTo<LanguageInfoInputDTO>
     {
         public int LanguageTypeId { get; set; }
 

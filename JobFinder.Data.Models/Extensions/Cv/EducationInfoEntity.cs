@@ -5,7 +5,8 @@ namespace JobFinder.Data.Models.CV;
 
 public partial class EducationInfoEntity : IMapFrom<EducationInfoEditDTO>,
     IMapTo<EducationInfoDTO>,
-    IMapTo<EducationInfoEditDTO>
+    IMapTo<EducationInfoEditDTO>,
+    IMapFrom<EducationInfoInputDTO>
 {
 
 }

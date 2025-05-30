@@ -4,8 +4,6 @@ using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Models.AdApplication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers

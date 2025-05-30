@@ -1,11 +1,11 @@
-﻿namespace JobFinder.Web.Models.CVModels
-{
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Services.Mappings;
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.CV;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-    public class EducationInputModel : IMapTo<EducationInfoEntity>
+namespace JobFinder.Web.Models.CVModels
+{
+    public class EducationInputModel : IMapTo<EducationInfoInputDTO>
     {
         public DateTime FromDate { get; set; }
 
