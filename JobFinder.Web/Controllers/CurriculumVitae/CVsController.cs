@@ -28,9 +28,9 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
         {
             string userId = this.User.GetCurrentUserId();
 
-            string id = await this.cvsService.CreateAsync(cvModel, userId);
+            string cvId = await this.cvsService.CreateAsync(cvModel, userId);
 
-            var resultObject = new { id };
+            object resultObject = new { cvId };
 
             return this.CreatedAtRoute("GetOwnCvData", resultObject, resultObject);
         }

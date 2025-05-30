@@ -89,6 +89,8 @@ namespace JobFinder.Services.Implementations.CV
 
         public async Task Delete(string cvId)
         {
+            // TODO: if it is has been sent as an application???
+
             this.unitOfWork.PersonalInfoRepository.Delete(cvId);
             this.unitOfWork.EducationInfoRepository.Delete(cvId);
             this.unitOfWork.WorkExperienceRepository.Delete(cvId);
