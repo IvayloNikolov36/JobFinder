@@ -98,7 +98,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.personalInfoRepository ??= new PersonalInfoRepository(this.dbContext);
+                this.personalInfoRepository ??= new PersonalInfoRepository(this.dbContext, this.mapper);
                 return this.personalInfoRepository;
             }
         }

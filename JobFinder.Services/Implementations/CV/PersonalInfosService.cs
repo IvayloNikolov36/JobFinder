@@ -1,40 +1,31 @@
-﻿namespace JobFinder.Services.Implementations.CV
-{
-    using AutoMapper;
-    using JobFinder.Data.Models.CV;
-    using JobFinder.DataAccess.Generic;
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Models.CVModels;
-    using System.Threading.Tasks;
+﻿using AutoMapper;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Services.CV;
+using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Web.Models.CVModels;
 
+namespace JobFinder.Services.Implementations.CV
+{
     public class PersonalInfosService : IPersonalInfosService
     {
-        private readonly IRepository<PersonalInfoEntity> repository;
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
         public PersonalInfosService(
-            IRepository<PersonalInfoEntity> personalDetailsRepository,
+            IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper) 
         {
-            this.repository = personalDetailsRepository;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
-        public async Task<bool> UpdateAsync(PersonalDetailsEditModel personalDetails)
+        public async Task Update(PersonalInfoEditModel personalInfo)
         {
-            PersonalInfoEntity personalDetailsFromDb = await this.repository.FindAsync(personalDetails.Id);
+            PersonalInfoEditDTO personalInfoDto = this.mapper.Map<PersonalInfoEditDTO>(personalInfo);
 
-            if (personalDetailsFromDb == null)
-            {
-                return false;
-            }
+            await this.unitOfWork.PersonalInfoRepository.Update(personalInfoDto);
 
-            this.mapper.Map(personalDetails, personalDetailsFromDb);
-
-            this.repository.Update(personalDetailsFromDb);
-            await this.repository.SaveChangesAsync();
-
-            return true;
+            await this.unitOfWork.SaveChanges();
         }
     }
 }

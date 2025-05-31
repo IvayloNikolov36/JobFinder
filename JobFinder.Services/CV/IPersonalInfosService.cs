@@ -1,10 +1,8 @@
-﻿namespace JobFinder.Services.CV
-{
-    using JobFinder.Web.Models.CVModels;
-    using System.Threading.Tasks;
+﻿using JobFinder.Web.Models.CVModels;
 
-    public interface IPersonalInfosService
-    {
-        Task<bool> UpdateAsync(PersonalDetailsEditModel personalDetails);
-    }
+namespace JobFinder.Services.CV;
+
+public interface IPersonalInfosService
+{
+    Task Update(PersonalInfoEditModel personalInfo);
 }
