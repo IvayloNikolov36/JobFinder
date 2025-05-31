@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using JobFinder.Data.Models;
-using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.JobAd;
 using System;
 
 namespace JobFinder.Web.Models.AdApplication
 {
-    public class JobApplicationInfoViewModel : IHaveCustomMappings
+    public class JobApplicationInfoViewModel : IMapFrom<JobAdApplicationInfoDTO>
     {
         public int Id { get; set; }
 
@@ -28,13 +27,5 @@ namespace JobFinder.Web.Models.AdApplication
         public bool IsPreviewed { get; set; }
 
         public DateTime? PreviewDate { get; set; }
-
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<JobAdApplicationEntity, JobApplicationInfoViewModel>()
-                .ForMember(vm => vm.Applicant, o => o.MapFrom(e => e.Applicant.FirstName + " " + e.Applicant.LastName))
-                .ForMember(vm => vm.Email, o => o.MapFrom(e => e.CurriculumVitae.PersonalDetails.Email))
-                .ForMember(vm => vm.Phone, o => o.MapFrom(e => e.CurriculumVitae.PersonalDetails.Phone));
-        }
     }
 }

@@ -4,7 +4,7 @@ using System;
 
 namespace JobFinder.Data.Models
 {
-    public class JobAdApplicationEntity : BaseEntity<int>
+    public partial class JobAdApplicationEntity : BaseEntity<int>
     {
         public int JobAdId { get; set; }
         public JobAdvertisementEntity JobAd { get; set; }

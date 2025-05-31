@@ -1,107 +1,92 @@
 ﻿using AutoMapper;
 using JobFinder.Common.Exceptions;
-using JobFinder.Data.Models;
-using JobFinder.DataAccess.Generic;
-using JobFinder.Services.Mappings;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.AdApplication;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Services.Implementations
 {
     public class JobAdsApplicationsService : IJobAdsApplicationsService
     {
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly IRepository<JobAdApplicationEntity> jobAdsApplicationsRepository;
-        private readonly IRepository<JobAdvertisementEntity> jobAdRepository;
 
         public JobAdsApplicationsService(
-            IMapper mapper,
-            IRepository<JobAdApplicationEntity> jobAdsApplicationsRepository,
-            IRepository<JobAdvertisementEntity> jobAdRepository)
+            IEntityFrameworkUnitOfWork unitOfWork,
+            IMapper mapper)
         {
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.jobAdsApplicationsRepository = jobAdsApplicationsRepository;
-            this.jobAdRepository = jobAdRepository;
         }
 
         public async Task Create(JobAdApplicationInputModel jobAdApplication)
         {
-            bool hasAlreadyApplied = await this.jobAdsApplicationsRepository
-                .AnyAsync(j => j.ApplicantId == jobAdApplication.ApplicantId
-                    && j.JobAdId == jobAdApplication.JobAdId);
+            bool hasAlreadyApplied = await this.unitOfWork.JobAdApplicationsRepository
+                .HasAlreadyApplied(
+                    jobAdApplication.ApplicantId,
+                    jobAdApplication.JobAdId);
 
             if (hasAlreadyApplied)
             {
                 throw new ActionableException("You can not apply again for this job ad!");
             }
 
-            JobAdApplicationEntity newJobAdApplicationEntity = this.mapper.Map<JobAdApplicationEntity>(jobAdApplication);
+            JobAddApplicationInputDTO jobAdApplicationDto = this.mapper
+                .Map<JobAddApplicationInputDTO>(jobAdApplication);
 
-            newJobAdApplicationEntity.AppliedOn = DateTime.UtcNow;
+            await this.unitOfWork.JobAdApplicationsRepository.Create(jobAdApplicationDto);
 
-            await this.jobAdsApplicationsRepository.AddAsync(newJobAdApplicationEntity);
-
-            await this.jobAdsApplicationsRepository.SaveChangesAsync();
+            await this.unitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<JobAdApplicationViewModel>> GetUserJobsAdApplications(string userId, int jobAdId)
+        public async Task<IEnumerable<JobAdApplicationViewModel>> GetUserJobsAdApplications(
+            string userId,
+            int jobAdId)
         {
-            await this.ValidateTheUserIsThePublisher(userId, jobAdId);
+            await this.ValidateTheUserIsTheJobAdPublisher(userId, jobAdId);
 
-            return await this.jobAdsApplicationsRepository.DbSetNoTracking()
-                .Where(j => j.JobAdId == jobAdId)
-                .OrderByDescending(j => j.AppliedOn)
-                .To<JobAdApplicationViewModel>()
-                .ToListAsync();
+            IEnumerable<JobAdApplicationDTO> jobAdApplications = await this.unitOfWork
+                .JobAdApplicationsRepository
+                .GetJobAdApplications<JobAdApplicationDTO>(jobAdId);
+
+            return this.mapper.Map<IEnumerable<JobAdApplicationViewModel>>(jobAdApplications);
         }
 
-        public async Task<IEnumerable<JobApplicationInfoViewModel>> GetCompanyJobAdApplications(string userId, int jobAdId)
+        public async Task<IEnumerable<JobApplicationInfoViewModel>> GetCompanyJobAdApplications(
+            string userId,
+            int jobAdId)
         {
-            await this.ValidateTheUserIsThePublisher(userId, jobAdId);
+            await this.ValidateTheUserIsTheJobAdPublisher(userId, jobAdId);
 
-            return await this.jobAdsApplicationsRepository.DbSetNoTracking()
-                .Where(j => j.JobAdId == jobAdId)
-                .To<JobApplicationInfoViewModel>()
-                .OrderByDescending(ja => ja.AppliedOn)
-                .ToListAsync();
+            IEnumerable<JobAdApplicationInfoDTO> applications = await this.unitOfWork
+                .JobAdApplicationsRepository
+                .GetJobAdApplications<JobAdApplicationInfoDTO>(jobAdId);
+
+            return this.mapper.Map<IEnumerable<JobApplicationInfoViewModel>>(applications);
         }
 
         public async Task<IEnumerable<JobAdApplicationViewModel>> GetAllMine(string userId)
         {
-            return await this.jobAdsApplicationsRepository.DbSetNoTracking()
-                .Where(j => j.ApplicantId == userId)
-                .OrderByDescending(j => j.AppliedOn)
-                .To<JobAdApplicationViewModel>()
-                .ToListAsync();
+            IEnumerable<JobAdApplicationDTO> applications = await this.unitOfWork.JobAdApplicationsRepository
+                .GetUserApplications(userId);
+
+            return this.mapper.Map<IEnumerable<JobAdApplicationViewModel>>(applications);
         }
 
         public async Task<PreviewInfoViewModel> SetPreviewInfo(string cvId, int jobAdId)
         {
-            JobAdApplicationEntity application = await this.jobAdsApplicationsRepository.All()
-                .SingleOrDefaultAsync(a => a.CurriculumVitaeId == cvId
-                    && a.JobAdId == jobAdId);
-            
-            if (application == null)
-            {
-                throw new ActionableException("No application with such cv for this job.");
-            }
+            DateTime previewDate = await this.unitOfWork.JobAdApplicationsRepository
+                .SetPreviewed(cvId, jobAdId);
 
-            DateTime previewDate = DateTime.UtcNow;
-            application.PreviewDate = previewDate;
-
-            this.jobAdsApplicationsRepository.Update(application);
-
-            await this.jobAdsApplicationsRepository.SaveChangesAsync();
+            await this.unitOfWork.SaveChanges();
 
             return new PreviewInfoViewModel(previewDate);
         }
 
-        private async Task ValidateTheUserIsThePublisher(string userId, int jobAdId)
-        {
-            string jobAdPublisherId = await this.jobAdRepository
-                .Where(ja => ja.Id == jobAdId)
-                .Select(ja => ja.Publisher.UserId)
-                .SingleOrDefaultAsync();
+        // TODO: candidate for a service filter
+        private async Task ValidateTheUserIsTheJobAdPublisher(string userId, int jobAdId)
+        {            
+            string jobAdPublisherId = await this.unitOfWork.JobAdRepository.GetPublisher(userId, jobAdId);
 
             if (jobAdPublisherId == null)
             {
@@ -110,7 +95,8 @@ namespace JobFinder.Services.Implementations
 
             if (jobAdPublisherId != userId)
             {
-                throw new UnauthorizedAccessException("You are not authorized to access data for other users job advertisements!");
+                throw new UnauthorizedAccessException(
+                    "You are not authorized to access data for other users job advertisements!");
             }
         }
     }
