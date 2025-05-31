@@ -24,7 +24,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         private ISkillsInfoDrivingCategoryRepository skillsInfoDrivingCategoryRepository;
         private ISkillsInfoRepository skillsInfoRepository;
         private IJobAdApplicationsRepository jobAdApplicationRepository;
-        private ICompanyProfileRepository companyProfileRepository;
+        private ICompanyRepository companyProfileRepository;
 
         public EntityFrameworkUnitOfWork(JobFinderDbContext dbContext, IMapper mapper)
         {
@@ -131,11 +131,11 @@ namespace JobFinder.DataAccess.UnitOfWork
             }
         }
 
-        public ICompanyProfileRepository CompanyProfileRepository
+        public ICompanyRepository CompanyRepository
         {
             get
             {
-                this.companyProfileRepository ??= new CompanyProfileRepository(this.dbContext);
+                this.companyProfileRepository ??= new CompanyRepository(this.dbContext);
                 return this.companyProfileRepository;
             }
         }

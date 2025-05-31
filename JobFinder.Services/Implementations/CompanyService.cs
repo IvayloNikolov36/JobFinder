@@ -1,49 +1,32 @@
-﻿using JobFinder.Common.Exceptions;
-using JobFinder.Data.Models;
-using JobFinder.DataAccess.Generic;
-using JobFinder.Services.Mappings;
+﻿using AutoMapper;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Transfer.DTOs.Company;
 using JobFinder.Web.Models.Company;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Services.Implementations
 {
     public class CompanyService : ICompanyService
     {
-        private readonly IRepository<CompanyEntity> companiesRepository;
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public CompanyService(IRepository<CompanyEntity> companiesRepository)
+        public CompanyService(IEntityFrameworkUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.companiesRepository = companiesRepository;
+            this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
         public async Task<int> GetCompanyId(string userId)
         {
-            int? companyId = await this.companiesRepository
-                .Where(c => c.UserId == userId)
-                .Select(c => (int?)c.Id)
-                .SingleOrDefaultAsync();
-
-            if (!companyId.HasValue)
-            {
-                throw new ActionableException($"There is no company related to user with id {userId}!");
-            }
-
-            return companyId.Value;
+            return await this.unitOfWork.CompanyRepository.GetCompanyId(userId);
         }
 
         public async Task<CompanyDetailsUserViewModel> Details(int companyId, string currentUserId)
         {
-            CompanyDetailsUserViewModel companyDetails = await this.companiesRepository
-                .Where(c => c.Id == companyId)
-                .To<CompanyDetailsUserViewModel>(new { currentUserId })
-                .SingleOrDefaultAsync();
+            CompanyDetailsUserDTO companyDetails = await this.unitOfWork.CompanyRepository
+                .GetDetails(companyId, currentUserId);
 
-            if (companyDetails == null)
-            {
-                throw new ActionableException($"Company with id {companyId} does not exist!");
-            }
-
-            return companyDetails;
+            return this.mapper.Map<CompanyDetailsUserViewModel>(companyDetails);
         }
     }
 }

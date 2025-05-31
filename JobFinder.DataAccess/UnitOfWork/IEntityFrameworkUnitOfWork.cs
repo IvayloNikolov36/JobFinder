@@ -27,7 +27,7 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         IJobAdApplicationsRepository JobAdApplicationsRepository { get; }
 
-        ICompanyProfileRepository CompanyProfileRepository { get; }
+        ICompanyRepository CompanyRepository { get; }
 
         Task SaveChanges();
 

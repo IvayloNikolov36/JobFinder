@@ -22,5 +22,15 @@ public partial class CompanyEntity : IHaveCustomMappings
                     .Count())
                 )
             );
+
+        string currentUserId = string.Empty;
+
+        configuration
+            .CreateMap<CompanyEntity, CompanyDetailsUserDTO>()
+            .ForMember(dto => dto.ActiveAdsCount, o => o.MapFrom(e => e.JobAds
+                .Where(ja => ja.IsActive)
+                .Count()))
+            .ForMember(dto => dto.HasSubscription, o => o.MapFrom(e => e.CompanySubscriptions
+                .Any(cs => cs.UserId == currentUserId)));
     }
 }

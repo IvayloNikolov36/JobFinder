@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using JobFinder.Data.Models.ViewsModels;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;

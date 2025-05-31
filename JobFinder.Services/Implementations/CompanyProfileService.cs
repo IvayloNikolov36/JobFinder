@@ -19,7 +19,7 @@ namespace JobFinder.Services.Implementations
         public async Task<CompanyProfileDataViewModel> GetProfileData(string userId)
         {
             CompanyProfileDataDTO companyProfileData = await this.unitOfWork
-                .CompanyProfileRepository
+                .CompanyRepository
                 .Get(userId);
 
             return this.mapper.Map<CompanyProfileDataViewModel>(companyProfileData);
