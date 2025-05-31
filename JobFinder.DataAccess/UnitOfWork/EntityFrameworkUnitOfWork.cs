@@ -116,7 +116,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.skillsInfoRepository ??= new SkillsInfoRepository(this.dbContext);
+                this.skillsInfoRepository ??= new SkillsInfoRepository(this.dbContext, this.mapper);
                 return this.skillsInfoRepository;
             }
         }

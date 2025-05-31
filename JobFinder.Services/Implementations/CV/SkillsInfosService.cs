@@ -1,78 +1,34 @@
-﻿namespace JobFinder.Services.Implementations.CV
-{
-    using AutoMapper;
-    using JobFinder.Data.Models.Cv;
-    using JobFinder.Data.Models.CV;
-    using JobFinder.DataAccess.Generic;
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Models.CVModels;
-    using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+﻿using AutoMapper;
+using JobFinder.Data.Models.Cv;
+using JobFinder.Data.Models.CV;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Services.CV;
+using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Web.Models.CVModels;
+using Microsoft.EntityFrameworkCore;
 
+namespace JobFinder.Services.Implementations.CV
+{
     public class SkillsInfosService : ISkillsInfosService
     {
-        private readonly IRepository<SkillsInfoEntity> repository;
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
         public SkillsInfosService(
-            IRepository<SkillsInfoEntity> skillRepository,
+            IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            this.repository = skillRepository;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
-        public async Task<bool> UpdateAsync(SkillsEditModel skillsModel)
+        public async Task Update(SkillsEditModel skillsInfoModel)
         {
-            SkillsInfoEntity skillFromDb = await this.repository
-                .Where(x => x.Id == skillsModel.Id)
-                .Include(x => x.SkillsInfoDrivingCategories)
-                .FirstOrDefaultAsync();
+            SkillsInfoEditDTO skillsInfoDto = this.mapper.Map<SkillsInfoEditDTO>(skillsInfoModel);
 
-            if (skillFromDb == null)
-            {
-                return false;
-            }
+            await this.unitOfWork.SkillsInfoRepository.Update(skillsInfoDto);
 
-            this.mapper.Map(skillsModel, skillFromDb);
-
-            skillFromDb.HasDrivingLicense = skillsModel.DrivingLicenseCategoryIds.Any();
-
-            this.UpdateDrivingLicenseCategories(
-                skillsModel.DrivingLicenseCategoryIds,
-                skillFromDb.SkillsInfoDrivingCategories);
-
-            this.repository.Update(skillFromDb);
-
-            await this.repository.SaveChangesAsync();
-
-            return true;
-        }
-
-        private void UpdateDrivingLicenseCategories(
-            IEnumerable<int> drivingCategoryIds,
-            List<SkillsInfoDrivingCategoryEntity> skillsInfoDrivingCategoryEntities)
-        {
-            IEnumerable<int> licenseCategoriesToAdd = drivingCategoryIds
-                .Where(id => !skillsInfoDrivingCategoryEntities.Any(x => x.DrivingCategoryId == id));
-
-            List<SkillsInfoDrivingCategoryEntity> licenseCategoriesToRemove = skillsInfoDrivingCategoryEntities
-                .Where(x => !drivingCategoryIds.Contains(x.DrivingCategoryId))
-                .ToList();
-
-            if (licenseCategoriesToAdd.Any())
-            {
-                skillsInfoDrivingCategoryEntities.AddRange(licenseCategoriesToAdd.Select(id => new SkillsInfoDrivingCategoryEntity { DrivingCategoryId = id }));
-            }
-
-            if (licenseCategoriesToRemove.Count > 0)
-            {
-                licenseCategoriesToRemove
-                    .ForEach(entityToRemove => skillsInfoDrivingCategoryEntities.Remove(entityToRemove));
-            }
+            await this.unitOfWork.SaveChanges();
         }
     }
 }

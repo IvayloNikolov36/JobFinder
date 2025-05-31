@@ -1,11 +1,11 @@
-﻿namespace JobFinder.Web.Models.CVModels
-{
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Services.Mappings;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.CV;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-    public class SkillsEditModel : IMapTo<SkillsInfoEntity>
+namespace JobFinder.Web.Models.CVModels
+{
+    public class SkillsEditModel : IMapTo<SkillsInfoEditDTO>
     {
         public int Id { get; set; }
 

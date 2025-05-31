@@ -1,11 +1,10 @@
-﻿namespace JobFinder.Web.Controllers.CurriculumVitae
-{
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Web.Models.CVModels;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services.CV;
+using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.CVModels;
+using Microsoft.AspNetCore.Mvc;
 
+namespace JobFinder.Web.Controllers.CurriculumVitae
+{
     public class SkillsController : BaseCVsController
     {
         private readonly ISkillsInfosService skillsService;
@@ -20,12 +19,7 @@
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update([FromRoute] string cvId, [FromBody] SkillsEditModel model)
         {
-            bool isUpdated = await this.skillsService.UpdateAsync(model);
-
-            if (!isUpdated)
-            {
-                return this.NotFound();
-            }
+            await this.skillsService.Update(model);
 
             return this.Ok();
         }
