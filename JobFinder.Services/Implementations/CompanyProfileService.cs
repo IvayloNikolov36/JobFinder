@@ -1,30 +1,28 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.DataAccess.Generic;
-using JobFinder.Services.Mappings;
+﻿using AutoMapper;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Transfer.DTOs.Company;
 using JobFinder.Web.Models.CompanyProfile;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Services.Implementations
 {
     public class CompanyProfileService : ICompanyProfileService
     {
-        public readonly IRepository<CompanyEntity> companyRepository;
+        public readonly IEntityFrameworkUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public CompanyProfileService(IRepository<CompanyEntity> companyRepository)
+        public CompanyProfileService(IEntityFrameworkUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.companyRepository = companyRepository;
+            this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
         public async Task<CompanyProfileDataViewModel> GetProfileData(string userId)
         {
-            CompanyProfileDataViewModel data =  await this.companyRepository
-                .Where(c => c.UserId == userId)
-                .To<CompanyProfileDataViewModel>()
-                .SingleOrDefaultAsync();
+            CompanyProfileDataDTO companyProfileData = await this.unitOfWork
+                .CompanyProfileRepository
+                .Get(userId);
 
-            data.NewApplicationsCount = data.NewApplications.Sum();
-
-            return data;
+            return this.mapper.Map<CompanyProfileDataViewModel>(companyProfileData);
         }
     }
 }

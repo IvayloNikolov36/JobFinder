@@ -3,7 +3,6 @@ using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.CompanyProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace JobFinder.Web.Controllers
 {
@@ -22,7 +21,8 @@ namespace JobFinder.Web.Controllers
         {
             string userId = this.User.GetCurrentUserId();
 
-            CompanyProfileDataViewModel profileData = await this.companyProfileService.GetProfileData(userId);
+            CompanyProfileDataViewModel profileData = await this.companyProfileService
+                .GetProfileData(userId);
 
             return this.Ok(profileData);
         }

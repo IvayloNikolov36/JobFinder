@@ -1,11 +1,11 @@
-﻿namespace JobFinder.Data.Models
-{
-    using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Subscriptions;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Data.Models.Common;
+using JobFinder.Data.Models.Subscriptions;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-    public class CompanyEntity : BaseEntity<int>
+namespace JobFinder.Data.Models
+{
+    public partial class CompanyEntity : BaseEntity<int>
     {
         public CompanyEntity()
         {

@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using JobFinder.Data.Models.Cv;
-using JobFinder.Data.Models.CV;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services.CV;
 using JobFinder.Transfer.DTOs.CV;
 using JobFinder.Web.Models.CVModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Services.Implementations.CV
 {
