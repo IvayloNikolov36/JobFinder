@@ -3,7 +3,6 @@ using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.UserProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace JobFinder.Web.Controllers
 {

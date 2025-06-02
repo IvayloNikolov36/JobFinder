@@ -31,6 +31,8 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         IJobAdRepository JobAdRepository { get; }
 
+        IUserRepository UserRepository { get; }
+
         Task SaveChanges();
 
         Task SaveChanges<DTO, IdType>(DTO dtoToPopulateId) where DTO : IUniquelyIdentified<IdType>;

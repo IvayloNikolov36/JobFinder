@@ -1,27 +1,25 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.DataAccess.Generic;
-using JobFinder.Services.Mappings;
+﻿using AutoMapper;
+using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Transfer.DTOs.User;
 using JobFinder.Web.Models.UserProfile;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
-namespace JobFinder.Services.Implementations
+namespace JobFinder.Services.Implementations;
+
+public class UserProfileService : IUserProfileService
 {
-    public class UserProfileService : IUserProfileService
+    private readonly IEntityFrameworkUnitOfWork unitOfWork;
+    private readonly IMapper mapper;
+
+    public UserProfileService(IEntityFrameworkUnitOfWork unitOfWork, IMapper mapper)
     {
-        private readonly IRepository<UserEntity> usersRepository;
+        this.unitOfWork = unitOfWork;
+        this.mapper = mapper;
+    }
 
-        public UserProfileService(IRepository<UserEntity> usersRepository)
-        {
-            this.usersRepository = usersRepository;
-        }
-
-        public async Task<UserProfileDataViewModel> GetNyProfileData(string userId)
-        {
-            return await this.usersRepository
-                .Where(u => u.Id == userId)
-                .To<UserProfileDataViewModel>()
-                .SingleOrDefaultAsync();
-        }
+    public async Task<UserProfileDataViewModel> GetNyProfileData(string userId)
+    {
+        UserProfileDataDTO userProfile = await this.unitOfWork.UserRepository.GetProfileData(userId);
+        
+        return this.mapper.Map<UserProfileDataViewModel>(userProfile);
     }
 }

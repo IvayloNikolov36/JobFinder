@@ -1,12 +1,12 @@
-﻿namespace JobFinder.Data.Models
-{
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Subscriptions;
-    using Microsoft.AspNetCore.Identity;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Data.Models.CV;
+using JobFinder.Data.Models.Subscriptions;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-    public class UserEntity : IdentityUser
+namespace JobFinder.Data.Models
+{
+    public partial class UserEntity : IdentityUser
     {
         public UserEntity()
         {        

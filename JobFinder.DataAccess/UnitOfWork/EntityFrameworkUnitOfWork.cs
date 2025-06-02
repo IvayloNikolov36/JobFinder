@@ -26,6 +26,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         private IJobAdApplicationsRepository jobAdApplicationRepository;
         private ICompanyRepository companyProfileRepository;
         private IJobAdRepository jobAdRepository;
+        private IUserRepository userRepository;
 
         public EntityFrameworkUnitOfWork(JobFinderDbContext dbContext, IMapper mapper)
         {
@@ -147,6 +148,15 @@ namespace JobFinder.DataAccess.UnitOfWork
             {
                 this.jobAdRepository ??= new JobAdRepository(this.dbContext, this.mapper);
                 return this.jobAdRepository;
+            }
+        }
+
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                this.userRepository ??= new UserRepository(this.dbContext);
+                return this.userRepository;
             }
         }
 
