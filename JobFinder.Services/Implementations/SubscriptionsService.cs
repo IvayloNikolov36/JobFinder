@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Business.JobSubscriptions;
 using JobFinder.Common.Exceptions;
-using JobFinder.Data.Models.Subscriptions;
-using JobFinder.DataAccess.Generic;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Common;
@@ -13,25 +11,24 @@ namespace JobFinder.Services.Implementations
 {
     public class SubscriptionsService : ISubscriptionsService
     {
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
         private readonly IJobAdsService jobAdsService;
         private readonly INomenclatureService nomenclatureService;
-        private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IJobSubscriptionsRules jobSubscriptionsRules;
-        private readonly IMapper mapper;
 
         public SubscriptionsService(
+            IEntityFrameworkUnitOfWork unitOfWork,
+            IMapper mapper,
             IJobAdsService jobAdsService,
             INomenclatureService nomenclatureService,
-            IRepository<JobsSubscriptionEntity> jobsSubscriptionRepository,
-            IEntityFrameworkUnitOfWork unitOfWork,
-            IJobSubscriptionsRules jobSubscriptionsRules,
-            IMapper mapper)
+            IJobSubscriptionsRules jobSubscriptionsRules)
         {
+            this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
             this.jobAdsService = jobAdsService;
             this.nomenclatureService = nomenclatureService;
-            this.unitOfWork = unitOfWork;
             this.jobSubscriptionsRules = jobSubscriptionsRules;
-            this.mapper = mapper;
         }
 
         public async Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
