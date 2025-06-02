@@ -86,7 +86,9 @@ namespace JobFinder.Services.Implementations
         // TODO: candidate for a service filter
         private async Task ValidateTheUserIsTheJobAdPublisher(string userId, int jobAdId)
         {            
-            string jobAdPublisherId = await this.unitOfWork.JobAdRepository.GetPublisher(userId, jobAdId);
+            string jobAdPublisherId = await this.unitOfWork
+                .JobAdRepository
+                .GetPublisher(jobAdId);
 
             if (jobAdPublisherId == null)
             {

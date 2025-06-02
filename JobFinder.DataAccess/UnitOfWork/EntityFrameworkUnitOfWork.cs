@@ -145,7 +145,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         {
             get
             {
-                this.jobAdRepository ??= new JobAdRepository(this.dbContext);
+                this.jobAdRepository ??= new JobAdRepository(this.dbContext, this.mapper);
                 return this.jobAdRepository;
             }
         }

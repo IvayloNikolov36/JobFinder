@@ -1,15 +1,14 @@
-﻿namespace JobFinder.Web.Controllers
-{
-    using JobFinder.Services;
-    using JobFinder.Web.Infrastructure.Extensions;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.JobAds;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using static JobFinder.Web.Infrastructure.WebConstants;
+﻿using JobFinder.Services;
+using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.JobAds;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
+namespace JobFinder.Web.Controllers
+{
     [Authorize]
     public class JobAdsController : ApiController
     {
@@ -53,14 +52,9 @@
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<JobAdDetailsModel>> Details([FromRoute] int id)
+        public async Task<ActionResult<JobAdDetailsViewModel>> Details([FromRoute] int id)
         {
-            JobAdDetailsModel jobDetails = await this.adsService.GetAsync<JobAdDetailsModel>(id);
-
-            if (jobDetails == null)
-            {
-                return this.NotFound(new { Message = NoJobFound });
-            }
+            JobAdDetailsViewModel jobDetails = await this.adsService.Get(id);
 
             return this.Ok(jobDetails);
         }
@@ -76,18 +70,20 @@
 
             int companyId = await companyService.GetCompanyId(userId);
 
-            await this.adsService.CreateAsync(companyId, model);
+            await this.adsService.Create(model, companyId);
 
             return this.Ok();
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult> Edit([FromRoute] int id, [FromBody] JobAdEditModel model)
+        [Authorize(Roles = CompanyRole)]
+        [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
+        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] JobAdEditModel model)
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.adsService.EditAsync(id, userId, model);
+            await this.adsService.Update(id, userId, model);
 
             return this.Ok();
         }

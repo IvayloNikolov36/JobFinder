@@ -1,9 +1,9 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.Company;
 
 namespace JobFinder.Web.Models.Company
 {
-    public class CompanyBasicViewModel : IMapFrom<CompanyEntity>
+    public class CompanyBasicViewModel : IMapFrom<CompanyBasicDTO>
     {
         public int Id { get; set; }
 

@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-using JobFinder.Data.Models;
-using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.Company;
 using System;
-using System.Linq;
 
 namespace JobFinder.Web.Models.JobAds
 {
-    public class CompanyJobAdViewModel : IHaveCustomMappings
+    public class CompanyJobAdViewModel : IMapFrom<CompanyJobAdDTO>
     {
         public int Id { get; set; }
 
@@ -29,17 +27,5 @@ namespace JobFinder.Web.Models.JobAds
         public bool IsActive { get; set; }
 
         public DateTime PublishDate { get; set; }
-
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<JobAdvertisementEntity, CompanyJobAdViewModel>()
-                .ForMember(vm => vm.Location, o => o.MapFrom(e => e.Location.Name))
-                .ForMember(vm => vm.ApplicationsSent, o => o.MapFrom(e => e.JobAdApplications.Count()))
-                .ForMember(x => x.Currency, m => m.MapFrom(m => m.Currency.Name))
-                .ForMember(vm => vm.NotPreviewedApplications, o => o.MapFrom(e => e
-                    .JobAdApplications
-                    .Where(ja => !ja.PreviewDate.HasValue)
-                    .Count()));
-        }
     }
 }

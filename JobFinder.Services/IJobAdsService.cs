@@ -1,16 +1,14 @@
-﻿namespace JobFinder.Services
-{
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.JobAds;
-    using JobFinder.Web.Models.Subscriptions;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.JobAds;
+using JobFinder.Web.Models.Subscriptions;
 
+namespace JobFinder.Services
+{
     public interface IJobAdsService
     {
-        Task<T> GetAsync<T>(int id);
+        Task<JobAdDetailsViewModel> Get(int id);
 
-        Task CreateAsync(int companyId, JobAdCreateViewModel model);
+        Task Create(JobAdCreateViewModel jobAd, int companyId);
 
         Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId);
 
@@ -18,10 +16,12 @@
 
         Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model);
 
-        Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel);
+        Task Update(int jobAdId, string userId, JobAdEditModel editModel);
 
         Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId);
 
-        Task DeactivateAds();     
+        Task DeactivateAds();
+
+        Task<string> GetPublisherId(int jobAdId);
     }
 }

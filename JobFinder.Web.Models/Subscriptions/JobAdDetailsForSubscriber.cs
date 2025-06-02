@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using JobFinder.Data.Models;
-using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.Company;
 
 namespace JobFinder.Web.Models.Subscriptions
 {
-    public class JobAdDetailsForSubscriber : IHaveCustomMappings
+    public class JobAdDetailsForSubscriber : IMapFrom<JobAdDetailsForSubscriberDTO>
     {
         public int Id { get; set; }
 
@@ -22,15 +21,5 @@ namespace JobFinder.Web.Models.Subscriptions
         public string Salary { get; set; }
 
         public bool Intership { get; set; }
-
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsForSubscriber>()
-                .ForMember(vm => vm.Salary, o => o.MapFrom(e => e.MinSalary.HasValue
-                    ? $"{e.MinSalary}-{e.MaxSalary} {e.Currency.Name}"
-                    : null))
-                .ForMember(vm => vm.Location, o => o.MapFrom(e => e.Location.Name))
-                .ForMember(vm => vm.Company, o => o.MapFrom(e => e.Publisher));
-        }
     }
 }

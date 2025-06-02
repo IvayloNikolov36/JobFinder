@@ -1,12 +1,12 @@
-﻿namespace JobFinder.Data.Models
-{
-    using JobFinder.Data.Models.Common;
-    using JobFinder.Data.Models.Nomenclature;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Data.Models.Common;
+using JobFinder.Data.Models.Nomenclature;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-    public class JobAdvertisementEntity : BaseEntity<int>
+namespace JobFinder.Data.Models
+{
+    public partial class JobAdvertisementEntity : BaseEntity<int>
     {
         public JobAdvertisementEntity()
         {

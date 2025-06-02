@@ -1,10 +1,11 @@
-﻿namespace JobFinder.Web.Models.JobAds
-{
-    using AutoMapper;
-    using JobFinder.Data.Models;
-    using JobFinder.Services.Mappings;
+﻿using AutoMapper;
+using JobFinder.Data.Models;
+using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.JobAd;
 
-    public class JobAdDetailsModel : IMapFrom<JobAdvertisementEntity>, IHaveCustomMappings
+namespace JobFinder.Web.Models.JobAds
+{
+    public class JobAdDetailsViewModel : IMapFrom<JobAdDetailsDTO>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -30,7 +31,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsModel>()
+            configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsViewModel>()
                 .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Logo))
                 .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))

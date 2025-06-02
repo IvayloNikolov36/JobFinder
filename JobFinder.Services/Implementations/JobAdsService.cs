@@ -1,81 +1,60 @@
 ﻿using AutoMapper;
 using JobFinder.Business.JobAds;
-using JobFinder.Common.Exceptions;
-using JobFinder.Data.Models;
-using JobFinder.DataAccess.Generic;
-using JobFinder.Services.Mappings;
+using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.Company;
+using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;
 using JobFinder.Web.Models.Subscriptions;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.Services.Implementations
 {
     public class JobAdsService : IJobAdsService
     {
-        private readonly IRepository<JobAdvertisementEntity> jobAdsRepository;
+        private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IJobAdvertisementsRules jobAdsRules;
         private readonly IMapper mapper;
 
         public JobAdsService(
-            IRepository<JobAdvertisementEntity> jobAdsRepository,
+            IEntityFrameworkUnitOfWork unitOfWork,
             IJobAdvertisementsRules jobAdsRules,
             IMapper mapper)
         {
-            this.jobAdsRepository = jobAdsRepository;
+            this.unitOfWork = unitOfWork;
             this.jobAdsRules = jobAdsRules;
             this.mapper = mapper;
         }
 
-        public async Task<T> GetAsync<T>(int id)
+        public async Task<JobAdDetailsViewModel> Get(int id)
         {
-            return await this.jobAdsRepository
-                .DbSetNoTracking()
-                .Where(ja => ja.Id == id)
-                .To<T>()
-                .FirstOrDefaultAsync();
+            JobAdDetailsDTO jobAd = await this.unitOfWork.JobAdRepository.Get(id);
+
+            return this.mapper.Map<JobAdDetailsViewModel>(jobAd);
         }
 
-        public async Task CreateAsync(int companyId, JobAdCreateViewModel model)
+        public async Task Create(JobAdCreateViewModel jobAd, int companyId)
         {
-            SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(model);
+            SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(jobAd);
 
             this.jobAdsRules.ValidateSalaryProperties(salaryProperties);
 
-            this.jobAdsRules.ValidateIntership(model.Intership, model.JobEngagementId);
+            this.jobAdsRules.ValidateIntership(jobAd.Intership, jobAd.JobEngagementId);
 
-            JobAdvertisementEntity jobAd = this.mapper.Map<JobAdvertisementEntity>(model);
-            jobAd.PublisherId = companyId;
-            jobAd.PublishDate = DateTime.UtcNow;
-            jobAd.IsActive = true;
+            JobAdCreateDTO jobAdDto = this.mapper.Map<JobAdCreateDTO>(jobAd);
 
-            await this.jobAdsRepository.AddAsync(jobAd);
+            await this.unitOfWork.JobAdRepository.Create(jobAdDto, companyId);
 
-            await this.jobAdsRepository.SaveChangesAsync();
+            await this.unitOfWork.SaveChanges();
         }
 
-        public async Task EditAsync(int jobAdId, string userId, JobAdEditModel editModel)
+        public async Task Update(int jobAdId, string userId, JobAdEditModel editModel)
         {
-            JobAdvertisementEntity offerFromDb = await this.jobAdsRepository.FindAsync(jobAdId);
+            JobAdEditDTO jobAdDto = this.mapper.Map<JobAdEditDTO>(editModel);
 
-            if (offerFromDb == null)
-            {
-                throw new ActionableException("Job ad with such id is not found!");
-            }
+            await this.unitOfWork.JobAdRepository.Update(jobAdId, jobAdDto);
 
-            bool isUserPublisher = userId == offerFromDb.Publisher.User.Id;
-
-            if (!isUserPublisher)
-            {
-                throw new ActionableException("You can edit only your own ads!");
-            }
-
-            this.mapper.Map(editModel, offerFromDb);
-
-            this.jobAdsRepository.Update(offerFromDb);
-
-            await this.jobAdsRepository.SaveChangesAsync();
+            await this.unitOfWork.SaveChanges();
         }
 
         public async Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId)
@@ -88,142 +67,49 @@ namespace JobFinder.Services.Implementations
             return await this.GetFilteredCompanyAds(userId, active);
         }
 
-        public async Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model)
+        public async Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel filter)
         {
-            IQueryable<JobAdvertisementEntity> jobs = this.jobAdsRepository
-                .DbSetNoTracking()
-                .Where(ja => ja.IsActive);
+            JobAdFilterDTO filterDto = this.mapper.Map<JobAdFilterDTO>(filter);
 
-            if (!string.IsNullOrEmpty(model.SearchText?.Trim()))
-            {
-                model.SearchText = model.SearchText.ToLower();
+            DataListingDTO<JobAdListingDTO> result = await this.unitOfWork
+                .JobAdRepository
+                .AllActive(filterDto);
 
-                jobs = jobs.Where(j => j.Position.ToLower().Contains(model.SearchText)
-                        || j.Publisher.Name.ToLower().Contains(model.SearchText));
-            }
-
-            if (model.EngagementId.HasValue)
-            {
-                jobs = this.FilterByEngagement(jobs, model.EngagementId.Value);
-            }
-
-            if (model.CategoryId.HasValue)
-            {
-                jobs = this.FilteredByCategory(jobs, model.CategoryId.Value);
-            }
-
-            if (model.LocationId.HasValue)
-            {
-                jobs = this.FilterByLocation(jobs, model.LocationId.Value);
-            }
-
-            if (model.Intership)
-            {
-                jobs = jobs.Where(ja => ja.Intership);
-            }
-
-            if (model.SpecifiedSalary)
-            {
-                jobs = jobs.Where(ja => ja.MinSalary.HasValue && ja.MaxSalary.HasValue);
-            }
-
-            if (!string.IsNullOrEmpty(model.SortBy) && model.SortBy == "Salary")
-            {
-                jobs = this.SortBySalary(jobs, model.IsAscending);
-            }
-
-            if (!string.IsNullOrEmpty(model.SortBy) && model.SortBy == "Published")
-            {
-                jobs = this.SortByPublishDate(jobs, model.IsAscending);
-            }
-
-            int totalCount = await jobs.CountAsync();
-
-            IEnumerable<JobListingModel> jobAds = await jobs.Skip((model.Page - 1) * model.Items)
-               .Take(model.Items)
-               .To<JobListingModel>()
-               .ToListAsync();
-
-            return new DataListingsModel<JobListingModel>(totalCount, jobAds);
+            return new DataListingsModel<JobListingModel>(
+                result.TotalCount,
+                this.mapper.Map<IEnumerable<JobListingModel>>(result.Data));
         }
 
         public async Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId)
         {
-            JobAdDetailsForSubscriber details = await this.jobAdsRepository.DbSetNoTracking()
-                .Where(ja => ja.Id == jobAdId)
-                .To<JobAdDetailsForSubscriber>()
-                .SingleOrDefaultAsync();
+            JobAdDetailsForSubscriberDTO detailsDto = await this.unitOfWork
+                .JobAdRepository
+                .GetDetailsForSubscriber(jobAdId);
 
-            return details ?? throw new ActionableException($"There is no job ad with id: {jobAdId}!");
+            return this.mapper.Map<JobAdDetailsForSubscriber>(detailsDto);
         }
 
         public async Task DeactivateAds()
         {
             int expirationAfterDays = this.jobAdsRules.GetDaysExpiration();
 
-            DateTime date = DateTime.UtcNow.AddDays(-expirationAfterDays);
+            DateTime dateTreshold = DateTime.UtcNow.AddDays(-expirationAfterDays);
 
-            await this.jobAdsRepository.All()
-                .Where(ja => ja.IsActive && ja.PublishDate <= date)
-                .ExecuteUpdateAsync(s => s.SetProperty(ja => ja.IsActive, ja => !ja.IsActive));
+            await this.unitOfWork.JobAdRepository.ExecuteJobAdsDeactivate(dateTreshold);
         }
 
-        // Filter methods
-
-        private IQueryable<JobAdvertisementEntity> FilteredByCategory(
-            IQueryable<JobAdvertisementEntity> jobAds,
-            int jobCategoryId)
+        public async Task<string> GetPublisherId(int jobAdId)
         {
-            return jobAds.Where(j => j.JobCategoryId == jobCategoryId);
-        }
-
-        private IQueryable<JobAdvertisementEntity> FilterByEngagement(
-            IQueryable<JobAdvertisementEntity> jobAds,
-            int jobEngagementId)
-        {
-            return jobAds.Where(j => j.JobEngagementId == jobEngagementId);
-        }
-
-        private IQueryable<JobAdvertisementEntity> FilterByLocation(
-            IQueryable<JobAdvertisementEntity> jobAds,
-            int locationId)
-        {
-            return jobAds.Where(j => j.LocationId == locationId);
-        }
-
-        // Sort methods
-
-        private IQueryable<JobAdvertisementEntity> SortBySalary(
-            IQueryable<JobAdvertisementEntity> jobAds,
-            bool isAscending)
-        {
-            return isAscending
-                ? jobAds.OrderBy(j => j.MaxSalary)
-                : jobAds.OrderByDescending(j => j.MinSalary);
-        }
-
-        private IQueryable<JobAdvertisementEntity> SortByPublishDate(
-            IQueryable<JobAdvertisementEntity> jobAds,
-            bool isAscending)
-        {
-            return isAscending
-                ? jobAds.OrderBy(j => j.CreatedOn)
-                : jobAds.OrderByDescending(j => j.CreatedOn);
+            return await this.unitOfWork.JobAdRepository.GetPublisher(jobAdId);
         }
 
         private async Task<IEnumerable<CompanyJobAdViewModel>> GetFilteredCompanyAds(string userId, bool? active)
         {
-            IQueryable<JobAdvertisementEntity> query = this.jobAdsRepository.DbSetNoTracking()
-                .Where(ja => ja.Publisher.UserId == userId);
+            IEnumerable<CompanyJobAdDTO> jobAds = await this.unitOfWork
+                .JobAdRepository
+                .GetFilteredCompanyAds(userId, active);
 
-            if (active.HasValue)
-            {
-                query = query.Where(ja => ja.IsActive == active);
-            }
-
-            return await query.OrderByDescending(j => j.PublishDate)
-                .To<CompanyJobAdViewModel>()
-                .ToListAsync();
+            return this.mapper.Map<IEnumerable<CompanyJobAdViewModel>>(jobAds);
         }
     }
 }

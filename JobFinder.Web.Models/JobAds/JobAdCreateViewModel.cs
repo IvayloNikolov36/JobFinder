@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using JobFinder.Data.Models;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.JobAd;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Web.Models.JobAds
 {
-    public class JobAdCreateViewModel : IMapTo<JobAdvertisementEntity>, IHaveCustomMappings
+    public class JobAdCreateViewModel : IMapTo<JobAdCreateDTO>, IHaveCustomMappings
     {
         [Required]
         [StringLength(90, MinimumLength = 6)]

@@ -1,6 +1,9 @@
-﻿namespace JobFinder.Web.Models.JobAds
+﻿using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.JobAd;
+
+namespace JobFinder.Web.Models.JobAds
 {
-    public class JobAdsFilterModel
+    public class JobAdsFilterModel : IMapTo<JobAdFilterDTO>
     {
         private const int InitialPage = 1;
         private const int DefaultItemsPerPage = 10;

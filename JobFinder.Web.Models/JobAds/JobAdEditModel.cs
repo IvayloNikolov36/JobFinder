@@ -1,10 +1,9 @@
-﻿namespace JobFinder.Web.Models.JobAds
-{
-    using JobFinder.Data.Models;
-    using JobFinder.Services.Mappings;
-    using System.ComponentModel.DataAnnotations;
+﻿using JobFinder.Services.Mappings;
+using System.ComponentModel.DataAnnotations;
 
-    public class JobAdEditModel : IMapTo<JobAdvertisementEntity>
+namespace JobFinder.Web.Models.JobAds
+{    
+    public class JobAdEditModel : IMapTo<JobAdEditModel>
     {
         [Required]
         [StringLength(90, MinimumLength = 6)]
