@@ -1,23 +1,18 @@
-﻿namespace JobFinder.Data
-{
-    using JobFinder.Data.Models;
-    using JobFinder.Data.Models.Cv;
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Data.Models.Nomenclature;
-    using JobFinder.Data.Models.Subscriptions;
-    using JobFinder.Data.Models.ViewsModels;
-    using JobFinder.Data.SchemaDefinitions;
-    using JobFinder.Data.Seeders;
-    using JobFinder.Transfer.Common;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using JobFinder.Data.Models;
+using JobFinder.Data.Models.Cv;
+using JobFinder.Data.Models.CV;
+using JobFinder.Data.Models.Nomenclature;
+using JobFinder.Data.Models.Subscriptions;
+using JobFinder.Data.Models.ViewsModels;
+using JobFinder.Data.SchemaDefinitions;
+using JobFinder.Data.Seeders;
+using JobFinder.Transfer.Common;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+namespace JobFinder.Data
+{
     public class JobFinderDbContext : IdentityDbContext<UserEntity>
     {
         public JobFinderDbContext(DbContextOptions<JobFinderDbContext> options) : base(options)
@@ -76,6 +71,15 @@
         public DbSet<CurrencyEntity> Currencies { get; set; }
 
         public DbSet<RecurringTypeEntity> RecurringTypes { get; set; }
+
+        public DbSet<ITAreaEntity> ItAreas { get; set; }
+
+        public DbSet<ITSKillEntity> ITSkills { get; set; }
+
+        public DbSet<TechStackEntity> TechStacks { get; set; }
+
+        public DbSet<RemoteJobPreferenceEntity> RemoteJobPreferences { get; set; }
+
 
         // For VIEWS
 
@@ -205,6 +209,10 @@
             CitiesSeeder.Seed(builder);
             CurrenciesSeeder.Seed(builder);
             RecurringTypesSeeder.Seed(builder);
+            ITAreasSeeder.Seed(builder);
+            ITSkillsSeeder.Seed(builder);
+            TechStacksSeeder.Seed(builder);
+            RemoteJobPreferencesSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()

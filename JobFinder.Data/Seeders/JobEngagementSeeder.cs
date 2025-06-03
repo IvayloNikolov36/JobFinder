@@ -17,7 +17,10 @@ namespace JobFinder.Data.Seeders
                 {
                     Name = "Suitable for candidates with no expirience",
                     Id = 6
-                });
+                },
+                new JobEngagementEntity { Name = "Seasonal", Id = 7 },
+                new JobEngagementEntity { Name = "Freelance", Id = 8 }
+            );
         }
     }
 }
