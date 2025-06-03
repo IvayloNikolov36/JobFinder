@@ -2,7 +2,7 @@
 
 namespace JobFinder.Data.Models.Nomenclature;
 
-public class ITSKillEntity : BaseNomenclatureEntity<int>
+public class SoftSKillEntity : BaseNomenclatureEntity<int>
 {
 
 }

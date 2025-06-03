@@ -1,4 +1,5 @@
-﻿using JobFinder.Data.Models;
+﻿using JobFinder.Data.Migrations;
+using JobFinder.Data.Models;
 using JobFinder.Data.Models.Cv;
 using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
@@ -45,6 +46,16 @@ namespace JobFinder.Data
 
         public DbSet<JobsSubscriptionEntity> JobsSubscriptions { get; set; }
 
+        public DbSet<AnonymousProfileAppearance> AnonymousProfileAppearances { get; set; }
+
+        public DbSet<AnonymousProfileAppearanceITAreaEntity> AnonymousProfileAppearancesITAreas { get; set; }
+
+        public DbSet<AnonymousProfileAppearanceSoftSkillEntity> AnonymousProfileAppearancesSoftSkills { get; set; }
+
+        public DbSet<AnonymousProfileAppearanceTechStackEntity> AnonymousProfileAppearancesTechStacks { get; set; }
+
+        public DbSet<AnonymousProfileAppearanceJobEngagementEntity> AnonymousProfileAppearancesJobEngagements { get; set; }
+
 
         // Nomenclature Entities
 
@@ -74,7 +85,7 @@ namespace JobFinder.Data
 
         public DbSet<ITAreaEntity> ItAreas { get; set; }
 
-        public DbSet<ITSKillEntity> ITSkills { get; set; }
+        public DbSet<SoftSKillEntity> SoftSkills { get; set; }
 
         public DbSet<TechStackEntity> TechStacks { get; set; }
 
@@ -156,7 +167,7 @@ namespace JobFinder.Data
                 .HasDefaultValue(false);
 
             builder.Entity<CompanySubscriptionEntity>()
-                .HasKey(x => new { x.UserId, x.CompanyId });
+                .HasKey(key => new { key.UserId, key.CompanyId });
 
             builder.Entity<JobAdApplicationEntity>()
                 .HasIndex(j => j.ApplicantId);
@@ -170,6 +181,19 @@ namespace JobFinder.Data
                         OR (CurrencyId IS NULL AND MinSalary IS NULL AND MaxSalary IS NULL)
                      ")
                 );
+
+            builder.Entity<AnonymousProfileAppearanceSoftSkillEntity>()
+                .HasKey(key => new { key.AnonymousProfileAppearanceId, key.SoftSkillId });
+
+            builder.Entity<AnonymousProfileAppearanceITAreaEntity>()
+                .HasKey(key => new { key.AnonymousProfileAppearanceId, key.ITAreaId });
+
+            builder.Entity<AnonymousProfileAppearanceTechStackEntity>()
+                .HasKey(key => new { key.AnonymousProfileAppearanceId, key.TechStackId });
+
+            builder.Entity<AnonymousProfileAppearanceJobEngagementEntity>()
+                .HasKey(key => new { key.AnonymousProfileAppearanceId, key.JobEngagementId });
+
 
             // VIEWS
 
@@ -210,7 +234,7 @@ namespace JobFinder.Data
             CurrenciesSeeder.Seed(builder);
             RecurringTypesSeeder.Seed(builder);
             ITAreasSeeder.Seed(builder);
-            ITSkillsSeeder.Seed(builder);
+            SoftSkillsSeeder.Seed(builder);
             TechStacksSeeder.Seed(builder);
             RemoteJobPreferencesSeeder.Seed(builder);
         }
