@@ -22,6 +22,43 @@ namespace JobFinder.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("JobCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PreferredPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RemoteJobPreferenceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurriculumVitaeId");
+
+                    b.HasIndex("JobCategoryId");
+
+                    b.HasIndex("RemoteJobPreferenceId");
+
+                    b.ToTable("AnonymousProfileAppearances");
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceITAreaEntity", b =>
                 {
                     b.Property<int>("AnonymousProfileAppearanceId")
@@ -473,51 +510,6 @@ namespace JobFinder.Data.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Cv.AnonymousProfileAppearanceEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurriculumVitaeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("JobCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("JobEngagementId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("JobEngagementsId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PreferredPositions")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RemoteJobPreferenceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurriculumVitaeId");
-
-                    b.HasIndex("JobCategoryId");
-
-                    b.HasIndex("JobEngagementsId");
-
-                    b.HasIndex("RemoteJobPreferenceId");
-
-                    b.ToTable("AnonymousProfileAppearanceEntity");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Cv.SkillsInfoDrivingCategoryEntity", b =>
@@ -5500,9 +5492,34 @@ namespace JobFinder.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceEntity", b =>
+                {
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
+                        .WithMany()
+                        .HasForeignKey("CurriculumVitaeId");
+
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
+                        .WithMany()
+                        .HasForeignKey("JobCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.RemoteJobPreferenceEntity", "RemoteJobPreference")
+                        .WithMany()
+                        .HasForeignKey("RemoteJobPreferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CurriculumVitae");
+
+                    b.Navigation("JobCategory");
+
+                    b.Navigation("RemoteJobPreference");
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceITAreaEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Cv.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
+                    b.HasOne("JobFinder.Data.Models.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
                         .WithMany("AnonymousProfileAppearanceITAreas")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5521,8 +5538,8 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceJobEngagementEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Cv.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
-                        .WithMany()
+                    b.HasOne("JobFinder.Data.Models.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
+                        .WithMany("AnonymousProfileAppearanceJobEngagements")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -5540,7 +5557,7 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceSoftSkillEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Cv.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
+                    b.HasOne("JobFinder.Data.Models.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
                         .WithMany("AnonymousProfileAppearanceSoftSkills")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5559,7 +5576,7 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceTechStackEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Cv.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
+                    b.HasOne("JobFinder.Data.Models.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
                         .WithMany("AnonymousProfileAppearanceTechStacks")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5730,37 +5747,6 @@ namespace JobFinder.Data.Migrations
                         .HasForeignKey("JobFinder.Data.Models.CompanyEntity", "UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Cv.AnonymousProfileAppearanceEntity", b =>
-                {
-                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
-                        .WithMany()
-                        .HasForeignKey("CurriculumVitaeId");
-
-                    b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
-                        .WithMany()
-                        .HasForeignKey("JobCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobFinder.Data.Models.Nomenclature.JobEngagementEntity", "JobEngagements")
-                        .WithMany()
-                        .HasForeignKey("JobEngagementsId");
-
-                    b.HasOne("JobFinder.Data.Models.Nomenclature.RemoteJobPreferenceEntity", "RemoteJobPreference")
-                        .WithMany()
-                        .HasForeignKey("RemoteJobPreferenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CurriculumVitae");
-
-                    b.Navigation("JobCategory");
-
-                    b.Navigation("JobEngagements");
-
-                    b.Navigation("RemoteJobPreference");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Cv.SkillsInfoDrivingCategoryEntity", b =>
@@ -5960,6 +5946,17 @@ namespace JobFinder.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfileAppearanceEntity", b =>
+                {
+                    b.Navigation("AnonymousProfileAppearanceITAreas");
+
+                    b.Navigation("AnonymousProfileAppearanceJobEngagements");
+
+                    b.Navigation("AnonymousProfileAppearanceSoftSkills");
+
+                    b.Navigation("AnonymousProfileAppearanceTechStacks");
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.CV.CurriculumVitaeEntity", b =>
                 {
                     b.Navigation("CourseCertificates");
@@ -5985,15 +5982,6 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("CompanySubscriptions");
 
                     b.Navigation("JobAds");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Cv.AnonymousProfileAppearanceEntity", b =>
-                {
-                    b.Navigation("AnonymousProfileAppearanceITAreas");
-
-                    b.Navigation("AnonymousProfileAppearanceSoftSkills");
-
-                    b.Navigation("AnonymousProfileAppearanceTechStacks");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.JobAdvertisementEntity", b =>

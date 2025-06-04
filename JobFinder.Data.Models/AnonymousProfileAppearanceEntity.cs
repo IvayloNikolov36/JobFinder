@@ -3,15 +3,16 @@ using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
 using System.Collections.Generic;
 
-namespace JobFinder.Data.Models.Cv;
+namespace JobFinder.Data.Models;
 
 public class AnonymousProfileAppearanceEntity : BaseEntity<int>
 {
     public AnonymousProfileAppearanceEntity()
     {
-        this.AnonymousProfileAppearanceSoftSkills = new HashSet<AnonymousProfileAppearanceSoftSkillEntity>();
-        this.AnonymousProfileAppearanceITAreas = new HashSet<AnonymousProfileAppearanceITAreaEntity>();
-        this.AnonymousProfileAppearanceTechStacks = new HashSet<AnonymousProfileAppearanceTechStackEntity>();
+        AnonymousProfileAppearanceJobEngagements = new HashSet<AnonymousProfileAppearanceJobEngagementEntity>();
+        AnonymousProfileAppearanceSoftSkills = new HashSet<AnonymousProfileAppearanceSoftSkillEntity>();
+        AnonymousProfileAppearanceITAreas = new HashSet<AnonymousProfileAppearanceITAreaEntity>();
+        AnonymousProfileAppearanceTechStacks = new HashSet<AnonymousProfileAppearanceTechStackEntity>();
     }
 
     public string CurriculumVitaeId { get; set; }
@@ -23,10 +24,9 @@ public class AnonymousProfileAppearanceEntity : BaseEntity<int>
     public int JobCategoryId { get; set; }
     public JobCategoryEntity JobCategory { get; set; }
 
-    public int JobEngagementId { get; set; }
-    public JobEngagementEntity JobEngagements { get; set; }
-
     public string PreferredPositions { get; set; }
+
+    public ICollection<AnonymousProfileAppearanceJobEngagementEntity> AnonymousProfileAppearanceJobEngagements { get; set; }
 
     public ICollection<AnonymousProfileAppearanceSoftSkillEntity> AnonymousProfileAppearanceSoftSkills { get; set; }
 

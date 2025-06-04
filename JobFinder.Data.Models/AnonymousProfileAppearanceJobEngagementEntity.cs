@@ -1,5 +1,4 @@
-﻿using JobFinder.Data.Models.Cv;
-using JobFinder.Data.Models.Nomenclature;
+﻿using JobFinder.Data.Models.Nomenclature;
 
 namespace JobFinder.Data.Models;
 

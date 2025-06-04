@@ -1,5 +1,4 @@
-﻿using JobFinder.Data.Migrations;
-using JobFinder.Data.Models;
+﻿using JobFinder.Data.Models;
 using JobFinder.Data.Models.Cv;
 using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
@@ -46,7 +45,7 @@ namespace JobFinder.Data
 
         public DbSet<JobsSubscriptionEntity> JobsSubscriptions { get; set; }
 
-        public DbSet<AnonymousProfileAppearance> AnonymousProfileAppearances { get; set; }
+        public DbSet<AnonymousProfileAppearanceEntity> AnonymousProfileAppearances { get; set; }
 
         public DbSet<AnonymousProfileAppearanceITAreaEntity> AnonymousProfileAppearancesITAreas { get; set; }
 
@@ -181,6 +180,9 @@ namespace JobFinder.Data
                         OR (CurrencyId IS NULL AND MinSalary IS NULL AND MaxSalary IS NULL)
                      ")
                 );
+
+            builder.Entity<AnonymousProfileAppearanceJobEngagementEntity>()
+                .HasKey(key => new { key.AnonymousProfileAppearanceId, key.JobEngagementId });
 
             builder.Entity<AnonymousProfileAppearanceSoftSkillEntity>()
                 .HasKey(key => new { key.AnonymousProfileAppearanceId, key.SoftSkillId });
