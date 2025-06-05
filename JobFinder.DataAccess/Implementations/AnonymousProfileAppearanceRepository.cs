@@ -3,6 +3,7 @@ using JobFinder.Data.Models;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
@@ -38,6 +39,18 @@ public class AnonymousProfileAppearanceRepository :
             .AddRange(this.GetTechStacksEntities(profileAppearance.TechStacks));
 
         await this.DbSet.AddAsync(entity);
+    }
+
+    public async Task Delete(string cvId)
+    {
+        AnonymousProfileAppearanceEntity profileAppearanceEntity = await this.Context
+            .AnonymousProfileAppearances
+            .Where(apa => apa.CurriculumVitaeId == cvId)
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(profileAppearanceEntity, "AnonymousProfileAppearance");
+
+        this.Delete(profileAppearanceEntity);
     }
 
     private IEnumerable<AnonymousProfileAppearanceSoftSkillEntity> GetSofSkillsEntities(IEnumerable<int> softSkills)

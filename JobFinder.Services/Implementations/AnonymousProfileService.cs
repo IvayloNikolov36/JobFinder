@@ -67,6 +67,8 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.LanguageInfoRepository.DisassociateFromAnonymousProfile(cvId);
         await this.unitOfWork.CoursesCertificateInfoRepository.DisassociateFromAnonymousProfile(cvId);
 
+        await this.unitOfWork.AnonymousProfileAppearanceRepository.Delete(cvId);
+
         await this.unitOfWork.CurriculumVitaeRepository.DeactivateAnonymousProfile(cvId);
 
         await this.unitOfWork.SaveChanges();
