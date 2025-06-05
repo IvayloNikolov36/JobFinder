@@ -99,6 +99,8 @@ namespace JobFinder.Services.Implementations.CV
             this.unitOfWork.SkillsInfoDrivingCategoryRepository.Delete(cvId);
             await this.unitOfWork.SkillsInfoRepository.Delete(cvId);
 
+            await this.unitOfWork.AnonymousProfileAppearanceRepository.Delete(cvId);
+
             await this.unitOfWork.CurriculumVitaeRepository.Delete(cvId);
 
             await this.unitOfWork.SaveChanges();
