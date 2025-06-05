@@ -9,10 +9,10 @@ public class AnonymousProfileAppearanceEntity : BaseEntity<int>
 {
     public AnonymousProfileAppearanceEntity()
     {
-        AnonymousProfileAppearanceJobEngagements = new HashSet<AnonymousProfileAppearanceJobEngagementEntity>();
-        AnonymousProfileAppearanceSoftSkills = new HashSet<AnonymousProfileAppearanceSoftSkillEntity>();
-        AnonymousProfileAppearanceITAreas = new HashSet<AnonymousProfileAppearanceITAreaEntity>();
-        AnonymousProfileAppearanceTechStacks = new HashSet<AnonymousProfileAppearanceTechStackEntity>();
+        AnonymousProfileAppearanceJobEngagements = [];
+        AnonymousProfileAppearanceSoftSkills = [];
+        AnonymousProfileAppearanceITAreas = [];
+        AnonymousProfileAppearanceTechStacks = [];
     }
 
     public string CurriculumVitaeId { get; set; }
@@ -26,11 +26,11 @@ public class AnonymousProfileAppearanceEntity : BaseEntity<int>
 
     public string PreferredPositions { get; set; }
 
-    public ICollection<AnonymousProfileAppearanceJobEngagementEntity> AnonymousProfileAppearanceJobEngagements { get; set; }
+    public List<AnonymousProfileAppearanceJobEngagementEntity> AnonymousProfileAppearanceJobEngagements { get; set; }
 
-    public ICollection<AnonymousProfileAppearanceSoftSkillEntity> AnonymousProfileAppearanceSoftSkills { get; set; }
+    public List<AnonymousProfileAppearanceSoftSkillEntity> AnonymousProfileAppearanceSoftSkills { get; set; }
 
-    public ICollection<AnonymousProfileAppearanceITAreaEntity> AnonymousProfileAppearanceITAreas { get; set; }
+    public List<AnonymousProfileAppearanceITAreaEntity> AnonymousProfileAppearanceITAreas { get; set; }
 
-    public ICollection<AnonymousProfileAppearanceTechStackEntity> AnonymousProfileAppearanceTechStacks { get; set; }
+    public List<AnonymousProfileAppearanceTechStackEntity> AnonymousProfileAppearanceTechStacks { get; set; }
 }

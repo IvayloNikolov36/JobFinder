@@ -3,6 +3,7 @@ using JobFinder.Business.CurriculumVitaes;
 using JobFinder.Common.Exceptions;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.AnonymousProfile;
 using JobFinder.Web.Models.AnonymousProfile;
 
 namespace JobFinder.Services.Implementations;
@@ -41,6 +42,10 @@ public class AnonymousProfileService : IAnonymousProfileService
 
         await this.unitOfWork.CoursesCertificateInfoRepository
             .SetIncludeInAnonymousProfile(cvId, profile.CoursesInfo);
+
+        AnonymousProfileAppearanceCreateDTO appearanceDto = this.mapper.Map<AnonymousProfileAppearanceCreateDTO>(profile);
+
+        await this.unitOfWork.AnonymousProfileAppearanceRepository.Create(cvId, appearanceDto);
 
         await this.unitOfWork.CurriculumVitaeRepository.SetAnonymousProfileActivated(cvId);
 
