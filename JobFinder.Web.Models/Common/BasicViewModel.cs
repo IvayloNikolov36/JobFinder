@@ -1,28 +1,12 @@
-﻿using JobFinder.Data.Models.Nomenclature;
-using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.Web.Models.Common;
 
-public class BasicViewModel :  
-    IMapFrom<CountryEntity>,
-    IMapFrom<CitizenshipEntity>,
-    IMapFrom<GenderEntity>,
-    IMapFrom<EducationLevelEntity>,
-    IMapFrom<BusinessSectorEntity>,
-    IMapFrom<LanguageTypeEntity>,
-    IMapFrom<LanguageLevelEntity>,
-    IMapFrom<DrivingCategoryEntity>,
-    IMapFrom<JobEngagementEntity>,
-    IMapFrom<JobCategoryEntity>,
-    IMapFrom<CityEntity>,
-    IMapFrom<CurrencyEntity>,
-    IMapFrom<RecurringTypeEntity>,
-    IMapFrom<BasicDTO>
+public class BasicViewModel : IMapFrom<BasicDTO>
 {
     public BasicViewModel()
     {
-
     }
 
     public BasicViewModel(int id, string name)

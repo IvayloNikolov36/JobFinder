@@ -1,6 +1,4 @@
 ﻿using JobFinder.Web.Models.Common;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace JobFinder.Services
 {
@@ -33,5 +31,13 @@ namespace JobFinder.Services
         Task<IEnumerable<BasicViewModel>> GetRecurringTypes();
 
         IEnumerable<BasicViewModel> GetRecurringTypesSync();
+
+        Task<IEnumerable<BasicViewModel>> GetItAreas();
+
+        Task<IEnumerable<BasicViewModel>> GetTechStacks();
+
+        Task<IEnumerable<BasicViewModel>> GetSoftSkills();
+
+        Task<IEnumerable<BasicViewModel>> GetRemoteJobPreferences();
     }
 }

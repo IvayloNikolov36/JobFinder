@@ -1,6 +1,8 @@
-﻿using JobFinder.Data.Models.Nomenclature;
+﻿using AutoMapper;
+using JobFinder.Data.Models.Nomenclature;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,7 @@ namespace JobFinder.Services.Implementations
 {
     public class NomenclatureService : INomenclatureService
     {
+        private readonly IMapper mapper;
         private readonly IRepository<CountryEntity> countriesRepository;
         private readonly IRepository<CitizenshipEntity> citizenshipRepository;
         private readonly IRepository<GenderEntity> genderRepository;
@@ -21,8 +24,13 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<CityEntity> citiesRepository;
         private readonly IRepository<CurrencyEntity> currenciesRepository;
         private readonly IRepository<RecurringTypeEntity> recurringTypesRepository;
+        private readonly IRepository<ITAreaEntity> itAreasRepository;
+        private readonly IRepository<TechStackEntity> techStacksRepository;
+        private readonly IRepository<SoftSKillEntity> softSkillsRepository;
+        private readonly IRepository<RemoteJobPreferenceEntity> remoteJobPreferencesRepository;
 
         public NomenclatureService(
+            IMapper mapper,
             IRepository<CountryEntity> countriesRepository,
             IRepository<CitizenshipEntity> citizenshipRepository,
             IRepository<GenderEntity> genderRepository,
@@ -35,8 +43,13 @@ namespace JobFinder.Services.Implementations
             IRepository<DrivingCategoryEntity> drivingCategoryTypesRepository,
             IRepository<CityEntity> citiesRepository,
             IRepository<CurrencyEntity> currenciesRepository,
-            IRepository<RecurringTypeEntity> recurringTypesRepository)
+            IRepository<RecurringTypeEntity> recurringTypesRepository,
+            IRepository<ITAreaEntity> itAreasRepository,
+            IRepository<TechStackEntity> techStacksRepository,
+            IRepository<SoftSKillEntity> softSkillsRepository,
+            IRepository<RemoteJobPreferenceEntity> remoteJobPreferencesRepository)
         {
+            this.mapper = mapper;
             this.countriesRepository = countriesRepository;
             this.citizenshipRepository = citizenshipRepository;
             this.genderRepository = genderRepository;
@@ -51,114 +64,182 @@ namespace JobFinder.Services.Implementations
             this.currenciesRepository = currenciesRepository;
             this.recurringTypesRepository = recurringTypesRepository;
             this.recurringTypesRepository = recurringTypesRepository;
+            this.itAreasRepository = itAreasRepository;
+            this.techStacksRepository = techStacksRepository;
+            this.softSkillsRepository = softSkillsRepository;
+            this.remoteJobPreferencesRepository = remoteJobPreferencesRepository;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCountries()
         {
-            return await this.countriesRepository
+            BasicDTO[] data = await this.countriesRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCitizenships()
         {
-            return await this.citizenshipRepository
+            BasicDTO[] data = await this.citizenshipRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetGender()
         {
-            return await this.genderRepository
+            BasicDTO[] data = await this.genderRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetBusinessSector()
         {
-            return await this.businessSectorRepository
+            BasicDTO[] data = await this.businessSectorRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetJobCategories()
         {
-            return await this.jobCategoryRepository
+            BasicDTO[] data = await this.jobCategoryRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetJobEngagements()
         {
-            return await this.jobEngagementRepository
+            BasicDTO[] data = await this.jobEngagementRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetEducationLevels()
         {
-            return await this.educationLevelsRepository
+            BasicDTO[] data = await this.educationLevelsRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetLanguageTypes()
         {
-            return await this.languageTypesRepository
+            BasicDTO[] data = await this.languageTypesRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetLanguageLevels()
         {
-            return await this.languageLevelsRepository
+            BasicDTO[] data = await this.languageLevelsRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetDrivingCategories()
         {
-            return await this.drivingCategoryTypesRepository
+            BasicDTO[] data = await this.drivingCategoryTypesRepository
                 .DbSetNoTracking()
-                .To<BasicViewModel>()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCities()
         {
-            return await this.citiesRepository.DbSetNoTracking()
-                .To<BasicViewModel>()
+            BasicDTO[] data = await this.citiesRepository.DbSetNoTracking()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCurrencies()
         {
-            return await this.currenciesRepository.DbSetNoTracking()
-                .To<BasicViewModel>()
+            BasicDTO[] data = await this.currenciesRepository.DbSetNoTracking()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetRecurringTypes()
         {
-            return await this.recurringTypesRepository.DbSetNoTracking()
-                .To<BasicViewModel>()
+            BasicDTO[] data = await this.recurringTypesRepository.DbSetNoTracking()
+                .To<BasicDTO>()
                 .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
 
         public IEnumerable<BasicViewModel> GetRecurringTypesSync()
         {
-            return this.recurringTypesRepository.DbSetNoTracking()
-                .To<BasicViewModel>()
-                .ToList();
+            BasicDTO[] data = this.recurringTypesRepository.DbSetNoTracking()
+                .To<BasicDTO>()
+                .ToArray();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetItAreas()
+        {
+            BasicDTO[] data = await this.itAreasRepository.DbSetNoTracking()
+                .To<BasicDTO>()
+                .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetTechStacks()
+        {
+            BasicDTO[] data = await this.techStacksRepository.DbSetNoTracking()
+                .To<BasicDTO>()
+                .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetSoftSkills()
+        {
+            BasicDTO[] data = await this.softSkillsRepository.DbSetNoTracking()
+                .To<BasicDTO>()
+                .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetRemoteJobPreferences()
+        {
+            BasicDTO[] data = await this.remoteJobPreferencesRepository.DbSetNoTracking()
+                .To<BasicDTO>()
+                .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
         }
     }
 }

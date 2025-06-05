@@ -2,7 +2,7 @@
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class CurrencyEntity : BaseNomenclatureEntity<int>
+    public partial class CurrencyEntity : BaseNomenclatureEntity<int>
     {
     }
 }

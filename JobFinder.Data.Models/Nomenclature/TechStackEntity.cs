@@ -2,7 +2,6 @@
 
 namespace JobFinder.Data.Models.Nomenclature;
 
-public class TechStackEntity : BaseNomenclatureEntity<int>
+public partial class TechStackEntity : BaseNomenclatureEntity<int>
 {
-
 }

@@ -1,8 +1,6 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Models.Common;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace JobFinder.Web.Controllers
 {
@@ -130,6 +128,42 @@ namespace JobFinder.Web.Controllers
             IEnumerable<BasicViewModel> recurringTypes = await this.nomenclatureService.GetRecurringTypes();
 
             return this.Ok(recurringTypes);
+        }
+
+        [HttpGet]
+        [Route("it-areas")]
+        public async Task<IActionResult> GetItAreas()
+        {
+            IEnumerable<BasicViewModel> itAreas = await this.nomenclatureService.GetItAreas();
+
+            return this.Ok(itAreas);
+        }
+
+        [HttpGet]
+        [Route("tech-stacks")]
+        public async Task<IActionResult> GetTechStacks()
+        {
+            IEnumerable<BasicViewModel> techStacks = await this.nomenclatureService.GetTechStacks();
+
+            return this.Ok(techStacks);
+        }
+
+        [HttpGet]
+        [Route("soft-skills")]
+        public async Task<IActionResult> GetSoftSkills()
+        {
+            IEnumerable<BasicViewModel> softSkills = await this.nomenclatureService.GetSoftSkills();
+
+            return this.Ok(softSkills);
+        }
+
+        [HttpGet]
+        [Route("remote-job-preferences")]
+        public async Task<IActionResult> GetRemoteJobPreferences()
+        {
+            IEnumerable<BasicViewModel> remoteJobPreferences = await this.nomenclatureService.GetRemoteJobPreferences();
+
+            return this.Ok(remoteJobPreferences);
         }
     }
 }

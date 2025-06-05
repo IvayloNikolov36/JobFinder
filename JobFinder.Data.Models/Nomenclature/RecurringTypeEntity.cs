@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class RecurringTypeEntity : BaseNomenclatureEntity<int>
+    public partial class RecurringTypeEntity : BaseNomenclatureEntity<int>
     {
         public RecurringTypeEntity()
         {

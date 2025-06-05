@@ -2,7 +2,6 @@
 
 namespace JobFinder.Data.Models.Nomenclature;
 
-public class RemoteJobPreferenceEntity : BaseNomenclatureEntity<int>
+public partial class RemoteJobPreferenceEntity : BaseNomenclatureEntity<int>
 {
-
 }

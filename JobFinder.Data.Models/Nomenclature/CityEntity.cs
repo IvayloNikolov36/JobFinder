@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.Nomenclature
 {
-    public class CityEntity : BaseNomenclatureEntity<int>
+    public partial class CityEntity : BaseNomenclatureEntity<int>
     {
         public CityEntity()
         {

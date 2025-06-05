@@ -2,7 +2,6 @@
 
 namespace JobFinder.Data.Models.Nomenclature;
 
-public class ITAreaEntity : BaseNomenclatureEntity<int>
+public partial class ITAreaEntity : BaseNomenclatureEntity<int>
 {
-
 }
