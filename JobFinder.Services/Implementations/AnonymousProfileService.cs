@@ -43,7 +43,8 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.CoursesCertificateInfoRepository
             .SetIncludeInAnonymousProfile(cvId, profile.CoursesInfo);
 
-        AnonymousProfileAppearanceCreateDTO appearanceDto = this.mapper.Map<AnonymousProfileAppearanceCreateDTO>(profile);
+        AnonymousProfileAppearanceCreateDTO appearanceDto = this.mapper
+            .Map<AnonymousProfileAppearanceCreateDTO>(profile.ProfileAppearanceCriterias);
 
         await this.unitOfWork.AnonymousProfileAppearanceRepository.Create(cvId, appearanceDto);
 
