@@ -4,10 +4,10 @@ using System;
 
 namespace JobFinder.Data.Models;
 
-public class AnonymousProfileAppearanceITAreaEntity : IAudit
+public class JobAdvertisementITAreaEntity : IAudit
 {
-    public int AnonymousProfileAppearanceId { get; set; }
-    public AnonymousProfileAppearanceEntity AnonymousProfileAppearance { get; set; }
+    public int JobAdvertisementId { get; set; }
+    public JobAdvertisementEntity JobAdvertisement { get; set; }
 
     public int ITAreaId { get; set; }
     public ITAreaEntity ITArea { get; set; }

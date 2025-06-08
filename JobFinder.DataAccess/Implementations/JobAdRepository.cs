@@ -34,14 +34,25 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
 
     public async Task Create(JobAdCreateDTO jobAd, int companyId)
     {
-        JobAdvertisementEntity jobAdEntity = new JobAdvertisementEntity();
+        JobAdvertisementEntity jobAdEntity = new();
 
         this.mapper.Map(jobAd, jobAdEntity);
 
         jobAdEntity.PublisherId = companyId;
         jobAdEntity.PublishDate = DateTime.UtcNow;
-        // TODO: create JobAdvertisementEntity IsActive default value true
-        jobAdEntity.IsActive = true;
+
+        if (jobAd.SoftSkills.Any())
+        {
+            jobAdEntity.JobAdSoftSkills.AddRange(this.GetJobAdSoftSkillsEntities(jobAd.SoftSkills));
+        }
+        if (jobAd.ITAreas.Any())
+        {
+            jobAdEntity.JobAdITAreas.AddRange(this.GetJobAdITAreasEntities(jobAd.ITAreas));
+        }
+        if (jobAd.TechStacks.Any())
+        {
+            jobAdEntity.JobAdTechStacks.AddRange(this.GetJobAdTechStackEntities(jobAd.TechStacks));
+        }
 
         await this.DbSet.AddAsync(jobAdEntity);
     }
@@ -206,5 +217,41 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
             .OrderByDescending(j => j.PublishDate)
             .To<CompanyJobAdDTO>()
             .ToListAsync();
+    }
+
+    private IEnumerable<JobAdvertisementTechStackEntity> GetJobAdTechStackEntities(IEnumerable<int> techStacks)
+    {
+        List<JobAdvertisementTechStackEntity> entities = [];
+
+        foreach (int techStackId in techStacks)
+        {
+            entities.Add(new JobAdvertisementTechStackEntity { TechStackId = techStackId });
+        }
+
+        return entities;
+    }
+
+    private IEnumerable<JobAdvertisementITAreaEntity> GetJobAdITAreasEntities(IEnumerable<int> itAreas)
+    {
+        List<JobAdvertisementITAreaEntity> entities = [];
+
+        foreach (int itAreaId in itAreas)
+        {
+            entities.Add(new JobAdvertisementITAreaEntity { ITAreaId = itAreaId });
+        }
+
+        return entities;
+    }
+
+    private IEnumerable<JobAdvertisementSoftSkillEntity> GetJobAdSoftSkillsEntities(IEnumerable<int> softSkills)
+    {
+        List<JobAdvertisementSoftSkillEntity> entities = [];
+
+        foreach (int softSkillId in softSkills)
+        {
+            entities.Add(new JobAdvertisementSoftSkillEntity { SoftSkillId = softSkillId });
+        }
+
+        return entities;
     }
 }

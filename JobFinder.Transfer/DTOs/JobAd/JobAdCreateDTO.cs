@@ -19,4 +19,12 @@ public class JobAdCreateDTO
     public int? CurrencyId { get; set; }
 
     public bool Intership { get; set; }
+
+    public int WorkplaceTypeId { get; set; }
+
+    public IEnumerable<int> SoftSkills { get; set; }
+
+    public IEnumerable<int> ITAreas { get; set; }
+
+    public IEnumerable<int> TechStacks { get; set; }
 }

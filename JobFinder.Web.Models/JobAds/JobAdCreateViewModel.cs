@@ -2,6 +2,7 @@
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.JobAd;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Web.Models.JobAds
@@ -29,6 +30,14 @@ namespace JobFinder.Web.Models.JobAds
         public int? CurrencyId { get; set; }
 
         public bool Intership { get; set; }
+
+        public int WorkplaceTypeId { get; set; }
+
+        public IEnumerable<int> SoftSkills { get; set; }
+
+        public IEnumerable<int> ITAreas { get; set; }
+
+        public IEnumerable<int> TechStacks { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

@@ -20,7 +20,7 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AllActiveAds([FromBody] JobAdsFilterModel paramsModel)
+        public async Task<IActionResult> GetAllActive([FromBody] JobAdsFilterModel paramsModel)
         {
             DataListingsModel<JobListingModel> ads = await this.adsService.AllActiveAsync(paramsModel);
 

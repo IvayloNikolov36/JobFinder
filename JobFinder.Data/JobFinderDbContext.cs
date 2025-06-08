@@ -55,6 +55,12 @@ namespace JobFinder.Data
 
         public DbSet<AnonymousProfileAppearanceJobEngagementEntity> AnonymousProfileAppearancesJobEngagements { get; set; }
 
+        public DbSet<JobAdvertisementSoftSkillEntity> JobAdvertisementsSoftSkills { get; set; }
+
+        public DbSet<JobAdvertisementITAreaEntity> JobAdvertisementsITAreas { get; set; }
+
+        public DbSet<JobAdvertisementTechStackEntity> JobAdvertisementsTechStacks { get; set; }
+
 
         // Nomenclature Entities
 
@@ -167,6 +173,10 @@ namespace JobFinder.Data
                 .Property(cv => cv.AnonymousProfileActivated)
                 .HasDefaultValue(false);
 
+            builder.Entity<JobAdvertisementEntity>()
+                .Property(j => j.IsActive)
+                .HasDefaultValue(true);
+
             builder.Entity<CompanySubscriptionEntity>()
                 .HasKey(key => new { key.UserId, key.CompanyId });
 
@@ -197,6 +207,15 @@ namespace JobFinder.Data
 
             builder.Entity<AnonymousProfileAppearanceJobEngagementEntity>()
                 .HasKey(key => new { key.AnonymousProfileAppearanceId, key.JobEngagementId });
+
+            builder.Entity<JobAdvertisementSoftSkillEntity>()
+                .HasKey(key => new { key.JobAdvertisementId, key.SoftSkillId });
+
+            builder.Entity<JobAdvertisementTechStackEntity>()
+                .HasKey(key => new { key.JobAdvertisementId, key.TechStackId });
+
+            builder.Entity<JobAdvertisementITAreaEntity>()
+                .HasKey(key => new { key.JobAdvertisementId, key.ITAreaId });
 
 
             // VIEWS

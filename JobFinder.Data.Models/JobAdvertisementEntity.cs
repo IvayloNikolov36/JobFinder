@@ -10,7 +10,10 @@ namespace JobFinder.Data.Models
     {
         public JobAdvertisementEntity()
         {
-            this.JobAdApplications = new List<JobAdApplicationEntity>();
+            this.JobAdSoftSkills = new List<JobAdvertisementSoftSkillEntity>();
+            this.JobAdITAreas = new List<JobAdvertisementITAreaEntity>();
+            this.JobAdTechStacks = new List<JobAdvertisementTechStackEntity>();
+            this.JobAdApplications = new List<JobAdApplicationEntity>();  
         }
 
         [Required]
@@ -48,6 +51,12 @@ namespace JobFinder.Data.Models
         public DateTime PublishDate { get; set; }
 
         public bool IsActive { get; set; }
+
+        public List<JobAdvertisementSoftSkillEntity> JobAdSoftSkills { get; set; }
+
+        public List<JobAdvertisementTechStackEntity> JobAdTechStacks { get; set; }
+
+        public List<JobAdvertisementITAreaEntity> JobAdITAreas { get; set; }
 
         public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
     }
