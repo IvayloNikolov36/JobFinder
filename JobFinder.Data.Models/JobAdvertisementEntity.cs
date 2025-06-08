@@ -37,12 +37,15 @@ namespace JobFinder.Data.Models
         public int JobEngagementId { get; set; }
         public JobEngagementEntity JobEngagement { get; set; }
 
+        public int WorkplaceTypeId { get; set; }
+        public WorkplaceTypeEntity WorkplaceType { get; set; }
+
+        public bool Intership { get; set; }
+
         public int PublisherId { get; set; }
         public CompanyEntity Publisher { get; set; }
 
         public DateTime PublishDate { get; set; }
-
-        public bool Intership { get; set; }
 
         public bool IsActive { get; set; }
 

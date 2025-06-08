@@ -90,6 +90,8 @@ namespace JobFinder.Data
 
         public DbSet<RemoteJobPreferenceEntity> RemoteJobPreferences { get; set; }
 
+        public DbSet<WorkplaceTypeEntity> WorkplaceTypes { get; set; }
+
 
         // For VIEWS
 
@@ -239,6 +241,7 @@ namespace JobFinder.Data
             SoftSkillsSeeder.Seed(builder);
             TechStacksSeeder.Seed(builder);
             RemoteJobPreferencesSeeder.Seed(builder);
+            WorkplaceTypesSeeder.Seed(builder);
         }
 
         private void ApplyAuditInfoRules()
