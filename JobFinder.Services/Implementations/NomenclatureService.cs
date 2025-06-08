@@ -28,6 +28,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<TechStackEntity> techStacksRepository;
         private readonly IRepository<SoftSKillEntity> softSkillsRepository;
         private readonly IRepository<RemoteJobPreferenceEntity> remoteJobPreferencesRepository;
+        private readonly IRepository<WorkplaceTypeEntity> workplaceTypeRepository;
 
         public NomenclatureService(
             IMapper mapper,
@@ -47,7 +48,8 @@ namespace JobFinder.Services.Implementations
             IRepository<ITAreaEntity> itAreasRepository,
             IRepository<TechStackEntity> techStacksRepository,
             IRepository<SoftSKillEntity> softSkillsRepository,
-            IRepository<RemoteJobPreferenceEntity> remoteJobPreferencesRepository)
+            IRepository<RemoteJobPreferenceEntity> remoteJobPreferencesRepository,
+            IRepository<WorkplaceTypeEntity> workplaceTypeRepository)
         {
             this.mapper = mapper;
             this.countriesRepository = countriesRepository;
@@ -68,6 +70,7 @@ namespace JobFinder.Services.Implementations
             this.techStacksRepository = techStacksRepository;
             this.softSkillsRepository = softSkillsRepository;
             this.remoteJobPreferencesRepository = remoteJobPreferencesRepository;
+            this.workplaceTypeRepository = workplaceTypeRepository;
         }
 
         public async Task<IEnumerable<BasicViewModel>> GetCountries()
@@ -236,6 +239,15 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetRemoteJobPreferences()
         {
             BasicDTO[] data = await this.remoteJobPreferencesRepository.DbSetNoTracking()
+                .To<BasicDTO>()
+                .ToArrayAsync();
+
+            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
+        }
+
+        public async Task<IEnumerable<BasicViewModel>> GetWorkplaceTypes()
+        {
+            BasicDTO[] data = await this.workplaceTypeRepository.DbSetNoTracking()
                 .To<BasicDTO>()
                 .ToArrayAsync();
 

@@ -165,5 +165,14 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok(remoteJobPreferences);
         }
+
+        [HttpGet]
+        [Route("workplace-types")]
+        public async Task<IActionResult> GetWorkplaceTypes()
+        {
+            IEnumerable<BasicViewModel> workplaceTypes = await this.nomenclatureService.GetWorkplaceTypes();
+
+            return this.Ok(workplaceTypes);
+        }
     }
 }

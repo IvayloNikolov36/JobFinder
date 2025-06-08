@@ -39,5 +39,7 @@ namespace JobFinder.Services
         Task<IEnumerable<BasicViewModel>> GetSoftSkills();
 
         Task<IEnumerable<BasicViewModel>> GetRemoteJobPreferences();
+
+        Task<IEnumerable<BasicViewModel>> GetWorkplaceTypes();
     }
 }

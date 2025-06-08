@@ -2,6 +2,6 @@
 
 namespace JobFinder.Data.Models.Nomenclature;
 
-public class WorkplaceTypeEntity : BaseNomenclatureEntity<int>
+public partial class WorkplaceTypeEntity : BaseNomenclatureEntity<int>
 {
 }
