@@ -15,11 +15,11 @@ public class MyCvDataViewModel : IMapFrom<MyCvDataDTO>
 
     public DateTime CreatedOn { get; set; }
 
-    public bool AnonymousProfileActivated { get; set; }
+    public string AnonymousProfileId { get; set; }
 
     public bool CanActivateAnonymousProfile { get; set; }
 
-    public PersonalInfoViewModel PersonalDetails { get; set; }
+    public PersonalInfoViewModel PersonalInfo { get; set; }
 
     public IEnumerable<EducationViewModel> Educations { get; set; }
 

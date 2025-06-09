@@ -7,15 +7,11 @@ using System.Linq;
 namespace JobFinder.Data.Models.CV;
 
 public partial class CurriculumVitaeEntity : IMapFrom<CVCreateDTO>,
-    IMapTo<MyCvDataDTO>,
-    IMapTo<CVListingDTO>,
     IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
     {
-        configuration.CreateMap<CurriculumVitaeEntity, AnonymousProfileCvDataDTO>()
-            // TODO: remove the mapping after renaming to PersonalInfo
-            .ForMember(dto => dto.PersonalInfo, o => o.MapFrom(e => e.PersonalDetails))
+        configuration.CreateMap<CurriculumVitaeEntity, AnonymousProfileDataDTO>()
             .ForMember(dto => dto.WorkExperienceInfo, o => o.MapFrom(e => e.WorkExperiences
                 .Where(we => we.IncludeInAnonymousProfile == true)))
             .ForMember(dto => dto.EducationInfo, o => o.MapFrom(e => e.Educations
@@ -25,5 +21,11 @@ public partial class CurriculumVitaeEntity : IMapFrom<CVCreateDTO>,
             .ForMember(dto => dto.CoursesInfo, o => o.MapFrom(e => e.CourseCertificates
                 .Where(cs => cs.IncludeInAnonymousProfile == true)))
             .ForMember(dto => dto.SkillsInfo, o => o.MapFrom(e => e.Skills));
+
+        configuration.CreateMap<CurriculumVitaeEntity, CVListingDTO>()
+            .ForMember(dto => dto.AnonymousProfileActivated, o => o.MapFrom(e => e.AnonymousProfile != null));
+
+        configuration.CreateMap<CurriculumVitaeEntity, MyCvDataDTO>()
+            .ForMember(dto => dto.AnonymousProfileId, o => o.MapFrom(e => e.AnonymousProfile.Id));
     }
 }

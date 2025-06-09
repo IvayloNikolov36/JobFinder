@@ -16,7 +16,7 @@ public partial class UserEntity : IHaveCustomMappings
                 .Select(c => c.PictureUrl)
                 .FirstOrDefault()))
             .ForMember(dto => dto.Phone, o => o.MapFrom(e => e.CurriculumVitaes
-                .Select(c => c.PersonalDetails.Phone)
+                .Select(c => c.PersonalInfo.Phone)
                 .FirstOrDefault()))
             .ForMember(dto => dto.CurriculumVitaesCount, o => o.MapFrom(e => e.CurriculumVitaes.Count()))
             .ForMember(dto => dto.SubscriptionsCount, o => o.MapFrom(e => e.CompanySubscriptions.Count() + e.JobCategorySubscriptions.Count()))

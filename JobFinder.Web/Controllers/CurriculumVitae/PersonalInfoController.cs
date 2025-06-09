@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JobFinder.Web.Controllers.CurriculumVitae
 {
-    public class PersonalDetailsController : BaseCVsController
+    public class PersonalInfoController : BaseCVsController
     {
-        private readonly IPersonalInfosService personalDetailsService;
+        private readonly IPersonalInfosService personalInfoService;
 
-        public PersonalDetailsController(IPersonalInfosService personalDetailsService)
+        public PersonalInfoController(IPersonalInfosService personalInfoService)
         {
-            this.personalDetailsService = personalDetailsService;
+            this.personalInfoService = personalInfoService;
         }
 
         [HttpPut]
@@ -19,7 +19,7 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update([FromRoute] string cvId, [FromBody] PersonalInfoEditModel model)
         {
-            await this.personalDetailsService.Update(model);
+            await this.personalInfoService.Update(model);
 
             return this.Ok();
         }

@@ -49,13 +49,6 @@ namespace JobFinder.Services.Implementations.CV
             return cvDataDto.Id;
         }
 
-        public async Task<byte[]> GetCvDataAsync(string cvId)
-        {
-            byte[] data = await this.unitOfWork.CurriculumVitaeRepository.GetCvData(cvId);
-
-            return data;
-        }
-
         public async Task<MyCvDataViewModel> GetOwnCvData(string cvId, string userId)
         {
             MyCvDataDTO cvDataDto = await this.unitOfWork.CurriculumVitaeRepository
@@ -63,8 +56,8 @@ namespace JobFinder.Services.Implementations.CV
 
             MyCvDataViewModel cvData = this.mapper.Map<MyCvDataViewModel>(cvDataDto);
 
-            bool hasAnyAnonymousProfileActivated = await this.unitOfWork.CurriculumVitaeRepository
-                .HasAnyCvWithActivatedAnonymousProfile(userId);
+            bool hasAnyAnonymousProfileActivated = await this.unitOfWork.AnonymousProfileRepository
+                .HasAnonymousProfile(userId);
 
             cvData.CanActivateAnonymousProfile = !hasAnyAnonymousProfileActivated;
 
@@ -80,13 +73,6 @@ namespace JobFinder.Services.Implementations.CV
             return cvData;
         }
 
-        public async Task SetData(string cvId, byte[] data)
-        {
-            await this.unitOfWork.CurriculumVitaeRepository.SetData(cvId, data);
-
-            await this.unitOfWork.SaveChanges();
-        }
-
         public async Task Delete(string cvId)
         {
             // TODO: if it is has been sent as an application???
@@ -99,7 +85,8 @@ namespace JobFinder.Services.Implementations.CV
             this.unitOfWork.SkillsInfoDrivingCategoryRepository.Delete(cvId);
             await this.unitOfWork.SkillsInfoRepository.Delete(cvId);
 
-            await this.unitOfWork.AnonymousProfileAppearanceRepository.Delete(cvId);
+            // TODO: check it
+            //await this.unitOfWork.AnonymousProfileRepository.Delete(cvId);
 
             await this.unitOfWork.CurriculumVitaeRepository.Delete(cvId);
 

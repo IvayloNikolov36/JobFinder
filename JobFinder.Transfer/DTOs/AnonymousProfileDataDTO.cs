@@ -2,10 +2,8 @@
 
 namespace JobFinder.Transfer.DTOs;
 
-public class AnonymousProfileCvDataDTO
+public class AnonymousProfileDataDTO
 {
-    public required string Id { get; set; }
-
     public required PersonalInfoAnonymousProfileDTO PersonalInfo { get; set; }
 
     public required IEnumerable<EducationInfoDTO> EducationInfo { get; set; }

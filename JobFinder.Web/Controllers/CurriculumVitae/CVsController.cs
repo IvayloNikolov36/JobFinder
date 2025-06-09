@@ -79,20 +79,6 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
             return this.NoContent();
         }
 
-        [HttpGet]
-        [Route("get-pdf/{id:guid}")]
-        public async Task<ActionResult> GetCvPdf(Guid id)
-        {
-            byte[] cvData = await this.cvsService.GetCvDataAsync(id.ToString());
-            if (cvData == null)
-            {
-                return this.BadRequest();
-            }
-
-            return this.File(cvData, "application/pdf");
-        }
-
-
         // TODO: refactor - move logic to a service
         [HttpGet]
         [Route("generate-pdf/{id}")]
@@ -119,27 +105,27 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
             sb.AppendFormat(@$"<tr>
                                     <td>Name</td>
                                     <td>
-    {data.PersonalDetails.FirstName + ' ' + data.PersonalDetails.MiddleName + ' ' + data.PersonalDetails.LastName }</td>");
+    {data.PersonalInfo.FirstName + ' ' + data.PersonalInfo.MiddleName + ' ' + data.PersonalInfo.LastName }</td>");
             
             sb.AppendFormat(@$"<tr>
                                     <td>Phone</td>
-                                    <td>{data.PersonalDetails.Phone}</td>");
+                                    <td>{data.PersonalInfo.Phone}</td>");
 
             sb.AppendFormat(@$"<tr>
                                     <td>Email</td>
-                                    <td>{data.PersonalDetails.Email}</td>");
+                                    <td>{data.PersonalInfo.Email}</td>");
 
             sb.AppendFormat(@$"<tr>
                                     <td>Citizenship</td>
-                                    <td>{data.PersonalDetails.Citizenship}</td>");
+                                    <td>{data.PersonalInfo.Citizenship}</td>");
 
             sb.AppendFormat(@$"<tr>
                                     <td>I live in</td>
-                                    <td>{data.PersonalDetails.City}, {data.PersonalDetails.Country}</td>");
+                                    <td>{data.PersonalInfo.City}, {data.PersonalInfo.Country}</td>");
 
             sb.AppendFormat(@$"<tr>
                                     <td>Gender</td>
-                                    <td>{data.PersonalDetails.Gender}</td>");
+                                    <td>{data.PersonalInfo.Gender}</td>");
 
             sb.Append("</table>");
 
@@ -270,9 +256,7 @@ namespace JobFinder.Web.Controllers.CurriculumVitae
 
             byte[] cvData = pdfGenerator.Generate(sb.ToString());
 
-            await this.cvsService.SetData(id, cvData);
-
-            return this.Ok();
+            return this.Ok(cvData);
         }
     }
 }

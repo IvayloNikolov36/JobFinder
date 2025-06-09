@@ -1,4 +1,5 @@
 ﻿using JobFinder.Data.Models;
+using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Cv;
 using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
@@ -44,6 +45,8 @@ namespace JobFinder.Data
         public DbSet<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
 
         public DbSet<JobsSubscriptionEntity> JobsSubscriptions { get; set; }
+
+        public DbSet<AnonymousProfileEntity> AnonymousProfiles { get; set; }
 
         public DbSet<AnonymousProfileAppearanceEntity> AnonymousProfileAppearances { get; set; }
 
@@ -169,10 +172,6 @@ namespace JobFinder.Data
                 .HasForeignKey<CompanyEntity>(c => c.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            builder.Entity<CurriculumVitaeEntity>()
-                .Property(cv => cv.AnonymousProfileActivated)
-                .HasDefaultValue(false);
-
             builder.Entity<JobAdvertisementEntity>()
                 .Property(j => j.IsActive)
                 .HasDefaultValue(true);
@@ -192,6 +191,11 @@ namespace JobFinder.Data
                         OR (CurrencyId IS NULL AND MinSalary IS NULL AND MaxSalary IS NULL)
                      ")
                 );
+
+            builder.Entity<AnonymousProfileAppearanceEntity>()
+                .HasOne(x => x.AnonymousProfile)
+                .WithOne(ap => ap.Appearance)
+                .IsRequired(true);
 
             builder.Entity<AnonymousProfileAppearanceJobEngagementEntity>()
                 .HasKey(key => new { key.AnonymousProfileAppearanceId, key.JobEngagementId });

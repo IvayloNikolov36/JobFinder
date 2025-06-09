@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using JobFinder.Business.CurriculumVitaes;
-using JobFinder.Common.Exceptions;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
@@ -24,10 +23,10 @@ public class AnonymousProfileService : IAnonymousProfileService
         this.cvRules = cvRules;
     }
 
-    public async Task Activate(string cvId, string userId, AnonymousProfileCreateViewModel profile)
+    public async Task<string> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile)
     {
-        bool hasAlreadyAnActivated = await this.unitOfWork.CurriculumVitaeRepository
-            .HasAnyCvWithActivatedAnonymousProfile(userId);
+        bool hasAlreadyAnActivated = await this.unitOfWork.AnonymousProfileRepository
+            .HasAnonymousProfile(userId);
 
         this.cvRules.ValidateAnonymousProfileCreation(hasAlreadyAnActivated);
 
@@ -43,45 +42,48 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.CoursesCertificateInfoRepository
             .SetIncludeInAnonymousProfile(cvId, profile.CoursesInfo);
 
-        AnonymousProfileAppearanceCreateDTO appearanceDto = this.mapper
-            .Map<AnonymousProfileAppearanceCreateDTO>(profile.ProfileAppearanceCriterias);
+        AnonymousProfileCreateDTO anonymousProfileDto = new AnonymousProfileCreateDTO
+        {
+            UserId = userId,
+            CurriculumVitaeId = cvId,
+            AppearanceDto = this.mapper
+                .Map<AnonymousProfileAppearanceCreateDTO>(profile.ProfileAppearanceCriterias)
+        };
 
-        await this.unitOfWork.AnonymousProfileAppearanceRepository.Create(cvId, appearanceDto);
+        await this.unitOfWork.AnonymousProfileRepository.Create(cvId, userId, anonymousProfileDto);
 
-        await this.unitOfWork.CurriculumVitaeRepository.SetAnonymousProfileActivated(cvId);
+        await this.unitOfWork.SaveChanges<AnonymousProfileCreateDTO, string>(anonymousProfileDto);
 
-        await this.unitOfWork.SaveChanges();
+        return anonymousProfileDto.Id;
+
     }
 
-    public async Task Deactivate(string cvId)
+    public async Task Delete(string id)
     {
-        bool hasAlreadyActivated = await this.unitOfWork.CurriculumVitaeRepository
-            .HasActivatedAnonymousProfile(cvId);
-
-        if (!hasAlreadyActivated)
-        {
-            throw new ActionableException("You don't have an activated anonymous profile!");
-        }
+        string cvId = await this.unitOfWork.AnonymousProfileRepository.GetCvId(id);
 
         await this.unitOfWork.WorkExperienceRepository.DisassociateFromAnonymousProfile(cvId);
         await this.unitOfWork.EducationInfoRepository.DisassociateFromAnonymousProfile(cvId);
         await this.unitOfWork.LanguageInfoRepository.DisassociateFromAnonymousProfile(cvId);
         await this.unitOfWork.CoursesCertificateInfoRepository.DisassociateFromAnonymousProfile(cvId);
 
-        await this.unitOfWork.AnonymousProfileAppearanceRepository.Delete(cvId);
-
-        await this.unitOfWork.CurriculumVitaeRepository.DeactivateAnonymousProfile(cvId);
+        await this.unitOfWork.AnonymousProfileRepository.Delete(id);
 
         await this.unitOfWork.SaveChanges();
     }
 
-    public async Task<AnonymousProfileCvDataViewModel> GetAnonymousProfileData(string userId)
+    public async Task<AnonymousProfileDataViewModel> GetAnonymousProfileData(string userId)
     {
-        AnonymousProfileCvDataDTO cvData = await this.unitOfWork.CurriculumVitaeRepository
-            .GetAnonymousProfileCvData(userId);
+        AnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
+            .GetAnonymousProfileData(userId);
 
-        AnonymousProfileCvDataViewModel profile = this.mapper.Map<AnonymousProfileCvDataViewModel>(cvData);
+        AnonymousProfileDataViewModel profile = this.mapper.Map<AnonymousProfileDataViewModel>(cvData);
 
         return profile;
+    }
+
+    public async Task<string> GetOwnerId(string id)
+    {
+        return await this.unitOfWork.AnonymousProfileRepository.GetOwnerId(id);
     }
 }

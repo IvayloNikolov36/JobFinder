@@ -12,10 +12,6 @@ namespace JobFinder.Services.CV
 
         Task<CvPreviewDataViewModel> GetUserCvData(string cvId);
 
-        Task SetData(string id, byte[] data);
-
-        Task<byte[]> GetCvDataAsync(string id);
-
         Task Delete(string id);
 
         Task<string> GetOwnerId(string id);

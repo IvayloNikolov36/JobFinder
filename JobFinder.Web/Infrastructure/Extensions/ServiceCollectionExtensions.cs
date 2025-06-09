@@ -36,6 +36,7 @@ namespace JobFinder.Web.Infrastructure.Extensions
         {
             services.AddScoped<ValidateCvIdBelongsToUser>();
             services.AddScoped<ValidateCompanyAccessingCVSentForOwnAd>();
+            services.AddScoped<ValidateAnonymousProfileBelongsToUser>();
 
             return services;
         }

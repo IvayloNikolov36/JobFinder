@@ -2,8 +2,10 @@
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Models.AnonymousProfile;
+using JobFinder.Web.Models.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
 {
@@ -18,39 +20,47 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPost]
-        [Route("{cvId:guid}/activate")]
+        [Route("create/{cvId:guid}")]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<IActionResult> Activate(
+        public async Task<IActionResult> Create(
             [FromRoute] Guid cvId,
             [FromBody] AnonymousProfileCreateViewModel profile)
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.anonymousProfileService.Activate(cvId.ToString(), userId, profile);
+            string id = await this.anonymousProfileService.Create(cvId.ToString(), userId, profile);
 
-            return this.Ok();
+            return this.Ok(new { id });
         }
 
-        [HttpGet]
-        [Route("{cvId:guid}/deactivate")]
-        [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<IActionResult> Deactivate([FromRoute] Guid cvId)
+        [HttpDelete]
+        [Route("delete/{id:guid}")]
+        [ServiceFilter(typeof(ValidateAnonymousProfileBelongsToUser))]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            await this.anonymousProfileService.Deactivate(cvId.ToString());
+            await this.anonymousProfileService.Delete(id.ToString());
 
             return this.Ok();
         }
 
         [HttpGet]
-        [Route("view")]
+        [Route("get")]
         public async Task<IActionResult> GetMyAnonymousProfileData()
         {
             string userId = this.User.GetCurrentUserId();
 
-            AnonymousProfileCvDataViewModel anonymousCvData = await this.anonymousProfileService
+            AnonymousProfileDataViewModel anonymousCvData = await this.anonymousProfileService
                 .GetAnonymousProfileData(userId);
 
             return this.Ok(anonymousCvData);
         }
+
+        //[HttpGet]
+        //[Route("view/{id:guid}")]
+        //[Authorize(Roles = CompanyRole)]
+        //public async Task<IActionResult> ViewAnonymousProfile([FromRoute] Guid id)
+        //{
+        //    return this.Ok();
+        //}
     }
 }

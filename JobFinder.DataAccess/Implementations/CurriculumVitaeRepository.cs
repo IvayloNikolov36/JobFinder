@@ -5,7 +5,6 @@ using JobFinder.Data.Models.CV;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.CV;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,75 +63,12 @@ public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>
         return userId;
     }
 
-    public async Task<AnonymousProfileCvDataDTO> GetAnonymousProfileCvData(string userId)
-    {
-        return await this.DbSet
-            .Where(cv => cv.UserId == userId && cv.AnonymousProfileActivated)
-            .To<AnonymousProfileCvDataDTO>()
-            .SingleOrDefaultAsync();
-    }
-
-    public async Task SetAnonymousProfileActivated(string cvId)
-    {
-        CurriculumVitaeEntity cvEntity = await this.DbSet.FindAsync(cvId);
-
-        cvEntity.AnonymousProfileActivated = true;
-
-        this.DbSet.Update(cvEntity);
-    }
-
-    public async Task DeactivateAnonymousProfile(string cvId)
-    {
-        CurriculumVitaeEntity cvEntity = await this.DbSet.FindAsync(cvId);
-
-        cvEntity.AnonymousProfileActivated = false;
-
-        this.DbSet.Update(cvEntity);
-    }
-
-    public async Task<bool> HasAnyCvWithActivatedAnonymousProfile(string userId)
-    {
-        return await this.DbSet
-            .AnyAsync(cv => cv.UserId == userId && cv.AnonymousProfileActivated);
-    }
-
-    public async Task<bool> HasActivatedAnonymousProfile(string cvId)
-    {
-        bool? hasAnonymousProfile = await this.DbSet
-            .Where(cv => cv.Id == cvId)
-            .Select(cv => (bool?)cv.AnonymousProfileActivated)
-            .SingleOrDefaultAsync();
-
-        base.ValidateForExistence(hasAnonymousProfile, "Curriculum Vitae");
-
-        return hasAnonymousProfile.Value;
-    }
-
     public async Task<T> GetCvData<T>(string cvId) where T: class
     {
         return await this.DbSet.AsNoTracking()
             .Where(cv => cv.Id == cvId)
             .To<T>()
             .SingleAsync();
-    }
-
-    public async Task<byte[]> GetCvData(string cvId)
-    {
-        return await this.DbSet
-            .Where(cv => cv.Id == cvId)
-            .Select(cv => cv.Data)
-            .FirstOrDefaultAsync();
-    }
-
-    public async Task SetData(string cvId, byte[] data)
-    {
-        CurriculumVitaeEntity cvFromDb = await this.DbSet.FindAsync(cvId);
-
-        base.ValidateForExistence(cvFromDb, "CurriculumVitae");
-
-        cvFromDb.Data = data;
-
-        this.DbSet.Update(cvFromDb);
     }
 
     public async Task Delete(string cvId)

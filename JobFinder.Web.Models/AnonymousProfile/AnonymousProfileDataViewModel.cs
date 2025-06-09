@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace JobFinder.Web.Models.AnonymousProfile;
 
-public class AnonymousProfileCvDataViewModel : IMapFrom<AnonymousProfileCvDataDTO>
+public class AnonymousProfileDataViewModel : IMapFrom<AnonymousProfileDataDTO>
 {
-    public string Id { get; set; }
-
     public PersonalInfoAnonymousProfileViewModel PersonalInfo { get; set; }
 
     public IEnumerable<EducationViewModel> EducationInfo { get; set; }

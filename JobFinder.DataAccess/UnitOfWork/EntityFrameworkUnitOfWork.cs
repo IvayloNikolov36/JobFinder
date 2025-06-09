@@ -28,6 +28,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         private IJobAdRepository jobAdRepository;
         private IUserRepository userRepository;
         private IAnonymousProfileAppearanceRepository anonymousProfileAppearanceRepository;
+        private IAnonymousProfileRepository anonymousProfileRepository;
 
         public EntityFrameworkUnitOfWork(JobFinderDbContext dbContext, IMapper mapper)
         {
@@ -170,6 +171,14 @@ namespace JobFinder.DataAccess.UnitOfWork
             }
         }
 
+        public IAnonymousProfileRepository AnonymousProfileRepository
+        {
+            get
+            {
+                this.anonymousProfileRepository ??= new AnonymousProfileRepository(this.dbContext);
+                return this.anonymousProfileRepository;
+            }
+        }
 
         public async Task SaveChanges()
         {

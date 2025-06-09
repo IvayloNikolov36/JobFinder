@@ -10,9 +10,9 @@ public class MyCvDataDTO
 
     public DateTime CreatedOn { get; set; }
 
-    public bool AnonymousProfileActivated { get; set; }
+    public string AnonymousProfileId { get; set; }
 
-    public PersonalInfoDTO PersonalDetails { get; set; }
+    public PersonalInfoDTO PersonalInfo { get; set; }
 
     public IEnumerable<EducationInfoDTO> Educations { get; set; }
 

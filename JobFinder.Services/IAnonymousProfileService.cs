@@ -4,9 +4,11 @@ namespace JobFinder.Services;
 
 public interface IAnonymousProfileService
 {
-    Task Activate(string cvId, string userId, AnonymousProfileCreateViewModel profile);
+    Task<string> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile);
 
-    Task Deactivate(string cvId);
+    Task Delete(string cvId);
 
-    Task<AnonymousProfileCvDataViewModel> GetAnonymousProfileData(string userId);
+    Task<AnonymousProfileDataViewModel> GetAnonymousProfileData(string userId);
+
+    Task<string> GetOwnerId(string id);
 }

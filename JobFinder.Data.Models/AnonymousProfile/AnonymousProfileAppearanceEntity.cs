@@ -3,7 +3,7 @@ using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
 using System.Collections.Generic;
 
-namespace JobFinder.Data.Models;
+namespace JobFinder.Data.Models.AnonymousProfile;
 
 public class AnonymousProfileAppearanceEntity : BaseEntity<int>
 {
@@ -15,8 +15,8 @@ public class AnonymousProfileAppearanceEntity : BaseEntity<int>
         AnonymousProfileAppearanceTechStacks = [];
     }
 
-    public string CurriculumVitaeId { get; set; }
-    public CurriculumVitaeEntity CurriculumVitae { get; set; }
+    public string AnonymousProfileId { get; set; }
+    public AnonymousProfileEntity AnonymousProfile { get; set; }
 
     public int RemoteJobPreferenceId { get; set; }
     public RemoteJobPreferenceEntity RemoteJobPreference { get; set; }

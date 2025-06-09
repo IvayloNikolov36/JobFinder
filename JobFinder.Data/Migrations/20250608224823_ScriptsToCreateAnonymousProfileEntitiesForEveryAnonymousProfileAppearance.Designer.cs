@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250608224823_ScriptsToCreateAnonymousProfileEntitiesForEveryAnonymousProfileAppearance")]
+    partial class ScriptsToCreateAnonymousProfileEntitiesForEveryAnonymousProfileAppearance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,11 +34,13 @@ namespace JobFinder.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AnonymousProfileId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CurriculumVitaeId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("JobCategoryId")
                         .HasColumnType("int");
@@ -52,7 +57,10 @@ namespace JobFinder.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AnonymousProfileId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[AnonymousProfileId] IS NOT NULL");
+
+                    b.HasIndex("CurriculumVitaeId");
 
                     b.HasIndex("JobCategoryId");
 
@@ -5655,9 +5663,11 @@ namespace JobFinder.Data.Migrations
                 {
                     b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", "AnonymousProfile")
                         .WithOne("Appearance")
-                        .HasForeignKey("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", "AnonymousProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", "AnonymousProfileId");
+
+                    b.HasOne("JobFinder.Data.Models.CV.CurriculumVitaeEntity", "CurriculumVitae")
+                        .WithMany()
+                        .HasForeignKey("CurriculumVitaeId");
 
                     b.HasOne("JobFinder.Data.Models.Nomenclature.JobCategoryEntity", "JobCategory")
                         .WithMany()
@@ -5672,6 +5682,8 @@ namespace JobFinder.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("AnonymousProfile");
+
+                    b.Navigation("CurriculumVitae");
 
                     b.Navigation("JobCategory");
 

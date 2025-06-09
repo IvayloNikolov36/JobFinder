@@ -2,15 +2,15 @@
 using JobFinder.Transfer.Common;
 using System;
 
-namespace JobFinder.Data.Models;
+namespace JobFinder.Data.Models.AnonymousProfile;
 
-public class AnonymousProfileAppearanceSoftSkillEntity : IAudit
+public class AnonymousProfileAppearanceITAreaEntity : IAudit
 {
     public int AnonymousProfileAppearanceId { get; set; }
     public AnonymousProfileAppearanceEntity AnonymousProfileAppearance { get; set; }
 
-    public int SoftSkillId { get; set; }
-    public SoftSKillEntity SoftSkill { get; set; }
+    public int ITAreaId { get; set; }
+    public ITAreaEntity ITArea { get; set; }
 
     public DateTime CreatedOn { get; set; }
 

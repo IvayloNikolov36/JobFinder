@@ -35,6 +35,8 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         IAnonymousProfileAppearanceRepository AnonymousProfileAppearanceRepository { get; }
 
+        IAnonymousProfileRepository AnonymousProfileRepository { get; }
+
         Task SaveChanges();
 
         Task SaveChanges<DTO, IdType>(DTO dtoToPopulateId) where DTO : IUniquelyIdentified<IdType>;
