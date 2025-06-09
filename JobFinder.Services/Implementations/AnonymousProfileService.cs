@@ -72,7 +72,7 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.SaveChanges();
     }
 
-    public Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId)
+    public async Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId)
     {
         AnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
             .GetAnonymousProfile(anonymousProfileId);

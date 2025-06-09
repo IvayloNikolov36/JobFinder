@@ -61,9 +61,9 @@ namespace JobFinder.Web.Controllers
         public async Task<IActionResult> ViewAnonymousProfile([FromRoute] Guid id)
         {
             AnonymousProfileDataViewModel anonymousProfile = await this.anonymousProfileService
-                .GetAnonymousProfile(id);
+                .GetAnonymousProfile(id.ToString());
 
-            return this.Ok(anonymousCvData);
+            return this.Ok(anonymousProfile);
         }
     }
 }
