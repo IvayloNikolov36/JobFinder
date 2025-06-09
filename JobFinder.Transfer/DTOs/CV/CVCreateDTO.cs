@@ -10,7 +10,7 @@ public class CVCreateDTO : IUniquelyIdentified<string>
 
     public string PictureUrl { get; set; }
 
-    public PersonalInfoInputDTO PersonalDetails { get; set; }
+    public PersonalInfoInputDTO PersonalInfo { get; set; }
 
     public IEnumerable<EducationInfoInputDTO> Educations { get; set; }
 

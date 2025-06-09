@@ -17,7 +17,7 @@ namespace JobFinder.Web.Models.CVModels
         public string PictureUrl { get; set; }
 
         [Required]
-        public PersonalDetailsInputModel PersonalDetails { get; set; }
+        public PersonalInfoInputModel PersonalInfo { get; set; }
 
         [Required]
         [NotEmptyCollection]

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Web.Models.CVModels
 {
-    public class PersonalDetailsInputModel : IMapTo<PersonalInfoInputDTO>
+    public class PersonalInfoInputModel : IMapTo<PersonalInfoInputDTO>
     {
 
         [Required]
