@@ -8,6 +8,8 @@ public interface IAnonymousProfileService
 
     Task Delete(string cvId);
 
+    Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId);
+
     Task<AnonymousProfileDataViewModel> GetAnonymousProfileData(string userId);
 
     Task<string> GetOwnerId(string id);

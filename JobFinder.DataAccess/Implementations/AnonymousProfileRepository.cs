@@ -15,6 +15,15 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
     }
 
+    public async Task<AnonymousProfileDataDTO> GetAnonymousProfile(string anonymousProfileId)
+    {
+        return await this.DbSet
+            .Where(ap => ap.Id == anonymousProfileId)
+            .Select(ap => ap.CurriculumVitae)
+            .To<AnonymousProfileDataDTO>()
+            .SingleOrDefaultAsync();
+    }
+
     public async Task<AnonymousProfileDataDTO> GetAnonymousProfileData(string userId)
     {
         return await this.DbSet

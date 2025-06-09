@@ -55,12 +55,15 @@ namespace JobFinder.Web.Controllers
             return this.Ok(anonymousCvData);
         }
 
-        //[HttpGet]
-        //[Route("view/{id:guid}")]
-        //[Authorize(Roles = CompanyRole)]
-        //public async Task<IActionResult> ViewAnonymousProfile([FromRoute] Guid id)
-        //{
-        //    return this.Ok();
-        //}
+        [HttpGet]
+        [Route("view/{id:guid}")]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<IActionResult> ViewAnonymousProfile([FromRoute] Guid id)
+        {
+            AnonymousProfileDataViewModel anonymousProfile = await this.anonymousProfileService
+                .GetAnonymousProfile(id);
+
+            return this.Ok(anonymousCvData);
+        }
     }
 }

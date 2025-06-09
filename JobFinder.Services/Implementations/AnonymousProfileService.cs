@@ -72,6 +72,16 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.SaveChanges();
     }
 
+    public Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId)
+    {
+        AnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
+            .GetAnonymousProfile(anonymousProfileId);
+
+        AnonymousProfileDataViewModel profile = this.mapper.Map<AnonymousProfileDataViewModel>(cvData);
+
+        return profile;
+    }
+
     public async Task<AnonymousProfileDataViewModel> GetAnonymousProfileData(string userId)
     {
         AnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
