@@ -1,6 +1,7 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.AnonymousProfile;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Authorization;
@@ -93,6 +94,18 @@ namespace JobFinder.Web.Controllers
         public async Task<IActionResult> DeactivateAds()
         {
             await this.adsService.DeactivateAds();
+
+            return this.Ok();
+        }
+
+        [HttpGet]
+        [Route("{jobAdId:int}/anonymous-profiles")]
+        [Authorize(Roles = CompanyRole)]
+        [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
+        public async Task<IActionResult> GetRelevantAnonymousProfiles([FromRoute] int jobAdId)
+        {
+            IEnumerable<AnonymousProfileListingViewModel> anonymousProfiles = await this.adsService
+                .GetRelevantAnonymousProfiles(jobAdId);
 
             return this.Ok();
         }

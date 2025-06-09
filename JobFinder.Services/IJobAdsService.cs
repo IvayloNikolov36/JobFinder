@@ -1,4 +1,5 @@
-﻿using JobFinder.Web.Models.Common;
+﻿using JobFinder.Web.Models.AnonymousProfile;
+using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;
 using JobFinder.Web.Models.Subscriptions;
 
@@ -23,5 +24,7 @@ namespace JobFinder.Services
         Task DeactivateAds();
 
         Task<string> GetPublisherId(int jobAdId);
+
+        Task<IEnumerable<AnonymousProfileListingViewModel>> GetRelevantAnonymousProfiles(int jobAdId);
     }
 }

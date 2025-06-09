@@ -2,8 +2,10 @@
 using JobFinder.Business.JobAds;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.AnonymousProfile;
 using JobFinder.Transfer.DTOs.Company;
 using JobFinder.Transfer.DTOs.JobAd;
+using JobFinder.Web.Models.AnonymousProfile;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;
 using JobFinder.Web.Models.Subscriptions;
@@ -101,6 +103,17 @@ namespace JobFinder.Services.Implementations
         public async Task<string> GetPublisherId(int jobAdId)
         {
             return await this.unitOfWork.JobAdRepository.GetPublisher(jobAdId);
+        }
+
+        public async Task<IEnumerable<AnonymousProfileListingViewModel>> GetRelevantAnonymousProfiles(int jobAdId)
+        {
+            JobAdCriteriasDTO jobAdCriterias = await this.unitOfWork.JobAdRepository.GetJobAdCriterias(jobAdId);
+
+            IEnumerable<AnonymousProfileListingDTO> anonymousProfiles = await this.unitOfWork
+                .AnonymousProfileRepository
+                .GetProfilesRelevantToJobAd(jobAdCriterias);
+
+            return this.mapper.Map<IEnumerable<AnonymousProfileListingViewModel>>(anonymousProfiles);
         }
 
         private async Task<IEnumerable<CompanyJobAdViewModel>> GetFilteredCompanyAds(string userId, bool? active)

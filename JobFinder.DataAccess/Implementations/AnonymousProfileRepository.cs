@@ -5,6 +5,7 @@ using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
+using JobFinder.Transfer.DTOs.JobAd;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
@@ -77,6 +78,30 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         return await this.DbSet.AnyAsync(ap => ap.UserId == userId);
     }
 
+
+    public async Task<string> GetCvId(string id)
+    {
+        AnonymousProfileEntity entity = await this.DbSet.FindAsync(id);
+
+        base.ValidateForExistence(entity, "AnonymousProfile");
+
+        return entity.CurriculumVitaeId;
+    }
+
+    public async Task<string> GetOwnerId(string id)
+    {
+        AnonymousProfileEntity entity = await this.DbSet.FindAsync(id);
+
+        base.ValidateForExistence(entity, "AnonymousProfile");
+
+        return entity.UserId;
+    }
+
+    public Task<IEnumerable<AnonymousProfileListingDTO>> GetProfilesRelevantToJobAd(JobAdCriteriasDTO jobAdCriterias)
+    {
+        throw new NotImplementedException();
+    }
+
     private IEnumerable<AnonymousProfileAppearanceSoftSkillEntity> GetSofSkillsEntities(IEnumerable<int> softSkills)
     {
         List<AnonymousProfileAppearanceSoftSkillEntity> softSkillsEntities = [];
@@ -135,23 +160,5 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         }
 
         return techStacksEntities;
-    }
-
-    public async Task<string> GetCvId(string id)
-    {
-        AnonymousProfileEntity entity = await this.DbSet.FindAsync(id);
-
-        base.ValidateForExistence(entity, "AnonymousProfile");
-
-        return entity.CurriculumVitaeId;
-    }
-
-    public async Task<string> GetOwnerId(string id)
-    {
-        AnonymousProfileEntity entity = await this.DbSet.FindAsync(id);
-
-        base.ValidateForExistence(entity, "AnonymousProfile");
-
-        return entity.UserId;
     }
 }

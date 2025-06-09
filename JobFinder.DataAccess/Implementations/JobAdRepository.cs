@@ -156,6 +156,11 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
         return data;
     }
 
+    public Task<JobAdCriteriasDTO> GetJobAdCriterias(int jobAdId)
+    {
+        throw new NotImplementedException();
+    }
+
     private IQueryable<JobAdvertisementEntity> FilteredByCategory(
         IQueryable<JobAdvertisementEntity> jobAds,
         int jobCategoryId)
