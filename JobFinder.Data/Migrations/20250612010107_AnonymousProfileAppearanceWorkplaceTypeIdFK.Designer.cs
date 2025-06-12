@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250612010107_AnonymousProfileAppearanceWorkplaceTypeIdFK")]
+    partial class AnonymousProfileAppearanceWorkplaceTypeIdFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,12 +49,22 @@ namespace JobFinder.Data.Migrations
                     b.Property<string>("PreferredPositions")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RemoteJobPreferenceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkplaceTypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AnonymousProfileId")
                         .IsUnique();
 
                     b.HasIndex("JobCategoryId");
+
+                    b.HasIndex("RemoteJobPreferenceId");
+
+                    b.HasIndex("WorkplaceTypeId");
 
                     b.ToTable("AnonymousProfileAppearances");
                 });
@@ -138,35 +151,6 @@ namespace JobFinder.Data.Migrations
                     b.HasIndex("TechStackId");
 
                     b.ToTable("AnonymousProfileAppearancesTechStacks");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceWorkplaceTypeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AnonymousProfileAppearanceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("WorkplaceTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnonymousProfileAppearanceId");
-
-                    b.HasIndex("WorkplaceTypeId");
-
-                    b.ToTable("AnonymousProfileAppearancesWorkplaceTypes");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", b =>
@@ -4939,6 +4923,49 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.RemoteJobPreferenceEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RemoteJobPreferences");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "only remote job offers"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "interested in remote job offers"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "not interested in remote job offers"
+                        });
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.SoftSKillEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -5646,15 +5673,29 @@ namespace JobFinder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.RemoteJobPreferenceEntity", "RemoteJobPreference")
+                        .WithMany()
+                        .HasForeignKey("RemoteJobPreferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.WorkplaceTypeEntity", "WorkplaceType")
+                        .WithMany()
+                        .HasForeignKey("WorkplaceTypeId");
+
                     b.Navigation("AnonymousProfile");
 
                     b.Navigation("JobCategory");
+
+                    b.Navigation("RemoteJobPreference");
+
+                    b.Navigation("WorkplaceType");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceITAreaEntity", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
-                        .WithMany("ITAreas")
+                        .WithMany("AnonymousProfileAppearanceITAreas")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -5673,7 +5714,7 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceJobEngagementEntity", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
-                        .WithMany("JobEngagements")
+                        .WithMany("AnonymousProfileAppearanceJobEngagements")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -5692,7 +5733,7 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceSoftSkillEntity", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
-                        .WithMany("SoftSkills")
+                        .WithMany("AnonymousProfileAppearanceSoftSkills")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -5711,7 +5752,7 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceTechStackEntity", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
-                        .WithMany("TechStacks")
+                        .WithMany("AnonymousProfileAppearanceTechStacks")
                         .HasForeignKey("AnonymousProfileAppearanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -5725,25 +5766,6 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("AnonymousProfileAppearance");
 
                     b.Navigation("TechStack");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceWorkplaceTypeEntity", b =>
-                {
-                    b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", "AnonymousProfileAppearance")
-                        .WithMany("WorkplaceTypes")
-                        .HasForeignKey("AnonymousProfileAppearanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobFinder.Data.Models.Nomenclature.WorkplaceTypeEntity", "WorkplaceType")
-                        .WithMany()
-                        .HasForeignKey("WorkplaceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AnonymousProfileAppearance");
-
-                    b.Navigation("WorkplaceType");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", b =>
@@ -6181,15 +6203,13 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceEntity", b =>
                 {
-                    b.Navigation("ITAreas");
+                    b.Navigation("AnonymousProfileAppearanceITAreas");
 
-                    b.Navigation("JobEngagements");
+                    b.Navigation("AnonymousProfileAppearanceJobEngagements");
 
-                    b.Navigation("SoftSkills");
+                    b.Navigation("AnonymousProfileAppearanceSoftSkills");
 
-                    b.Navigation("TechStacks");
-
-                    b.Navigation("WorkplaceTypes");
+                    b.Navigation("AnonymousProfileAppearanceTechStacks");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", b =>

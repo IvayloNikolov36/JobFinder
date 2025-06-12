@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250612014059_MappingTableForAPAppearanceWorkplaceTypes")]
+    partial class MappingTableForAPAppearanceWorkplaceTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,12 +49,17 @@ namespace JobFinder.Data.Migrations
                     b.Property<string>("PreferredPositions")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RemoteJobPreferenceId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AnonymousProfileId")
                         .IsUnique();
 
                     b.HasIndex("JobCategoryId");
+
+                    b.HasIndex("RemoteJobPreferenceId");
 
                     b.ToTable("AnonymousProfileAppearances");
                 });
@@ -4939,6 +4947,49 @@ namespace JobFinder.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.RemoteJobPreferenceEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RemoteJobPreferences");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "only remote job offers"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "interested in remote job offers"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "not interested in remote job offers"
+                        });
+                });
+
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.SoftSKillEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -5646,9 +5697,17 @@ namespace JobFinder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JobFinder.Data.Models.Nomenclature.RemoteJobPreferenceEntity", "RemoteJobPreference")
+                        .WithMany()
+                        .HasForeignKey("RemoteJobPreferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AnonymousProfile");
 
                     b.Navigation("JobCategory");
+
+                    b.Navigation("RemoteJobPreference");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileAppearanceITAreaEntity", b =>

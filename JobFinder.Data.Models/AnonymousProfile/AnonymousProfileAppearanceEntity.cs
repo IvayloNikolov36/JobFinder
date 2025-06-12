@@ -1,5 +1,4 @@
 ﻿using JobFinder.Data.Models.Common;
-using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
 using System.Collections.Generic;
 
@@ -9,28 +8,28 @@ public class AnonymousProfileAppearanceEntity : BaseEntity<int>
 {
     public AnonymousProfileAppearanceEntity()
     {
-        AnonymousProfileAppearanceJobEngagements = [];
-        AnonymousProfileAppearanceSoftSkills = [];
-        AnonymousProfileAppearanceITAreas = [];
-        AnonymousProfileAppearanceTechStacks = [];
+        this.JobEngagements = [];
+        this.SoftSkills = [];
+        this.ITAreas = [];
+        this.TechStacks = [];
+        this.WorkplaceTypes = [];
     }
 
     public string AnonymousProfileId { get; set; }
     public AnonymousProfileEntity AnonymousProfile { get; set; }
-
-    public int RemoteJobPreferenceId { get; set; }
-    public RemoteJobPreferenceEntity RemoteJobPreference { get; set; }
 
     public int JobCategoryId { get; set; }
     public JobCategoryEntity JobCategory { get; set; }
 
     public string PreferredPositions { get; set; }
 
-    public List<AnonymousProfileAppearanceJobEngagementEntity> AnonymousProfileAppearanceJobEngagements { get; set; }
+    public List<AnonymousProfileAppearanceJobEngagementEntity> JobEngagements { get; set; }
 
-    public List<AnonymousProfileAppearanceSoftSkillEntity> AnonymousProfileAppearanceSoftSkills { get; set; }
+    public List<AnonymousProfileAppearanceSoftSkillEntity> SoftSkills { get; set; }
 
-    public List<AnonymousProfileAppearanceITAreaEntity> AnonymousProfileAppearanceITAreas { get; set; }
+    public List<AnonymousProfileAppearanceITAreaEntity> ITAreas { get; set; }
 
-    public List<AnonymousProfileAppearanceTechStackEntity> AnonymousProfileAppearanceTechStacks { get; set; }
+    public List<AnonymousProfileAppearanceTechStackEntity> TechStacks { get; set; }
+
+    public List<AnonymousProfileAppearanceWorkplaceTypeEntity> WorkplaceTypes { get; set; }
 }

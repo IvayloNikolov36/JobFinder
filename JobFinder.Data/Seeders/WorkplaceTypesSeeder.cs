@@ -9,8 +9,8 @@ static class WorkplaceTypesSeeder
     {
         builder.Entity<WorkplaceTypeEntity>()
             .HasData(
-                new WorkplaceTypeEntity { Name = "Office", Id = 1 },
-                new WorkplaceTypeEntity { Name = "Home", Id = 2 },
+                new WorkplaceTypeEntity { Name = "On-site", Id = 1 },
+                new WorkplaceTypeEntity { Name = "Remote", Id = 2 },
                 new WorkplaceTypeEntity { Name = "Hybrid", Id = 3 });
     }
 }

@@ -158,15 +158,6 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("remote-job-preferences")]
-        public async Task<IActionResult> GetRemoteJobPreferences()
-        {
-            IEnumerable<BasicViewModel> remoteJobPreferences = await this.nomenclatureService.GetRemoteJobPreferences();
-
-            return this.Ok(remoteJobPreferences);
-        }
-
-        [HttpGet]
         [Route("workplace-types")]
         public async Task<IActionResult> GetWorkplaceTypes()
         {

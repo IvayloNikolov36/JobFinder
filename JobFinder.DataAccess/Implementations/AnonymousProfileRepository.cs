@@ -38,21 +38,22 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         AnonymousProfileAppearanceEntity appearanceEntity = new()
         {
-            RemoteJobPreferenceId = anonymousProfileDto.AppearanceDto.RemoteJobPreferenceId,
+            // TODO: create entities for every workplaceTypeId selected
+            // WorkplaceTypeId = anonymousProfileDto.AppearanceDto.WorkplaceTypeId,
             JobCategoryId = anonymousProfileDto.AppearanceDto.JobCategoryId,
             PreferredPositions = anonymousProfileDto.AppearanceDto.PreferredPositions
         };
 
-        appearanceEntity.AnonymousProfileAppearanceJobEngagements
+        appearanceEntity.JobEngagements
             .AddRange(this.GetJobEngagementsEntities(anonymousProfileDto.AppearanceDto.JobEngagements));
 
-        appearanceEntity.AnonymousProfileAppearanceSoftSkills
+        appearanceEntity.SoftSkills
             .AddRange(this.GetSofSkillsEntities(anonymousProfileDto.AppearanceDto.SoftSkills));
 
-        appearanceEntity.AnonymousProfileAppearanceITAreas
+        appearanceEntity.ITAreas
             .AddRange(this.GetItAreasEntities(anonymousProfileDto.AppearanceDto.ITAreas));
 
-        appearanceEntity.AnonymousProfileAppearanceTechStacks
+        appearanceEntity.TechStacks
             .AddRange(this.GetTechStacksEntities(anonymousProfileDto.AppearanceDto.TechStacks));
 
         AnonymousProfileEntity anonymousProfileEntity = new AnonymousProfileEntity
@@ -102,13 +103,13 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         IEnumerable<AnonymousProfileListingDTO> data = await this.DbSet.AsNoTracking()
             .Where(ap => ap.Appearance.JobCategoryId == jobAdCriterias.JobCategoryId)
             .Where(ap => ap.Appearance
-                .AnonymousProfileAppearanceJobEngagements
+                .JobEngagements
                 .Select(je => je.JobEngagementId)
                 .Contains(jobAdCriterias.JobEngagementId))
             .Where(ap => jobAdCriterias
                 .SoftSkills
                 .All(adSkill => ap.Appearance
-                    .AnonymousProfileAppearanceSoftSkills
+                    .SoftSkills
                     .Select(ss => ss.SoftSkillId)
                     .Contains(adSkill)))
             .Select(ap => new AnonymousProfileListingDTO

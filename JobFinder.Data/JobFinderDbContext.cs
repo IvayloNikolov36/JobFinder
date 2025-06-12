@@ -64,6 +64,8 @@ namespace JobFinder.Data
 
         public DbSet<JobAdvertisementTechStackEntity> JobAdvertisementsTechStacks { get; set; }
 
+        public DbSet<AnonymousProfileAppearanceWorkplaceTypeEntity> AnonymousProfileAppearancesWorkplaceTypes { get; set; }
+
 
         // Nomenclature Entities
 
@@ -96,8 +98,6 @@ namespace JobFinder.Data
         public DbSet<SoftSKillEntity> SoftSkills { get; set; }
 
         public DbSet<TechStackEntity> TechStacks { get; set; }
-
-        public DbSet<RemoteJobPreferenceEntity> RemoteJobPreferences { get; set; }
 
         public DbSet<WorkplaceTypeEntity> WorkplaceTypes { get; set; }
 
@@ -221,7 +221,6 @@ namespace JobFinder.Data
             builder.Entity<JobAdvertisementITAreaEntity>()
                 .HasKey(key => new { key.JobAdvertisementId, key.ITAreaId });
 
-
             // VIEWS
 
             builder.Entity<CompanyJobAdsForSubscribersViewData>()
@@ -263,7 +262,6 @@ namespace JobFinder.Data
             ITAreasSeeder.Seed(builder);
             SoftSkillsSeeder.Seed(builder);
             TechStacksSeeder.Seed(builder);
-            RemoteJobPreferencesSeeder.Seed(builder);
             WorkplaceTypesSeeder.Seed(builder);
         }
 

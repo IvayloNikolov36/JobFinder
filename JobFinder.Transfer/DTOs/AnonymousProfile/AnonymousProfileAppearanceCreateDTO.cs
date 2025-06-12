@@ -2,7 +2,7 @@
 
 public class AnonymousProfileAppearanceCreateDTO
 {
-    public int RemoteJobPreferenceId { get; set; }
+    public int WorkplaceTypeId { get; set; }
 
     public int JobCategoryId { get; set; }
 

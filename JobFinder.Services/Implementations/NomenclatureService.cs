@@ -27,7 +27,6 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<ITAreaEntity> itAreasRepository;
         private readonly IRepository<TechStackEntity> techStacksRepository;
         private readonly IRepository<SoftSKillEntity> softSkillsRepository;
-        private readonly IRepository<RemoteJobPreferenceEntity> remoteJobPreferencesRepository;
         private readonly IRepository<WorkplaceTypeEntity> workplaceTypeRepository;
 
         public NomenclatureService(
@@ -48,7 +47,6 @@ namespace JobFinder.Services.Implementations
             IRepository<ITAreaEntity> itAreasRepository,
             IRepository<TechStackEntity> techStacksRepository,
             IRepository<SoftSKillEntity> softSkillsRepository,
-            IRepository<RemoteJobPreferenceEntity> remoteJobPreferencesRepository,
             IRepository<WorkplaceTypeEntity> workplaceTypeRepository)
         {
             this.mapper = mapper;
@@ -69,7 +67,6 @@ namespace JobFinder.Services.Implementations
             this.itAreasRepository = itAreasRepository;
             this.techStacksRepository = techStacksRepository;
             this.softSkillsRepository = softSkillsRepository;
-            this.remoteJobPreferencesRepository = remoteJobPreferencesRepository;
             this.workplaceTypeRepository = workplaceTypeRepository;
         }
 
@@ -230,15 +227,6 @@ namespace JobFinder.Services.Implementations
         public async Task<IEnumerable<BasicViewModel>> GetSoftSkills()
         {
             BasicDTO[] data = await this.softSkillsRepository.DbSetNoTracking()
-                .To<BasicDTO>()
-                .ToArrayAsync();
-
-            return this.mapper.Map<IEnumerable<BasicViewModel>>(data);
-        }
-
-        public async Task<IEnumerable<BasicViewModel>> GetRemoteJobPreferences()
-        {
-            BasicDTO[] data = await this.remoteJobPreferencesRepository.DbSetNoTracking()
                 .To<BasicDTO>()
                 .ToArrayAsync();
 
