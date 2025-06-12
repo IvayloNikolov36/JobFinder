@@ -38,11 +38,12 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         AnonymousProfileAppearanceEntity appearanceEntity = new()
         {
-            // TODO: create entities for every workplaceTypeId selected
-            // WorkplaceTypeId = anonymousProfileDto.AppearanceDto.WorkplaceTypeId,
             JobCategoryId = anonymousProfileDto.AppearanceDto.JobCategoryId,
             PreferredPositions = anonymousProfileDto.AppearanceDto.PreferredPositions
         };
+
+        appearanceEntity.WorkplaceTypes
+            .AddRange(this.GetWorkingplaceTypesEntities(anonymousProfileDto.AppearanceDto.WorkplaceTypes));
 
         appearanceEntity.JobEngagements
             .AddRange(this.GetJobEngagementsEntities(anonymousProfileDto.AppearanceDto.JobEngagements));
@@ -56,7 +57,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         appearanceEntity.TechStacks
             .AddRange(this.GetTechStacksEntities(anonymousProfileDto.AppearanceDto.TechStacks));
 
-        AnonymousProfileEntity anonymousProfileEntity = new AnonymousProfileEntity
+        AnonymousProfileEntity anonymousProfileEntity = new()
         {
             CurriculumVitaeId = cvId,
             UserId = userId,
@@ -65,7 +66,6 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
 
         await this.DbSet.AddAsync(anonymousProfileEntity);
     }
-
 
     public async Task Delete(string id)
     {
@@ -78,7 +78,6 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         return await this.DbSet.AnyAsync(ap => ap.UserId == userId);
     }
-
 
     public async Task<string> GetCvId(string id)
     {
@@ -120,6 +119,22 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
             .ToListAsync();
 
         return data;
+    }
+
+    private IEnumerable<AnonymousProfileAppearanceWorkplaceTypeEntity> GetWorkingplaceTypesEntities(
+        IEnumerable<int> workplaceTypes)
+    {
+        List<AnonymousProfileAppearanceWorkplaceTypeEntity> workingplaceTypeEntities = [];
+
+        foreach (int workingplaceTypeId in workplaceTypes)
+        {
+            workingplaceTypeEntities.Add(new AnonymousProfileAppearanceWorkplaceTypeEntity
+            {
+                WorkplaceTypeId = workingplaceTypeId
+            });
+        }
+
+        return workingplaceTypeEntities;
     }
 
     private IEnumerable<AnonymousProfileAppearanceSoftSkillEntity> GetSofSkillsEntities(IEnumerable<int> softSkills)

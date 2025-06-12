@@ -55,7 +55,6 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.SaveChanges<AnonymousProfileCreateDTO, string>(anonymousProfileDto);
 
         return anonymousProfileDto.Id;
-
     }
 
     public async Task Delete(string id)

@@ -2,11 +2,11 @@
 
 public class AnonymousProfileAppearanceCreateDTO
 {
-    public int WorkplaceTypeId { get; set; }
-
     public int JobCategoryId { get; set; }
 
     public string PreferredPositions { get; set; }
+
+    public IEnumerable<int> WorkplaceTypes { get; set; }
 
     public IEnumerable<int> JobEngagements { get; set; }
 

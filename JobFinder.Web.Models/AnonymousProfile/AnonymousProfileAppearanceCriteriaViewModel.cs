@@ -18,5 +18,5 @@ public class AnonymousProfileAppearanceCriteriaViewModel : IMapTo<AnonymousProfi
 
     public IEnumerable<int> TechStacks { get; set; }
 
-    public int WorkplaceTypeId { get; set; }
+    public IEnumerable<int> WorkplaceTypes { get; set; }
 }
