@@ -120,6 +120,10 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
                     .SoftSkills
                     .Select(ss => ss.SoftSkillId)
                     .Contains(adSkill)))
+            .Where(ap => ap.Appearance
+                .WorkplaceTypes
+                .Select(apw => apw.WorkplaceTypeId)
+                .Contains(jobAdCriterias.WorkplaceTypeId))
             .Select(ap => new AnonymousProfileListingDTO
             {
                 Id = ap.Id,
