@@ -107,13 +107,16 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<AnonymousProfileListingViewModel>> GetRelevantAnonymousProfiles(int jobAdId)
         {
-            JobAdCriteriasDTO jobAdCriterias = await this.unitOfWork.JobAdRepository.GetJobAdCriterias(jobAdId);
+            JobAdCriteriasDTO jobAdCriterias = await this.unitOfWork
+                .JobAdRepository
+                .GetJobAdCriterias(jobAdId);
 
             IEnumerable<AnonymousProfileListingDTO> anonymousProfiles = await this.unitOfWork
                 .AnonymousProfileRepository
                 .GetProfilesRelevantToJobAd(jobAdCriterias);
 
-            return this.mapper.Map<IEnumerable<AnonymousProfileListingViewModel>>(anonymousProfiles);
+            return this.mapper
+                .Map<IEnumerable<AnonymousProfileListingViewModel>>(anonymousProfiles);
         }
 
         private async Task<IEnumerable<CompanyJobAdViewModel>> GetFilteredCompanyAds(string userId, bool? active)

@@ -6,7 +6,7 @@ namespace JobFinder.Web.Models.AnonymousProfile;
 
 public class AnonymousProfileListingViewModel : IMapFrom<AnonymousProfileListingDTO>
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     public DateTime ActivateDate { get; set; }
 }

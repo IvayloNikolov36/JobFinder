@@ -80,11 +80,6 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
         this.DbSet.Update(jobAdFromDb);
     }
 
-    public Task Update(JobAdEditDTO jobAdDto)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<DataListingDTO<JobAdListingDTO>> AllActive(JobAdFilterDTO filter)
     {
         IQueryable<JobAdvertisementEntity> jobs = this.DbSet
@@ -156,9 +151,16 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
         return data;
     }
 
-    public Task<JobAdCriteriasDTO> GetJobAdCriterias(int jobAdId)
+    public async Task<JobAdCriteriasDTO> GetJobAdCriterias(int jobAdId)
     {
-        throw new NotImplementedException();
+        JobAdCriteriasDTO jobAdCriterias = await this.DbSet.AsNoTracking()
+            .Where(ja => ja.Id == jobAdId)
+            .To<JobAdCriteriasDTO>()
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(jobAdCriterias, "JobAdvertisement");
+
+        return jobAdCriterias;
     }
 
     private IQueryable<JobAdvertisementEntity> FilteredByCategory(

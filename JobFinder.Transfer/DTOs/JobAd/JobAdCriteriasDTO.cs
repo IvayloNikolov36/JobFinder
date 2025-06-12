@@ -12,9 +12,9 @@ public class JobAdCriteriasDTO
 
     public bool Intership { get; set; }
 
-    public IEnumerable<BasicDTO> SoftSkills { get; set; }
+    public IEnumerable<int> SoftSkills { get; set; }
 
-    public IEnumerable<BasicDTO> TechStacks { get; set; }
+    public IEnumerable<int> TechStacks { get; set; }
 
-    public IEnumerable<BasicDTO> ITAreas { get; set; }
+    public IEnumerable<int> ITAreas { get; set; }
 }

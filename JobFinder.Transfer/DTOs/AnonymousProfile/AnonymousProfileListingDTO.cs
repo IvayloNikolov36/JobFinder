@@ -2,7 +2,7 @@
 
 public class AnonymousProfileListingDTO
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     public DateTime ActivatedDate { get; set; }
 }

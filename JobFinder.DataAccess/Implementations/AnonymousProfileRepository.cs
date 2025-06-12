@@ -97,9 +97,28 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         return entity.UserId;
     }
 
-    public Task<IEnumerable<AnonymousProfileListingDTO>> GetProfilesRelevantToJobAd(JobAdCriteriasDTO jobAdCriterias)
+    public async Task<IEnumerable<AnonymousProfileListingDTO>> GetProfilesRelevantToJobAd(JobAdCriteriasDTO jobAdCriterias)
     {
-        throw new NotImplementedException();
+        IEnumerable<AnonymousProfileListingDTO> data = await this.DbSet.AsNoTracking()
+            .Where(ap => ap.Appearance.JobCategoryId == jobAdCriterias.JobCategoryId)
+            .Where(ap => ap.Appearance
+                .AnonymousProfileAppearanceJobEngagements
+                .Select(je => je.JobEngagementId)
+                .Contains(jobAdCriterias.JobEngagementId))
+            .Where(ap => jobAdCriterias
+                .SoftSkills
+                .All(adSkill => ap.Appearance
+                    .AnonymousProfileAppearanceSoftSkills
+                    .Select(ss => ss.SoftSkillId)
+                    .Contains(adSkill)))
+            .Select(ap => new AnonymousProfileListingDTO
+            {
+                Id = ap.Id,
+                ActivatedDate = ap.CreatedOn
+            })
+            .ToListAsync();
+
+        return data;
     }
 
     private IEnumerable<AnonymousProfileAppearanceSoftSkillEntity> GetSofSkillsEntities(IEnumerable<int> softSkills)

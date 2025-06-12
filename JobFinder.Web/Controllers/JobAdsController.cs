@@ -107,7 +107,7 @@ namespace JobFinder.Web.Controllers
             IEnumerable<AnonymousProfileListingViewModel> anonymousProfiles = await this.adsService
                 .GetRelevantAnonymousProfiles(jobAdId);
 
-            return this.Ok();
+            return this.Ok(anonymousProfiles);
         }
     }
 }
