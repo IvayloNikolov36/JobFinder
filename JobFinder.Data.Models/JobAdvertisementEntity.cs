@@ -50,7 +50,7 @@ namespace JobFinder.Data.Models
 
         public DateTime PublishDate { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public List<JobAdvertisementSoftSkillEntity> JobAdSoftSkills { get; set; }
 
