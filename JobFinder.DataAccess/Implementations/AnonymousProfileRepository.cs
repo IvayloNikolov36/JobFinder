@@ -51,20 +51,25 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
             PreferredPositions = anonymousProfileDto.AppearanceDto.PreferredPositions
         };
 
+        AnonymousProfileAppearanceDTO appearanceDto = anonymousProfileDto.AppearanceDto;
+
         appearanceEntity.WorkplaceTypes
-            .AddRange(this.GetWorkingplaceTypesEntities(anonymousProfileDto.AppearanceDto.WorkplaceTypes));
+            .AddRange(this.GetWorkingplaceTypesEntities(appearanceDto.WorkplaceTypes));
 
         appearanceEntity.JobEngagements
-            .AddRange(this.GetJobEngagementsEntities(anonymousProfileDto.AppearanceDto.JobEngagements));
+            .AddRange(this.GetJobEngagementsEntities(appearanceDto.JobEngagements));
 
         appearanceEntity.SoftSkills
-            .AddRange(this.GetSofSkillsEntities(anonymousProfileDto.AppearanceDto.SoftSkills));
+            .AddRange(this.GetSofSkillsEntities(appearanceDto.SoftSkills));
 
         appearanceEntity.ITAreas
-            .AddRange(this.GetItAreasEntities(anonymousProfileDto.AppearanceDto.ITAreas));
+            .AddRange(this.GetItAreasEntities(appearanceDto.ITAreas));
 
         appearanceEntity.TechStacks
-            .AddRange(this.GetTechStacksEntities(anonymousProfileDto.AppearanceDto.TechStacks));
+            .AddRange(this.GetTechStacksEntities(appearanceDto.TechStacks));
+
+        appearanceEntity.Cities
+            .AddRange(this.GetCityEntities(appearanceDto.Cities));
 
         AnonymousProfileEntity anonymousProfileEntity = new()
         {
@@ -110,6 +115,10 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         IEnumerable<AnonymousProfileListingDTO> data = await this.DbSet.AsNoTracking()
             .Where(ap => ap.Appearance.JobCategoryId == jobAdCriterias.JobCategoryId)
+            .Where(ap => ap.Appearance
+                .Cities
+                .Select(apc => apc.CityId)
+                .Contains(jobAdCriterias.CityId))
             .Where(ap => ap.Appearance
                 .JobEngagements
                 .Select(je => je.JobEngagementId)
@@ -208,5 +217,20 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         }
 
         return techStacksEntities;
+    }
+
+    private IEnumerable<AnonymousProfileAppearanceCityEntity> GetCityEntities(IEnumerable<int> cities)
+    {
+        List<AnonymousProfileAppearanceCityEntity> cityEntities = new();
+
+        foreach (int cityId in cities)
+        {
+            cityEntities.Add(new AnonymousProfileAppearanceCityEntity
+            {
+                CityId = cityId
+            });
+        }
+
+        return cityEntities;
     }
 }

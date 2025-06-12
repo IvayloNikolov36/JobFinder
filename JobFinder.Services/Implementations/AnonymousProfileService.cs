@@ -42,7 +42,7 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.CoursesCertificateInfoRepository
             .SetIncludeInAnonymousProfile(cvId, profile.CoursesInfo);
 
-        AnonymousProfileCreateDTO anonymousProfileDto = new AnonymousProfileCreateDTO
+        AnonymousProfileCreateDTO anonymousProfileDto = new()
         {
             UserId = userId,
             CurriculumVitaeId = cvId,

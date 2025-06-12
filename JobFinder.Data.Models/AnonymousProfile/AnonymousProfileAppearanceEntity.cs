@@ -13,6 +13,7 @@ public partial class AnonymousProfileAppearanceEntity : BaseEntity<int>
         this.ITAreas = [];
         this.TechStacks = [];
         this.WorkplaceTypes = [];
+        this.Cities = [];
     }
 
     public string AnonymousProfileId { get; set; }
@@ -32,4 +33,6 @@ public partial class AnonymousProfileAppearanceEntity : BaseEntity<int>
     public List<AnonymousProfileAppearanceTechStackEntity> TechStacks { get; set; }
 
     public List<AnonymousProfileAppearanceWorkplaceTypeEntity> WorkplaceTypes { get; set; }
+
+    public List<AnonymousProfileAppearanceCityEntity> Cities { get; set; }
 }

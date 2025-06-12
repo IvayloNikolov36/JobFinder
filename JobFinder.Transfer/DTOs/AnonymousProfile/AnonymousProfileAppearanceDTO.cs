@@ -15,4 +15,6 @@ public class AnonymousProfileAppearanceDTO
     public IEnumerable<int> ITAreas { get; set; }
 
     public IEnumerable<int> TechStacks { get; set; }
+
+    public IEnumerable<int> Cities { get; set; }
 }

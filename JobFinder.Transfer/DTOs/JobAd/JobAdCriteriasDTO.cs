@@ -4,6 +4,8 @@ public class JobAdCriteriasDTO
 {
     public string Position { get; set; }
 
+    public int CityId { get; set; }
+
     public int JobCategoryId { get; set; }
 
     public int JobEngagementId { get; set; }

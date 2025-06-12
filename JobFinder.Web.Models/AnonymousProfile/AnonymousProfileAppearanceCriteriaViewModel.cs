@@ -21,4 +21,6 @@ public class AnonymousProfileAppearanceCriteriaViewModel :
     public IEnumerable<int> TechStacks { get; set; }
 
     public IEnumerable<int> WorkplaceTypes { get; set; }
+
+    public IEnumerable<int> Cities { get; set; }
 }

@@ -14,6 +14,7 @@ public partial class AnonymousProfileAppearanceEntity : IHaveCustomMappings
             .ForMember(dto => dto.JobEngagements, o => o.MapFrom(e => e.JobEngagements.Select(je => je.JobEngagementId)))
             .ForMember(dto => dto.SoftSkills, o => o.MapFrom(e => e.SoftSkills.Select(ss => ss.SoftSkillId)))
             .ForMember(dto => dto.ITAreas, o => o.MapFrom(e => e.ITAreas.Select(a => a.ITAreaId)))
-            .ForMember(dto => dto.TechStacks, o => o.MapFrom(e => e.TechStacks.Select(ts => ts.TechStackId)));
+            .ForMember(dto => dto.TechStacks, o => o.MapFrom(e => e.TechStacks.Select(ts => ts.TechStackId)))
+            .ForMember(dto => dto.Cities, o => o.MapFrom(e => e.Cities.Select(c => c.CityId)));
     }
 }
