@@ -34,6 +34,15 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
             .SingleOrDefaultAsync();
     }
 
+    public async Task<MyAnonymousProfileDataDTO> GetMyAnonymousProfileData(string userId)
+    {
+        return await this.DbSet
+            .Where(ap => ap.UserId == userId)
+            .Select(ap => ap.CurriculumVitae)
+            .To<MyAnonymousProfileDataDTO>()
+            .SingleOrDefaultAsync();
+    }
+
     public async Task Create(string cvId, string userId, AnonymousProfileCreateDTO anonymousProfileDto)
     {
         AnonymousProfileAppearanceEntity appearanceEntity = new()

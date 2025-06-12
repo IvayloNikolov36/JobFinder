@@ -1,6 +1,6 @@
 ﻿namespace JobFinder.Transfer.DTOs.AnonymousProfile;
 
-public class AnonymousProfileAppearanceCreateDTO
+public class AnonymousProfileAppearanceDTO
 {
     public int JobCategoryId { get; set; }
 

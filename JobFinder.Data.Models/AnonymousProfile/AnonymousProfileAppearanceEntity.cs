@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.AnonymousProfile;
 
-public class AnonymousProfileAppearanceEntity : BaseEntity<int>
+public partial class AnonymousProfileAppearanceEntity : BaseEntity<int>
 {
     public AnonymousProfileAppearanceEntity()
     {

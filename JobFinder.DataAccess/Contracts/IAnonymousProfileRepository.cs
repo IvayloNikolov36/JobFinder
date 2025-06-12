@@ -14,9 +14,13 @@ public interface IAnonymousProfileRepository
 
     Task<AnonymousProfileDataDTO> GetAnonymousProfileData(string userId);
 
+    Task<MyAnonymousProfileDataDTO> GetMyAnonymousProfileData(string userId);
+
     Task<string> GetCvId(string id);
 
     Task<string> GetOwnerId(string id);
+
     Task<IEnumerable<AnonymousProfileListingDTO>> GetProfilesRelevantToJobAd(JobAdCriteriasDTO jobAdCriterias);
+
     Task<bool> HasAnonymousProfile(string userId);
 }

@@ -10,7 +10,7 @@ public class AnonymousProfileCreateDTO : IUniquelyIdentified<string>
 
     public string UserId { get; set; }
 
-    public AnonymousProfileAppearanceCreateDTO AppearanceDto { get; set; }
+    public AnonymousProfileAppearanceDTO AppearanceDto { get; set; }
 
     public Guid UniqueIdentificator { get; set; }
 }

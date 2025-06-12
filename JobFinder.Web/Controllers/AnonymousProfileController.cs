@@ -48,8 +48,8 @@ namespace JobFinder.Web.Controllers
         {
             string userId = this.User.GetCurrentUserId();
 
-            AnonymousProfileDataViewModel anonymousCvData = await this.anonymousProfileService
-                .GetAnonymousProfileData(userId);
+            MyAnonymousProfileDataViewModel anonymousCvData = await this.anonymousProfileService
+                .GetMyAnonymousProfileData(userId);
 
             return this.Ok(anonymousCvData);
         }

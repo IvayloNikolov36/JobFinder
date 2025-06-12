@@ -10,7 +10,7 @@ public interface IAnonymousProfileService
 
     Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId);
 
-    Task<AnonymousProfileDataViewModel> GetAnonymousProfileData(string userId);
+    Task<MyAnonymousProfileDataViewModel> GetMyAnonymousProfileData(string userId);
 
     Task<string> GetOwnerId(string id);
 }

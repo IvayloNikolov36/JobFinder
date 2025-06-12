@@ -47,7 +47,7 @@ public class AnonymousProfileService : IAnonymousProfileService
             UserId = userId,
             CurriculumVitaeId = cvId,
             AppearanceDto = this.mapper
-                .Map<AnonymousProfileAppearanceCreateDTO>(profile.ProfileAppearanceCriterias)
+                .Map<AnonymousProfileAppearanceDTO>(profile.ProfileAppearanceCriterias)
         };
 
         await this.unitOfWork.AnonymousProfileRepository.Create(cvId, userId, anonymousProfileDto);
@@ -81,12 +81,12 @@ public class AnonymousProfileService : IAnonymousProfileService
         return profile;
     }
 
-    public async Task<AnonymousProfileDataViewModel> GetAnonymousProfileData(string userId)
+    public async Task<MyAnonymousProfileDataViewModel> GetMyAnonymousProfileData(string userId)
     {
-        AnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
-            .GetAnonymousProfileData(userId);
+        MyAnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
+            .GetMyAnonymousProfileData(userId);
 
-        AnonymousProfileDataViewModel profile = this.mapper.Map<AnonymousProfileDataViewModel>(cvData);
+        MyAnonymousProfileDataViewModel profile = this.mapper.Map<MyAnonymousProfileDataViewModel>(cvData);
 
         return profile;
     }

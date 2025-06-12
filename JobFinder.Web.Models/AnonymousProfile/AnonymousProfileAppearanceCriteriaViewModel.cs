@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 namespace JobFinder.Web.Models.AnonymousProfile;
 
-public class AnonymousProfileAppearanceCriteriaViewModel : IMapTo<AnonymousProfileAppearanceCreateDTO>
+public class AnonymousProfileAppearanceCriteriaViewModel :
+    IMapTo<AnonymousProfileAppearanceDTO>,
+    IMapFrom<AnonymousProfileAppearanceDTO>
 {
     public int JobCategoryId { get; set; }
 
