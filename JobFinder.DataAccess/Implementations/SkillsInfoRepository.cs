@@ -29,8 +29,6 @@ public class SkillsInfoRepository : EfCoreRepository<SkillsInfoEntity>, ISkillsI
 
         this.mapper.Map(skillsInfoDto, skillFromDb);
 
-        skillFromDb.HasDrivingLicense = skillsInfoDto.DrivingLicenseCategoryIds.Any();
-
         this.UpdateDrivingLicenseCategories(
             skillsInfoDto.DrivingLicenseCategoryIds,
             skillFromDb.SkillsInfoDrivingCategories);

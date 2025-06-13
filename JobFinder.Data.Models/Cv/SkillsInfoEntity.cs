@@ -24,9 +24,6 @@ namespace JobFinder.Data.Models.CV
 
         public bool HasManagedPeople { get; set; }
 
-        // TODO: consider removing this property
-        public bool HasDrivingLicense { get; set; }
-
         public List<SkillsInfoDrivingCategoryEntity> SkillsInfoDrivingCategories { get; set; }
     }
 }

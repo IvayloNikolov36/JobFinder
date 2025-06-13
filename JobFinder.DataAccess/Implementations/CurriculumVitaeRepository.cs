@@ -35,8 +35,6 @@ public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>
 
         if (cvData.Skills.DrivingLicenseCategoryIds.Any())
         {
-            cvEntity.Skills.HasDrivingLicense = true;
-
             cvEntity.Skills.SkillsInfoDrivingCategories
                 .AddRange(
                     cvData.Skills
