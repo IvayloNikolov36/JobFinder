@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JobFinder.Business.AnonymousProfile;
 using JobFinder.Business.CurriculumVitaes;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
@@ -12,15 +13,18 @@ public class AnonymousProfileService : IAnonymousProfileService
     private readonly IEntityFrameworkUnitOfWork unitOfWork;
     private readonly IMapper mapper;
     private readonly ICurriculumVitaesRules cvRules;
+    private readonly IAnonymousProfileRules anonymousProfileRules;
 
     public AnonymousProfileService(
         IEntityFrameworkUnitOfWork unitOfWork,
         IMapper mapper,
-        ICurriculumVitaesRules cvRules)
+        ICurriculumVitaesRules cvRules,
+        IAnonymousProfileRules anonymousProfileRules)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
         this.cvRules = cvRules;
+        this.anonymousProfileRules = anonymousProfileRules;
     }
 
     public async Task<string> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile)
@@ -28,7 +32,12 @@ public class AnonymousProfileService : IAnonymousProfileService
         bool hasAlreadyAnActivated = await this.unitOfWork.AnonymousProfileRepository
             .HasAnonymousProfile(userId);
 
-        this.cvRules.ValidateAnonymousProfileCreation(hasAlreadyAnActivated);
+        this.cvRules.ValidateAnonymousProfileCanBeCreated(hasAlreadyAnActivated);
+
+        AnonymousProfileAppearanceDTO appearanceDto = this.mapper
+            .Map<AnonymousProfileAppearanceDTO>(profile.ProfileAppearanceCriterias);
+
+        this.anonymousProfileRules.ValidateAnonymousProfileAppearanceData(appearanceDto);
 
         await this.unitOfWork.WorkExperienceRepository
             .SetIncludeInAnonymousProfile(cvId, profile.WorkExpiriencesInfo);
@@ -46,8 +55,7 @@ public class AnonymousProfileService : IAnonymousProfileService
         {
             UserId = userId,
             CurriculumVitaeId = cvId,
-            AppearanceDto = this.mapper
-                .Map<AnonymousProfileAppearanceDTO>(profile.ProfileAppearanceCriterias)
+            AppearanceDto = appearanceDto
         };
 
         await this.unitOfWork.AnonymousProfileRepository.Create(cvId, userId, anonymousProfileDto);
