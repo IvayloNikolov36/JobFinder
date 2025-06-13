@@ -17,5 +17,7 @@ namespace JobFinder.Services.CV
         Task<string> GetOwnerId(string id);
 
         Task ValidateApplicationIsSentForCurrentUserJobAd(string cvId, int jobAdId, string currentUserId);
+
+        Task<byte[]> GeneratePdf(string id, string userId);
     }
 }

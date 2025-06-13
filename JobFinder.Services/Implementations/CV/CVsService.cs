@@ -1,10 +1,12 @@
-﻿using JobFinder.Services.CV;
-using AutoMapper;
-using JobFinder.Web.Models.CVModels;
+﻿using AutoMapper;
+using JobFinder.Business.CourseCertificatesInfo;
 using JobFinder.Common.Exceptions;
 using JobFinder.DataAccess.UnitOfWork;
+using JobFinder.Services.CV;
 using JobFinder.Transfer.DTOs.CV;
-using JobFinder.Business.CourseCertificatesInfo;
+using JobFinder.Web.Models.CVModels;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JobFinder.Services.Implementations.CV
 {
@@ -12,15 +14,18 @@ namespace JobFinder.Services.Implementations.CV
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IPdfGenerator pdfGenerator;
         private readonly ICourseCertificateInfoRules courceCertificateInfoRules;
 
         public CVsService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
+            IPdfGenerator pdfGenerator,
             ICourseCertificateInfoRules courceCertificateInfoRules)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.pdfGenerator = pdfGenerator;
             this.courceCertificateInfoRules = courceCertificateInfoRules;
         }
 
@@ -110,6 +115,280 @@ namespace JobFinder.Services.Implementations.CV
             }
 
             return;
+        }
+
+        public async Task<byte[]> GeneratePdf(string id, string userId)
+        {
+            MyCvDataViewModel data = await this.GetOwnCvData(id, userId);
+
+            StringBuilder sb = new();
+
+            sb.AppendFormat(@$"
+                <html>
+                    <head></head>
+                    <body>
+                        <div class='header'>
+                            <h1>Curriculum Vitae</h1>
+                        </div>
+            ");
+
+            this.AppendPersonalInfo(sb, data.PersonalInfo);
+            this.AppendWorkExperienceInfo(sb, data.WorkExperiences);
+            this.AppendEducationInfo(sb, data.Educations);
+
+            sb.Append(@"
+                <table align='center'>
+                    <tr>
+                        <th>Personal skills and competences</th>
+                        <th></th>
+                    </tr>
+            ");
+
+            this.AppendLanguagesInfo(sb, data.LanguagesInfo);
+            this.AppendSkillsInfo(sb, data.Skills);
+            this.AppendCoursesInfo(sb, data.CourseCertificates);
+
+            sb.Append("</table>");
+
+            sb.Append(@"</body>
+                        </html>");
+
+            byte[] cvData = pdfGenerator.Generate(sb.ToString());
+
+            return cvData;
+        }
+
+        private void AppendPersonalInfo(StringBuilder sb, PersonalInfoViewModel personalInfo)
+        {
+            sb.AppendLine(@$"
+                <table align='center'>
+                    <tr>
+                        <th>Personal Details</th>
+                        <th></th>
+                    </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        {this.GetPersonalInfoFullName(personalInfo)}
+                    </td>
+                </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Phone</td>
+                    <td>{personalInfo.Phone}</td>
+                </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Email</td>
+                    <td>{personalInfo.Email}</td>
+                </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Citizenship</td>
+                    <td>{personalInfo.Citizenship}</td>
+                </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>I live in</td>
+                    <td>{personalInfo.City}, {personalInfo.Country}</td>
+                </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Gender</td>
+                    <td>{personalInfo.Gender}</td>
+                </tr>
+            ");
+
+            sb.Append("</table>");
+        }
+
+        private string GetPersonalInfoFullName(PersonalInfoViewModel personalInfo)
+        {
+            return $"{personalInfo.FirstName} {personalInfo.MiddleName} {personalInfo.LastName}";
+        }
+
+        private void AppendCoursesInfo(StringBuilder sb, IEnumerable<CourseInfoViewModel> courseCertificates)
+        {
+            foreach (CourseInfoViewModel cs in courseCertificates)
+            {
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>{cs.CourseName}</td>
+                        <td>{cs.CertificateUrl}</td>
+                    </tr>
+                ");
+            }
+        }
+
+        private void AppendSkillsInfo(StringBuilder sb, SkillsViewModel skills)
+        {
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Computer skills and competences</td>
+                    <td>{skills.ComputerSkills}</td>
+                </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Other skills and competences</td>
+                    <td>{skills.OtherSkills}</td>
+                </tr>
+            ");
+
+            sb.AppendFormat(@$"
+                <tr>
+                    <td>Driving license</td>
+                    <td></td>
+                </tr>
+            ");
+        }
+
+        private void AppendLanguagesInfo(StringBuilder sb, IEnumerable<LanguageInfoViewModel> languagesInfo)
+        {
+            foreach (LanguageInfoViewModel l in languagesInfo)
+            {
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Language</td>
+                        <td>{l.LanguageType}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Comprehension</td>
+                        <td>{l.ComprehensionLevel.Name}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Speaking</td>
+                        <td>{l.SpeakingLevel.Name}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Writing</td>
+                        <td>{l.WritingLevel.Name}</td>
+                    </tr>
+                ");
+            }
+        }
+
+        private void AppendEducationInfo(StringBuilder sb, IEnumerable<EducationViewModel> educationInfo)
+        {
+            sb.Append(@"
+                <table align='center'>
+                    <tr>
+                        <th>Education</th>
+                        <th></th>
+                    </tr>
+            ");
+
+            foreach (EducationViewModel e in educationInfo)
+            {
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Dates</td>
+                        <td>{e.FromDate} - {e.ToDate}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Principal subjects/occupational skills covered</td>
+                        <td>{e.MainSubjects}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Name and type of organisation providing education and training</td>
+                        <td>{e.Organization}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Location</td>
+                        <td>{e.Location}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Level</td>
+                        <td>{e.Major}</td>
+                    </tr>
+                ");
+            }
+
+            sb.Append("</table>");
+        }
+
+        private void AppendWorkExperienceInfo(StringBuilder sb, IEnumerable<WorkExperienceViewModel> workExperienceinfo)
+        {
+            sb.Append(@"<table align='center'>
+                            <tr>
+                                <th>Work Experience</th>
+                                <th></th>
+                            </tr>");
+
+            foreach (WorkExperienceViewModel we in workExperienceinfo)
+            {
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Dates</td>
+                        <td>{we.FromDate} - {we.ToDate}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Occupation or position held</td>
+                        <td>{we.JobTitle}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Name of employer</td>
+                        <td>{we.Organization}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Location</td>
+                        <td>{we.Location}</td>
+                    </tr>
+                ");
+
+                sb.AppendFormat(@$"
+                    <tr>
+                        <td>Type of business</td>
+                        <td>{we.BusinessSector}</td>
+                    </tr>
+                ");
+            }
+
+            sb.Append("</table>");
         }
     }
 }
