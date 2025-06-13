@@ -4,7 +4,7 @@ namespace JobFinder.Business.CurriculumVitaes;
 
 public class CurriculumVitaesRules : ICurriculumVitaesRules
 {
-    public void ValidateAnonymousProfileCreation(bool hasActivatedAnonymousProfile)
+    public void ValidateAnonymousProfileCanBeCreated(bool hasActivatedAnonymousProfile)
     {
         if (hasActivatedAnonymousProfile)
         {

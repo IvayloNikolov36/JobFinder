@@ -2,5 +2,5 @@
 
 public interface ICurriculumVitaesRules
 {
-    void ValidateAnonymousProfileCreation(bool hasActivatedAnonymousProfile);
+    void ValidateAnonymousProfileCanBeCreated(bool hasActivatedAnonymousProfile);
 }
