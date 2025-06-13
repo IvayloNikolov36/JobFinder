@@ -16,7 +16,11 @@ public class JobAdDetailsForSubscriberDTO
 
     public string JobEngagementName { get; set; }
 
-    public string Salary { get; set; }
+    public int? MinSalary { get; set; }
+
+    public int? MaxSalary { get; set; }
+
+    public string CurrencyName { get; set; }
 
     public bool Intership { get; set; }
 }

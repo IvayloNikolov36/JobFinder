@@ -21,10 +21,6 @@ public partial class JobAdvertisementEntity : IMapFrom<JobAdCreateDTO>, IHaveCus
             .ForMember(dto => dto.Location, m => m.MapFrom(e => e.Location.Name));
 
         configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsForSubscriberDTO>()
-            // TODO: move to a Business Rule
-            .ForMember(dto => dto.Salary, o => o.MapFrom(e => e.MinSalary.HasValue
-                ? $"{e.MinSalary}-{e.MaxSalary} {e.Currency.Name}"
-                : null))
             .ForMember(dto => dto.Location, o => o.MapFrom(e => e.Location.Name))
             .ForMember(dto => dto.Company, o => o.MapFrom(e => e.Publisher));
 

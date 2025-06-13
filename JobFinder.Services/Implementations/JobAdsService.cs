@@ -88,7 +88,14 @@ namespace JobFinder.Services.Implementations
                 .JobAdRepository
                 .GetDetailsForSubscriber(jobAdId);
 
-            return this.mapper.Map<JobAdDetailsForSubscriber>(detailsDto);
+            JobAdDetailsForSubscriber model = this.mapper.Map<JobAdDetailsForSubscriber>(detailsDto);
+
+            model.Salary = this.jobAdsRules.GenerateSalaryText(
+                detailsDto.MinSalary,
+                detailsDto.MaxSalary,
+                detailsDto.CurrencyName);
+
+            return model;
         }
 
         public async Task DeactivateAds()

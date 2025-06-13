@@ -83,7 +83,6 @@ namespace JobFinder.Services.Implementations
             return new PreviewInfoViewModel(previewDate);
         }
 
-        // TODO: candidate for a service filter
         private async Task ValidateTheUserIsTheJobAdPublisher(string userId, int jobAdId)
         {            
             string jobAdPublisherId = await this.unitOfWork

@@ -65,5 +65,15 @@ namespace JobFinder.Business.JobAds
         {
             return DaysExpiration;
         }
+
+        public string GenerateSalaryText(int? minSalary, int? maxSalary, string currencyName)
+        {
+            if (minSalary.HasValue && maxSalary.HasValue && currencyName is not null)
+            {
+                return  $"{minSalary}-{maxSalary} {currencyName}";
+            }
+
+            return string.Empty;
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace JobFinder.Business.JobAds
         void ValidateIntership(bool intership, int jobEngagementId);
 
         int GetDaysExpiration();
+
+        string GenerateSalaryText(int? minSalary, int? maxSalary, string currencyName);
     }
 }
