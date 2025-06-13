@@ -22,20 +22,9 @@ public partial class CurriculumVitaeEntity : IMapFrom<CVCreateDTO>,
                 .Where(cs => cs.IncludeInAnonymousProfile == true)))
             .ForMember(dto => dto.SkillsInfo, o => o.MapFrom(e => e.Skills));
 
-
         configuration.CreateMap<CurriculumVitaeEntity, MyAnonymousProfileDataDTO>()
-            .ForMember(dto => dto.ProfileAppearanceCriterias, o => o.MapFrom(e => e.AnonymousProfile.Appearance))
-            // TODO: reuse the mapping from above
-            .ForMember(dto => dto.WorkExperienceInfo, o => o.MapFrom(e => e.WorkExperiences
-                .Where(we => we.IncludeInAnonymousProfile == true)))
-            .ForMember(dto => dto.EducationInfo, o => o.MapFrom(e => e.Educations
-                .Where(e => e.IncludeInAnonymousProfile == true)))
-            .ForMember(dto => dto.LanguagesInfo, o => o.MapFrom(e => e.LanguagesInfo
-                .Where(l => l.IncludeInAnonymousProfile == true)))
-            .ForMember(dto => dto.CoursesInfo, o => o.MapFrom(e => e.CourseCertificates
-                .Where(cs => cs.IncludeInAnonymousProfile == true)))
-            .ForMember(dto => dto.SkillsInfo, o => o.MapFrom(e => e.Skills));
-
+            .IncludeBase<CurriculumVitaeEntity, AnonymousProfileDataDTO>()
+            .ForMember(dto => dto.ProfileAppearanceCriterias, o => o.MapFrom(e => e.AnonymousProfile.Appearance));
 
         configuration.CreateMap<CurriculumVitaeEntity, CVListingDTO>()
             .ForMember(dto => dto.AnonymousProfileActivated, o => o.MapFrom(e => e.AnonymousProfile != null));
