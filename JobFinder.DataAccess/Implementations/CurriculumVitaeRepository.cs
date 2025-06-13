@@ -30,18 +30,21 @@ public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>
     public async Task Create(string userId, CVCreateDTO cvData)
     {
         CurriculumVitaeEntity cvEntity = new();
-        string id = cvEntity.Id;
 
         this.mapper.Map(cvData, cvEntity);
-        cvEntity.Id = id; // TODO: fix this
 
         if (cvData.Skills.DrivingLicenseCategoryIds.Any())
         {
             cvEntity.Skills.HasDrivingLicense = true;
+
             cvEntity.Skills.SkillsInfoDrivingCategories
                 .AddRange(
-                    cvData.Skills.DrivingLicenseCategoryIds
-                    .Select(dcId => new SkillsInfoDrivingCategoryEntity { DrivingCategoryId = dcId })
+                    cvData.Skills
+                        .DrivingLicenseCategoryIds
+                        .Select(dcId => new SkillsInfoDrivingCategoryEntity
+                        {
+                            DrivingCategoryId = dcId
+                        })
                 );
         }
 
@@ -63,7 +66,7 @@ public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>
         return userId;
     }
 
-    public async Task<T> GetCvData<T>(string cvId) where T: class
+    public async Task<T> GetCvData<T>(string cvId) where T : class
     {
         return await this.DbSet.AsNoTracking()
             .Where(cv => cv.Id == cvId)

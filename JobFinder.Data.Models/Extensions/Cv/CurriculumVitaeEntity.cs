@@ -6,11 +6,14 @@ using System.Linq;
 
 namespace JobFinder.Data.Models.CV;
 
-public partial class CurriculumVitaeEntity : IMapFrom<CVCreateDTO>,
+public partial class CurriculumVitaeEntity :
     IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
     {
+        configuration.CreateMap<CVCreateDTO, CurriculumVitaeEntity>()
+            .ForMember(e => e.Id, o => o.Ignore());
+
         configuration.CreateMap<CurriculumVitaeEntity, AnonymousProfileDataDTO>()
             .ForMember(dto => dto.WorkExperienceInfo, o => o.MapFrom(e => e.WorkExperiences
                 .Where(we => we.IncludeInAnonymousProfile == true)))
