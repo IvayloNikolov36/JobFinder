@@ -45,10 +45,13 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
 
     public async Task Create(string cvId, string userId, AnonymousProfileCreateDTO anonymousProfileDto)
     {
+        DateTime now = DateTime.UtcNow;
+
         AnonymousProfileAppearanceEntity appearanceEntity = new()
         {
             JobCategoryId = anonymousProfileDto.AppearanceDto.JobCategoryId,
-            PreferredPositions = anonymousProfileDto.AppearanceDto.PreferredPositions
+            PreferredPositions = anonymousProfileDto.AppearanceDto.PreferredPositions,
+            CreatedOn = now
         };
 
         AnonymousProfileAppearanceDTO appearanceDto = anonymousProfileDto.AppearanceDto;
@@ -75,7 +78,8 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         {
             CurriculumVitaeId = cvId,
             UserId = userId,
-            Appearance = appearanceEntity
+            Appearance = appearanceEntity,
+            CreatedOn = now
         };
 
         await this.DbSet.AddAsync(anonymousProfileEntity);
@@ -116,6 +120,10 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         IEnumerable<AnonymousProfileListingDTO> data = await this.DbSet.AsNoTracking()
             .Where(ap => ap.Appearance.JobCategoryId == jobAdCriterias.JobCategoryId)
             .Where(ap => ap.Appearance
+                .JobEngagements
+                .Select(apje => apje.JobEngagementId)
+                .Contains(jobAdCriterias.JobEngagementId))
+            .Where(ap => ap.Appearance
                 .Cities
                 .Select(apc => apc.CityId)
                 .Contains(jobAdCriterias.CityId))
@@ -136,7 +144,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
             .Select(ap => new AnonymousProfileListingDTO
             {
                 Id = ap.Id,
-                ActivatedDate = ap.CreatedOn
+                ActivateDate = ap.CreatedOn
             })
             .ToListAsync();
 

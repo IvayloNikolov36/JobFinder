@@ -34,6 +34,7 @@ public partial class JobAdvertisementEntity : IMapFrom<JobAdCreateDTO>, IHaveCus
                 .Count()));
 
         configuration.CreateMap<JobAdvertisementEntity, JobAdCriteriasDTO>()
+            .ForMember(dto => dto.CityId, o => o.MapFrom(e => e.LocationId))
             .ForMember(dto => dto.SoftSkills, o => o.MapFrom(e => e.JobAdSoftSkills.Select(jass => jass.SoftSkillId)))
             .ForMember(dto => dto.ITAreas, o => o.MapFrom(e => e.JobAdITAreas.Select(jass => jass.ITAreaId)))
             .ForMember(dto => dto.TechStacks, o => o.MapFrom(e => e.JobAdTechStacks.Select(jass => jass.TechStackId)));
