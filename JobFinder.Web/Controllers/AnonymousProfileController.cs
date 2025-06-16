@@ -55,9 +55,11 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("view/{id:guid}")]
+        [Route("view/{id:guid}/{jobAdId:int}")]
         [Authorize(Roles = CompanyRole)]
-        public async Task<IActionResult> ViewAnonymousProfile([FromRoute] Guid id)
+        [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
+        [ServiceFilter(typeof(ValidateCompanyCanViewAnonymousProfile))]
+        public async Task<IActionResult> AnonymousProfilePreview([FromRoute] Guid id, [FromRoute] int jobAdId)
         {
             AnonymousProfileDataViewModel anonymousProfile = await this.anonymousProfileService
                 .GetAnonymousProfile(id.ToString());

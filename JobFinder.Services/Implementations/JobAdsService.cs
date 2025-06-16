@@ -126,6 +126,15 @@ namespace JobFinder.Services.Implementations
                 .Map<IEnumerable<AnonymousProfileListingViewModel>>(anonymousProfiles);
         }
 
+        public async Task<JobAdCriteriasViewModel> GetJobAdCriterias(int jobAdId)
+        {
+            JobAdCriteriasDTO jobAdCriterias = await this.unitOfWork
+                .JobAdRepository
+                .GetJobAdCriterias(jobAdId);
+
+            return this.mapper.Map<JobAdCriteriasViewModel>(jobAdCriterias);
+        }
+
         private async Task<IEnumerable<CompanyJobAdViewModel>> GetFilteredCompanyAds(string userId, bool? active)
         {
             IEnumerable<CompanyJobAdDTO> jobAds = await this.unitOfWork

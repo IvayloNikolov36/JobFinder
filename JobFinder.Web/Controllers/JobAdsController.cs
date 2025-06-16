@@ -80,11 +80,11 @@ namespace JobFinder.Web.Controllers
         [Route("{id}")]
         [Authorize(Roles = CompanyRole)]
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
-        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] JobAdEditModel model)
+        public async Task<ActionResult> Update([FromRoute] int jobAdId, [FromBody] JobAdEditModel model)
         {
             string userId = this.User.GetCurrentUserId();
 
-            await this.adsService.Update(id, userId, model);
+            await this.adsService.Update(jobAdId, userId, model);
 
             return this.Ok();
         }

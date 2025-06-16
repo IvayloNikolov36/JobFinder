@@ -22,5 +22,7 @@ public interface IAnonymousProfileRepository
 
     Task<IEnumerable<AnonymousProfileListingDTO>> GetProfilesRelevantToJobAd(JobAdCriteriasDTO jobAdCriterias);
 
+    Task<bool> IsAnonymousProfileRelevantForJobAd(string id, JobAdCriteriasDTO jobAdCriterias);
+
     Task<bool> HasAnonymousProfile(string userId);
 }

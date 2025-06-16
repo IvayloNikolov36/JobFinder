@@ -26,5 +26,7 @@ namespace JobFinder.Services
         Task<string> GetPublisherId(int jobAdId);
 
         Task<IEnumerable<AnonymousProfileListingViewModel>> GetRelevantAnonymousProfiles(int jobAdId);
+
+        Task<JobAdCriteriasViewModel> GetJobAdCriterias(int jobAdId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using JobFinder.Web.Models.AnonymousProfile;
+using JobFinder.Web.Models.JobAds;
 
 namespace JobFinder.Services;
 
@@ -13,4 +14,6 @@ public interface IAnonymousProfileService
     Task<MyAnonymousProfileDataViewModel> GetMyAnonymousProfileData(string userId);
 
     Task<string> GetOwnerId(string id);
+
+    Task<bool> IsRelevant(string id, JobAdCriteriasViewModel jobAdCriterias);
 }

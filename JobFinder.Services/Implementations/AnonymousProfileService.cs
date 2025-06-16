@@ -4,7 +4,9 @@ using JobFinder.Business.CurriculumVitaes;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
+using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.AnonymousProfile;
+using JobFinder.Web.Models.JobAds;
 
 namespace JobFinder.Services.Implementations;
 
@@ -102,5 +104,14 @@ public class AnonymousProfileService : IAnonymousProfileService
     public async Task<string> GetOwnerId(string id)
     {
         return await this.unitOfWork.AnonymousProfileRepository.GetOwnerId(id);
+    }
+
+    public async Task<bool> IsRelevant(string id, JobAdCriteriasViewModel jobAdCriterias)
+    {
+        return await this.unitOfWork
+            .AnonymousProfileRepository
+            .IsAnonymousProfileRelevantForJobAd(
+                id,
+                this.mapper.Map<JobAdCriteriasDTO>(jobAdCriterias));
     }
 }

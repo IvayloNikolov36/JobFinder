@@ -5,7 +5,8 @@ using System.Security.Claims;
 
 namespace JobFinder.Web.Infrastructure.Filters;
 
-public class ValidateJobAdBelongsToUser : ActionFilterAttribute
+public class 
+    ValidateJobAdBelongsToUser : ActionFilterAttribute
 {
     private readonly IJobAdsService jobAdService;
 
@@ -23,7 +24,7 @@ public class ValidateJobAdBelongsToUser : ActionFilterAttribute
 
         object id = context
             .ActionArguments
-            .FirstOrDefault(aa => aa.Key.ToLower().Contains("id")).Value;
+            .FirstOrDefault(aa => aa.Key.ToLower().Equals("jobadid")).Value;
 
         if (id is not int jobAdId)
         {

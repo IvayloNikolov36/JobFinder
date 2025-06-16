@@ -7,6 +7,7 @@ using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
 using JobFinder.Transfer.DTOs.JobAd;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace JobFinder.DataAccess.Implementations;
 
@@ -118,29 +119,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     public async Task<IEnumerable<AnonymousProfileListingDTO>> GetProfilesRelevantToJobAd(JobAdCriteriasDTO jobAdCriterias)
     {
         IEnumerable<AnonymousProfileListingDTO> data = await this.DbSet.AsNoTracking()
-            .Where(ap => ap.Appearance.JobCategoryId == jobAdCriterias.JobCategoryId)
-            .Where(ap => ap.Appearance
-                .JobEngagements
-                .Select(apje => apje.JobEngagementId)
-                .Contains(jobAdCriterias.JobEngagementId))
-            .Where(ap => ap.Appearance
-                .Cities
-                .Select(apc => apc.CityId)
-                .Contains(jobAdCriterias.CityId))
-            .Where(ap => ap.Appearance
-                .JobEngagements
-                .Select(je => je.JobEngagementId)
-                .Contains(jobAdCriterias.JobEngagementId))
-            .Where(ap => jobAdCriterias
-                .SoftSkills
-                .All(adSkill => ap.Appearance
-                    .SoftSkills
-                    .Select(ss => ss.SoftSkillId)
-                    .Contains(adSkill)))
-            .Where(ap => ap.Appearance
-                .WorkplaceTypes
-                .Select(apw => apw.WorkplaceTypeId)
-                .Contains(jobAdCriterias.WorkplaceTypeId))
+            .Where(this.ExpressionForAnonymousProfileJobAdRelevance(jobAdCriterias))
             .Select(ap => new AnonymousProfileListingDTO
             {
                 Id = ap.Id,
@@ -149,6 +128,46 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
             .ToListAsync();
 
         return data;
+    }
+
+    public async Task<bool> IsAnonymousProfileRelevantForJobAd(string id, JobAdCriteriasDTO jobAdCriterias)
+    {
+        bool isRelevant = await this.DbSet
+            .Where(ap => ap.Id == id)
+            .Where(this.ExpressionForAnonymousProfileJobAdRelevance(jobAdCriterias))
+            .AnyAsync();
+
+        return isRelevant;
+    }
+
+    private Expression<Func<AnonymousProfileEntity, bool>> ExpressionForAnonymousProfileJobAdRelevance(JobAdCriteriasDTO jobAdCriterias)
+    {
+        Expression<Func<AnonymousProfileEntity, bool>> expr = (AnonymousProfileEntity ap) =>
+            ap.Appearance.JobCategoryId == jobAdCriterias.JobCategoryId
+            && ap.Appearance
+                .JobEngagements
+                .Select(apje => apje.JobEngagementId)
+                .Contains(jobAdCriterias.JobEngagementId)
+            && ap.Appearance
+                .Cities
+                .Select(apc => apc.CityId)
+                .Contains(jobAdCriterias.CityId)
+            && ap.Appearance
+                .JobEngagements
+                .Select(je => je.JobEngagementId)
+                .Contains(jobAdCriterias.JobEngagementId)
+            && jobAdCriterias
+                .SoftSkills
+                .All(adSkill => ap.Appearance
+                    .SoftSkills
+                    .Select(ss => ss.SoftSkillId)
+                    .Contains(adSkill))
+            && ap.Appearance
+                .WorkplaceTypes
+                .Select(apw => apw.WorkplaceTypeId)
+                .Contains(jobAdCriterias.WorkplaceTypeId);
+
+        return expr;
     }
 
     private IEnumerable<AnonymousProfileAppearanceWorkplaceTypeEntity> GetWorkingplaceTypesEntities(
