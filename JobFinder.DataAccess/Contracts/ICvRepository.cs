@@ -1,8 +1,8 @@
-﻿using JobFinder.Transfer.DTOs.CV;
+﻿using JobFinder.Transfer.DTOs.Cv;   
 
 namespace JobFinder.DataAccess.Contracts;
 
-public interface ICurriculumVitaeRepository
+public interface ICvRepository
 {
     Task<IEnumerable<CVListingDTO>> All(string userId);
 

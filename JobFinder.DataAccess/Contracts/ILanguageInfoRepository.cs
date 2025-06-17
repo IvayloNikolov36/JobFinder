@@ -1,4 +1,4 @@
-﻿using JobFinder.Transfer.DTOs.CV;
+﻿using JobFinder.Transfer.DTOs.Cv;
 
 namespace JobFinder.DataAccess.Contracts;
 

@@ -9,6 +9,6 @@
         public string CandidateId { get; set; }
 
         [Required]
-        public IFormFile CurriculumVitae { get; set; }
+        public IFormFile Cv { get; set; }
     }
 }

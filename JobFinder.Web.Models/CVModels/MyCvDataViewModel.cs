@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System;
 using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 
-namespace JobFinder.Web.Models.CVModels;
+namespace JobFinder.Web.Models.CvModels;
 
 public class MyCvDataViewModel : IMapFrom<MyCvDataDTO>
 {

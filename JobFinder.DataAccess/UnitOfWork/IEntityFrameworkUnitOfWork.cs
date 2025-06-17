@@ -9,7 +9,7 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         IJobAdSubscriptionsRepository JobAdSubscriptionsRepository { get; }
 
-        ICurriculumVitaeRepository CurriculumVitaeRepository { get; }
+        ICvRepository CvRepository { get; }
 
         IPersonalInfoRepository PersonalInfoRepository { get; }
 

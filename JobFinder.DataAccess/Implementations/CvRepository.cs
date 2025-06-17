@@ -1,20 +1,19 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
 using JobFinder.Data.Models.Cv;
-using JobFinder.Data.Models.CV;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
-public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>, ICurriculumVitaeRepository
+public class CvRepository : EfCoreRepository<CurriculumVitaeEntity>, ICvRepository
 {
     private readonly IMapper mapper;
 
-    public CurriculumVitaeRepository(JobFinderDbContext context, IMapper mapper) : base(context)
+    public CvRepository(JobFinderDbContext context, IMapper mapper) : base(context)
     {
         this.mapper = mapper;
     }
@@ -59,7 +58,7 @@ public class CurriculumVitaeRepository : EfCoreRepository<CurriculumVitaeEntity>
             .Select(cv => cv.UserId)
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(userId, "CurriculumVitae");
+        base.ValidateForExistence(userId, "CV");
 
         return userId;
     }

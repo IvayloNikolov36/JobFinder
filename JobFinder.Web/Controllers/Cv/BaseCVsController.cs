@@ -1,4 +1,4 @@
-﻿namespace JobFinder.Web.Controllers.CurriculumVitae
+﻿namespace JobFinder.Web.Controllers.Cv
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

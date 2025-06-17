@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services.CV;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 using JobFinder.Web.Models.Common;
-using JobFinder.Web.Models.CVModels;
+using JobFinder.Web.Models.CvModels;
 
-namespace JobFinder.Services.Implementations.CV
+namespace JobFinder.Services.Implementations.Cv
 {
     public class WorkExperienceInfosService : IWorkExperienceInfosService
     {

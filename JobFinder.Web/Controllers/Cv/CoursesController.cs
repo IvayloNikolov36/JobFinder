@@ -1,16 +1,16 @@
-﻿using JobFinder.Services.CV;
+﻿using JobFinder.Services.Cv;
 using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Models.Common;
-using JobFinder.Web.Models.CVModels;
+using JobFinder.Web.Models.CvModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobFinder.Web.Controllers.CurriculumVitae
+namespace JobFinder.Web.Controllers.Cv
 {
     public class CoursesController : BaseCVsController
     {
-        private readonly ICoursesCertificatesService coursesService;
+        private readonly ICoursesInfoService coursesService;
 
-        public CoursesController(ICoursesCertificatesService coursesService)
+        public CoursesController(ICoursesInfoService coursesService)
         {
             this.coursesService = coursesService;
         }

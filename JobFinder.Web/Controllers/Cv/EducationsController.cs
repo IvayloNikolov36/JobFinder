@@ -1,19 +1,16 @@
-﻿namespace JobFinder.Web.Controllers.CurriculumVitae
-{
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.CVModels;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services.CV;
+using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.CvModels;
+using Microsoft.AspNetCore.Mvc;
 
+namespace JobFinder.Web.Controllers.Cv
+{
     public class EducationsController : BaseCVsController
     {
-        private readonly IEducationInfosService educationService;
+        private readonly IEducationsInfoService educationService;
 
-        public EducationsController(IEducationInfosService educationService)
+        public EducationsController(IEducationsInfoService educationService)
         {
             this.educationService = educationService;
         }

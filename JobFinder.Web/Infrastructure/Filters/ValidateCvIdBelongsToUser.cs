@@ -1,17 +1,15 @@
-﻿namespace JobFinder.Web.Infrastructure.Filters
-{
-    using JobFinder.Services.CV;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services.Cv;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
 
+namespace JobFinder.Web.Infrastructure.Filters
+{
     public class ValidateCvIdBelongsToUser : ActionFilterAttribute
     {
-        private readonly ICVsService cvsService;
+        private readonly ICvsService cvsService;
 
-        public ValidateCvIdBelongsToUser(ICVsService cvsService)
+        public ValidateCvIdBelongsToUser(ICvsService cvsService)
         {
             this.cvsService = cvsService;
         }

@@ -1,9 +1,9 @@
 ﻿using JobFinder.Services.CV;
 using JobFinder.Web.Infrastructure.Filters;
-using JobFinder.Web.Models.CVModels;
+using JobFinder.Web.Models.CvModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobFinder.Web.Controllers.CurriculumVitae
+namespace JobFinder.Web.Controllers.Cv
 {
     public class SkillsController : BaseCVsController
     {

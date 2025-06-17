@@ -1,10 +1,11 @@
 ﻿using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Common;
+using JobFinder.Data.Models.Cv;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace JobFinder.Data.Models.CV
+namespace JobFinder.Data.Models.Cv
 {    
     public partial class CurriculumVitaeEntity : BaseEntity<string>
     {

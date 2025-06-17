@@ -12,11 +12,13 @@ namespace JobFinder.Web.Models.AdApplication
 
         public string Applicant { get; set; }
 
-        public string CurriculumVitaeId { get; set; }
+        // TODO: use Dto
 
-        public string CurriculumVitaeName { get; set; }
+        public string CvId { get; set; }
 
-        public string CurriculumVitaePictureUrl { get; set; }
+        public string CvName { get; set; }
+
+        public string CvPictureUrl { get; set; }
 
         public string Email { get; set; }
 

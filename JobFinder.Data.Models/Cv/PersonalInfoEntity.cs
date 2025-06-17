@@ -3,13 +3,12 @@ using JobFinder.Data.Models.Nomenclature;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace JobFinder.Data.Models.CV
+namespace JobFinder.Data.Models.Cv
 {
     public partial class PersonalInfoEntity : BaseEntity<int>
     {
         [Required]
         public string CurriculumVitaeId { get; set; }
-
         public CurriculumVitaeEntity CurriculumVitae { get; set; }
 
         [Required]
@@ -33,7 +32,6 @@ namespace JobFinder.Data.Models.CV
 
         [Required]
         public int GenderId { get; set; }
-
         public GenderEntity Gender { get; set; }
 
         public DateTime Birthdate { get; set; }

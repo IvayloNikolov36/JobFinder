@@ -1,8 +1,8 @@
 ﻿using JobFinder.Common.Exceptions;
 
-namespace JobFinder.Business.CurriculumVitaes;
+namespace JobFinder.Business.Cv;
 
-public class CurriculumVitaesRules : ICurriculumVitaesRules
+public class CvRules : ICvRules
 {
     public void ValidateAnonymousProfileCanBeCreated(bool hasActivatedAnonymousProfile)
     {

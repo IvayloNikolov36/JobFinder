@@ -6,9 +6,9 @@ public class JobAdApplicationDTO
 
     public int JobAdId { get; set; }
 
-    public string CurriculumVitaeId { get; set; }
+    public string CvId { get; set; }
 
-    public string CurriculumVitaeName { get; set; }
+    public string CvName { get; set; }
 
     public string JobTitle { get; set; }
 

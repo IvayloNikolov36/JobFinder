@@ -1,5 +1,5 @@
 ﻿using JobFinder.Data.Models.Common;
-using JobFinder.Data.Models.CV;
+using JobFinder.Data.Models.Cv;
 using System;
 
 namespace JobFinder.Data.Models.AnonymousProfile;

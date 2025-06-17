@@ -1,4 +1,4 @@
-﻿namespace JobFinder.Transfer.DTOs.CV;
+﻿namespace JobFinder.Transfer.DTOs.Cv;
 
 public class CVListingDTO
 {

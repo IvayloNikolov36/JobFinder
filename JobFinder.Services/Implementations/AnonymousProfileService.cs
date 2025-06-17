@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Business.AnonymousProfile;
-using JobFinder.Business.CurriculumVitaes;
+using JobFinder.Business.Cv;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
@@ -14,13 +14,13 @@ public class AnonymousProfileService : IAnonymousProfileService
 {
     private readonly IEntityFrameworkUnitOfWork unitOfWork;
     private readonly IMapper mapper;
-    private readonly ICurriculumVitaesRules cvRules;
+    private readonly ICvRules cvRules;
     private readonly IAnonymousProfileRules anonymousProfileRules;
 
     public AnonymousProfileService(
         IEntityFrameworkUnitOfWork unitOfWork,
         IMapper mapper,
-        ICurriculumVitaesRules cvRules,
+        ICvRules cvRules,
         IAnonymousProfileRules anonymousProfileRules)
     {
         this.unitOfWork = unitOfWork;
@@ -56,7 +56,7 @@ public class AnonymousProfileService : IAnonymousProfileService
         AnonymousProfileCreateDTO anonymousProfileDto = new()
         {
             UserId = userId,
-            CurriculumVitaeId = cvId,
+            CvId = cvId,
             AppearanceDto = appearanceDto
         };
 

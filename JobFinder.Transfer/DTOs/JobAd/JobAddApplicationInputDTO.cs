@@ -4,7 +4,7 @@ public class JobAddApplicationInputDTO
 {
     public int JobAdId { get; set; }
 
-    public string CurriculumVitaeId { get; set; }
+    public string CvId { get; set; }
 
     public string ApplicantId { get; set; }
 }

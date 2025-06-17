@@ -3,7 +3,7 @@ using JobFinder.Data.Models.Nomenclature;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace JobFinder.Data.Models.CV
+namespace JobFinder.Data.Models.Cv
 {
     public partial class WorkExperienceInfoEntity : BaseEntity<int>
     {

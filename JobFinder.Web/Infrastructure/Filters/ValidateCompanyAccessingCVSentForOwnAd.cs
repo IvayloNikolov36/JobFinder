@@ -1,4 +1,4 @@
-﻿using JobFinder.Services.CV;
+﻿using JobFinder.Services.Cv;
 using JobFinder.Web.Models.AdApplication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -8,9 +8,9 @@ namespace JobFinder.Web.Infrastructure.Filters
 {
     public class ValidateCompanyAccessingCVSentForOwnAd : ActionFilterAttribute
     {
-        private readonly ICVsService cvsService;
+        private readonly ICvsService cvsService;
 
-        public ValidateCompanyAccessingCVSentForOwnAd(ICVsService cvsService)
+        public ValidateCompanyAccessingCVSentForOwnAd(ICvsService cvsService)
         {
             this.cvsService = cvsService;
         }

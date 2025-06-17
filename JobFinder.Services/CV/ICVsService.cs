@@ -1,8 +1,8 @@
-﻿using JobFinder.Web.Models.CVModels;
+﻿using JobFinder.Web.Models.CvModels;
 
-namespace JobFinder.Services.CV
+namespace JobFinder.Services.Cv
 {
-    public interface ICVsService
+    public interface ICvsService
     {
         Task<string> CreateAsync(CVCreateInputModel cvModel, string userId);
 

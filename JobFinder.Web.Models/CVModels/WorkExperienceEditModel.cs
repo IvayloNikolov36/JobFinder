@@ -1,9 +1,9 @@
 ﻿using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace JobFinder.Web.Models.CVModels
+namespace JobFinder.Web.Models.CvModels
 {
     public class WorkExperienceEditModel : IMapTo<WorkExperienceInfoEditDTO>
     {

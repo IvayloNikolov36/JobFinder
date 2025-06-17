@@ -2,7 +2,7 @@
 using JobFinder.Data.Models.Nomenclature;
 using System.ComponentModel.DataAnnotations;
 
-namespace JobFinder.Data.Models.CV
+namespace JobFinder.Data.Models.Cv
 {
     public partial class LanguageInfoEntity : BaseEntity<int>
     {

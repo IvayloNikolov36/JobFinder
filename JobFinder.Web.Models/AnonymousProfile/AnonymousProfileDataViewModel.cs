@@ -1,6 +1,6 @@
 ﻿using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
-using JobFinder.Web.Models.CVModels;
+using JobFinder.Web.Models.CvModels;
 using System.Collections.Generic;
 
 namespace JobFinder.Web.Models.AnonymousProfile;

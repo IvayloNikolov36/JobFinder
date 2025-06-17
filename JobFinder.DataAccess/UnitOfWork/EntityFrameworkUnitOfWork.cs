@@ -15,7 +15,7 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         private ICompanySubscriptionsRepository companySubscriptionsRepository;
         private IJobAdSubscriptionsRepository jobAdSubscriptionsRepository;
-        private ICurriculumVitaeRepository curriculumVitaeRepository;
+        private ICvRepository curriculumVitaeRepository;
         private IWorkExperienceRepository workExperienceRepository;
         private IEducationInfoRepository educationInfoRepository;
         private ILanguageInfoRepository languageInfoRepository;
@@ -54,11 +54,11 @@ namespace JobFinder.DataAccess.UnitOfWork
             }
         }
 
-        public ICurriculumVitaeRepository CurriculumVitaeRepository
+        public ICvRepository CvRepository
         {
             get
             {
-                this.curriculumVitaeRepository ??= new CurriculumVitaeRepository(this.dbContext, this.mapper);
+                this.curriculumVitaeRepository ??= new CvRepository(this.dbContext, this.mapper);
                 return this.curriculumVitaeRepository;
             }
         }

@@ -1,7 +1,6 @@
 ﻿using JobFinder.Data.Models;
 using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Cv;
-using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
 using JobFinder.Data.Models.Subscriptions;
 using JobFinder.Data.Models.ViewsModels;

@@ -10,7 +10,7 @@ namespace JobFinder.Web.Models.AdApplication
         public int JobAdId { get; set; }
 
         [Required]
-        public string CurriculumVitaeId { get; set; }
+        public string CvId { get; set; }
 
         public string ApplicantId { get; set; }
     }

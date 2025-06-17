@@ -1,5 +1,5 @@
 ﻿using JobFinder.Common.Exceptions;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 using System.Collections.Generic;
 
 namespace JobFinder.Business.CourseCertificatesInfo

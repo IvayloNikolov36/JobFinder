@@ -21,7 +21,7 @@ namespace JobFinder.Web.Models.Account
         [Url]
         public string Logo { get; set; }
 
-        public void CreateMappings(IProfileExpression configuration)
+        public new void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<RegisterCompanyModel, CompanyEntity>()
                 .ForMember(e => e.Name, o => o.MapFrom(m => m.CompanyName));

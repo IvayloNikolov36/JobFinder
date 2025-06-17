@@ -1,14 +1,11 @@
-﻿namespace JobFinder.Web.Controllers.CurriculumVitae
-{
-    using JobFinder.Services.CV;
-    using JobFinder.Web.Infrastructure.Filters;
-    using JobFinder.Web.Models.Common;
-    using JobFinder.Web.Models.CVModels;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services.Cv;
+using JobFinder.Web.Infrastructure.Filters;
+using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.CvModels;
+using Microsoft.AspNetCore.Mvc;
 
+namespace JobFinder.Web.Controllers.Cv
+{
     public class LanguagesInfoController : BaseCVsController
     {
         private readonly ILanguageInfosService languagesInfosService;

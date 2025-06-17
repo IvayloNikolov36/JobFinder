@@ -1,7 +1,6 @@
-﻿namespace JobFinder.Web.Models.CVModels
+﻿namespace JobFinder.Web.Models.CvModels;
+
+public class EducationDeleteModel
 {
-    public class EducationDeleteModel
-    {
-        public int EducationId { get; set; }
-    }
+    public int EducationId { get; set; }
 }

@@ -1,8 +1,8 @@
-﻿using JobFinder.Data.Models.CV;
+﻿using JobFinder.Data.Models.Cv;
 using JobFinder.Services.Mappings;
 using System.Collections.Generic;
 
-namespace JobFinder.Web.Models.CVModels
+namespace JobFinder.Web.Models.CvModels
 {
     public class CvPreviewDataViewModel : IMapFrom<CurriculumVitaeEntity>
     {

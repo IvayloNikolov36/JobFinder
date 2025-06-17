@@ -1,5 +1,4 @@
 ﻿using JobFinder.Data.Models.Common;
-using JobFinder.Data.Models.CV;
 using JobFinder.Data.Models.Nomenclature;
 using System.ComponentModel.DataAnnotations;
 

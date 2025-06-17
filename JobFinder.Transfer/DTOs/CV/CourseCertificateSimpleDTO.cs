@@ -1,6 +1,6 @@
 ﻿using JobFinder.Transfer.Common;
 
-namespace JobFinder.Transfer.DTOs.CV;
+namespace JobFinder.Transfer.DTOs.Cv;
 
 public class CourseCertificateSimpleDTO : IIdentity
 {

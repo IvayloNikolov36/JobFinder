@@ -1,4 +1,4 @@
-﻿using JobFinder.Data.Models.CV;
+﻿using JobFinder.Data.Models.Cv;
 using JobFinder.Data.Models.Subscriptions;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace JobFinder.Data.Models
     {
         public UserEntity()
         {        
-            this.CurriculumVitaes = new List<CurriculumVitaeEntity>();
+            this.Cvs = new List<CurriculumVitaeEntity>();
             this.JobCategorySubscriptions = new List<JobsSubscriptionEntity>();
             this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
             this.JobAdApplications = new List<JobAdApplicationEntity>();
@@ -39,7 +39,7 @@ namespace JobFinder.Data.Models
 
         public CompanyEntity Company { get; set; }
 
-        public ICollection<CurriculumVitaeEntity> CurriculumVitaes { get; set; }
+        public ICollection<CurriculumVitaeEntity> Cvs { get; set; }
 
         public ICollection<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
 

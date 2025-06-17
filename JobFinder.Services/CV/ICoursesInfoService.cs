@@ -1,9 +1,9 @@
 ﻿using JobFinder.Web.Models.Common;
-using JobFinder.Web.Models.CVModels;
+using JobFinder.Web.Models.CvModels;
 
-namespace JobFinder.Services.CV;
+namespace JobFinder.Services.Cv;
 
-public interface ICoursesCertificatesService
+public interface ICoursesInfoService
 {
     Task<IEnumerable<CourseInfoViewModel>> All(string cvId);
 

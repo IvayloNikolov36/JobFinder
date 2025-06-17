@@ -8,11 +8,12 @@ public class JobAdApplicationInfoDTO
 
     public string Applicant { get; set; }
 
-    public string CurriculumVitaeId { get; set; }
+    // TODO: use a DTO
+    public string CvId { get; set; }
 
-    public string CurriculumVitaeName { get; set; }
+    public string CvName { get; set; }
 
-    public string CurriculumVitaePictureUrl { get; set; }
+    public string CvPictureUrl { get; set; }
 
     public string Email { get; set; }
 

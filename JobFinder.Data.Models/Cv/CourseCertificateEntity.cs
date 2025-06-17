@@ -1,7 +1,7 @@
 ﻿using JobFinder.Data.Models.Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace JobFinder.Data.Models.CV
+namespace JobFinder.Data.Models.Cv
 {
     public partial class CourseCertificateEntity : BaseEntity<int>
     {

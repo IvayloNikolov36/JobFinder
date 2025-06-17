@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
-using JobFinder.Data.Models.CV;
+using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;

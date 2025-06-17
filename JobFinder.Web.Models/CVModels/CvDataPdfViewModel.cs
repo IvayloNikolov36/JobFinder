@@ -1,9 +1,9 @@
-﻿namespace JobFinder.Web.Models.CVModels
-{
-    using JobFinder.Services.Mappings;
-    using JobFinder.Data.Models.CV;
-    using System.Collections.Generic;
+﻿using JobFinder.Data.Models.Cv;
+using JobFinder.Services.Mappings;
+using System.Collections.Generic;
 
+namespace JobFinder.Web.Models.CvModels
+{
     public class CvDataPdfViewModel : IMapFrom<CurriculumVitaeEntity>
     {
         public string Name { get; set; }

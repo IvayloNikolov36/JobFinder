@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 using System.Linq;
 
-namespace JobFinder.Data.Models.CV;
+namespace JobFinder.Data.Models.Cv;
 
 public partial class SkillsInfoEntity : IMapFrom<SkillsInfoInputDTO>,
     IMapFrom<SkillsInfoEditDTO>,

@@ -1,12 +1,11 @@
-﻿
-namespace JobFinder.Web.Models.CVModels
-{
-    using AutoMapper;
-    using JobFinder.Data.Models.CV;
-    using JobFinder.Services.Mappings;
-    using System;
-    using System.Collections.Generic;
+﻿using AutoMapper;
+using JobFinder.Data.Models.Cv;
+using JobFinder.Services.Mappings;
+using System;
+using System.Collections.Generic;
 
+namespace JobFinder.Web.Models.CvModels
+{
     public class CvDataViewModel : IHaveCustomMappings
     {
         public string Id { get; set; }

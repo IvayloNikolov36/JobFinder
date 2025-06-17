@@ -2,22 +2,21 @@
 using JobFinder.Business.CourseCertificatesInfo;
 using JobFinder.Common.Exceptions;
 using JobFinder.DataAccess.UnitOfWork;
-using JobFinder.Services.CV;
-using JobFinder.Transfer.DTOs.CV;
-using JobFinder.Web.Models.CVModels;
+using JobFinder.Services.Cv;
+using JobFinder.Transfer.DTOs.Cv;
+using JobFinder.Web.Models.CvModels;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace JobFinder.Services.Implementations.CV
+namespace JobFinder.Services.Implementations.Cv
 {
-    public class CVsService : ICVsService
+    public class CvsService : ICvsService
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IPdfGenerator pdfGenerator;
         private readonly ICourseCertificateInfoRules courceCertificateInfoRules;
 
-        public CVsService(
+        public CvsService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
             IPdfGenerator pdfGenerator,
@@ -32,7 +31,7 @@ namespace JobFinder.Services.Implementations.CV
         public async Task<IEnumerable<CvListingModel>> All(string userId)
         {
             IEnumerable<CVListingDTO> cvDtos = await this.unitOfWork
-                .CurriculumVitaeRepository
+                .CvRepository
                 .All(userId);
 
             return this.mapper.Map<IEnumerable<CvListingModel>>(cvDtos);
@@ -47,7 +46,7 @@ namespace JobFinder.Services.Implementations.CV
 
             CVCreateDTO cvDataDto = this.mapper.Map<CVCreateDTO>(cvModel);
 
-            await this.unitOfWork.CurriculumVitaeRepository.Create(userId, cvDataDto);
+            await this.unitOfWork.CvRepository.Create(userId, cvDataDto);
 
             await this.unitOfWork.SaveChanges<CVCreateDTO, string>(cvDataDto);
 
@@ -56,7 +55,7 @@ namespace JobFinder.Services.Implementations.CV
 
         public async Task<MyCvDataViewModel> GetOwnCvData(string cvId, string userId)
         {
-            MyCvDataDTO cvDataDto = await this.unitOfWork.CurriculumVitaeRepository
+            MyCvDataDTO cvDataDto = await this.unitOfWork.CvRepository
                 .GetCvData<MyCvDataDTO>(cvId);
 
             MyCvDataViewModel cvData = this.mapper.Map<MyCvDataViewModel>(cvDataDto);
@@ -72,7 +71,7 @@ namespace JobFinder.Services.Implementations.CV
         public async Task<CvPreviewDataViewModel> GetUserCvData(string cvId)
         {
             CvPreviewDataViewModel cvData = await this.unitOfWork
-                .CurriculumVitaeRepository
+                .CvRepository
                 .GetCvData<CvPreviewDataViewModel>(cvId);
 
             return cvData;
@@ -93,14 +92,14 @@ namespace JobFinder.Services.Implementations.CV
             // TODO: check it
             //await this.unitOfWork.AnonymousProfileRepository.Delete(cvId);
 
-            await this.unitOfWork.CurriculumVitaeRepository.Delete(cvId);
+            await this.unitOfWork.CvRepository.Delete(cvId);
 
             await this.unitOfWork.SaveChanges();
         }
 
         public async Task<string> GetOwnerId(string cvId)
         {
-            return await this.unitOfWork.CurriculumVitaeRepository.GetUserId(cvId);
+            return await this.unitOfWork.CvRepository.GetUserId(cvId);
         }
 
         public async Task ValidateApplicationIsSentForCurrentUserJobAd(string cvId, int jobAdId, string currentUserId)

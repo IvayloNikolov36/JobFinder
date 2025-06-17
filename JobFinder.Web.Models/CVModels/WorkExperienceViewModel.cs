@@ -1,10 +1,10 @@
-﻿using JobFinder.Data.Models.CV;
+﻿using JobFinder.Data.Models.Cv;
 using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.CV;
+using JobFinder.Transfer.DTOs.Cv;
 using JobFinder.Web.Models.Common;
 using System;
 
-namespace JobFinder.Web.Models.CVModels;
+namespace JobFinder.Web.Models.CvModels;
 
 public class WorkExperienceViewModel : IMapFrom<WorkExperienceInfoEntity>, IMapFrom<WorkExperienceInfoDTO>
 {
