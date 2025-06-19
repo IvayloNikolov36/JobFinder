@@ -70,11 +70,11 @@ namespace JobFinder.Services.Implementations.Cv
 
         public async Task<CvPreviewDataViewModel> GetUserCvData(string cvId)
         {
-            CvPreviewDataViewModel cvData = await this.unitOfWork
+            CvPreviewDataDTO cvData = await this.unitOfWork
                 .CvRepository
-                .GetCvData<CvPreviewDataViewModel>(cvId);
+                .GetCvData<CvPreviewDataDTO>(cvId);
 
-            return cvData;
+            return this.mapper.Map<CvPreviewDataViewModel>(cvData);
         }
 
         public async Task Delete(string cvId)

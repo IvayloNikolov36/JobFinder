@@ -7,6 +7,7 @@ using System.Linq;
 namespace JobFinder.Data.Models.Cv;
 
 public partial class CurriculumVitaeEntity :
+    IMapTo<CvPreviewDataDTO>,
     IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)

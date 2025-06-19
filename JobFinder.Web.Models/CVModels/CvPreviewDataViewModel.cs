@@ -1,10 +1,11 @@
 ﻿using JobFinder.Data.Models.Cv;
 using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.Cv;
 using System.Collections.Generic;
 
 namespace JobFinder.Web.Models.CvModels
 {
-    public class CvPreviewDataViewModel : IMapFrom<CurriculumVitaeEntity>
+    public class CvPreviewDataViewModel : IMapFrom<CvPreviewDataDTO>
     {
         public string PictureUrl { get; set; }
 
