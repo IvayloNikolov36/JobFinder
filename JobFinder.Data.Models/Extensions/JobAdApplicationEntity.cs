@@ -16,7 +16,7 @@ public partial class JobAdApplicationEntity : IMapFrom<JobAddApplicationInputDTO
         configuration.CreateMap<JobAdApplicationEntity, JobAdApplicationInfoDTO>()
             .ForMember(dto => dto.Applicant, o => o
                 .MapFrom(e => e.Applicant.FirstName + " " + e.Applicant.LastName))
-            .ForMember(dto => dto.Email, o => o.MapFrom(e => e.CurriculumVitae.PersonalInfo.Email))
-            .ForMember(dto => dto.Phone, o => o.MapFrom(e => e.CurriculumVitae.PersonalInfo.Phone));
+            .ForMember(dto => dto.Email, o => o.MapFrom(e => e.Cv.PersonalInfo.Email))
+            .ForMember(dto => dto.Phone, o => o.MapFrom(e => e.Cv.PersonalInfo.Phone));
     }
 }

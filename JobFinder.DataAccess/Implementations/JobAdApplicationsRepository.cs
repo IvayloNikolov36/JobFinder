@@ -56,7 +56,7 @@ public class JobAdApplicationsRepository : EfCoreRepository<JobAdApplicationEnti
     public async Task<bool> IsApplicationSent(string cvId, int jobAdId, string publisherId)
     {
         return await this.DbSet
-            .AnyAsync(jaa => jaa.CurriculumVitaeId == cvId
+            .AnyAsync(jaa => jaa.CvId == cvId
                 && jaa.JobAdId == jobAdId
                 && jaa.JobAd.Publisher.UserId == publisherId);
     }
@@ -64,7 +64,7 @@ public class JobAdApplicationsRepository : EfCoreRepository<JobAdApplicationEnti
     public async Task<DateTime> SetPreviewed(string cvId, int jobAdId)
     {
         JobAdApplicationEntity application = await this.DbSet
-            .SingleOrDefaultAsync(a => a.CurriculumVitaeId == cvId
+            .SingleOrDefaultAsync(a => a.CvId == cvId
                 && a.JobAdId == jobAdId);
 
         base.ValidateForExistence(application, "JobAdApplication");

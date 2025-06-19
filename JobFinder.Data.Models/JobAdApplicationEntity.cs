@@ -12,8 +12,8 @@ namespace JobFinder.Data.Models
         public string ApplicantId { get; set; }
         public UserEntity Applicant { get; set; }
 
-        public string CurriculumVitaeId { get; set; }
-        public CurriculumVitaeEntity CurriculumVitae { get; set; }
+        public string CvId { get; set; }
+        public CurriculumVitaeEntity Cv { get; set; }
 
         public DateTime AppliedOn { get; set; }
 
