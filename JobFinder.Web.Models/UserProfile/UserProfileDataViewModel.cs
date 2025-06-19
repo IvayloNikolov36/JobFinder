@@ -13,7 +13,7 @@ namespace JobFinder.Web.Models.UserProfile
 
         public string PictureUrl { get; set; }
 
-        public int CurriculumVitaesCount { get; set; }
+        public int CVsCount { get; set; }
 
         public int SubscriptionsCount { get; set; }
 
