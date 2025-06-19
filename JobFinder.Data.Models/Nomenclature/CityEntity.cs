@@ -7,9 +7,9 @@ namespace JobFinder.Data.Models.Nomenclature
     {
         public CityEntity()
         {
-            this.JobAdvertisements = new List<JobAdvertisementEntity>();
+            this.JobAdvertisements = new List<JobAdEntity>();
         }
 
-        public ICollection<JobAdvertisementEntity> JobAdvertisements { get; set; }
+        public ICollection<JobAdEntity> JobAdvertisements { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace JobFinder.Services.Implementations
         private readonly IRepository<CityEntity> citiesRepository;
         private readonly IRepository<CurrencyEntity> currenciesRepository;
         private readonly IRepository<RecurringTypeEntity> recurringTypesRepository;
-        private readonly IRepository<ITAreaEntity> itAreasRepository;
+        private readonly IRepository<ItAreaEntity> itAreasRepository;
         private readonly IRepository<TechStackEntity> techStacksRepository;
         private readonly IRepository<SoftSKillEntity> softSkillsRepository;
         private readonly IRepository<WorkplaceTypeEntity> workplaceTypeRepository;
@@ -44,7 +44,7 @@ namespace JobFinder.Services.Implementations
             IRepository<CityEntity> citiesRepository,
             IRepository<CurrencyEntity> currenciesRepository,
             IRepository<RecurringTypeEntity> recurringTypesRepository,
-            IRepository<ITAreaEntity> itAreasRepository,
+            IRepository<ItAreaEntity> itAreasRepository,
             IRepository<TechStackEntity> techStacksRepository,
             IRepository<SoftSKillEntity> softSkillsRepository,
             IRepository<WorkplaceTypeEntity> workplaceTypeRepository)

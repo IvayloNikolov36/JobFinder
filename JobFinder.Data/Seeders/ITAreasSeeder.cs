@@ -7,26 +7,26 @@ static class ITAreasSeeder
 {
     public static void Seed(ModelBuilder builder)
     {
-        builder.Entity<ITAreaEntity>().HasData(
-            new ITAreaEntity { Name = "Mobile", Id = 1 },
-            new ITAreaEntity { Name = "Web", Id = 2 },
-            new ITAreaEntity { Name = "Desktop", Id = 3 },
-            new ITAreaEntity { Name = "Cloud", Id = 4 },
-            new ITAreaEntity { Name = "Embedded", Id = 5 },
-            new ITAreaEntity { Name = "QA", Id = 6 },
-            new ITAreaEntity { Name = "System Administration", Id = 7 },
-            new ITAreaEntity { Name = "Network Administration", Id = 8 },
-            new ITAreaEntity { Name = "DevOps", Id = 9 },
-            new ITAreaEntity { Name = "Security", Id = 10 },
-            new ITAreaEntity { Name = "Big Data", Id = 11 },
-            new ITAreaEntity { Name = "Data Science", Id = 12 },
-            new ITAreaEntity { Name = "AI", Id = 13 },
-            new ITAreaEntity { Name = "ML", Id = 14 },
-            new ITAreaEntity { Name = "ERP", Id = 15 },
-            new ITAreaEntity { Name = "Gaming", Id = 16 },
-            new ITAreaEntity { Name = "IT Architecture", Id = 17 },
-            new ITAreaEntity { Name = "Team Lead", Id = 18 },
-            new ITAreaEntity { Name = "IT Recruitment", Id = 19 }
+        builder.Entity<ItAreaEntity>().HasData(
+            new ItAreaEntity { Name = "Mobile", Id = 1 },
+            new ItAreaEntity { Name = "Web", Id = 2 },
+            new ItAreaEntity { Name = "Desktop", Id = 3 },
+            new ItAreaEntity { Name = "Cloud", Id = 4 },
+            new ItAreaEntity { Name = "Embedded", Id = 5 },
+            new ItAreaEntity { Name = "QA", Id = 6 },
+            new ItAreaEntity { Name = "System Administration", Id = 7 },
+            new ItAreaEntity { Name = "Network Administration", Id = 8 },
+            new ItAreaEntity { Name = "DevOps", Id = 9 },
+            new ItAreaEntity { Name = "Security", Id = 10 },
+            new ItAreaEntity { Name = "Big Data", Id = 11 },
+            new ItAreaEntity { Name = "Data Science", Id = 12 },
+            new ItAreaEntity { Name = "AI", Id = 13 },
+            new ItAreaEntity { Name = "ML", Id = 14 },
+            new ItAreaEntity { Name = "ERP", Id = 15 },
+            new ItAreaEntity { Name = "Gaming", Id = 16 },
+            new ItAreaEntity { Name = "IT Architecture", Id = 17 },
+            new ItAreaEntity { Name = "Team Lead", Id = 18 },
+            new ItAreaEntity { Name = "IT Recruitment", Id = 19 }
         );
     }
 }

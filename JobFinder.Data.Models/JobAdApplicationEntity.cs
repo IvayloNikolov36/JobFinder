@@ -7,7 +7,7 @@ namespace JobFinder.Data.Models
     public partial class JobAdApplicationEntity : BaseEntity<int>
     {
         public int JobAdId { get; set; }
-        public JobAdvertisementEntity JobAd { get; set; }
+        public JobAdEntity JobAd { get; set; }
 
         public string ApplicantId { get; set; }
         public UserEntity Applicant { get; set; }

@@ -9,7 +9,7 @@ namespace JobFinder.Data.Models
     {
         public CompanyEntity()
         {
-            this.JobAds = new List<JobAdvertisementEntity>();
+            this.JobAds = new List<JobAdEntity>();
             this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
         }
 
@@ -28,7 +28,7 @@ namespace JobFinder.Data.Models
 
         public UserEntity User { get; set; }
 
-        public ICollection<JobAdvertisementEntity> JobAds { get; set; }
+        public ICollection<JobAdEntity> JobAds { get; set; }
 
         public ICollection<CompanySubscriptionEntity> CompanySubscriptions { get; set; }
     }

@@ -10,7 +10,7 @@ public class AnonymousProfileAppearanceITAreaEntity : IAudit
     public AnonymousProfileAppearanceEntity AnonymousProfileAppearance { get; set; }
 
     public int ITAreaId { get; set; }
-    public ITAreaEntity ITArea { get; set; }
+    public ItAreaEntity ITArea { get; set; }
 
     public DateTime CreatedOn { get; set; }
 

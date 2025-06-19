@@ -21,7 +21,7 @@ namespace JobFinder.Data
 
         public DbSet<CompanyEntity> Companies { get; set; }
 
-        public DbSet<JobAdvertisementEntity> JobAdvertisements { get; set; }
+        public DbSet<JobAdEntity> JobAdvertisements { get; set; }
 
         public DbSet<CurriculumVitaeEntity> CurriculumVitaes { get; set; }
 
@@ -57,11 +57,11 @@ namespace JobFinder.Data
 
         public DbSet<AnonymousProfileAppearanceJobEngagementEntity> AnonymousProfileAppearancesJobEngagements { get; set; }
 
-        public DbSet<JobAdvertisementSoftSkillEntity> JobAdvertisementsSoftSkills { get; set; }
+        public DbSet<JobAdSoftSkillEntity> JobAdsSoftSkills { get; set; }
 
-        public DbSet<JobAdvertisementITAreaEntity> JobAdvertisementsITAreas { get; set; }
+        public DbSet<JobAdItAreaEntity> JobAdsItAreas { get; set; }
 
-        public DbSet<JobAdvertisementTechStackEntity> JobAdvertisementsTechStacks { get; set; }
+        public DbSet<JobAdTechStackEntity> JobAdsTechStacks { get; set; }
 
         public DbSet<AnonymousProfileAppearanceWorkplaceTypeEntity> AnonymousProfileAppearancesWorkplaceTypes { get; set; }
 
@@ -94,7 +94,7 @@ namespace JobFinder.Data
 
         public DbSet<RecurringTypeEntity> RecurringTypes { get; set; }
 
-        public DbSet<ITAreaEntity> ItAreas { get; set; }
+        public DbSet<ItAreaEntity> ItAreas { get; set; }
 
         public DbSet<SoftSKillEntity> SoftSkills { get; set; }
 
@@ -173,7 +173,7 @@ namespace JobFinder.Data
                 .HasForeignKey<CompanyEntity>(c => c.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            builder.Entity<JobAdvertisementEntity>()
+            builder.Entity<JobAdEntity>()
                 .Property(j => j.IsActive)
                 .HasDefaultValue(true);
 
@@ -186,7 +186,7 @@ namespace JobFinder.Data
             builder.Entity<JobAdApplicationEntity>()
                 .HasIndex(j => j.JobAdId);
 
-            builder.Entity<JobAdvertisementEntity>()
+            builder.Entity<JobAdEntity>()
                 .ToTable(t => t.HasCheckConstraint("CHK_JobAdvertisements_MinSalary_MaxSalary_Currency",
                      @"(CurrencyId IS NOT NULL AND MinSalary IS NOT NULL AND MaxSalary IS NOT NULL AND MinSalary <= MaxSalary)
                         OR (CurrencyId IS NULL AND MinSalary IS NULL AND MaxSalary IS NULL)
@@ -213,14 +213,14 @@ namespace JobFinder.Data
             builder.Entity<AnonymousProfileAppearanceJobEngagementEntity>()
                 .HasKey(key => new { key.AnonymousProfileAppearanceId, key.JobEngagementId });
 
-            builder.Entity<JobAdvertisementSoftSkillEntity>()
-                .HasKey(key => new { key.JobAdvertisementId, key.SoftSkillId });
+            builder.Entity<JobAdSoftSkillEntity>()
+                .HasKey(key => new { key.JobAdId, key.SoftSkillId });
 
-            builder.Entity<JobAdvertisementTechStackEntity>()
-                .HasKey(key => new { key.JobAdvertisementId, key.TechStackId });
+            builder.Entity<JobAdTechStackEntity>()
+                .HasKey(key => new { key.JobAdId, key.TechStackId });
 
-            builder.Entity<JobAdvertisementITAreaEntity>()
-                .HasKey(key => new { key.JobAdvertisementId, key.ITAreaId });
+            builder.Entity<JobAdItAreaEntity>()
+                .HasKey(key => new { key.JobAdId, key.ItAreaId });
 
             // VIEWS
 

@@ -6,13 +6,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Data.Models
 {
-    public partial class JobAdvertisementEntity : BaseEntity<int>
+    public partial class JobAdEntity : BaseEntity<int>
     {
-        public JobAdvertisementEntity()
+        public JobAdEntity()
         {
-            this.JobAdSoftSkills = new List<JobAdvertisementSoftSkillEntity>();
-            this.JobAdITAreas = new List<JobAdvertisementITAreaEntity>();
-            this.JobAdTechStacks = new List<JobAdvertisementTechStackEntity>();
+            this.JobAdSoftSkills = new List<JobAdSoftSkillEntity>();
+            this.JobAdITAreas = new List<JobAdItAreaEntity>();
+            this.JobAdTechStacks = new List<JobAdTechStackEntity>();
             this.JobAdApplications = new List<JobAdApplicationEntity>();  
         }
 
@@ -52,11 +52,11 @@ namespace JobFinder.Data.Models
 
         public bool IsActive { get; set; } = true;
 
-        public List<JobAdvertisementSoftSkillEntity> JobAdSoftSkills { get; set; }
+        public List<JobAdSoftSkillEntity> JobAdSoftSkills { get; set; }
 
-        public List<JobAdvertisementTechStackEntity> JobAdTechStacks { get; set; }
+        public List<JobAdTechStackEntity> JobAdTechStacks { get; set; }
 
-        public List<JobAdvertisementITAreaEntity> JobAdITAreas { get; set; }
+        public List<JobAdItAreaEntity> JobAdITAreas { get; set; }
 
         public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
     }

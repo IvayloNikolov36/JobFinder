@@ -6,7 +6,7 @@ using static JobFinder.Common.MessageConstants;
 
 namespace JobFinder.Business.JobAds
 {
-    public class JobAdvertisementsRules : IJobAdvertisementsRules
+    public class JobAdsRules : IJobAdsRules
     {
         private const int DaysExpiration = 30;
 

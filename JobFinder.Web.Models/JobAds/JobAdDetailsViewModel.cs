@@ -31,7 +31,7 @@ namespace JobFinder.Web.Models.JobAds
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsViewModel>()
+            configuration.CreateMap<JobAdEntity, JobAdDetailsViewModel>()
                 .ForMember(x => x.CompanyLogo, m => m.MapFrom(m => m.Publisher.Logo))
                 .ForMember(x => x.CompanyName, m => m.MapFrom(m => m.Publisher.Name))
                 .ForMember(x => x.PostedOn, m => m.MapFrom(m => m.CreatedOn.ToString()))

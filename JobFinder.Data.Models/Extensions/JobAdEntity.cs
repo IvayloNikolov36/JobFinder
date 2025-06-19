@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace JobFinder.Data.Models;
 
-public partial class JobAdvertisementEntity : IMapFrom<JobAdCreateDTO>, IHaveCustomMappings
+public partial class JobAdEntity : IMapFrom<JobAdCreateDTO>, IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
     {
-        configuration.CreateMap<JobAdvertisementEntity, JobAdListingDTO>()
+        configuration.CreateMap<JobAdEntity, JobAdListingDTO>()
             .ForMember(dto => dto.CompanyId, m => m.MapFrom(e => e.PublisherId))
             .ForMember(dto => dto.CompanyLogo, m => m.MapFrom(e => e.Publisher.Logo))
             .ForMember(dto => dto.CompanyName, m => m.MapFrom(e => e.Publisher.Name))
@@ -20,11 +20,11 @@ public partial class JobAdvertisementEntity : IMapFrom<JobAdCreateDTO>, IHaveCus
             .ForMember(dto => dto.JobCategory, m => m.MapFrom(e => e.JobCategory.Name))
             .ForMember(dto => dto.Location, m => m.MapFrom(e => e.Location.Name));
 
-        configuration.CreateMap<JobAdvertisementEntity, JobAdDetailsForSubscriberDTO>()
+        configuration.CreateMap<JobAdEntity, JobAdDetailsForSubscriberDTO>()
             .ForMember(dto => dto.Location, o => o.MapFrom(e => e.Location.Name))
             .ForMember(dto => dto.Company, o => o.MapFrom(e => e.Publisher));
 
-        configuration.CreateMap<JobAdvertisementEntity, CompanyJobAdDTO>()
+        configuration.CreateMap<JobAdEntity, CompanyJobAdDTO>()
             .ForMember(dto => dto.Location, o => o.MapFrom(e => e.Location.Name))
             .ForMember(dto => dto.ApplicationsSent, o => o.MapFrom(e => e.JobAdApplications.Count()))
             .ForMember(x => x.Currency, m => m.MapFrom(m => m.Currency.Name))
@@ -33,10 +33,10 @@ public partial class JobAdvertisementEntity : IMapFrom<JobAdCreateDTO>, IHaveCus
                 .Where(ja => !ja.PreviewDate.HasValue)
                 .Count()));
 
-        configuration.CreateMap<JobAdvertisementEntity, JobAdCriteriasDTO>()
+        configuration.CreateMap<JobAdEntity, JobAdCriteriasDTO>()
             .ForMember(dto => dto.CityId, o => o.MapFrom(e => e.LocationId))
             .ForMember(dto => dto.SoftSkills, o => o.MapFrom(e => e.JobAdSoftSkills.Select(jass => jass.SoftSkillId)))
-            .ForMember(dto => dto.ITAreas, o => o.MapFrom(e => e.JobAdITAreas.Select(jass => jass.ITAreaId)))
+            .ForMember(dto => dto.ITAreas, o => o.MapFrom(e => e.JobAdITAreas.Select(jass => jass.ItAreaId)))
             .ForMember(dto => dto.TechStacks, o => o.MapFrom(e => e.JobAdTechStacks.Select(jass => jass.TechStackId)));
     }
 }

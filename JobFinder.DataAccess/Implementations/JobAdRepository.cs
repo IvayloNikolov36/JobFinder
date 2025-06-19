@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
-public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdRepository
+public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
 {
     private readonly IMapper mapper;
 
@@ -34,7 +34,7 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
 
     public async Task Create(JobAdCreateDTO jobAd, int companyId)
     {
-        JobAdvertisementEntity jobAdEntity = new();
+        JobAdEntity jobAdEntity = new();
 
         this.mapper.Map(jobAd, jobAdEntity);
 
@@ -71,7 +71,7 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
 
     public async Task Update(int id, JobAdEditDTO jobAdDto)
     {
-        JobAdvertisementEntity jobAdFromDb = await this.DbSet.FindAsync(id);
+        JobAdEntity jobAdFromDb = await this.DbSet.FindAsync(id);
 
         base.ValidateForExistence(jobAdFromDb, "JobAdvertisement");
 
@@ -82,7 +82,7 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
 
     public async Task<DataListingDTO<JobAdListingDTO>> AllActive(JobAdFilterDTO filter)
     {
-        IQueryable<JobAdvertisementEntity> jobs = this.DbSet
+        IQueryable<JobAdEntity> jobs = this.DbSet
             .AsNoTracking()
             .Where(ja => ja.IsActive);
 
@@ -163,29 +163,29 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
         return jobAdCriterias;
     }
 
-    private IQueryable<JobAdvertisementEntity> FilteredByCategory(
-        IQueryable<JobAdvertisementEntity> jobAds,
+    private IQueryable<JobAdEntity> FilteredByCategory(
+        IQueryable<JobAdEntity> jobAds,
         int jobCategoryId)
     {
         return jobAds.Where(j => j.JobCategoryId == jobCategoryId);
     }
 
-    private IQueryable<JobAdvertisementEntity> FilterByEngagement(
-        IQueryable<JobAdvertisementEntity> jobAds,
+    private IQueryable<JobAdEntity> FilterByEngagement(
+        IQueryable<JobAdEntity> jobAds,
         int jobEngagementId)
     {
         return jobAds.Where(j => j.JobEngagementId == jobEngagementId);
     }
 
-    private IQueryable<JobAdvertisementEntity> FilterByLocation(
-        IQueryable<JobAdvertisementEntity> jobAds,
+    private IQueryable<JobAdEntity> FilterByLocation(
+        IQueryable<JobAdEntity> jobAds,
         int locationId)
     {
         return jobAds.Where(j => j.LocationId == locationId);
     }
 
-    private IQueryable<JobAdvertisementEntity> SortBySalary(
-        IQueryable<JobAdvertisementEntity> jobAds,
+    private IQueryable<JobAdEntity> SortBySalary(
+        IQueryable<JobAdEntity> jobAds,
         bool isAscending)
     {
         return isAscending
@@ -193,8 +193,8 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
             : jobAds.OrderByDescending(j => j.MinSalary);
     }
 
-    private IQueryable<JobAdvertisementEntity> SortByPublishDate(
-        IQueryable<JobAdvertisementEntity> jobAds,
+    private IQueryable<JobAdEntity> SortByPublishDate(
+        IQueryable<JobAdEntity> jobAds,
         bool isAscending)
     {
         return isAscending
@@ -212,7 +212,7 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
 
     public async Task<IEnumerable<CompanyJobAdDTO>> GetFilteredCompanyAds(string userId, bool? active)
     {
-        IQueryable<JobAdvertisementEntity> query = this.DbSet.AsNoTracking()
+        IQueryable<JobAdEntity> query = this.DbSet.AsNoTracking()
             .Where(ja => ja.Publisher.UserId == userId);
 
         if (active.HasValue)
@@ -226,37 +226,37 @@ public class JobAdRepository : EfCoreRepository<JobAdvertisementEntity>, IJobAdR
             .ToListAsync();
     }
 
-    private IEnumerable<JobAdvertisementTechStackEntity> GetJobAdTechStackEntities(IEnumerable<int> techStacks)
+    private IEnumerable<JobAdTechStackEntity> GetJobAdTechStackEntities(IEnumerable<int> techStacks)
     {
-        List<JobAdvertisementTechStackEntity> entities = [];
+        List<JobAdTechStackEntity> entities = [];
 
         foreach (int techStackId in techStacks)
         {
-            entities.Add(new JobAdvertisementTechStackEntity { TechStackId = techStackId });
+            entities.Add(new JobAdTechStackEntity { TechStackId = techStackId });
         }
 
         return entities;
     }
 
-    private IEnumerable<JobAdvertisementITAreaEntity> GetJobAdITAreasEntities(IEnumerable<int> itAreas)
+    private IEnumerable<JobAdItAreaEntity> GetJobAdITAreasEntities(IEnumerable<int> itAreas)
     {
-        List<JobAdvertisementITAreaEntity> entities = [];
+        List<JobAdItAreaEntity> entities = [];
 
         foreach (int itAreaId in itAreas)
         {
-            entities.Add(new JobAdvertisementITAreaEntity { ITAreaId = itAreaId });
+            entities.Add(new JobAdItAreaEntity { ItAreaId = itAreaId });
         }
 
         return entities;
     }
 
-    private IEnumerable<JobAdvertisementSoftSkillEntity> GetJobAdSoftSkillsEntities(IEnumerable<int> softSkills)
+    private IEnumerable<JobAdSoftSkillEntity> GetJobAdSoftSkillsEntities(IEnumerable<int> softSkills)
     {
-        List<JobAdvertisementSoftSkillEntity> entities = [];
+        List<JobAdSoftSkillEntity> entities = [];
 
         foreach (int softSkillId in softSkills)
         {
-            entities.Add(new JobAdvertisementSoftSkillEntity { SoftSkillId = softSkillId });
+            entities.Add(new JobAdSoftSkillEntity { SoftSkillId = softSkillId });
         }
 
         return entities;

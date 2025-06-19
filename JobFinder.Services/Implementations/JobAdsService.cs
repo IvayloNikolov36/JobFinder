@@ -15,12 +15,12 @@ namespace JobFinder.Services.Implementations
     public class JobAdsService : IJobAdsService
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
-        private readonly IJobAdvertisementsRules jobAdsRules;
+        private readonly IJobAdsRules jobAdsRules;
         private readonly IMapper mapper;
 
         public JobAdsService(
             IEntityFrameworkUnitOfWork unitOfWork,
-            IJobAdvertisementsRules jobAdsRules,
+            IJobAdsRules jobAdsRules,
             IMapper mapper)
         {
             this.unitOfWork = unitOfWork;

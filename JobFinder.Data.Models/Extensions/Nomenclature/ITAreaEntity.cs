@@ -3,6 +3,6 @@ using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.Data.Models.Nomenclature;
 
-public partial class ITAreaEntity : IMapTo<BasicDTO>
+public partial class ItAreaEntity : IMapTo<BasicDTO>
 {
 }

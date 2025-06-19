@@ -4,10 +4,10 @@ using System;
 
 namespace JobFinder.Data.Models;
 
-public class JobAdvertisementSoftSkillEntity : IAudit
+public class JobAdSoftSkillEntity : IAudit
 {
-    public int JobAdvertisementId { get; set; }
-    public JobAdvertisementEntity JobAdvertisement { get; set; }
+    public int JobAdId { get; set; }
+    public JobAdEntity JobAd { get; set; }
 
     public int SoftSkillId { get; set; }
     public SoftSKillEntity SoftSkill { get; set; }

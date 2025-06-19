@@ -2,7 +2,7 @@
 
 namespace JobFinder.Business.JobAds
 {
-    public interface IJobAdvertisementsRules
+    public interface IJobAdsRules
     {
         void ValidateSalaryProperties(SalaryPropertiesDTO salaryProperties);
 

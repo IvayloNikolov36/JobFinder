@@ -8,14 +8,14 @@ using static JobFinder.Common.MessageConstants;
 namespace JobFinder.Business.UnitTests
 {
     [TestFixture]
-    public class JobAdvertisementsRulesTests
+    public class JobAdsRulesTests
     {
-        private JobAdvertisementsRules rules;
+        private JobAdsRules rules;
 
         [SetUp]
         public void Setup()
         {
-            this.rules = new JobAdvertisementsRules();
+            this.rules = new JobAdsRules();
         }
 
         [TestCase(5, 5, null, SpecifyCurrency)]
