@@ -14,6 +14,6 @@ public class SkillsInfoDrivingCategoryRepository : EfCoreRepository<SkillsInfoDr
 
     public void Delete(string cvId)
     {
-        base.DeleteWhere(x => x.SkillsInfo.CurriculumVitaeId == cvId);
+        base.DeleteWhere(x => x.SkillsInfo.CvId == cvId);
     }
 }

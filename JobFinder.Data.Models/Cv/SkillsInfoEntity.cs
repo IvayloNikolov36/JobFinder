@@ -12,8 +12,8 @@ namespace JobFinder.Data.Models.Cv
         }
 
         [Required]
-        public string CurriculumVitaeId { get; set; }
-        public CurriculumVitaeEntity CurriculumVitae { get; set; }
+        public string CvId { get; set; }
+        public CurriculumVitaeEntity Cv { get; set; }
 
         [StringLength(10000, MinimumLength = 10)]
         public string ComputerSkills { get; set; }

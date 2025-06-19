@@ -38,7 +38,7 @@ public class SkillsInfoRepository : EfCoreRepository<SkillsInfoEntity>, ISkillsI
     public async Task Delete(string cvId)
     {
         SkillsInfoEntity skillsInfoEntity = await this.DbSet
-            .FirstOrDefaultAsync(s => s.CurriculumVitaeId == cvId);
+            .FirstOrDefaultAsync(s => s.CvId == cvId);
 
         base.ValidateForExistence(skillsInfoEntity, "SkillsInfo");
 

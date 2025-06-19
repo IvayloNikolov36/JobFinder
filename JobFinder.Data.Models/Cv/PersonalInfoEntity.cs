@@ -8,8 +8,8 @@ namespace JobFinder.Data.Models.Cv
     public partial class PersonalInfoEntity : BaseEntity<int>
     {
         [Required]
-        public string CurriculumVitaeId { get; set; }
-        public CurriculumVitaeEntity CurriculumVitae { get; set; }
+        public string CvId { get; set; }
+        public CurriculumVitaeEntity Cv { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 2)]

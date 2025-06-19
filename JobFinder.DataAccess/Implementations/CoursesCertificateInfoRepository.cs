@@ -22,7 +22,7 @@ public class CoursesCertificateInfoRepository
     public async Task<IEnumerable<CourseCertificateDTO>> All(string cvId)
     {
         return await this.DbSet.AsNoTracking()
-            .Where(cs => cs.CurriculumVitaeId == cvId)
+            .Where(cs => cs.CvId == cvId)
             .To<CourseCertificateDTO>()
             .ToListAsync();
     }
@@ -32,7 +32,7 @@ public class CoursesCertificateInfoRepository
         IEnumerable<CourseCertificateSimpleDTO> courcesInfo)
     {
         List<CourseCertificateEntity> courceEntitiesFromDb = await this.DbSet
-            .Where(we => we.CurriculumVitaeId == cvId)
+            .Where(we => we.CvId == cvId)
             .ToListAsync();
 
         IEnumerable<CourseCertificateSimpleDTO> coursesToAdd = courcesInfo
@@ -46,7 +46,7 @@ public class CoursesCertificateInfoRepository
             {
                 CourseCertificateEntity entityToAdd = this.mapper.Map<CourseCertificateEntity>(model);
                 entityToAdd.Id = 0;
-                entityToAdd.CurriculumVitaeId = cvId;
+                entityToAdd.CvId = cvId;
                 entitiesToAdd.Add(entityToAdd);
             }
 
@@ -83,7 +83,7 @@ public class CoursesCertificateInfoRepository
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> courseCertificateInfoIds)
     {
         CourseCertificateEntity[] courses = await this.DbSet
-            .Where(c => c.CurriculumVitaeId == cvId)
+            .Where(c => c.CvId == cvId)
             .ToArrayAsync();
 
         foreach (CourseCertificateEntity course in courses)
@@ -97,7 +97,7 @@ public class CoursesCertificateInfoRepository
     public async Task DisassociateFromAnonymousProfile(string cvId)
     {
         CourseCertificateEntity[] courses = await this.DbSet
-            .Where(c => c.CurriculumVitaeId == cvId)
+            .Where(c => c.CvId == cvId)
             .ToArrayAsync();
 
         foreach (CourseCertificateEntity course in courses)
@@ -119,6 +119,6 @@ public class CoursesCertificateInfoRepository
 
     public void Delete(string cvId)
     {
-        base.DeleteWhere(cs => cs.CurriculumVitaeId == cvId);
+        base.DeleteWhere(cs => cs.CvId == cvId);
     }
 }

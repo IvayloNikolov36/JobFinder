@@ -25,7 +25,7 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
         int[] languageInfoIds = [.. languageInfoDtos.Select(li => li.Id)];
 
         List<LanguageInfoEntity> languageInfoEntitiesFromDB = await this.DbSet
-            .Where(we => we.CurriculumVitaeId == cvId)
+            .Where(we => we.CvId == cvId)
             .ToListAsync();
 
         IEnumerable<LanguageInfoEditDTO> languageInfoToAdd = languageInfoDtos
@@ -40,7 +40,7 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
             {
                 LanguageInfoEntity entityToAdd = this.mapper.Map<LanguageInfoEntity>(dto);
                 entityToAdd.Id = 0;
-                entityToAdd.CurriculumVitaeId = languageInfoEntitiesFromDB.First().CurriculumVitaeId;
+                entityToAdd.CvId = languageInfoEntitiesFromDB.First().CvId;
                 entitiesToAdd.Add(entityToAdd);
             }
 
@@ -77,7 +77,7 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> languageInfoIds)
     {
         LanguageInfoEntity[] languageInfos = await this.DbSet
-            .Where(li => li.CurriculumVitaeId == cvId)
+            .Where(li => li.CvId == cvId)
             .ToArrayAsync();
 
         foreach (LanguageInfoEntity languageInfo in languageInfos)
@@ -92,7 +92,7 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
     public async Task DisassociateFromAnonymousProfile(string cvId)
     {
         LanguageInfoEntity[] languageInfos = await this.DbSet
-            .Where(li => li.CurriculumVitaeId == cvId)
+            .Where(li => li.CvId == cvId)
             .ToArrayAsync();
 
         foreach (LanguageInfoEntity languageInfo in languageInfos)
@@ -105,6 +105,6 @@ public class LanguageInfoRepository : EfCoreRepository<LanguageInfoEntity>, ILan
 
     public void Delete(string cvId)
     {
-        base.DeleteWhere(l => l.CurriculumVitaeId == cvId);
+        base.DeleteWhere(l => l.CvId == cvId);
     }
 }

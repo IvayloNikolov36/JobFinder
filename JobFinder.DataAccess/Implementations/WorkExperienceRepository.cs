@@ -21,7 +21,7 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
         IEnumerable<WorkExperienceInfoEditDTO> workExperienceModels)
     {
         List<WorkExperienceInfoEntity> workExperienceEntitiesFromDB = await this.DbSet
-            .Where(we => we.CurriculumVitaeId == cvId)
+            .Where(we => we.CvId == cvId)
             .ToListAsync();
 
         IEnumerable<WorkExperienceInfoEditDTO> workExperinceToAdd = workExperienceModels
@@ -35,7 +35,7 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
             {
                 WorkExperienceInfoEntity entityToAdd = this.mapper.Map<WorkExperienceInfoEntity>(model);
                 entityToAdd.Id = 0;
-                entityToAdd.CurriculumVitaeId = cvId;
+                entityToAdd.CvId = cvId;
                 entitiesToAdd.Add(entityToAdd);
             }
 
@@ -72,7 +72,7 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> workExperienceIds)
     {
         WorkExperienceInfoEntity[] workExperienceEntities = await this.DbSet
-            .Where(we => we.CurriculumVitaeId == cvId)
+            .Where(we => we.CvId == cvId)
             .ToArrayAsync();
 
         foreach (WorkExperienceInfoEntity workExperience in workExperienceEntities)
@@ -86,7 +86,7 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
     public async Task DisassociateFromAnonymousProfile(string cvId)
     {
         WorkExperienceInfoEntity[] workExperienceEntities = await this.DbSet
-            .Where(we => we.CurriculumVitaeId == cvId)
+            .Where(we => we.CvId == cvId)
             .ToArrayAsync();
 
         foreach (WorkExperienceInfoEntity workExperience in workExperienceEntities)
@@ -99,6 +99,6 @@ public class WorkExperienceRepository : EfCoreRepository<WorkExperienceInfoEntit
 
     public void Delete(string cvId)
     {
-        base.DeleteWhere(we => we.CurriculumVitaeId == cvId);
+        base.DeleteWhere(we => we.CvId == cvId);
     }
 }

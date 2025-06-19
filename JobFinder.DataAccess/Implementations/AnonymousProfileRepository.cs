@@ -21,7 +21,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         return await this.DbSet
             .Where(ap => ap.Id == anonymousProfileId)
-            .Select(ap => ap.CurriculumVitae)
+            .Select(ap => ap.Cv)
             .To<AnonymousProfileDataDTO>()
             .SingleOrDefaultAsync();
     }
@@ -30,7 +30,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         return await this.DbSet
             .Where(ap => ap.UserId == userId)
-            .Select(ap => ap.CurriculumVitae)
+            .Select(ap => ap.Cv)
             .To<AnonymousProfileDataDTO>()
             .SingleOrDefaultAsync();
     }
@@ -39,7 +39,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         return await this.DbSet
             .Where(ap => ap.UserId == userId)
-            .Select(ap => ap.CurriculumVitae)
+            .Select(ap => ap.Cv)
             .To<MyAnonymousProfileDataDTO>()
             .SingleOrDefaultAsync();
     }
@@ -77,7 +77,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
 
         AnonymousProfileEntity anonymousProfileEntity = new()
         {
-            CurriculumVitaeId = cvId,
+            CvId = cvId,
             UserId = userId,
             Appearance = appearanceEntity,
             CreatedOn = now
@@ -104,7 +104,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
 
         base.ValidateForExistence(entity, "AnonymousProfile");
 
-        return entity.CurriculumVitaeId;
+        return entity.CvId;
     }
 
     public async Task<string> GetOwnerId(string id)

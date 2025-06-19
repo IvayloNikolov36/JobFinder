@@ -8,9 +8,9 @@ namespace JobFinder.Data.Models.Cv
     public partial class WorkExperienceInfoEntity : BaseEntity<int>
     {
         [Required]
-        public string CurriculumVitaeId { get; set; }
+        public string CvId { get; set; }
 
-        public CurriculumVitaeEntity CurriculumVitae { get; set; }
+        public CurriculumVitaeEntity Cv { get; set; }
 
         public bool? IncludeInAnonymousProfile { get; set; }
 

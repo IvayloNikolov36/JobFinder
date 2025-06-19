@@ -14,8 +14,8 @@ public partial class AnonymousProfileEntity : BaseEntity<string>
     public string UserId { get; set; }
     public UserEntity User { get; set; }
 
-    public string CurriculumVitaeId { get; set; }
-    public CurriculumVitaeEntity CurriculumVitae { get; set; }
+    public string CvId { get; set; }
+    public CurriculumVitaeEntity Cv { get; set; }
 
     public AnonymousProfileAppearanceEntity Appearance { get; set; }
 }

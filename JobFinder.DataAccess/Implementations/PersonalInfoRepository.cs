@@ -29,6 +29,6 @@ public class PersonalInfoRepository : EfCoreRepository<PersonalInfoEntity>, IPer
 
     public void Delete(string cvId)
     {
-        base.DeleteWhere(x => x.CurriculumVitaeId == cvId);
+        base.DeleteWhere(x => x.CvId == cvId);
     }
 }

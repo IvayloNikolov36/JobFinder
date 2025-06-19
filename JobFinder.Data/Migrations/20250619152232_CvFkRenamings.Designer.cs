@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250619152232_CvFkRenamings")]
+    partial class CvFkRenamings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -654,7 +657,7 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CurriculumVitaeId")
+                    b.Property<string>("CvId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("JobAdId")
@@ -670,7 +673,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasIndex("ApplicantId");
 
-                    b.HasIndex("CurriculumVitaeId");
+                    b.HasIndex("CvId");
 
                     b.HasIndex("JobAdId");
 
@@ -6055,7 +6058,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithMany()
-                        .HasForeignKey("CurriculumVitaeId");
+                        .HasForeignKey("CvId");
 
                     b.HasOne("JobFinder.Data.Models.JobAdvertisementEntity", "JobAd")
                         .WithMany("JobAdApplications")
@@ -6065,7 +6068,7 @@ namespace JobFinder.Data.Migrations
 
                     b.Navigation("Applicant");
 
-                    b.Navigation("CurriculumVitae");
+                    b.Navigation("Cv");
 
                     b.Navigation("JobAd");
                 });

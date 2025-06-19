@@ -20,7 +20,7 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
     public async Task<IEnumerable<EducationInfoEditDTO>> Update(string cvId, IEnumerable<EducationInfoEditDTO> educationDtos)
     {
         List<EducationInfoEntity> educationEntitiesFromDb = await this.DbSet
-            .Where(e => e.CurriculumVitaeId == cvId)
+            .Where(e => e.CvId == cvId)
             .ToListAsync();
 
         IEnumerable<EducationInfoEditDTO> educationsToAdd = educationDtos
@@ -34,7 +34,7 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
             {
                 EducationInfoEntity educationEntity = this.mapper.Map<EducationInfoEntity>(educationEditDto);
                 educationEntity.Id = 0;
-                educationEntity.CurriculumVitaeId = cvId;
+                educationEntity.CvId = cvId;
                 educationEntitiesToAdd.Add(educationEntity);
             }
 
@@ -71,7 +71,7 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
     public async Task SetIncludeInAnonymousProfile(string cvId, IEnumerable<int> educationInfoIds)
     {
         EducationInfoEntity[] educationInfos = await this.DbSet
-            .Where(e => e.CurriculumVitaeId == cvId)
+            .Where(e => e.CvId == cvId)
             .ToArrayAsync();
 
         foreach (EducationInfoEntity educationInfo in educationInfos)
@@ -85,7 +85,7 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
     public async Task DisassociateFromAnonymousProfile(string cvId)
     {
         EducationInfoEntity[] educationInfos = await this.DbSet
-            .Where(e => e.CurriculumVitaeId == cvId)
+            .Where(e => e.CvId == cvId)
             .ToArrayAsync();
 
         foreach (EducationInfoEntity educationInfo in educationInfos)
@@ -98,6 +98,6 @@ public class EducationInfoRepository : EfCoreRepository<EducationInfoEntity>, IE
 
     public void Delete(string cvId)
     {
-        base.DeleteWhere(e => e.CurriculumVitaeId == cvId);
+        base.DeleteWhere(e => e.CvId == cvId);
     }
 }
