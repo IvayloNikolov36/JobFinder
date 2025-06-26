@@ -67,6 +67,8 @@ namespace JobFinder.Data
 
         public DbSet<AnonymousProfileAppearanceCityEntity> AnonymousProfileAppearancesCities { get; set; }
 
+        public DbSet<CvPreviewRequestEntity> CvPreviewRequests { get; set; }
+
 
         // Nomenclature Entities
 

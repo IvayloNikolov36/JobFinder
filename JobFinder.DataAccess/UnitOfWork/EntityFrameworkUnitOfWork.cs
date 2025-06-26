@@ -29,6 +29,7 @@ namespace JobFinder.DataAccess.UnitOfWork
         private IUserRepository userRepository;
         private IAnonymousProfileAppearanceRepository anonymousProfileAppearanceRepository;
         private IAnonymousProfileRepository anonymousProfileRepository;
+        private ICvPreviewRequestRepository cvPreviewRequestRepository;
 
         public EntityFrameworkUnitOfWork(JobFinderDbContext dbContext, IMapper mapper)
         {
@@ -177,6 +178,15 @@ namespace JobFinder.DataAccess.UnitOfWork
             {
                 this.anonymousProfileRepository ??= new AnonymousProfileRepository(this.dbContext);
                 return this.anonymousProfileRepository;
+            }
+        }
+
+        public ICvPreviewRequestRepository CvPreviewRequestRepository
+        {
+            get
+            {
+                this.cvPreviewRequestRepository ??= new CvPreviewRequestRepository(this.dbContext, this.mapper);
+                return this.cvPreviewRequestRepository;
             }
         }
 

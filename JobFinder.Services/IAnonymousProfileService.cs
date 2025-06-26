@@ -1,4 +1,5 @@
 ﻿using JobFinder.Web.Models.AnonymousProfile;
+using JobFinder.Web.Models.CvModels;
 using JobFinder.Web.Models.JobAds;
 
 namespace JobFinder.Services;
@@ -16,4 +17,6 @@ public interface IAnonymousProfileService
     Task<string> GetOwnerId(string id);
 
     Task<bool> IsRelevant(string id, JobAdCriteriasViewModel jobAdCriterias);
+
+    Task CreateCvPreviewRequest(CvPreviewRequestCreateViewModel requestModel);
 }
