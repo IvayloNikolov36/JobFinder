@@ -1,12 +1,13 @@
 ﻿using JobFinder.Services;
+using JobFinder.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
 namespace JobFinder.Web.Infrastructure.Filters;
 
-public class 
-    ValidateJobAdBelongsToUser : ActionFilterAttribute
+public class ValidateJobAdBelongsToUser : ActionFilterAttribute
 {
     private readonly IJobAdsService jobAdService;
 
@@ -22,13 +23,25 @@ public class
             return;
         }
 
-        object id = context
-            .ActionArguments
-            .FirstOrDefault(aa => aa.Key.ToLower().Equals("jobadid")).Value;
+        object id = context.GetParam("jobadid");
+
+        if (id is null)
+        {
+            ControllerParameterDescriptor paramDescriptor = context.GetBodyParameterDescriptor();
+
+            if (paramDescriptor is null)
+            {
+                context.SetBadRequestResult("The anonymous profile id and jobAdId must be provided!");
+                return;
+            }
+
+            dynamic entity = context.ActionArguments[paramDescriptor.Name];
+            id = entity.JobAdId;
+        }
 
         if (id is not int jobAdId)
         {
-            context.Result = controller.BadRequest(new { Title = "JobAd id must be a valid integer number!" });
+            context.SetBadRequestResult("JobAd id must be a valid integer number!");
             return;
         }
 
@@ -38,7 +51,7 @@ public class
 
         if (jobAdPublisherId != requestUserId)
         {
-            context.Result = controller.BadRequest(new { Title = "You are not allowed to modify other users jobAds!" });
+            context.SetBadRequestResult("You are not allowed to modify other users jobAds!");
             return;
         }
 

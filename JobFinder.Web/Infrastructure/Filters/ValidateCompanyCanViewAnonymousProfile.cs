@@ -1,6 +1,8 @@
 ﻿using JobFinder.Services;
+using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace JobFinder.Web.Infrastructure.Filters;
@@ -25,38 +27,47 @@ public class ValidateCompanyCanViewAnonymousProfile : ActionFilterAttribute
             return;
         }
 
-        object id = context
-            .ActionArguments
-            .FirstOrDefault(aa => aa.Key.ToLower().Equals("id")).Value;
+        object id = context.GetParam("id");
+        object jobAdId = context.GetParam("jobadid");
 
-        if (id == null)
+        if (id == null && jobAdId == null)
         {
-            context.Result = controller.BadRequest(new { Title = "The anonymous profile id must be provided!" });
-            return;
+            ControllerParameterDescriptor paramDescriptor = context.GetBodyParameterDescriptor();
+
+            if (paramDescriptor is null)
+            {
+                context.SetBadRequestResult("The anonymous profile id and jobAdId must be provided!");
+                return;
+            }
+
+            dynamic entity = context.ActionArguments[paramDescriptor.Name];
+            id = entity.AnonymousProfileId;
+            jobAdId = entity.JobAdId;
         }
-
-        object jobAdId = context
-            .ActionArguments
-            .FirstOrDefault(aa => aa.Key.ToLower().Equals("jobadid")).Value;
-
-        if (jobAdId == null)
+        else
         {
-            context.Result = controller.BadRequest(new { Title = "Job Ad id must be provided!" });
-            return;
-        }
+            if (id == null)
+            {
+                context.SetBadRequestResult("The anonymous profile id must be provided!");
+                return;
+            }
 
-        int jobAdIdValue = (int)jobAdId;
-        Guid anonymousProfileGuid = (Guid)id;
+            if (jobAdId == null)
+            {
+                context.SetBadRequestResult("Job Ad id must be provided!");
+                return;
+            }
+        }
 
         JobAdCriteriasViewModel jobAdCriterias = await this.jobAdService
-            .GetJobAdCriterias(jobAdIdValue);
+            .GetJobAdCriterias((int)jobAdId);
 
         bool isRelevant = await this.anonymousProfileService
-            .IsRelevant(anonymousProfileGuid.ToString(), jobAdCriterias);
+            .IsRelevant(((Guid)id).ToString(), jobAdCriterias);
 
         if (!isRelevant)
         {
-            context.Result = controller.BadRequest(new { Title = "This anonymous profile is not relevant to the specified job ad!" });
+            context.SetBadRequestResult("This anonymous profile is not relevant to the specified job ad!");
             return;
         }
 
