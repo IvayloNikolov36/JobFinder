@@ -125,4 +125,13 @@ public class AnonymousProfileService : IAnonymousProfileService
 
         await this.unitOfWork.SaveChanges();
     }
+
+    public async Task<IEnumerable<CvPreviewRequestListingViewModel>> GetAllCvPreviewRequests(string userId)
+    {
+        IEnumerable<CvPreviewRequestListingDTO> cvRequests = await this.unitOfWork
+            .AnonymousProfileRepository
+            .GetAllCvPreviewRequests(userId);
+
+        return this.mapper.Map<IEnumerable<CvPreviewRequestListingViewModel>>(cvRequests);
+    }
 }

@@ -19,4 +19,6 @@ public interface IAnonymousProfileService
     Task<bool> IsRelevant(string id, JobAdCriteriasViewModel jobAdCriterias);
 
     Task CreateCvPreviewRequest(CvPreviewRequestCreateViewModel requestModel);
+
+    Task<IEnumerable<CvPreviewRequestListingViewModel>> GetAllCvPreviewRequests(string userId);
 }

@@ -79,5 +79,17 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok();
         }
+
+        [HttpGet]
+        [Route("cv-requests")]
+        public async Task<IActionResult> GetAllCvPreviewRequests()
+        {
+            string userId = this.User.GetCurrentUserId();
+
+            IEnumerable<CvPreviewRequestListingViewModel> cvRequests = await this.anonymousProfileService
+                .GetAllCvPreviewRequests(userId);
+
+            return this.Ok(cvRequests);
+        }
     }
 }
