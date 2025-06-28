@@ -1,6 +1,7 @@
 ﻿using JobFinder.Data.Models.Common;
 using JobFinder.Data.Models.Cv;
 using System;
+using System.Collections.Generic;
 
 namespace JobFinder.Data.Models.AnonymousProfile;
 
@@ -9,6 +10,7 @@ public partial class AnonymousProfileEntity : BaseEntity<string>
     public AnonymousProfileEntity()
     {
         this.Id = Guid.NewGuid().ToString();
+        this.CvPreviewRequests = [];
     }
 
     public string UserId { get; set; }
@@ -18,4 +20,6 @@ public partial class AnonymousProfileEntity : BaseEntity<string>
     public CurriculumVitaeEntity Cv { get; set; }
 
     public AnonymousProfileAppearanceEntity Appearance { get; set; }
+
+    public ICollection<CvPreviewRequestEntity> CvPreviewRequests { get; set; }
 }

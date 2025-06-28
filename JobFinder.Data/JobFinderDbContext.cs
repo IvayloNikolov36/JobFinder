@@ -195,6 +195,10 @@ namespace JobFinder.Data
                      ")
                 );
 
+            builder.Entity<CvPreviewRequestEntity>()
+                .HasIndex(i => new { i.AnonymousProfileId, i.JobAdId })
+                .IsUnique();
+
             builder.Entity<AnonymousProfileAppearanceEntity>()
                 .HasOne(x => x.AnonymousProfile)
                 .WithOne(ap => ap.Appearance)
