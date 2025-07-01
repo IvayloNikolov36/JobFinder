@@ -1,5 +1,5 @@
 ﻿using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs.Cv;
+using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using System;
 
 namespace JobFinder.Web.Models.CvModels;

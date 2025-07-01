@@ -2,19 +2,17 @@
 using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using System;
 
-namespace JobFinder.Web.Models.CvModels;
+namespace JobFinder.Data.Models.Cv;
 
-public class CvPreviewRequestListingViewModel : IMapFrom<CvPreviewRequestListingDTO>
+public class CompanyCvPreviewRequestListingViewModel : IMapFrom<CompanyCvPreviewRequestListingDTO>
 {
-    public int Id { get; set; }
+    public string AnonymousProfileId { get; set; }
+
+    public string CvId { get; set; }
 
     public int JobAdId { get; set; }
 
     public string Position { get; set; }
-
-    public string CompanyName { get; set; }
-
-    public string CompanyLogoUrl { get; set; }
 
     public DateTime RequestDate { get; set; }
 

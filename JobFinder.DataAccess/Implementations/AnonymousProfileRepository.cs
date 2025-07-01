@@ -5,7 +5,7 @@ using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
-using JobFinder.Transfer.DTOs.Cv;
+using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using JobFinder.Transfer.DTOs.JobAd;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

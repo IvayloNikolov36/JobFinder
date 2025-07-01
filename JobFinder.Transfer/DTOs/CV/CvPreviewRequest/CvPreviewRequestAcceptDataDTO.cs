@@ -1,4 +1,4 @@
-﻿namespace JobFinder.Transfer.DTOs.Cv;
+﻿namespace JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 
 public class CvPreviewRequestAcceptDataDTO
 {

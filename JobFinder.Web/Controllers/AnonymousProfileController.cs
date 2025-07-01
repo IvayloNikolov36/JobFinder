@@ -75,7 +75,9 @@ namespace JobFinder.Web.Controllers
         [ServiceFilter(typeof(ValidateCompanyCanViewAnonymousProfile))]
         public async Task<IActionResult> CreateCvPreviewRequest([FromBody] CvPreviewRequestCreateViewModel requestModel)
         {
-            await this.anonymousProfileService.CreateCvPreviewRequest(requestModel);
+            string currentUserId = this.User.GetCurrentUserId();
+
+            await this.anonymousProfileService.MakeCvPreviewRequest(requestModel, currentUserId);
 
             return this.Ok();
         }

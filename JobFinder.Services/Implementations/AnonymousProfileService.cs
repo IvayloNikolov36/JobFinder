@@ -4,7 +4,7 @@ using JobFinder.Business.Cv;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
-using JobFinder.Transfer.DTOs.Cv;
+using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.AnonymousProfile;
 using JobFinder.Web.Models.CvModels;
@@ -117,9 +117,10 @@ public class AnonymousProfileService : IAnonymousProfileService
                 this.mapper.Map<JobAdCriteriasDTO>(jobAdCriterias));
     }
 
-    public async Task CreateCvPreviewRequest(CvPreviewRequestCreateViewModel requestModel)
+    public async Task MakeCvPreviewRequest(CvPreviewRequestCreateViewModel requestModel, string currentUserId)
     {
         CvPreviewRequestDTO requestDto = this.mapper.Map<CvPreviewRequestDTO>(requestModel);
+        requestDto.RequesterId = currentUserId;
 
         await this.unitOfWork.CvPreviewRequestRepository.MakeRequest(requestDto);
 

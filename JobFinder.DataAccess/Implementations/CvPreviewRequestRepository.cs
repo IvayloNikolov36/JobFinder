@@ -3,7 +3,8 @@ using JobFinder.Data;
 using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
-using JobFinder.Transfer.DTOs.Cv;
+using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
@@ -51,5 +52,13 @@ public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntit
         base.ValidateForExistence(data, nameof(CvPreviewRequestEntity));
 
         return data;
+    }
+
+    public async Task<IEnumerable<CompanyCvPreviewRequestListingDTO>> GetCompanyCvRequests(string userId)
+    {
+        return await this.DbSet.AsNoTracking()
+            .Where(cpr => cpr.RequesterId == userId)
+            .To<CompanyCvPreviewRequestListingDTO>()
+            .ToListAsync();
     }
 }
