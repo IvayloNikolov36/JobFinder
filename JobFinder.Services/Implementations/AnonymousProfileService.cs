@@ -121,7 +121,7 @@ public class AnonymousProfileService : IAnonymousProfileService
     {
         CvPreviewRequestDTO requestDto = this.mapper.Map<CvPreviewRequestDTO>(requestModel);
 
-        await this.unitOfWork.CvPreviewRequestRepository.CreateRequest(requestDto);
+        await this.unitOfWork.CvPreviewRequestRepository.MakeRequest(requestDto);
 
         await this.unitOfWork.SaveChanges();
     }

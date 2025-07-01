@@ -4,6 +4,7 @@ using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Transfer.DTOs.Cv;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
@@ -16,12 +17,39 @@ public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntit
         this.mapper = mapper;
     }
 
-    public async Task CreateRequest(CvPreviewRequestDTO request)
+    public async Task MakeRequest(CvPreviewRequestDTO request)
     {
-        CvPreviewRequestEntity requestEntity = new CvPreviewRequestEntity();
+        CvPreviewRequestEntity requestEntity = new();
         this.mapper.Map(request, requestEntity);
         requestEntity.RequestDate = DateTime.UtcNow;
 
         await this.DbSet.AddAsync(requestEntity);
+    }
+
+    public async Task AcceptRequest(int id)
+    {
+        CvPreviewRequestEntity cvPreviewRequest = await this.DbSet.FindAsync(id);
+
+        base.ValidateForExistence(cvPreviewRequest, nameof(CvPreviewRequestEntity));
+
+        cvPreviewRequest.AcceptedDate = DateTime.UtcNow;
+
+        this.DbSet.Update(cvPreviewRequest);
+    }
+
+    public async Task<CvPreviewRequestAcceptDataDTO> GetCvRequestAcceptData(int cvRequestId)
+    {
+        CvPreviewRequestAcceptDataDTO data = await this.DbSet.AsNoTracking()
+            .Where(r => r.Id == cvRequestId)
+            .Select(r => new CvPreviewRequestAcceptDataDTO
+            {
+                CvOwnerId = r.AnonymousProfile.UserId,
+                AcceptedDate = r.AcceptedDate
+            })
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(data, nameof(CvPreviewRequestEntity));
+
+        return data;
     }
 }

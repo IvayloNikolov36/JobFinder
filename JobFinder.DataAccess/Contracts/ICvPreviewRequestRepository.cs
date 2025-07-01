@@ -4,5 +4,9 @@ namespace JobFinder.DataAccess.Contracts;
 
 public interface ICvPreviewRequestRepository
 {
-    Task CreateRequest(CvPreviewRequestDTO request);
+    Task MakeRequest(CvPreviewRequestDTO request);
+
+    Task AcceptRequest(int id);
+
+    Task<CvPreviewRequestAcceptDataDTO> GetCvRequestAcceptData(int cvRequestId);
 }

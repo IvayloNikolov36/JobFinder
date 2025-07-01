@@ -6,6 +6,8 @@ namespace JobFinder.Web.Models.CvModels;
 
 public class CvPreviewRequestListingViewModel : IMapFrom<CvPreviewRequestListingDTO>
 {
+    public int Id { get; set; }
+
     public int JobAdId { get; set; }
 
     public string Position { get; set; }
