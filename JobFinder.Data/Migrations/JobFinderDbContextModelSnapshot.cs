@@ -365,9 +365,14 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("RequesterId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("JobAdId");
+
+                    b.HasIndex("RequesterId");
 
                     b.HasIndex("AnonymousProfileId", "JobAdId")
                         .IsUnique()
@@ -5941,7 +5946,7 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.Cv.CvPreviewRequestEntity", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", "AnonymousProfile")
-                        .WithMany()
+                        .WithMany("CvPreviewRequests")
                         .HasForeignKey("AnonymousProfileId");
 
                     b.HasOne("JobFinder.Data.Models.JobAdEntity", "JobAd")
@@ -5950,9 +5955,15 @@ namespace JobFinder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JobFinder.Data.Models.UserEntity", "Requester")
+                        .WithMany()
+                        .HasForeignKey("RequesterId");
+
                     b.Navigation("AnonymousProfile");
 
                     b.Navigation("JobAd");
+
+                    b.Navigation("Requester");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Cv.EducationInfoEntity", b =>
@@ -6362,6 +6373,8 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", b =>
                 {
                     b.Navigation("Appearance");
+
+                    b.Navigation("CvPreviewRequests");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>

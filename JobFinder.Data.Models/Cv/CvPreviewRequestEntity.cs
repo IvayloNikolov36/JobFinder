@@ -6,6 +6,9 @@ namespace JobFinder.Data.Models.Cv;
 
 public partial class CvPreviewRequestEntity : BaseEntity<int>
 {
+    public string RequesterId { get; set; }
+    public UserEntity Requester { get; set; }
+
     public string AnonymousProfileId { get; set; }
     public AnonymousProfileEntity AnonymousProfile { get; set; }
 
