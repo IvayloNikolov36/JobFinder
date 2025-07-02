@@ -12,5 +12,7 @@ public interface ICvRepository
    
     Task<T> GetCvData<T>(string cvId) where T: class;
 
+    Task<CvPreviewDataDTO> GetRequestedCvData(int cvRequestId);
+
     Task Delete(string cvId);
 }

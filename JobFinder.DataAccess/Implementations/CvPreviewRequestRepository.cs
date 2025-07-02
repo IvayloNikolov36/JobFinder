@@ -61,4 +61,16 @@ public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntit
             .To<CompanyCvPreviewRequestListingDTO>()
             .ToListAsync();
     }
+
+    public async Task<string> GetRequesterId(int cvRequestId)
+    {
+        string publisherId = await this.DbSet
+            .Where(cr => cr.Id == cvRequestId)
+            .Select(cr => cr.RequesterId)
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(publisherId, nameof(CvPreviewRequestEntity));
+
+        return publisherId;
+    }
 }

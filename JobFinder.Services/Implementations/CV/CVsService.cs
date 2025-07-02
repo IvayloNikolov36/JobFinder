@@ -77,6 +77,24 @@ namespace JobFinder.Services.Implementations.Cv
             return this.mapper.Map<CvPreviewDataViewModel>(cvData);
         }
 
+        public async Task<CvPreviewDataViewModel> GetRequestedCvData(int cvRequestId, string currentUserId)
+        {
+            string requesterId = await this.unitOfWork
+                .CvPreviewRequestRepository
+                .GetRequesterId(cvRequestId);
+
+            if (requesterId != currentUserId)
+            {
+                throw new ActionableException("You are not allowed to access CV from foreign CV request!");
+            }
+
+            CvPreviewDataDTO cvData = await this.unitOfWork
+                .CvRepository
+                .GetRequestedCvData(cvRequestId);
+
+            return this.mapper.Map<CvPreviewDataViewModel>(cvData);
+        }
+
         public async Task Delete(string cvId)
         {
             // TODO: if it is has been sent as an application???

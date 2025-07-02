@@ -67,6 +67,19 @@ namespace JobFinder.Web.Controllers.Cv
             return this.Ok(cv);
         }
 
+        [HttpGet]
+        [Route("preview/{cvRequestId:int}")]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<IActionResult> GetRequestedCv([FromRoute] int cvRequestId)
+        {
+            string userId = this.User.GetCurrentUserId();
+
+            CvPreviewDataViewModel cvData = await this.cvsService
+                .GetRequestedCvData(cvRequestId, userId);
+
+            return this.Ok(cvData);
+        }
+
         [HttpDelete]
         [Route("delete/{id}")]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]

@@ -58,7 +58,7 @@ public class CvRepository : EfCoreRepository<CurriculumVitaeEntity>, ICvReposito
             .Select(cv => cv.UserId)
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(userId, "CV");
+        base.ValidateForExistence(userId, nameof(CurriculumVitaeEntity));
 
         return userId;
     }
@@ -69,6 +69,19 @@ public class CvRepository : EfCoreRepository<CurriculumVitaeEntity>, ICvReposito
             .Where(cv => cv.Id == cvId)
             .To<T>()
             .SingleAsync();
+    }
+
+    public async Task<CvPreviewDataDTO> GetRequestedCvData(int cvRequestId)
+    {
+        CvPreviewDataDTO cvData =  await this.Context.CvPreviewRequests.AsNoTracking()
+            .Where(cr => cr.Id == cvRequestId)
+            .Select(cr => cr.AnonymousProfile.Cv)
+            .To<CvPreviewDataDTO>()
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(cvData, nameof(CvPreviewRequestEntity));
+
+        return cvData;
     }
 
     public async Task Delete(string cvId)
