@@ -48,7 +48,6 @@ namespace JobFinder.Web
                 );
 
             services.AddResponseCaching();
-            services.AddHttpCacheHeaders();
 
             services.AddCors(options => options.Configure());
 
@@ -101,6 +100,8 @@ namespace JobFinder.Web
             app.UseRouting();
 
             app.UseCors(WebConstants.CorsPolicyName);
+            app.UseResponseCaching();
+
             app.UseAuthentication();
             app.UseAuthorization();
 

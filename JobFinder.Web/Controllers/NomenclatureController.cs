@@ -6,6 +6,8 @@ namespace JobFinder.Web.Controllers
 {
     public class NomenclatureController : ApiController
     {
+        private const int CacheDuration = 3600;
+
         private readonly INomenclatureService nomenclatureService;
 
         public NomenclatureController(INomenclatureService nomenclatureService)
@@ -15,6 +17,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("countries")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCountries()
         {
             IEnumerable<BasicViewModel> countries = await this.nomenclatureService.GetCountries();
@@ -24,6 +27,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("citizenships")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCitizenships()
         {
             IEnumerable<BasicViewModel> citizenships = await this.nomenclatureService.GetCitizenships();
@@ -33,6 +37,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("gender")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetGender()
         {
             IEnumerable<BasicViewModel> gender = await this.nomenclatureService.GetGender();
@@ -42,6 +47,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("business-sectors")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetBusinessSectors()
         {
             IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetBusinessSector();
@@ -51,6 +57,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("job-categories")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetJobCategories()
         {
             IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetJobCategories();
@@ -60,6 +67,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("job-engagements")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetJobEngagements()
         {
             IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetJobEngagements();
@@ -69,6 +77,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("education-levels")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetEducationLevels()
         {
             IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetEducationLevels();
@@ -78,6 +87,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("language-types")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetLanguageTypes()
         {
             IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetLanguageTypes();
@@ -87,6 +97,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("language-levels")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetLanguageLevels()
         {
             IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetLanguageLevels();
@@ -96,6 +107,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("driving-categories")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetDrivingCategories()
         {
             IEnumerable<BasicViewModel> data = await this.nomenclatureService.GetDrivingCategories();
@@ -105,6 +117,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("cities")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCities()
         {
             IEnumerable<BasicViewModel> cities = await this.nomenclatureService.GetCities();
@@ -114,6 +127,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("currencies")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCurrencies()
         {
             IEnumerable<BasicViewModel> currencies = await this.nomenclatureService.GetCurrencies();
@@ -123,6 +137,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("recurring-types")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetRecurringTypes()
         {
             IEnumerable<BasicViewModel> recurringTypes = await this.nomenclatureService.GetRecurringTypes();
@@ -132,6 +147,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("it-areas")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetItAreas()
         {
             IEnumerable<BasicViewModel> itAreas = await this.nomenclatureService.GetItAreas();
@@ -141,6 +157,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("tech-stacks")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetTechStacks()
         {
             IEnumerable<BasicViewModel> techStacks = await this.nomenclatureService.GetTechStacks();
@@ -150,6 +167,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("soft-skills")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetSoftSkills()
         {
             IEnumerable<BasicViewModel> softSkills = await this.nomenclatureService.GetSoftSkills();
@@ -159,6 +177,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("workplace-types")]
+        [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetWorkplaceTypes()
         {
             IEnumerable<BasicViewModel> workplaceTypes = await this.nomenclatureService.GetWorkplaceTypes();
