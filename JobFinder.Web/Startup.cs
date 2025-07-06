@@ -48,6 +48,7 @@ namespace JobFinder.Web
                 );
 
             services.AddResponseCaching();
+            services.AddDistributedMemoryCache();
 
             services.AddCors(options => options.Configure());
 

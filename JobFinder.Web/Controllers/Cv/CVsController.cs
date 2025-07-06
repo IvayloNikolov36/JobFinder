@@ -26,7 +26,8 @@ namespace JobFinder.Web.Controllers.Cv
         {
             string userId = this.User.GetCurrentUserId();
 
-            string cvId = await this.cvsService.CreateAsync(cvModel, userId);
+            string cvId = await this.cvsService
+                .CreateAsync(cvModel, userId, invalidateCache: true);
 
             object resultObject = new { cvId };
 

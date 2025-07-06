@@ -4,7 +4,7 @@ namespace JobFinder.Services.Cv
 {
     public interface ICvsService
     {
-        Task<string> CreateAsync(CVCreateInputModel cvModel, string userId);
+        Task<string> CreateAsync(CVCreateInputModel cvModel, string userId, bool invalidateCache);
 
         Task<IEnumerable<CvListingModel>> All(string userId);
 

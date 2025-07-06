@@ -5,39 +5,60 @@ using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services.Cv;
 using JobFinder.Transfer.DTOs.Cv;
 using JobFinder.Web.Models.CvModels;
+using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
+using System.Text.Json;
 
 namespace JobFinder.Services.Implementations.Cv
 {
     public class CvsService : ICvsService
     {
+        private const string CVsCacheKey = "cvs_{0}";
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IDistributedCache distributedCache;
         private readonly IPdfGenerator pdfGenerator;
         private readonly ICourseCertificateInfoRules courceCertificateInfoRules;
 
         public CvsService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
+            IDistributedCache distributedCache,
             IPdfGenerator pdfGenerator,
             ICourseCertificateInfoRules courceCertificateInfoRules)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.distributedCache = distributedCache;
             this.pdfGenerator = pdfGenerator;
             this.courceCertificateInfoRules = courceCertificateInfoRules;
         }
 
         public async Task<IEnumerable<CvListingModel>> All(string userId)
         {
-            IEnumerable<CVListingDTO> cvDtos = await this.unitOfWork
-                .CvRepository
-                .All(userId);
+            string cacheKey = string.Format(CVsCacheKey, userId);
 
-            return this.mapper.Map<IEnumerable<CvListingModel>>(cvDtos);
+            byte[] cachedData = await this.distributedCache.GetAsync(cacheKey);
+            if (cachedData == null)
+            {
+                IEnumerable<CVListingDTO> cvDtos = await this.unitOfWork
+                    .CvRepository
+                    .All(userId);
+
+                var data = this.mapper.Map<IEnumerable<CvListingModel>>(cvDtos);
+
+                string serializedData = JsonSerializer.Serialize(data);
+
+                await this.distributedCache.SetAsync(cacheKey, Encoding.UTF8.GetBytes(serializedData));
+
+                return data;
+            }
+
+            return JsonSerializer
+                .Deserialize<IEnumerable<CvListingModel>>(Encoding.UTF8.GetString(cachedData));
         }
 
-        public async Task<string> CreateAsync(CVCreateInputModel cvModel, string userId)
+        public async Task<string> CreateAsync(CVCreateInputModel cvModel, string userId, bool invalidateCache)
         {
             IEnumerable<CourseCertificateInputDTO> courceCertificateInfoDtos = this.mapper
                 .Map<IEnumerable<CourseCertificateInputDTO>>(cvModel.CourseCertificates);
@@ -49,6 +70,11 @@ namespace JobFinder.Services.Implementations.Cv
             await this.unitOfWork.CvRepository.Create(userId, cvDataDto);
 
             await this.unitOfWork.SaveChanges<CVCreateDTO, string>(cvDataDto);
+
+            if (invalidateCache)
+            {
+                await this.distributedCache.RemoveAsync(string.Format(CVsCacheKey, userId));
+            }
 
             return cvDataDto.Id;
         }
