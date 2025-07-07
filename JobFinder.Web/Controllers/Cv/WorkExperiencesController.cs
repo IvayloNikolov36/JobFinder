@@ -21,7 +21,8 @@ public class WorkExperiencesController : BaseCVsController
         [FromRoute] Guid cvId,
         [FromBody] IEnumerable<WorkExperienceEditModel> workExperience)
     {
-        UpdateResult result = await this.workExperienceService.UpdateAsync(cvId.ToString(), workExperience);
+        UpdateResult result = await this.workExperienceService
+            .UpdateAsync(cvId.ToString(), workExperience);
 
         return this.Ok(result);
     }

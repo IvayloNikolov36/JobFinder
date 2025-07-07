@@ -8,12 +8,12 @@ using JobFinder.Web.Models.CvModels;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
 using System.Text.Json;
+using static JobFinder.Services.Constants.CacheConstants;
 
 namespace JobFinder.Services.Implementations.Cv
 {
     public class CvsService : ICvsService
     {
-        private const string CVsCacheKey = "cvs_{0}";
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IDistributedCache distributedCache;
@@ -81,17 +81,30 @@ namespace JobFinder.Services.Implementations.Cv
 
         public async Task<MyCvDataViewModel> GetOwnCvData(string cvId, string userId)
         {
-            MyCvDataDTO cvDataDto = await this.unitOfWork.CvRepository
+            string cacheKey = string.Format(CvCacheKey, cvId);
+
+            byte[] cachedCv = await this.distributedCache.GetAsync(cacheKey);
+
+            if (cachedCv == null)
+            {
+                MyCvDataDTO cvDataDto = await this.unitOfWork.CvRepository
                 .GetCvData<MyCvDataDTO>(cvId);
 
-            MyCvDataViewModel cvData = this.mapper.Map<MyCvDataViewModel>(cvDataDto);
+                MyCvDataViewModel cvData = this.mapper.Map<MyCvDataViewModel>(cvDataDto);
 
-            bool hasAnyAnonymousProfileActivated = await this.unitOfWork.AnonymousProfileRepository
-                .HasAnonymousProfile(userId);
+                bool hasAnyAnonymousProfileActivated = await this.unitOfWork.AnonymousProfileRepository
+                    .HasAnonymousProfile(userId);
 
-            cvData.CanActivateAnonymousProfile = !hasAnyAnonymousProfileActivated;
+                cvData.CanActivateAnonymousProfile = !hasAnyAnonymousProfileActivated;
 
-            return cvData;
+                string serializedCvData = JsonSerializer.Serialize(cvData);
+
+                await this.distributedCache.SetAsync(cacheKey, Encoding.UTF8.GetBytes(serializedCvData));
+
+                return cvData;
+            }
+
+            return JsonSerializer.Deserialize<MyCvDataViewModel>(cachedCv);
         }
 
         public async Task<CvPreviewDataViewModel> GetUserCvData(string cvId)

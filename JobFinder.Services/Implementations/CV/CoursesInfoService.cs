@@ -4,6 +4,8 @@ using JobFinder.Services.Cv;
 using JobFinder.Transfer.DTOs.Cv;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.CvModels;
+using Microsoft.Extensions.Caching.Distributed;
+using static JobFinder.Services.Constants.CacheConstants;
 
 namespace JobFinder.Services.Implementations.Cv
 {
@@ -11,13 +13,15 @@ namespace JobFinder.Services.Implementations.Cv
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-
+        private readonly IDistributedCache distributedCache;
         public CoursesInfoService(
             IEntityFrameworkUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IDistributedCache distributedCache)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.distributedCache = distributedCache;
         }
 
         public async Task<IEnumerable<CourseInfoViewModel>> All(string cvId)
@@ -29,7 +33,9 @@ namespace JobFinder.Services.Implementations.Cv
             return this.mapper.Map<IEnumerable<CourseInfoViewModel>>(coursesData);
         }
 
-        public async Task<UpdateResult> Update(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfoModels)
+        public async Task<UpdateResult> Update(
+            string cvId,
+            IEnumerable<CourseSertificateEditModel> coursesInfoModels)
         {
             IEnumerable<CourseCertificateSimpleDTO> courcesInfo = this.mapper
                 .Map<IEnumerable<CourseCertificateSimpleDTO>>(coursesInfoModels);
@@ -39,6 +45,10 @@ namespace JobFinder.Services.Implementations.Cv
                 .Update(cvId, courcesInfo);
 
             await this.unitOfWork.SaveChanges();
+
+            string cvCacheKey = string.Format(CvCacheKey, cvId);
+
+            await this.distributedCache.RemoveAsync(cvCacheKey);
 
             return new UpdateResult(newItems);
         }

@@ -28,7 +28,8 @@ namespace JobFinder.Web.Controllers
         {
             string userId = this.User.GetCurrentUserId();
 
-            string id = await this.anonymousProfileService.Create(cvId.ToString(), userId, profile);
+            string id = await this.anonymousProfileService
+                .Create(cvId.ToString(), userId, profile);
 
             return this.Ok(new { id });
         }

@@ -9,6 +9,9 @@ using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.AnonymousProfile;
 using JobFinder.Web.Models.CvModels;
 using JobFinder.Web.Models.JobAds;
+using Microsoft.Extensions.Caching.Distributed;
+using static JobFinder.Services.Constants.CacheConstants;
+
 
 namespace JobFinder.Services.Implementations;
 
@@ -18,20 +21,26 @@ public class AnonymousProfileService : IAnonymousProfileService
     private readonly IMapper mapper;
     private readonly ICvRules cvRules;
     private readonly IAnonymousProfileRules anonymousProfileRules;
+    private readonly IDistributedCache distributedCache;
 
     public AnonymousProfileService(
         IEntityFrameworkUnitOfWork unitOfWork,
         IMapper mapper,
         ICvRules cvRules,
-        IAnonymousProfileRules anonymousProfileRules)
+        IAnonymousProfileRules anonymousProfileRules,
+        IDistributedCache distributedCache)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
         this.cvRules = cvRules;
         this.anonymousProfileRules = anonymousProfileRules;
+        this.distributedCache = distributedCache;
     }
 
-    public async Task<string> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile)
+    public async Task<string> Create(
+        string cvId,
+        string userId,
+        AnonymousProfileCreateViewModel profile)
     {
         bool hasAlreadyAnActivated = await this.unitOfWork.AnonymousProfileRepository
             .HasAnonymousProfile(userId);
@@ -66,6 +75,10 @@ public class AnonymousProfileService : IAnonymousProfileService
 
         await this.unitOfWork.SaveChanges<AnonymousProfileCreateDTO, string>(anonymousProfileDto);
 
+        string cvCacheKey = string.Format(CvCacheKey, cvId);
+
+        await this.distributedCache.RemoveAsync(cvCacheKey);
+
         return anonymousProfileDto.Id;
     }
 
@@ -81,6 +94,10 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.unitOfWork.AnonymousProfileRepository.Delete(id);
 
         await this.unitOfWork.SaveChanges();
+
+        string cvCacheKey = string.Format(CvCacheKey, cvId);
+
+        await this.distributedCache.RemoveAsync(cvCacheKey);
     }
 
     public async Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId)

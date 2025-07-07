@@ -19,7 +19,7 @@ namespace JobFinder.Web.Controllers.Cv
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update([FromRoute] string cvId, [FromBody] SkillsEditModel model)
         {
-            await this.skillsService.Update(model);
+            await this.skillsService.Update(cvId, model);
 
             return this.Ok();
         }
