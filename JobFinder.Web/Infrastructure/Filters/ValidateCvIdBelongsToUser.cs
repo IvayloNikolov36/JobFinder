@@ -26,7 +26,7 @@ namespace JobFinder.Web.Infrastructure.Filters
 
             if (id == null)
             {
-                context.Result = controller.BadRequest(new { Title = "The CV id must be a string value!" });
+                context.SetBadRequestResult("The CV id must be a string value!");
                 return;
             }
 
