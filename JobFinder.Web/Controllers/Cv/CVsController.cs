@@ -82,21 +82,21 @@ namespace JobFinder.Web.Controllers.Cv
         }
 
         [HttpDelete]
-        [Route("delete/{id}")]
+        [Route("delete/{cvId}")]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<IActionResult> DeleteCv([FromRoute] string id)
+        public async Task<IActionResult> DeleteCv([FromRoute] string cvId)
         {
-            await this.cvsService.Delete(id);
+            await this.cvsService.Delete(cvId);
 
             return this.NoContent();
         }
 
         [HttpGet]
-        [Route("generate-pdf/{id}")]
+        [Route("generate-pdf/{cvId}")]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<ActionResult> GenerateCVPdf(string id)
+        public async Task<ActionResult> GenerateCVPdf(string cvId)
         {
-            byte[] cvPdf = await this.cvsService.GeneratePdf(id, this.User.GetCurrentUserId());
+            byte[] cvPdf = await this.cvsService.GeneratePdf(cvId, this.User.GetCurrentUserId());
 
             return this.Ok(cvPdf);
         }

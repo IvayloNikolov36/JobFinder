@@ -22,7 +22,6 @@ namespace JobFinder.Web.Infrastructure.Filters
                 return;
             }
 
-
             if (context.ActionArguments.First().Value is not ApplicationPreviewInfoInputModel model)
             {
                 return;

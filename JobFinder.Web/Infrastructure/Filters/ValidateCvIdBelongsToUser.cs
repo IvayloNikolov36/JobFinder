@@ -1,4 +1,5 @@
 ﻿using JobFinder.Services.Cv;
+using JobFinder.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
@@ -16,16 +17,12 @@ namespace JobFinder.Web.Infrastructure.Filters
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            ControllerBase controller = context.Controller as ControllerBase;
-
-            if (controller == null)
+            if (context.Controller is not ControllerBase controller)
             {
                 return;
             }
 
-            object id = context
-                .ActionArguments
-                .FirstOrDefault(aa => aa.Key.ToLower().Contains("id")).Value;
+            object id = context.GetParam("cvId");
 
             if (id == null)
             {
@@ -44,7 +41,7 @@ namespace JobFinder.Web.Infrastructure.Filters
 
             if (requestUserId != userId)
             {
-                context.Result = controller.BadRequest(new { Title = "You can't access or modify other users CVs!" });
+                context.SetBadRequestResult("You can't access or modify other users CVs!");
                 return;
             }
 

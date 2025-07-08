@@ -1,4 +1,5 @@
 ﻿using JobFinder.Services;
+using JobFinder.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
@@ -14,22 +15,20 @@ namespace JobFinder.Web.Infrastructure.Filters
             this.anonymousProfileService = anonymousProfileService;
         }
 
-        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public override async Task OnActionExecutionAsync(
+            ActionExecutingContext context,
+            ActionExecutionDelegate next)
         {
-            ControllerBase controller = context.Controller as ControllerBase;
-
-            if (controller == null)
+            if (context.Controller is not ControllerBase controller)
             {
                 return;
             }
 
-            object id = context
-                .ActionArguments
-                .FirstOrDefault(aa => aa.Key.ToLower().Contains("id")).Value;
+            object id = context.GetParam("id");
 
             if (id == null)
             {
-                context.Result = controller.BadRequest(new { Title = "The CV id must be a string value!" });
+                context.SetBadRequestResult("Anonymous Profile id must be a string value!");
                 return;
             }
 
@@ -44,7 +43,7 @@ namespace JobFinder.Web.Infrastructure.Filters
 
             if (requestUserId != userId)
             {
-                context.Result = controller.BadRequest(new { Title = "You can't access or modify other users anonymous profiles!" });
+                context.SetBadRequestResult("You can't access or modify other users anonymous profiles!");
                 return;
             }
 
