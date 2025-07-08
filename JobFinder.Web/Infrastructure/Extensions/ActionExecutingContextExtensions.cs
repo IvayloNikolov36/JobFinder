@@ -10,7 +10,7 @@ namespace JobFinder.Web.Infrastructure.Extensions
         {
             return context
                 .ActionArguments
-                .FirstOrDefault(aa => aa.Key.ToLower().Equals(paramName)).Value;
+                .FirstOrDefault(aa => aa.Key.ToLower().Equals(paramName.ToLower())).Value;
         }
 
         public static void SetBadRequestResult(this ActionExecutingContext context, string errorMessage)
