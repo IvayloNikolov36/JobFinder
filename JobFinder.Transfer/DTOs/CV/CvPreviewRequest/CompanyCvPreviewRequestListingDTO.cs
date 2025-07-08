@@ -4,8 +4,6 @@ public class CompanyCvPreviewRequestListingDTO
 {
     public int Id { get; set; }
 
-    public string AnonymousProfileId { get; set; }
-
     public string CvId { get; set; }
 
     // TODO: use DTO

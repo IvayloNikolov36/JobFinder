@@ -141,11 +141,12 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         return isRelevant;
     }
 
+    // TODO: move the method into appropriate repo
     public async Task<IEnumerable<CvPreviewRequestListingDTO>> GetAllCvPreviewRequests(string userId)
     {
-        return await this.DbSet.AsNoTracking()
-            .Where(ap => ap.UserId == userId)
-            .SelectMany(ap => ap.CvPreviewRequests)
+        return await this.Context.CurriculumVitaes.AsNoTracking()
+            .Where(cv => cv.UserId == userId)
+            .SelectMany(cv => cv.CvPreviewRequests)
             .To<CvPreviewRequestListingDTO>()
             .ToArrayAsync();
     }

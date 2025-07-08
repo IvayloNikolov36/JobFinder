@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250708224134_CvPreviewRequest_CvIdColumn")]
+    partial class CvPreviewRequest_CvIdColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,11 +353,13 @@ namespace JobFinder.Data.Migrations
                     b.Property<DateTime?>("AcceptedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("AnonymousProfileId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CvId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("JobAdId")
@@ -371,12 +376,15 @@ namespace JobFinder.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CvId");
+
                     b.HasIndex("JobAdId");
 
                     b.HasIndex("RequesterId");
 
-                    b.HasIndex("CvId", "JobAdId")
-                        .IsUnique();
+                    b.HasIndex("AnonymousProfileId", "JobAdId")
+                        .IsUnique()
+                        .HasFilter("[AnonymousProfileId] IS NOT NULL");
 
                     b.ToTable("CvPreviewRequests");
                 });
@@ -5945,11 +5953,13 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.Cv.CvPreviewRequestEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
+                    b.HasOne("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", "AnonymousProfile")
                         .WithMany("CvPreviewRequests")
-                        .HasForeignKey("CvId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AnonymousProfileId");
+
+                    b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
+                        .WithMany()
+                        .HasForeignKey("CvId");
 
                     b.HasOne("JobFinder.Data.Models.JobAdEntity", "JobAd")
                         .WithMany()
@@ -5960,6 +5970,8 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.UserEntity", "Requester")
                         .WithMany()
                         .HasForeignKey("RequesterId");
+
+                    b.Navigation("AnonymousProfile");
 
                     b.Navigation("Cv");
 
@@ -6375,6 +6387,8 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", b =>
                 {
                     b.Navigation("Appearance");
+
+                    b.Navigation("CvPreviewRequests");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>
@@ -6389,8 +6403,6 @@ namespace JobFinder.Data.Migrations
                     b.Navigation("AnonymousProfile");
 
                     b.Navigation("CourseCertificates");
-
-                    b.Navigation("CvPreviewRequests");
 
                     b.Navigation("Educations");
 

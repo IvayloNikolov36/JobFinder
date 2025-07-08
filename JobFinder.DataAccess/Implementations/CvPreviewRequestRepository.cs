@@ -44,7 +44,7 @@ public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntit
             .Where(r => r.Id == cvRequestId)
             .Select(r => new CvPreviewRequestAcceptDataDTO
             {
-                CvOwnerId = r.AnonymousProfile.UserId,
+                CvOwnerId = r.Cv.UserId,
                 AcceptedDate = r.AcceptedDate
             })
             .SingleOrDefaultAsync();

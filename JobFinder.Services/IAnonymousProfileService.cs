@@ -8,7 +8,7 @@ public interface IAnonymousProfileService
 {
     Task<string> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile);
 
-    Task Delete(string cvId);
+    Task Delete(string anonymousProfileId, string userId);
 
     Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId);
 

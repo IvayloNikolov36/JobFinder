@@ -17,7 +17,7 @@ public partial class CvPreviewRequestEntity : IMapFrom<CvPreviewRequestDTO>,
         configuration.CreateMap<CvPreviewRequestEntity, CompanyCvPreviewRequestListingDTO>()
             .ForMember(dto => dto.Position, o => o.MapFrom(e => e.JobAd.Position))
             .ForMember(dto => dto.CvId, o => o.MapFrom(e => e.AcceptedDate.HasValue
-                ? e.AnonymousProfile.CvId
+                ? e.CvId
                 : null));
     }
 }

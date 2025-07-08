@@ -10,7 +10,6 @@ public partial class AnonymousProfileEntity : BaseEntity<string>
     public AnonymousProfileEntity()
     {
         this.Id = Guid.NewGuid().ToString();
-        this.CvPreviewRequests = [];
     }
 
     public string UserId { get; set; }
@@ -20,6 +19,4 @@ public partial class AnonymousProfileEntity : BaseEntity<string>
     public CurriculumVitaeEntity Cv { get; set; }
 
     public AnonymousProfileAppearanceEntity Appearance { get; set; }
-
-    public ICollection<CvPreviewRequestEntity> CvPreviewRequests { get; set; }
 }

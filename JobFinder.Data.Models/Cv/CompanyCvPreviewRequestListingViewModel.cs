@@ -8,8 +8,6 @@ public class CompanyCvPreviewRequestListingViewModel : IMapFrom<CompanyCvPreview
 {
     public int Id { get; set; }
 
-    public string AnonymousProfileId { get; set; }
-
     public string CvId { get; set; }
 
     public int JobAdId { get; set; }

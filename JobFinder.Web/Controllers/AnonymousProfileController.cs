@@ -39,7 +39,9 @@ namespace JobFinder.Web.Controllers
         [ServiceFilter(typeof(ValidateAnonymousProfileBelongsToUser))]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            await this.anonymousProfileService.Delete(id.ToString());
+            await this.anonymousProfileService.Delete(
+                id.ToString(),
+                this.User.GetCurrentUserId());
 
             return this.Ok();
         }
@@ -74,11 +76,13 @@ namespace JobFinder.Web.Controllers
         [Authorize(Roles = CompanyRole)]
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
         [ServiceFilter(typeof(ValidateCompanyCanViewAnonymousProfile))]
-        public async Task<IActionResult> CreateCvPreviewRequest([FromBody] CvPreviewRequestCreateViewModel requestModel)
+        public async Task<IActionResult> CreateCvPreviewRequest(
+            [FromBody] CvPreviewRequestCreateViewModel requestModel)
         {
             string currentUserId = this.User.GetCurrentUserId();
 
-            await this.anonymousProfileService.MakeCvPreviewRequest(requestModel, currentUserId);
+            await this.anonymousProfileService
+                .MakeCvPreviewRequest(requestModel, currentUserId);
 
             return this.Ok();
         }

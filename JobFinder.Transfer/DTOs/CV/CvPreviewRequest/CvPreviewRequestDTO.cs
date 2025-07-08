@@ -4,7 +4,7 @@ public class CvPreviewRequestDTO
 {
     public string RequesterId { get; set; }
 
-    public Guid AnonymousProfileId { get; set; }
-
     public int JobAdId { get; set; }
+
+    public string CvId { get; set; }
 }

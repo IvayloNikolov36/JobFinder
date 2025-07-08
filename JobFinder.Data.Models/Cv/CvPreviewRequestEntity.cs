@@ -1,6 +1,6 @@
-﻿using JobFinder.Data.Models.AnonymousProfile;
-using JobFinder.Data.Models.Common;
+﻿using JobFinder.Data.Models.Common;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Data.Models.Cv;
 
@@ -9,8 +9,9 @@ public partial class CvPreviewRequestEntity : BaseEntity<int>
     public string RequesterId { get; set; }
     public UserEntity Requester { get; set; }
 
-    public string AnonymousProfileId { get; set; }
-    public AnonymousProfileEntity AnonymousProfile { get; set; }
+    [Required]
+    public string CvId { get; set; }
+    public CurriculumVitaeEntity Cv { get; set; }
 
     public int JobAdId { get; set; }
     public JobAdEntity JobAd { get; set; }

@@ -75,7 +75,7 @@ public class CvRepository : EfCoreRepository<CurriculumVitaeEntity>, ICvReposito
     {
         CvPreviewDataDTO cvData =  await this.Context.CvPreviewRequests.AsNoTracking()
             .Where(cr => cr.Id == cvRequestId)
-            .Select(cr => cr.AnonymousProfile.Cv)
+            .Select(cr => cr.Cv)
             .To<CvPreviewDataDTO>()
             .SingleOrDefaultAsync();
 

@@ -75,29 +75,29 @@ public class AnonymousProfileService : IAnonymousProfileService
 
         await this.unitOfWork.SaveChanges<AnonymousProfileCreateDTO, string>(anonymousProfileDto);
 
-        string cvCacheKey = string.Format(CvCacheKey, cvId);
-
-        await this.distributedCache.RemoveAsync(cvCacheKey);
+        await this.RemoveCvFromCache(cvId);
+        await this.RemoveCVsFromCache(userId);
 
         return anonymousProfileDto.Id;
     }
 
-    public async Task Delete(string id)
+    public async Task Delete(string anonymousProfileId, string userId)
     {
-        string cvId = await this.unitOfWork.AnonymousProfileRepository.GetCvId(id);
+        string cvId = await this.unitOfWork
+            .AnonymousProfileRepository
+            .GetCvId(anonymousProfileId);
 
         await this.unitOfWork.WorkExperienceRepository.DisassociateFromAnonymousProfile(cvId);
         await this.unitOfWork.EducationInfoRepository.DisassociateFromAnonymousProfile(cvId);
         await this.unitOfWork.LanguageInfoRepository.DisassociateFromAnonymousProfile(cvId);
         await this.unitOfWork.CoursesCertificateInfoRepository.DisassociateFromAnonymousProfile(cvId);
 
-        await this.unitOfWork.AnonymousProfileRepository.Delete(id);
+        await this.unitOfWork.AnonymousProfileRepository.Delete(anonymousProfileId);
 
         await this.unitOfWork.SaveChanges();
 
-        string cvCacheKey = string.Format(CvCacheKey, cvId);
-
-        await this.distributedCache.RemoveAsync(cvCacheKey);
+        await this.RemoveCvFromCache(cvId);
+        await this.RemoveCVsFromCache(userId);
     }
 
     public async Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId)
@@ -137,7 +137,12 @@ public class AnonymousProfileService : IAnonymousProfileService
     public async Task MakeCvPreviewRequest(CvPreviewRequestCreateViewModel requestModel, string currentUserId)
     {
         CvPreviewRequestDTO requestDto = this.mapper.Map<CvPreviewRequestDTO>(requestModel);
+
         requestDto.RequesterId = currentUserId;
+
+        requestDto.CvId = await this.unitOfWork
+            .AnonymousProfileRepository
+            .GetCvId(requestModel.AnonymousProfileId.ToString());
 
         await this.unitOfWork.CvPreviewRequestRepository.MakeRequest(requestDto);
 
@@ -151,5 +156,17 @@ public class AnonymousProfileService : IAnonymousProfileService
             .GetAllCvPreviewRequests(userId);
 
         return this.mapper.Map<IEnumerable<CvPreviewRequestListingViewModel>>(cvRequests);
+    }
+
+    private async Task RemoveCvFromCache(string cvId)
+    {
+        string cvCacheKey = string.Format(CvCacheKey, cvId);
+        await this.distributedCache.RemoveAsync(cvCacheKey);
+    }
+
+    private async Task RemoveCVsFromCache(string userId)
+    {
+        string cvsCacheKey = string.Format(CVsCacheKey, userId);
+        await this.distributedCache.RemoveAsync(cvsCacheKey);
     }
 }

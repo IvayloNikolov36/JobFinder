@@ -1,6 +1,5 @@
 ﻿using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Common;
-using JobFinder.Data.Models.Cv;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +15,7 @@ namespace JobFinder.Data.Models.Cv
             this.Educations = new List<EducationInfoEntity>();
             this.LanguagesInfo = new List<LanguageInfoEntity>();
             this.CourseCertificates = new List<CourseCertificateEntity>();
+            this.CvPreviewRequests = new List<CvPreviewRequestEntity>();
         }
 
         public string UserId { get; set; }
@@ -30,11 +30,19 @@ namespace JobFinder.Data.Models.Cv
         public string PictureUrl { get; set; }
 
         public AnonymousProfileEntity AnonymousProfile { get; set; }
+
         public PersonalInfoEntity PersonalInfo { get; set; }
+
         public SkillsInfoEntity Skills { get; set; }
+
         public ICollection<WorkExperienceInfoEntity> WorkExperiences { get; set; }
+
         public ICollection<EducationInfoEntity> Educations { get; set; }
+
         public ICollection<LanguageInfoEntity> LanguagesInfo { get; set; }
+
         public ICollection<CourseCertificateEntity> CourseCertificates { get; set; }
+
+        public ICollection<CvPreviewRequestEntity> CvPreviewRequests { get; set; }
     }
 }
