@@ -16,4 +16,6 @@ public interface IJobAdApplicationsRepository
     Task<bool> IsApplicationSent(string cvId, int jobAdId, string publisherId);
 
     Task<DateTime> SetPreviewed(string cvId, int jobAdId);
+
+    void DeleteAll(string cvId);
 }

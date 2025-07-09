@@ -13,4 +13,6 @@ public interface ICvPreviewRequestRepository
     Task<IEnumerable<CompanyCvPreviewRequestListingDTO>> GetCompanyCvRequests(string userId);
 
     Task<string> GetRequesterId(int cvRequestId);
+
+    void DeleteAll(string cvId);
 }

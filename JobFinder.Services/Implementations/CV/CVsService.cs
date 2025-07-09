@@ -136,8 +136,6 @@ namespace JobFinder.Services.Implementations.Cv
 
         public async Task Delete(string cvId)
         {
-            // TODO: if it is has been sent as an application???
-
             this.unitOfWork.PersonalInfoRepository.Delete(cvId);
             this.unitOfWork.EducationInfoRepository.Delete(cvId);
             this.unitOfWork.WorkExperienceRepository.Delete(cvId);
@@ -146,8 +144,14 @@ namespace JobFinder.Services.Implementations.Cv
             this.unitOfWork.SkillsInfoDrivingCategoryRepository.Delete(cvId);
             await this.unitOfWork.SkillsInfoRepository.Delete(cvId);
 
-            // TODO: check it
-            //await this.unitOfWork.AnonymousProfileRepository.Delete(cvId);
+            this.unitOfWork.JobAdApplicationsRepository
+                .DeleteAll(cvId);
+
+            this.unitOfWork.CvPreviewRequestRepository
+                .DeleteAll(cvId);
+
+            await this.unitOfWork.AnonymousProfileRepository
+                .DeleteAnonymousProfile(cvId);
 
             await this.unitOfWork.CvRepository.Delete(cvId);
 

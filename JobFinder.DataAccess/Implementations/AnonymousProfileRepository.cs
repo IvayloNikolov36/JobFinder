@@ -87,11 +87,27 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
         await this.DbSet.AddAsync(anonymousProfileEntity);
     }
 
-    public async Task Delete(string id)
+    public async Task Delete(string anonymousProfileId)
     {
-        AnonymousProfileEntity profileEntity = await this.DbSet.FindAsync(id);
+        AnonymousProfileEntity profileEntity = await this.DbSet
+            .FindAsync(anonymousProfileId);
+
+        base.ValidateForExistence(profileEntity, nameof(AnonymousProfileEntity));
 
         this.DbSet.Remove(profileEntity);
+    }
+
+
+    public async Task DeleteAnonymousProfile(string cvId)
+    {
+        AnonymousProfileEntity profileEntity = await this.DbSet
+            .Where(ap => ap.CvId == cvId)
+            .SingleOrDefaultAsync();
+
+        if (profileEntity != null)
+        {
+            this.DbSet.Remove(profileEntity);
+        }
     }
 
     public async Task<bool> HasAnonymousProfile(string userId)

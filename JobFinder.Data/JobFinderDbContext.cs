@@ -168,6 +168,7 @@ namespace JobFinder.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CompanyEntitySchemaDefinition());
+            builder.ApplyConfiguration(new CvEntitySchemaDefinition());
 
             builder.Entity<UserEntity>()
                 .HasOne(u => u.Company)

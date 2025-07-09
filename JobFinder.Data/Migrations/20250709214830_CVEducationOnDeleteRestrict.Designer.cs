@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250709214830_CVEducationOnDeleteRestrict")]
+    partial class CVEducationOnDeleteRestrict
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5903,8 +5906,7 @@ namespace JobFinder.Data.Migrations
                 {
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithOne("AnonymousProfile")
-                        .HasForeignKey("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", "CvId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", "CvId");
 
                     b.HasOne("JobFinder.Data.Models.UserEntity", "User")
                         .WithMany()
@@ -5929,7 +5931,7 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithMany("CourseCertificates")
                         .HasForeignKey("CvId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cv");
@@ -5949,7 +5951,7 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithMany("CvPreviewRequests")
                         .HasForeignKey("CvId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.JobAdEntity", "JobAd")
@@ -5999,7 +6001,7 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithMany("LanguagesInfo")
                         .HasForeignKey("CvId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", "LanguageType")
@@ -6048,7 +6050,7 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithOne("PersonalInfo")
                         .HasForeignKey("JobFinder.Data.Models.Cv.PersonalInfoEntity", "CvId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.Nomenclature.GenderEntity", "Gender")
@@ -6090,7 +6092,7 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithOne("Skills")
                         .HasForeignKey("JobFinder.Data.Models.Cv.SkillsInfoEntity", "CvId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cv");
@@ -6107,7 +6109,7 @@ namespace JobFinder.Data.Migrations
                     b.HasOne("JobFinder.Data.Models.Cv.CurriculumVitaeEntity", "Cv")
                         .WithMany("WorkExperiences")
                         .HasForeignKey("CvId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BusinessSector");

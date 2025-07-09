@@ -9,7 +9,9 @@ public interface IAnonymousProfileRepository
 {
     Task Create(string cvId, string userId, AnonymousProfileCreateDTO anonymousProfileDto);
 
-    Task Delete(string id);
+    Task Delete(string anonymousProfileId);
+
+    Task DeleteAnonymousProfile(string cvId);
 
     Task<AnonymousProfileDataDTO> GetAnonymousProfile(string anonymousProfileId);
 

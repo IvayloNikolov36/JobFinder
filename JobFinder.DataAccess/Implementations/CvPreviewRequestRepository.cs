@@ -9,7 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
-public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntity>, ICvPreviewRequestRepository
+public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntity>,
+    ICvPreviewRequestRepository
 {
     private readonly IMapper mapper;
 
@@ -72,5 +73,13 @@ public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntit
         base.ValidateForExistence(publisherId, nameof(CvPreviewRequestEntity));
 
         return publisherId;
+    }
+
+    public void DeleteAll(string cvId)
+    {
+        IQueryable<CvPreviewRequestEntity> cvRequests = this.DbSet
+            .Where(cr => cr.CvId == cvId);
+
+        this.DbSet.RemoveRange(cvRequests);
     }
 }

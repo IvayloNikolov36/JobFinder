@@ -76,4 +76,11 @@ public class JobAdApplicationsRepository : EfCoreRepository<JobAdApplicationEnti
 
         return previewDate;
     }
+    public void DeleteAll(string cvId)
+    {
+        IQueryable<JobAdApplicationEntity> records = this.DbSet
+            .Where(ja => ja.CvId == cvId);
+
+        this.DbSet.RemoveRange(records);
+    }
 }
