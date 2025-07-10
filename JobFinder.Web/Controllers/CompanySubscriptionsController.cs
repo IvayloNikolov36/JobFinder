@@ -3,6 +3,7 @@ using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
 {
@@ -19,6 +20,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> Subscribe([FromRoute] int id)
         {
             string userId = this.User.GetCurrentUserId();
@@ -30,6 +32,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("unsubscribe/{id}")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> Unsubscribe([FromRoute] int id)
         {
             string userId = this.User.GetCurrentUserId();
@@ -41,6 +44,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("unsubscribe/all")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> UnsubscribeAll()
         {
             string userId = this.User.GetCurrentUserId();
@@ -52,6 +56,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("mine")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetMySubscriptions()
         {
             string userId = this.User.GetCurrentUserId();

@@ -20,7 +20,8 @@ namespace JobFinder.Web.Controllers
         [Route("details/{companyId}")]
         public async Task<IActionResult> Details([FromRoute] int companyId)
         {
-            CompanyDetailsUserViewModel details = await this.companiesService.Details(companyId, this.User.GetCurrentUserId());
+            CompanyDetailsUserViewModel details = await this.companiesService
+                .Details(companyId, this.User.GetCurrentUserId());
 
             return this.Ok(details);
         }

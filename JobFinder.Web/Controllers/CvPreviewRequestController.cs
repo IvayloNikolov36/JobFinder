@@ -1,7 +1,6 @@
 ﻿using JobFinder.Data.Models.Cv;
 using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
-using JobFinder.Web.Models.CvModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static JobFinder.Web.Infrastructure.WebConstants;
@@ -13,13 +12,15 @@ public class CvPreviewRequestController : ApiController
 {
     private readonly ICvPreviewRequestService cvPreviewRequestService;
 
-    public CvPreviewRequestController(ICvPreviewRequestService cvPreviewRequestService)
+    public CvPreviewRequestController(
+        ICvPreviewRequestService cvPreviewRequestService)
     {
         this.cvPreviewRequestService = cvPreviewRequestService;
     }
 
     [HttpGet]
     [Route("allow-cv-preview/{id:int}")]
+    [Authorize(Roles = JobSeekerRole)]
     public async Task<IActionResult> AllowCvPreview([FromRoute] int id)
     {
         await this.cvPreviewRequestService.AllowCvPreview(id, this.User.GetCurrentUserId());

@@ -46,7 +46,8 @@ namespace JobFinder.Web.Controllers
         {
             string currentUserId = this.User.GetCurrentUserId();
 
-            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService.GetCompanyAds(currentUserId, active);
+            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService
+                .GetCompanyAds(currentUserId, active);
 
             return this.Ok(jobAds);
         }
@@ -77,7 +78,7 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{jobAdId:int}")]
         [Authorize(Roles = CompanyRole)]
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
         public async Task<ActionResult> Update([FromRoute] int jobAdId, [FromBody] JobAdEditModel model)

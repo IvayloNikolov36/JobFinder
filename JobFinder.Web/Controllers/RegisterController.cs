@@ -3,10 +3,6 @@ using JobFinder.Data.Models;
 using JobFinder.Web.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
@@ -41,6 +37,14 @@ namespace JobFinder.Web.Controllers
                 requestResult = new RegisterResult { Successful = false, Errors = errors };
 
                 return this.BadRequest(requestResult);
+            }
+
+            IdentityResult addRoleResult = await this.userManager
+                .AddToRoleAsync(newUser, JobSeekerRole);
+
+            if (!addRoleResult.Succeeded)
+            {
+                return this.BadRequest(new RegisterResult { Errors = [CanNotAddJobSeekerRole] });
             }
 
             requestResult = new RegisterResult { Successful = true, Message = RegisterSuccess };

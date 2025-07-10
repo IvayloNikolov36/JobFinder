@@ -1,4 +1,6 @@
-﻿namespace JobFinder.Web.Models.Account
+﻿using System.Collections.Generic;
+
+namespace JobFinder.Web.Models.Account
 {
     public class LoginResult
     {
@@ -10,6 +12,6 @@
 
         public string Id { get; set; }
 
-        public string Role { get; set; }
+        public IEnumerable<string> Roles { get; set; }
     }
 }

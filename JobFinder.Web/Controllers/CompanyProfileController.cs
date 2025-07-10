@@ -3,6 +3,7 @@ using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.CompanyProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
 {
@@ -17,6 +18,7 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> GetMyProfileData()
         {
             string userId = this.User.GetCurrentUserId();

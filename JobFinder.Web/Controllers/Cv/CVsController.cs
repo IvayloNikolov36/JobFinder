@@ -22,6 +22,7 @@ namespace JobFinder.Web.Controllers.Cv
 
         [HttpPost]
         [Route("create")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<ActionResult<BasicViewModel>> Create([FromBody] CVCreateInputModel cvModel)
         {
             string userId = this.User.GetCurrentUserId();
@@ -36,6 +37,7 @@ namespace JobFinder.Web.Controllers.Cv
 
         [HttpGet]
         [Route("all")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<ActionResult<IEnumerable<CvListingModel>>> GetAllMine()
         {
             string userId = this.User.GetCurrentUserId();
@@ -47,6 +49,7 @@ namespace JobFinder.Web.Controllers.Cv
 
         [HttpGet]
         [Route("{cvId:guid}", Name = "GetOwnCvData")]
+        [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<ActionResult<CvDataViewModel>> GetOwnCvData([FromRoute] Guid cvId)
         {
@@ -83,6 +86,7 @@ namespace JobFinder.Web.Controllers.Cv
 
         [HttpDelete]
         [Route("delete/{cvId}")]
+        [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> DeleteCv([FromRoute] string cvId)
         {
@@ -93,6 +97,7 @@ namespace JobFinder.Web.Controllers.Cv
 
         [HttpGet]
         [Route("generate-pdf/{cvId}")]
+        [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<ActionResult> GenerateCVPdf(string cvId)
         {

@@ -12,13 +12,15 @@ namespace JobFinder.Web.Controllers
     {
         private readonly IJobAdsApplicationsService jobAdsApplicationsService;
 
-        public JobAdsApplicationsController(IJobAdsApplicationsService jobAdsApplicationsService)
+        public JobAdsApplicationsController(
+            IJobAdsApplicationsService jobAdsApplicationsService)
         {
             this.jobAdsApplicationsService = jobAdsApplicationsService;
         }
 
         [HttpGet]
         [Route("mine")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetAllMine()
         {
             string currentUserId = this.User.GetCurrentUserId();
@@ -43,18 +45,20 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("jobAd/{id}")]
-        public async Task<IActionResult> GetUserJobsApplications([FromRoute] int id)
+        [Route("jobAd/{jobAdId:int}")]
+        [Authorize(Roles = JobSeekerRole)]
+        public async Task<IActionResult> GetMyJobsApplications([FromRoute] int jobAdId)
         {
             string currentUserId = this.User.GetCurrentUserId();
 
             IEnumerable<JobAdApplicationViewModel> jobAdsApplications = await this.jobAdsApplicationsService
-                .GetUserJobsAdApplications(currentUserId, id);
+                .GetUserJobsAdApplications(currentUserId, jobAdId);
 
             return this.Ok(jobAdsApplications);
         }
 
         [HttpPost]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> Create(JobAdApplicationInputModel jobAdApplication)
         {
             jobAdApplication.ApplicantId = this.User.GetCurrentUserId();

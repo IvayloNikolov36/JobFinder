@@ -1,9 +1,11 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Models.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobFinder.Web.Controllers
 {
+    [Authorize]
     public class NomenclatureController : ApiController
     {
         private const int CacheDuration = 3600;

@@ -14,13 +14,15 @@ namespace JobFinder.Web.Controllers
     {
         private readonly IAnonymousProfileService anonymousProfileService;
 
-        public AnonymousProfileController(IAnonymousProfileService anonymousProfileService)
+        public AnonymousProfileController(
+            IAnonymousProfileService anonymousProfileService)
         {
             this.anonymousProfileService = anonymousProfileService;
         }
 
         [HttpPost]
         [Route("create/{cvId:guid}")]
+        [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Create(
             [FromRoute] Guid cvId,
@@ -36,6 +38,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpDelete]
         [Route("delete/{id:guid}")]
+        [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateAnonymousProfileBelongsToUser))]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
@@ -48,6 +51,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("get")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetMyAnonymousProfileData()
         {
             string userId = this.User.GetCurrentUserId();
@@ -89,7 +93,8 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("cv-requests")]
-        public async Task<IActionResult> GetAllCvPreviewRequests()
+        [Authorize(Roles = JobSeekerRole)]
+        public async Task<IActionResult> GetMyCvsPreviewRequests()
         {
             string userId = this.User.GetCurrentUserId();
 

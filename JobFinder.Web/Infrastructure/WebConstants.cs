@@ -4,6 +4,7 @@
     {
         public const string AdminRole = "Admin";
         public const string CompanyRole = "Company";
+        public const string JobSeekerRole = "Job Seeker";
 
         public const string AdminUserName = "Administrator";
         public const string AdminEmail = "admin@job-finder.com";
@@ -26,6 +27,7 @@
         public const string LoginSuccess = "Successfully logged in!";
         public const string InvalidEmailOrPassword = "Email and/or password are invalid!";
         public const string CanNotAddCompanyRole = "Unable to add company role!";
+        public const string CanNotAddJobSeekerRole = "Unable to add Job Seeker role!";
 
         // Job Ads
         public const string NoJobFound = "Job ad not found!";

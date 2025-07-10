@@ -3,6 +3,7 @@ using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.UserProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
 {
@@ -11,18 +12,21 @@ namespace JobFinder.Web.Controllers
     {
         private readonly IUserProfileService userProfileService;
 
-        public UserProfileController(IUserProfileService userProfileService)
+        public UserProfileController(
+            IUserProfileService userProfileService)
         {
             this.userProfileService = userProfileService;
         }
 
         [HttpGet]
         [Route("my-data")]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetMyProfileData()
         {
             string userId = this.User.GetCurrentUserId();
 
-            UserProfileDataViewModel profileData = await this.userProfileService.GetNyProfileData(userId);
+            UserProfileDataViewModel profileData = await this.userProfileService
+                .GetNyProfileData(userId);
 
             return this.Ok(profileData);
         }

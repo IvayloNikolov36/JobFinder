@@ -1,21 +1,16 @@
-﻿namespace JobFinder.Web.Controllers
-{
-    using JobFinder.Data.Models;
-    using JobFinder.Web.Models.Account;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.IdentityModel.Tokens;
-    using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Text;
-    using System.Threading.Tasks;
-    using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-    using static JobFinder.Web.Infrastructure.WebConstants;
+﻿using JobFinder.Data.Models;
+using JobFinder.Web.Models.Account;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
+namespace JobFinder.Web.Controllers
+{
     public class LoginController : ApiController
     {
         private readonly IConfiguration configuration;
@@ -72,7 +67,7 @@
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Username = user.UserName,
                 Id = user.Id,
-                Role = roles.Any() ? roles.First() : string.Empty,
+                Roles = roles
             };
 
             return this.Ok(loginResult);
