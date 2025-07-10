@@ -28,6 +28,4 @@ public interface IAnonymousProfileRepository
     Task<bool> IsAnonymousProfileRelevantForJobAd(string id, JobAdCriteriasDTO jobAdCriterias);
 
     Task<bool> HasAnonymousProfile(string userId);
-
-    Task<IEnumerable<CvPreviewRequestListingDTO>> GetAllCvPreviewRequests(string userId);
 }

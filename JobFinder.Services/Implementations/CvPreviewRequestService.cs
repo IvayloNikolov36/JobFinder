@@ -21,6 +21,36 @@ public class CvPreviewRequestService : ICvPreviewRequestService
         this.mapper = mapper;
     }
 
+    public async Task<IEnumerable<CvPreviewRequestListingViewModel>> GetAllCvPreviewRequests(
+        string userId)
+    {
+        IEnumerable<CvPreviewRequestListingDTO> cvRequests = await this.unitOfWork
+            .CvPreviewRequestRepository
+            .GetAllCvPreviewRequests(userId);
+
+        return this.mapper.Map<IEnumerable<CvPreviewRequestListingViewModel>>(cvRequests);
+    }
+
+    public async Task MakeCvPreviewRequest(
+        CvPreviewRequestCreateViewModel requestModel,
+        string currentUserId)
+    {
+        CvPreviewRequestDTO requestDto = this.mapper
+            .Map<CvPreviewRequestDTO>(requestModel);
+
+        requestDto.RequesterId = currentUserId;
+
+        requestDto.CvId = await this.unitOfWork
+            .AnonymousProfileRepository
+            .GetCvId(requestModel.AnonymousProfileId.ToString());
+
+        await this.unitOfWork
+            .CvPreviewRequestRepository
+            .MakeRequest(requestDto);
+
+        await this.unitOfWork.SaveChanges();
+    }
+
     public async Task AllowCvPreview(int id, string currentUserId)
     {
         await this.ValidateCvRequest(id, currentUserId);

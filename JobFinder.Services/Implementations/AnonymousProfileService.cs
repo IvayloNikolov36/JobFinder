@@ -134,30 +134,6 @@ public class AnonymousProfileService : IAnonymousProfileService
                 this.mapper.Map<JobAdCriteriasDTO>(jobAdCriterias));
     }
 
-    public async Task MakeCvPreviewRequest(CvPreviewRequestCreateViewModel requestModel, string currentUserId)
-    {
-        CvPreviewRequestDTO requestDto = this.mapper.Map<CvPreviewRequestDTO>(requestModel);
-
-        requestDto.RequesterId = currentUserId;
-
-        requestDto.CvId = await this.unitOfWork
-            .AnonymousProfileRepository
-            .GetCvId(requestModel.AnonymousProfileId.ToString());
-
-        await this.unitOfWork.CvPreviewRequestRepository.MakeRequest(requestDto);
-
-        await this.unitOfWork.SaveChanges();
-    }
-
-    public async Task<IEnumerable<CvPreviewRequestListingViewModel>> GetAllCvPreviewRequests(string userId)
-    {
-        IEnumerable<CvPreviewRequestListingDTO> cvRequests = await this.unitOfWork
-            .AnonymousProfileRepository
-            .GetAllCvPreviewRequests(userId);
-
-        return this.mapper.Map<IEnumerable<CvPreviewRequestListingViewModel>>(cvRequests);
-    }
-
     private async Task RemoveCvFromCache(string cvId)
     {
         string cvCacheKey = string.Format(CvCacheKey, cvId);

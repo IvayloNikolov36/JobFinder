@@ -19,6 +19,16 @@ public class CvPreviewRequestRepository : EfCoreRepository<CvPreviewRequestEntit
         this.mapper = mapper;
     }
 
+    public async Task<IEnumerable<CvPreviewRequestListingDTO>> GetAllCvPreviewRequests(
+        string userId)
+    {
+        return await this.Context.CurriculumVitaes.AsNoTracking()
+            .Where(cv => cv.UserId == userId)
+            .SelectMany(cv => cv.CvPreviewRequests)
+            .To<CvPreviewRequestListingDTO>()
+            .ToArrayAsync();
+    }
+
     public async Task MakeRequest(CvPreviewRequestDTO request)
     {
         CvPreviewRequestEntity requestEntity = new();

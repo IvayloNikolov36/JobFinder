@@ -2,7 +2,6 @@
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Models.AnonymousProfile;
-using JobFinder.Web.Models.CvModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static JobFinder.Web.Infrastructure.WebConstants;
@@ -73,35 +72,6 @@ namespace JobFinder.Web.Controllers
                 .GetAnonymousProfile(id.ToString());
 
             return this.Ok(anonymousProfile);
-        }
-
-        [HttpPost]
-        [Route("cv-request")]
-        [Authorize(Roles = CompanyRole)]
-        [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
-        [ServiceFilter(typeof(ValidateCompanyCanViewAnonymousProfile))]
-        public async Task<IActionResult> CreateCvPreviewRequest(
-            [FromBody] CvPreviewRequestCreateViewModel requestModel)
-        {
-            string currentUserId = this.User.GetCurrentUserId();
-
-            await this.anonymousProfileService
-                .MakeCvPreviewRequest(requestModel, currentUserId);
-
-            return this.Ok();
-        }
-
-        [HttpGet]
-        [Route("cv-requests")]
-        [Authorize(Roles = JobSeekerRole)]
-        public async Task<IActionResult> GetMyCvsPreviewRequests()
-        {
-            string userId = this.User.GetCurrentUserId();
-
-            IEnumerable<CvPreviewRequestListingViewModel> cvRequests = await this.anonymousProfileService
-                .GetAllCvPreviewRequests(userId);
-
-            return this.Ok(cvRequests);
         }
     }
 }

@@ -5,7 +5,6 @@ using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
-using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using JobFinder.Transfer.DTOs.JobAd;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -155,16 +154,6 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
             .AnyAsync();
 
         return isRelevant;
-    }
-
-    // TODO: move the method into appropriate repo
-    public async Task<IEnumerable<CvPreviewRequestListingDTO>> GetAllCvPreviewRequests(string userId)
-    {
-        return await this.Context.CurriculumVitaes.AsNoTracking()
-            .Where(cv => cv.UserId == userId)
-            .SelectMany(cv => cv.CvPreviewRequests)
-            .To<CvPreviewRequestListingDTO>()
-            .ToArrayAsync();
     }
 
     private Expression<Func<AnonymousProfileEntity, bool>> ExpressionForAnonymousProfileJobAdRelevance(JobAdCriteriasDTO jobAdCriterias)
