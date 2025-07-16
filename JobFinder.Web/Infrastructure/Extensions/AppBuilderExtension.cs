@@ -1,24 +1,24 @@
-﻿namespace JobFinder.Web.Infrastructure.Extensions
-{
-    using JobFinder.Data;
-    using JobFinder.Data.Models;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.Extensions.DependencyInjection;
-    using System.Threading.Tasks;
-    using static JobFinder.Web.Infrastructure.WebConstants;
+﻿using JobFinder.Data;
+using JobFinder.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
+namespace JobFinder.Web.Infrastructure.Extensions
+{
     public static class AppBuilderExtension
     {
         private static readonly IdentityRole[] Roles =
-        {
+        [
             new IdentityRole(AdminRole),
-            new IdentityRole(CompanyRole)
-        };
+            new IdentityRole(CompanyRole),
+            new IdentityRole(JobSeekerRole)
+        ];
 
         public static async void SeedDatabase(this IApplicationBuilder app)
         {
-            IServiceScopeFactory serviceFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            IServiceScopeFactory serviceFactory = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>();
+
             IServiceScope scope = serviceFactory.CreateScope();
 
             using (scope)
