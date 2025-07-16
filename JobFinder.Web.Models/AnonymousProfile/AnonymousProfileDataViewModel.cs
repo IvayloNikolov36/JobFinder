@@ -1,11 +1,11 @@
 ﻿using JobFinder.Services.Mappings;
-using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.AnonymousProfile;
 using JobFinder.Web.Models.CvModels;
 using System.Collections.Generic;
 
 namespace JobFinder.Web.Models.AnonymousProfile;
 
-public class AnonymousProfileDataViewModel : IMapFrom<AnonymousProfileDataDTO>
+public class AnonymousProfileDataViewModel : IMapFrom<CompanyAnonymousProfileDataDTO>
 {
     public PersonalInfoAnonymousProfileViewModel PersonalInfo { get; set; }
 
@@ -18,4 +18,6 @@ public class AnonymousProfileDataViewModel : IMapFrom<AnonymousProfileDataDTO>
     public SkillsViewModel SkillsInfo { get; set; }
 
     public IEnumerable<CourseInfoViewModel> CoursesInfo { get; set; }
+
+    public bool IsCvRequested { get; set; }
 }

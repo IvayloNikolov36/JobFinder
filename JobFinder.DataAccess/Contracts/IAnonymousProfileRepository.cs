@@ -1,6 +1,5 @@
 ﻿using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
-using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using JobFinder.Transfer.DTOs.JobAd;
 
 namespace JobFinder.DataAccess.Contracts;
@@ -13,7 +12,10 @@ public interface IAnonymousProfileRepository
 
     Task DeleteAnonymousProfile(string cvId);
 
-    Task<AnonymousProfileDataDTO> GetAnonymousProfile(string anonymousProfileId);
+    Task<CompanyAnonymousProfileDataDTO> GetAnonymousProfile(
+        string anonymousProfileId,
+        int jobAdId,
+        string requesterId);
 
     Task<AnonymousProfileDataDTO> GetAnonymousProfileData(string userId);
 

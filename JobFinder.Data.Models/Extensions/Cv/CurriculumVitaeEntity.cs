@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.AnonymousProfile;
 using JobFinder.Transfer.DTOs.Cv;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Linq;
 
 namespace JobFinder.Data.Models.Cv;
@@ -25,6 +27,14 @@ public partial class CurriculumVitaeEntity :
             .ForMember(dto => dto.CoursesInfo, o => o.MapFrom(e => e.CourseCertificates
                 .Where(cs => cs.IncludeInAnonymousProfile == true)))
             .ForMember(dto => dto.SkillsInfo, o => o.MapFrom(e => e.Skills));
+
+        int jobAdId = 0;
+        string requesterId = string.Empty;
+
+        configuration.CreateMap<CurriculumVitaeEntity, CompanyAnonymousProfileDataDTO>()
+            .IncludeBase<CurriculumVitaeEntity, AnonymousProfileDataDTO>()
+            .ForMember(dto => dto.IsCvRequested, o => o.MapFrom(e => e.CvPreviewRequests
+                .Any(cr => cr.JobAdId == jobAdId && cr.RequesterId == requesterId)));
 
         configuration.CreateMap<CurriculumVitaeEntity, MyAnonymousProfileDataDTO>()
             .IncludeBase<CurriculumVitaeEntity, AnonymousProfileDataDTO>()

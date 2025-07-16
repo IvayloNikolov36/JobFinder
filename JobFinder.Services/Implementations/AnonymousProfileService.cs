@@ -100,10 +100,13 @@ public class AnonymousProfileService : IAnonymousProfileService
         await this.RemoveCVsFromCache(userId);
     }
 
-    public async Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId)
+    public async Task<AnonymousProfileDataViewModel> GetAnonymousProfile(
+        string anonymousProfileId,
+        int jobAdId,
+        string currentUserId)
     {
-        AnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
-            .GetAnonymousProfile(anonymousProfileId);
+        CompanyAnonymousProfileDataDTO cvData = await this.unitOfWork.AnonymousProfileRepository
+            .GetAnonymousProfile(anonymousProfileId, jobAdId, currentUserId);
 
         AnonymousProfileDataViewModel profile = this.mapper.Map<AnonymousProfileDataViewModel>(cvData);
 

@@ -9,7 +9,10 @@ public interface IAnonymousProfileService
 
     Task Delete(string anonymousProfileId, string userId);
 
-    Task<AnonymousProfileDataViewModel> GetAnonymousProfile(string anonymousProfileId);
+    Task<AnonymousProfileDataViewModel> GetAnonymousProfile(
+        string anonymousProfileId,
+        int jobAdId,
+        string currentUserId);
 
     Task<MyAnonymousProfileDataViewModel> GetMyAnonymousProfileData(string userId);
 

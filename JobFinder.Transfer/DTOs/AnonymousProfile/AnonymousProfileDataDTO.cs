@@ -1,6 +1,6 @@
 ﻿using JobFinder.Transfer.DTOs.Cv;
 
-namespace JobFinder.Transfer.DTOs;
+namespace JobFinder.Transfer.DTOs.AnonymousProfile;
 
 public class AnonymousProfileDataDTO
 {

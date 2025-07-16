@@ -17,12 +17,15 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
     }
 
-    public async Task<AnonymousProfileDataDTO> GetAnonymousProfile(string anonymousProfileId)
+    public async Task<CompanyAnonymousProfileDataDTO> GetAnonymousProfile(
+        string anonymousProfileId,
+        int jobAdId,
+        string requesterId)
     {
         return await this.DbSet
             .Where(ap => ap.Id == anonymousProfileId)
             .Select(ap => ap.Cv)
-            .To<AnonymousProfileDataDTO>()
+            .To<CompanyAnonymousProfileDataDTO>(new { jobAdId, requesterId })
             .SingleOrDefaultAsync();
     }
 
