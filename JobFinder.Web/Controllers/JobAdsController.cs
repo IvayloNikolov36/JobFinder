@@ -35,13 +35,14 @@ namespace JobFinder.Web.Controllers
         {
             string currentUserId = this.User.GetCurrentUserId();
 
-            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService.GetAllCompanyAds(currentUserId);
+            IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService
+                .GetAllCompanyAds(currentUserId);
 
             return this.Ok(jobAds);
         }
 
         [HttpGet]
-        [Route("company/{active}")]
+        [Route("company/{active:bool}")]
         public async Task<IActionResult> GetCompanyAds([FromRoute] bool active)
         {
             string currentUserId = this.User.GetCurrentUserId();
@@ -53,7 +54,7 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<ActionResult<JobAdDetailsViewModel>> Details([FromRoute] int id)
         {
             JobAdDetailsViewModel jobDetails = await this.adsService.Get(id);
