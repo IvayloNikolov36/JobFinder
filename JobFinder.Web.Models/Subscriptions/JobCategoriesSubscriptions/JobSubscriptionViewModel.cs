@@ -4,7 +4,8 @@ using JobFinder.Transfer.DTOs;
 
 namespace JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
 
-public class JobSubscriptionViewModel : IHaveCustomMappings
+public class 
+    JobSubscriptionViewModel : IHaveCustomMappings
 {
     private const string NoPropValueSubstitution = "All";
 

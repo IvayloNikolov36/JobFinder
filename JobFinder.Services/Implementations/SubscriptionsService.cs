@@ -6,6 +6,10 @@ using JobFinder.Transfer.DTOs;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.Subscriptions;
 using JobFinder.Web.Models.Subscriptions.JobCategoriesSubscriptions;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text;
+using System.Text.Json;
+using static JobFinder.Services.Constants.CacheConstants;
 
 namespace JobFinder.Services.Implementations
 {
@@ -16,37 +20,51 @@ namespace JobFinder.Services.Implementations
         private readonly IJobAdsService jobAdsService;
         private readonly INomenclatureService nomenclatureService;
         private readonly IJobSubscriptionsRules jobSubscriptionsRules;
+        private readonly IDistributedCache distributedCache;
 
         public SubscriptionsService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
             IJobAdsService jobAdsService,
             INomenclatureService nomenclatureService,
-            IJobSubscriptionsRules jobSubscriptionsRules)
+            IJobSubscriptionsRules jobSubscriptionsRules,
+            IDistributedCache distributedCache)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.jobAdsService = jobAdsService;
             this.nomenclatureService = nomenclatureService;
             this.jobSubscriptionsRules = jobSubscriptionsRules;
+            this.distributedCache = distributedCache;
         }
 
-        public async Task<JobSubscriptionViewModel> SubscribeForJobs(string userId, JobSubscriptionCriteriasViewModel subscription)
+        public async Task<JobSubscriptionViewModel> SubscribeForJobs(
+            string userId,
+            JobSubscriptionCriteriasViewModel subscription)
         {
-            JobSubscriptionCriteriasDTO subscriptionDto = this.mapper.Map<JobSubscriptionCriteriasDTO>(subscription);
+            JobSubscriptionCriteriasDTO subscriptionDto = this.mapper
+                .Map<JobSubscriptionCriteriasDTO>(subscription);
+
             subscriptionDto.UserId = userId;
 
             this.jobSubscriptionsRules.ValidateJobsSubscriptionProperties(subscriptionDto);
 
-            bool hasSuchSubscription = await this.unitOfWork.JobAdSubscriptionsRepository.Any(subscriptionDto);
+            bool hasSuchSubscription = await this.unitOfWork
+                .JobAdSubscriptionsRepository
+                .Any(subscriptionDto);
+
             if (hasSuchSubscription)
             {
                 throw new ActionableException("You already have subscription for jobs with given criterias!");
             }
 
-            await this.unitOfWork.JobAdSubscriptionsRepository.Add(subscriptionDto);
+            await this.unitOfWork.JobAdSubscriptionsRepository
+                .Add(subscriptionDto);
 
-            await this.unitOfWork.SaveChanges<JobSubscriptionCriteriasDTO, int>(subscriptionDto);
+            await this.unitOfWork
+                .SaveChanges<JobSubscriptionCriteriasDTO, int>(subscriptionDto);
+
+            await this.RemoveJobSubscriptionsCache(userId);
 
             JobSubscriptionDTO subscriptionDetails = await this.unitOfWork.JobAdSubscriptionsRepository
                 .GetDetails(subscriptionDto.Id);
@@ -58,24 +76,47 @@ namespace JobFinder.Services.Implementations
         {
             await this.unitOfWork.JobAdSubscriptionsRepository.Delete(subscriptionId, userId);
             await this.unitOfWork.SaveChanges();
+
+            await this.RemoveJobSubscriptionsCache(userId);
         }
 
         public async Task UnsubscribeFromAllJobsWithCriterias(string userId)
         {
             this.unitOfWork.JobAdSubscriptionsRepository.DeleteAll(userId);
             await this.unitOfWork.SaveChanges();
+
+            await this.RemoveJobSubscriptionsCache(userId);
         }
 
         public async Task<IEnumerable<JobSubscriptionViewModel>> GetAllJobSubscriptions(string userId)
         {
-            IEnumerable<JobSubscriptionDTO> subscriptions = await this.unitOfWork
-                .JobAdSubscriptionsRepository
-                .GetAll(userId);
+            string cacheKey = string.Format(JobSubscriptionsCacheKey, userId);
+            byte[] subscriptionsCache = await this.distributedCache.GetAsync(cacheKey);
 
-            return this.mapper.Map<IEnumerable<JobSubscriptionViewModel>>(subscriptions);
+            if (subscriptionsCache == null)
+            {
+                IEnumerable<JobSubscriptionDTO> subscriptions = await this.unitOfWork
+                    .JobAdSubscriptionsRepository
+                    .GetAll(userId);
+
+                var subscriptionModels = this.mapper
+                    .Map<IEnumerable<JobSubscriptionViewModel>>(subscriptions);
+
+                string serializedData = JsonSerializer.Serialize(subscriptionModels);
+
+                await this.distributedCache
+                    .SetAsync(cacheKey, Encoding.UTF8.GetBytes(serializedData));
+
+                return subscriptionModels;
+            }
+
+            return JsonSerializer
+                .Deserialize<IEnumerable<JobSubscriptionViewModel>>(
+                    Encoding.UTF8.GetString(subscriptionsCache));
         }
 
-        public async Task<IDictionary<string, List<JobAdsSubscriptionsViewModel>>> GetLatestJobAdsAsync(int recurringTypeId)
+        public async Task<IDictionary<string, List<JobAdsSubscriptionsViewModel>>> GetLatestJobAdsAsync(
+            int recurringTypeId)
         {
             IEnumerable<JobAdsSubscriptionDTO> jobAdsSubscriptions = await this.unitOfWork
                 .JobAdSubscriptionsRepository
@@ -137,7 +178,10 @@ namespace JobFinder.Services.Implementations
             return result;
         }
 
-        private async Task<List<JobAdDetailsForSubscriber>> GetJobAdsDetails(int[] jobAdsIds, Dictionary<int, JobAdDetailsForSubscriber> jobDetailsById)
+        private async Task<List<JobAdDetailsForSubscriber>> GetJobAdsDetails(
+            int[] jobAdsIds,
+            Dictionary<int,
+                JobAdDetailsForSubscriber> jobDetailsById)
         {
             List<JobAdDetailsForSubscriber> jobAdsDetails = new(jobAdsIds.Length);
 
@@ -159,6 +203,12 @@ namespace JobFinder.Services.Implementations
             }
 
             return jobAdsDetails;
+        }
+
+        private async Task RemoveJobSubscriptionsCache(string userId)
+        {
+            string subscriptionsCacheKey = string.Format(JobSubscriptionsCacheKey, userId);
+            await this.distributedCache.RemoveAsync(subscriptionsCacheKey);
         }
     }
 }
