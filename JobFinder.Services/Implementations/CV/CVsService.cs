@@ -134,7 +134,7 @@ namespace JobFinder.Services.Implementations.Cv
             return this.mapper.Map<CvPreviewDataViewModel>(cvData);
         }
 
-        public async Task Delete(string cvId)
+        public async Task Delete(string cvId, string userId)
         {
             this.unitOfWork.PersonalInfoRepository.Delete(cvId);
             this.unitOfWork.EducationInfoRepository.Delete(cvId);
@@ -156,6 +156,9 @@ namespace JobFinder.Services.Implementations.Cv
             await this.unitOfWork.CvRepository.Delete(cvId);
 
             await this.unitOfWork.SaveChanges();
+
+            string cvsCacheKey = string.Format(CVsCacheKey, userId);
+            await this.distributedCache.RemoveAsync(cvsCacheKey);
         }
 
         public async Task<string> GetOwnerId(string cvId)

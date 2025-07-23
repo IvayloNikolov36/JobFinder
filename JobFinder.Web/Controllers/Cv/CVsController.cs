@@ -90,7 +90,7 @@ namespace JobFinder.Web.Controllers.Cv
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> DeleteCv([FromRoute] string cvId)
         {
-            await this.cvsService.Delete(cvId);
+            await this.cvsService.Delete(cvId, this.User.GetCurrentUserId());
 
             return this.NoContent();
         }

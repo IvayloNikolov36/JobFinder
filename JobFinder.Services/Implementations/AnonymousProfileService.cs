@@ -4,14 +4,11 @@ using JobFinder.Business.Cv;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
-using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.AnonymousProfile;
-using JobFinder.Web.Models.CvModels;
 using JobFinder.Web.Models.JobAds;
 using Microsoft.Extensions.Caching.Distributed;
 using static JobFinder.Services.Constants.CacheConstants;
-
 
 namespace JobFinder.Services.Implementations;
 
