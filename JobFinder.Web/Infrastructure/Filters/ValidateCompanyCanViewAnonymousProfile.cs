@@ -10,11 +10,11 @@ namespace JobFinder.Web.Infrastructure.Filters;
 public class ValidateCompanyCanViewAnonymousProfile : ActionFilterAttribute
 {
     private readonly IJobAdsService jobAdService;
-    private readonly IAnonymousProfileService anonymousProfileService;
+    private readonly IAnonymousProfilesService anonymousProfileService;
 
     public ValidateCompanyCanViewAnonymousProfile(
         IJobAdsService jobAdService,
-        IAnonymousProfileService anonymousProfileService)
+        IAnonymousProfilesService anonymousProfileService)
     {
         this.jobAdService = jobAdService;
         this.anonymousProfileService = anonymousProfileService;

@@ -8,9 +8,9 @@ namespace JobFinder.Web.Infrastructure.Filters
 {
     public class ValidateAnonymousProfileBelongsToUser : ActionFilterAttribute
     {
-        private readonly IAnonymousProfileService anonymousProfileService;
+        private readonly IAnonymousProfilesService anonymousProfileService;
 
-        public ValidateAnonymousProfileBelongsToUser(IAnonymousProfileService anonymousProfileService)
+        public ValidateAnonymousProfileBelongsToUser(IAnonymousProfilesService anonymousProfileService)
         {
             this.anonymousProfileService = anonymousProfileService;
         }

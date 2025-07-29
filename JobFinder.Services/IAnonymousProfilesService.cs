@@ -3,7 +3,7 @@ using JobFinder.Web.Models.JobAds;
 
 namespace JobFinder.Services;
 
-public interface IAnonymousProfileService
+public interface IAnonymousProfilesService
 {
     Task<string> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile);
 

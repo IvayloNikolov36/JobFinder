@@ -12,7 +12,7 @@ using static JobFinder.Services.Constants.CacheConstants;
 
 namespace JobFinder.Services.Implementations;
 
-public class AnonymousProfileService : IAnonymousProfileService
+public class AnonymousProfilesService : IAnonymousProfilesService
 {
     private readonly IEntityFrameworkUnitOfWork unitOfWork;
     private readonly IMapper mapper;
@@ -20,7 +20,7 @@ public class AnonymousProfileService : IAnonymousProfileService
     private readonly IAnonymousProfileRules anonymousProfileRules;
     private readonly IDistributedCache distributedCache;
 
-    public AnonymousProfileService(
+    public AnonymousProfilesService(
         IEntityFrameworkUnitOfWork unitOfWork,
         IMapper mapper,
         ICvRules cvRules,
