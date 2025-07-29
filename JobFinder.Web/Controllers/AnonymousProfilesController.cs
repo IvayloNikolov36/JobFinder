@@ -23,6 +23,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("mine", Name = "MyAnonymousProfile")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MyAnonymousProfileDataViewModel))]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetMyAnonymousProfileData()
         {
@@ -67,6 +68,7 @@ namespace JobFinder.Web.Controllers
         [HttpGet]
         [Route("{id:guid}/{jobAdId:int}")]
         [Authorize(Roles = CompanyRole)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AnonymousProfileDataViewModel))]
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
         [ServiceFilter(typeof(ValidateCompanyCanViewAnonymousProfile))]
         public async Task<IActionResult> GetAnonymousProfileData(
