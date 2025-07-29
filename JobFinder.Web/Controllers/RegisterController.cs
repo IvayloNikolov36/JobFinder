@@ -22,6 +22,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpPost]
         [Route("user")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RegisterResult))]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model)
         {
             UserEntity newUser = this.mapper.Map<UserEntity>(model);
@@ -54,6 +55,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpPost]
         [Route("company")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RegisterResult))]
         public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyModel model)
         {
             CompanyEntity newCompany = this.mapper.Map<CompanyEntity>(model);

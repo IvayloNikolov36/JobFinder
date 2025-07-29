@@ -8,6 +8,8 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
 {
+    [Authorize]
+    [Route("api/ads-applications")]
     public class JobAdsApplicationsController : ApiController
     {
         private readonly IJobAdsApplicationsService jobAdsApplicationsService;
@@ -19,7 +21,9 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("mine")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<JobAdApplicationViewModel>))]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetAllMine()
         {
@@ -32,7 +36,10 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{jobAdId}")]
+        [Route("{jobAdId:int}")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<JobApplicationInfoViewModel>))]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> GetJobAllApplications([FromRoute] int jobAdId)
         {
@@ -44,20 +51,8 @@ namespace JobFinder.Web.Controllers
             return this.Ok(jobApplications);
         }
 
-        [HttpGet]
-        [Route("jobAd/{jobAdId:int}")]
-        [Authorize(Roles = JobSeekerRole)]
-        public async Task<IActionResult> GetMyJobsApplications([FromRoute] int jobAdId)
-        {
-            string currentUserId = this.User.GetCurrentUserId();
-
-            IEnumerable<JobAdApplicationViewModel> jobAdsApplications = await this.jobAdsApplicationsService
-                .GetUserJobsAdApplications(currentUserId, jobAdId);
-
-            return this.Ok(jobAdsApplications);
-        }
-
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> Create(JobAdApplicationInputModel jobAdApplication)
         {
@@ -68,11 +63,15 @@ namespace JobFinder.Web.Controllers
             return this.Ok();
         }
 
-        [HttpPost]
+        [HttpPost] // TODO: change to HTTP PATCH
         [Route("preview-info")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(PreviewInfoViewModel))]
         [Authorize(Roles = CompanyRole)]
         [ServiceFilter(typeof(ValidateCompanyAccessingCVSentForOwnAd))]
-        public async Task<IActionResult> SetCvPreviewed([FromBody] ApplicationPreviewInfoInputModel appModel)
+        public async Task<IActionResult> SetCvPreviewed(
+            [FromBody] ApplicationPreviewInfoInputModel appModel)
         {
             PreviewInfoViewModel previewInfo = await this.jobAdsApplicationsService
                 .SetPreviewInfo(appModel.CvId, appModel.JobAdId);

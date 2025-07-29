@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace JobFinder.Services
 {
-    public interface ICompanyService
+    public interface ICompaniesService
     {
         Task<int> GetCompanyId(string userId);
 

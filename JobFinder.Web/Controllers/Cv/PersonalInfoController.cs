@@ -7,22 +7,29 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers.Cv
 {
-    public class PersonalInfoController : BaseCVsController
+    [Authorize]
+    [Route("api/personal-info")]
+    public class PersonalInfoController : ApiController
     {
-        private readonly IPersonalInfosService personalInfoService;
+        private readonly IPersonalInfoService personalInfoService;
 
-        public PersonalInfoController(IPersonalInfosService personalInfoService)
+        public PersonalInfoController(IPersonalInfoService personalInfoService)
         {
             this.personalInfoService = personalInfoService;
         }
 
         [HttpPut]
-        [Route("{cvId}/update")]
+        [Route("{cvId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<IActionResult> Update([FromRoute] string cvId, [FromBody] PersonalInfoEditModel model)
+        public async Task<IActionResult> Update(
+            [FromRoute] Guid cvId,
+            [FromBody] PersonalInfoEditModel model)
         {
-            await this.personalInfoService.Update(cvId, model);
+            await this.personalInfoService.Update(
+                cvId.ToString(),
+                model);
 
             return this.Ok();
         }

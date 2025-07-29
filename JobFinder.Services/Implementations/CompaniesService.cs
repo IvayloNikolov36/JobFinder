@@ -5,12 +5,12 @@ using JobFinder.Web.Models.Company;
 
 namespace JobFinder.Services.Implementations
 {
-    public class CompanyService : ICompanyService
+    public class CompaniesService : ICompaniesService
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
-        public CompanyService(IEntityFrameworkUnitOfWork unitOfWork, IMapper mapper)
+        public CompaniesService(IEntityFrameworkUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;

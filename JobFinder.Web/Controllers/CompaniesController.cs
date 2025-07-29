@@ -7,21 +7,23 @@ using Microsoft.AspNetCore.Mvc;
 namespace JobFinder.Web.Controllers
 {
     [Authorize]
-    public class CompanyController : ApiController
+    [Route("api/companies")]
+    public class CompaniesController : ApiController
     {
-        private readonly ICompanyService companiesService;
+        private readonly ICompaniesService companiesService;
 
-        public CompanyController(ICompanyService companiesService)
+        public CompaniesController(ICompaniesService companiesService)
         {
             this.companiesService = companiesService;
         }
 
         [HttpGet]
-        [Route("details/{companyId}")]
-        public async Task<IActionResult> Details([FromRoute] int companyId)
+        [Route("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyDetailsUserViewModel))]
+        public async Task<IActionResult> Details([FromRoute] int id)
         {
             CompanyDetailsUserViewModel details = await this.companiesService
-                .Details(companyId, this.User.GetCurrentUserId());
+                .Details(id, this.User.GetCurrentUserId());
 
             return this.Ok(details);
         }

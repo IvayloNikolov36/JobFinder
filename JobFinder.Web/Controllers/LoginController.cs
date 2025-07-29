@@ -28,6 +28,7 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResult))]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             SignInResult result = await signInManager.PasswordSignInAsync(userName: model.Email, model.Password, false, false);

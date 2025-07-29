@@ -11,6 +11,7 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 namespace JobFinder.Web.Controllers
 {
     [Authorize]
+    [Route("api/ads")]
     public class JobAdsController : ApiController
     {
         private readonly IJobAdsService adsService;
@@ -21,6 +22,9 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(DataListingsModel<JobListingModel>))]
         public async Task<IActionResult> GetAllActive([FromBody] JobAdsFilterModel paramsModel)
         {
             DataListingsModel<JobListingModel> ads = await this.adsService.AllActiveAsync(paramsModel);
@@ -28,8 +32,13 @@ namespace JobFinder.Web.Controllers
             return this.Ok(ads);
         }
 
+        // TODO: create an endpoint for job seeker to access company ads
+
         [HttpGet]
         [Route("company/all")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<CompanyJobAdViewModel>))]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> GetAllCompanyAds()
         {
@@ -43,6 +52,9 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("company/{active:bool}")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<CompanyJobAdViewModel>))]
         public async Task<IActionResult> GetCompanyAds([FromRoute] bool active)
         {
             string currentUserId = this.User.GetCurrentUserId();
@@ -54,8 +66,11 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        public async Task<ActionResult<JobAdDetailsViewModel>> Details([FromRoute] int id)
+        [Route("{id:int}", Name = "Details")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(JobAdDetailsViewModel))]
+        public async Task<ActionResult<JobAdDetailsViewModel>> GetDetails([FromRoute] int id)
         {
             JobAdDetailsViewModel jobDetails = await this.adsService.Get(id);
 
@@ -64,23 +79,29 @@ namespace JobFinder.Web.Controllers
 
         [HttpPost]
         [Route("create")]
+        [ProducesResponseType(
+            StatusCodes.Status201Created,
+            Type = typeof(JobAdDetailsViewModel))]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> Create(
             [FromBody] JobAdCreateViewModel model,
-            [FromServices] ICompanyService companyService)
+            [FromServices] ICompaniesService companyService)
         {
             string userId = this.User.GetCurrentUserId();
 
             int companyId = await companyService.GetCompanyId(userId);
 
-            await this.adsService.Create(model, companyId);
+            int id = await this.adsService.Create(model, companyId);
 
-            return this.Ok();
+            IdentityViewModel<int> result = new(id);
+
+            return this.CreatedAtRoute("Details", result, result);
         }
 
         [HttpPut]
         [Route("{jobAdId:int}")]
         [Authorize(Roles = CompanyRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
         public async Task<ActionResult> Update([FromRoute] int jobAdId, [FromBody] JobAdEditModel model)
         {
@@ -93,6 +114,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("deactivate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeactivateAds()
         {
             await this.adsService.DeactivateAds();
@@ -102,6 +124,9 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("{jobAdId:int}/anonymous-profiles")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<AnonymousProfileListingViewModel>))]
         [Authorize(Roles = CompanyRole)]
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
         public async Task<IActionResult> GetRelevantAnonymousProfiles([FromRoute] int jobAdId)

@@ -8,6 +8,7 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 namespace JobFinder.Web.Controllers
 {
     [Authorize]
+    [Route("api/company-profile")]
     public class CompanyProfileController : ApiController
     {
         private readonly ICompanyProfileService companyProfileService;
@@ -18,6 +19,7 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyProfileDataViewModel))]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> GetMyProfileData()
         {

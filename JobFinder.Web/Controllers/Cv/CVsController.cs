@@ -21,22 +21,24 @@ namespace JobFinder.Web.Controllers.Cv
         }
 
         [HttpPost]
-        [Route("create")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IdentityViewModel<string>))]
         [Authorize(Roles = JobSeekerRole)]
-        public async Task<ActionResult<BasicViewModel>> Create([FromBody] CVCreateInputModel cvModel)
+        public async Task<ActionResult<BasicViewModel>> Create(
+            [FromBody] CVCreateInputModel cvModel)
         {
             string userId = this.User.GetCurrentUserId();
 
             string cvId = await this.cvsService
                 .CreateAsync(cvModel, userId, invalidateCache: true);
 
-            object resultObject = new { cvId };
+            IdentityViewModel<string> result = new(cvId);
 
-            return this.CreatedAtRoute("GetOwnCvData", resultObject, resultObject);
+            return this.CreatedAtRoute("GetOwnCvData", result, result);
         }
 
         [HttpGet]
         [Route("all")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IEnumerable<CvListingModel>))]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<ActionResult<IEnumerable<CvListingModel>>> GetAllMine()
         {
@@ -49,6 +51,7 @@ namespace JobFinder.Web.Controllers.Cv
 
         [HttpGet]
         [Route("{cvId:guid}", Name = "GetOwnCvData")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MyCvDataViewModel))]
         [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<ActionResult<CvDataViewModel>> GetOwnCvData([FromRoute] Guid cvId)
@@ -61,18 +64,22 @@ namespace JobFinder.Web.Controllers.Cv
         }
 
         [HttpGet]
-        [Route("preview/{CvId}/{JobAdId}")]
+        [Route("{CvId}/{JobAdId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CvPreviewDataViewModel))]
         [Authorize(Roles = CompanyRole)]
         [ServiceFilter(typeof(ValidateCompanyAccessingCVSentForOwnAd))]
-        public async Task<ActionResult<CvDataViewModel>> GetCvPreview([FromRoute] ApplicationPreviewInfoInputModel model)
+        public async Task<ActionResult<CvDataViewModel>> GetCvPreview(
+            [FromRoute] ApplicationPreviewInfoInputModel model)
         {
-            CvPreviewDataViewModel cv = await this.cvsService.GetUserCvData(model.CvId);
+            CvPreviewDataViewModel cv = await this.cvsService
+                .GetUserCvData(model.CvId);
 
             return this.Ok(cv);
         }
 
         [HttpGet]
         [Route("preview/{cvRequestId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CvPreviewDataViewModel))]
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> GetRequestedCv([FromRoute] int cvRequestId)
         {
@@ -85,23 +92,29 @@ namespace JobFinder.Web.Controllers.Cv
         }
 
         [HttpDelete]
-        [Route("delete/{cvId}")]
+        [Route("{cvId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<IActionResult> DeleteCv([FromRoute] string cvId)
+        public async Task<IActionResult> DeleteCv([FromRoute] Guid cvId)
         {
-            await this.cvsService.Delete(cvId, this.User.GetCurrentUserId());
+            await this.cvsService.Delete(
+                cvId.ToString(),
+                this.User.GetCurrentUserId());
 
             return this.NoContent();
         }
 
         [HttpGet]
-        [Route("generate-pdf/{cvId}")]
+        [Route("generate-pdf/{cvId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(byte[]))]
         [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
-        public async Task<ActionResult> GenerateCVPdf(string cvId)
+        public async Task<ActionResult> GenerateCVPdf(Guid cvId)
         {
-            byte[] cvPdf = await this.cvsService.GeneratePdf(cvId, this.User.GetCurrentUserId());
+            byte[] cvPdf = await this.cvsService.GeneratePdf(
+                cvId.ToString(),
+                this.User.GetCurrentUserId());
 
             return this.Ok(cvPdf);
         }

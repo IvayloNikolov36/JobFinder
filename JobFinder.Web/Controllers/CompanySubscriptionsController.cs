@@ -8,6 +8,7 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 namespace JobFinder.Web.Controllers
 {
     [Authorize]
+    [Route("api/company-subscriptions")]
     public class CompanySubscriptionsController : ApiController
     {
         private readonly ICompanySubscriptionsService companySubscriptionsService;
@@ -20,6 +21,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> Subscribe([FromRoute] int id)
         {
@@ -32,6 +34,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("unsubscribe/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> Unsubscribe([FromRoute] int id)
         {
@@ -44,6 +47,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("unsubscribe/all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> UnsubscribeAll()
         {
@@ -56,6 +60,9 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("mine")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<CompanySubscriptionViewModel>))]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetMySubscriptions()
         {
@@ -69,6 +76,9 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("latestJobs")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<CompanyJobAdsForSubscribersViewModel>))]
         public async Task<IActionResult> GetLatestJobs()
         {
             IEnumerable<CompanyJobAdsForSubscribersViewModel> jobs = await this.companySubscriptionsService

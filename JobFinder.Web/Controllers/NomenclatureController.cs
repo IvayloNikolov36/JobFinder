@@ -19,6 +19,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("countries")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCountries()
         {
@@ -29,6 +30,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("citizenships")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCitizenships()
         {
@@ -39,6 +41,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("gender")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetGender()
         {
@@ -49,6 +52,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("business-sectors")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetBusinessSectors()
         {
@@ -59,6 +63,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("job-categories")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetJobCategories()
         {
@@ -69,6 +74,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("job-engagements")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetJobEngagements()
         {
@@ -79,6 +85,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("education-levels")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetEducationLevels()
         {
@@ -89,6 +96,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("language-types")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetLanguageTypes()
         {
@@ -99,6 +107,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("language-levels")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetLanguageLevels()
         {
@@ -109,6 +118,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("driving-categories")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetDrivingCategories()
         {
@@ -119,6 +129,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("cities")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCities()
         {
@@ -129,6 +140,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("currencies")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetCurrencies()
         {
@@ -139,6 +151,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("recurring-types")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetRecurringTypes()
         {
@@ -149,6 +162,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("it-areas")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetItAreas()
         {
@@ -159,6 +173,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("tech-stacks")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetTechStacks()
         {
@@ -169,6 +184,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("soft-skills")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetSoftSkills()
         {
@@ -179,6 +195,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("workplace-types")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BasicViewModel>))]
         [ResponseCache(Duration = CacheDuration)]
         public async Task<IActionResult> GetWorkplaceTypes()
         {

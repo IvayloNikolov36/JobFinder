@@ -8,24 +8,29 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers.Cv
 {
-    public class LanguagesInfoController : BaseCVsController
+    [Authorize]
+    [Route("api/languages-info")]
+    public class LanguagesInfoController : ApiController
     {
-        private readonly ILanguageInfosService languagesInfosService;
+        private readonly ILanguagesInfoService languagesInfoService;
 
-        public LanguagesInfoController(ILanguageInfosService languageService)
+        public LanguagesInfoController(ILanguagesInfoService languageService)
         {
-            this.languagesInfosService = languageService;
+            this.languagesInfoService = languageService;
         }
       
         [HttpPut]
         [Route("{cvId:guid}/update")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult))]
         [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update(
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<LanguageInfoEditModel> languagesInfo)
         {
-            UpdateResult result = await this.languagesInfosService.Update(cvId.ToString(), languagesInfo);
+            UpdateResult result = await this.languagesInfoService.Update(
+                cvId.ToString(),
+                languagesInfo);
 
             return this.Ok(result);
         }

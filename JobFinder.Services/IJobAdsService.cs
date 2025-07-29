@@ -9,7 +9,7 @@ namespace JobFinder.Services
     {
         Task<JobAdDetailsViewModel> Get(int id);
 
-        Task Create(JobAdCreateViewModel jobAd, int companyId);
+        Task<int> Create(JobAdCreateViewModel jobAd, int companyId);
 
         Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId);
 

@@ -10,6 +10,7 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 namespace JobFinder.Web.Controllers;
 
 [Authorize]
+[Route("api/cv-requests")]
 public class CvPreviewRequestController : ApiController
 {
     private readonly ICvPreviewRequestService cvPreviewRequestService;
@@ -21,7 +22,9 @@ public class CvPreviewRequestController : ApiController
     }
 
     [HttpGet]
-    [Route("cv-requests")]
+    [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<CvPreviewRequestListingViewModel>))]
     [Authorize(Roles = JobSeekerRole)]
     public async Task<IActionResult> GetMyCvsPreviewRequests()
     {
@@ -34,11 +37,11 @@ public class CvPreviewRequestController : ApiController
     }
 
     [HttpPost]
-    [Route("cv-request")]
     [Authorize(Roles = CompanyRole)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
     [ServiceFilter(typeof(ValidateCompanyCanViewAnonymousProfile))]
-    public async Task<IActionResult> MakeCvPreviewRequest(
+    public async Task<IActionResult> CreateCvPreviewRequest(
         [FromBody] CvPreviewRequestCreateViewModel requestModel)
     {
         string currentUserId = this.User.GetCurrentUserId();
@@ -50,17 +53,23 @@ public class CvPreviewRequestController : ApiController
     }
 
     [HttpGet]
-    [Route("allow-cv-preview/{id:int}")]
+    [Route("{id:int}/accept")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [Authorize(Roles = JobSeekerRole)]
-    public async Task<IActionResult> AllowCvPreview([FromRoute] int id)
+    public async Task<IActionResult> AcceptCvPreviewRequest([FromRoute] int id)
     {
-        await this.cvPreviewRequestService.AllowCvPreview(id, this.User.GetCurrentUserId());
+        await this.cvPreviewRequestService.AcceptCvPreviewRequest(
+            id,
+            this.User.GetCurrentUserId());
 
         return this.Ok();
     }
 
     [HttpGet]
-    [Route("all-requests")]
+    [Route("all")]
+    [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<CompanyCvPreviewRequestListingViewModel>))]
     [Authorize(Roles = CompanyRole)]
     public async Task<IActionResult> GetAllCompanyCvRequests()
     {

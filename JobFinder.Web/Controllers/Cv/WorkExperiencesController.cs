@@ -8,17 +8,20 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers.Cv;
 
-public class WorkExperiencesController : BaseCVsController
+[Authorize]
+[Route("api/work-experience")]
+public class WorkExperiencesController : ApiController
 {
-    private readonly IWorkExperienceInfosService workExperienceService;
+    private readonly IWorkExperienceInfoService workExperienceService;
 
-    public WorkExperiencesController(IWorkExperienceInfosService workExperienceService)
+    public WorkExperiencesController(IWorkExperienceInfoService workExperienceService)
     {
         this.workExperienceService = workExperienceService;
     }
 
     [HttpPut]
-    [Route("{cvId:guid}/update")]
+    [Route("{cvId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult))]
     [Authorize(Roles = JobSeekerRole)]
     [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
     public async Task<IActionResult> Update(

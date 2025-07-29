@@ -3,7 +3,7 @@ using JobFinder.Web.Models.CvModels;
 
 namespace JobFinder.Services.Cv
 {
-    public interface ILanguageInfosService
+    public interface ILanguagesInfoService
     {
         Task<UpdateResult> Update(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfo);
     }

@@ -8,7 +8,9 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers.Cv
 {
-    public class CoursesController : BaseCVsController
+    [Authorize]
+    [Route("api/courses-info")]
+    public class CoursesController : ApiController
     {
         private readonly ICoursesInfoService coursesService;
 
@@ -18,14 +20,17 @@ namespace JobFinder.Web.Controllers.Cv
         }
 
         [HttpPut]
-        [Route("{cvId:guid}/update")]
+        [Route("{cvId:guid}")]
         [Authorize(Roles = JobSeekerRole)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult))]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update(
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<CourseSertificateEditModel> coursesInfo)
         {
-            UpdateResult result = await this.coursesService.Update(cvId.ToString(), coursesInfo);
+            UpdateResult result = await this.coursesService.Update(
+                cvId.ToString(),
+                coursesInfo);
 
             return this.Ok(result);
         }

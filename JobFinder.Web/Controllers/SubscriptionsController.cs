@@ -20,6 +20,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpPost]
         [Route("subscribe")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobSubscriptionViewModel))]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> SubscribeForJobs(
             [FromBody] JobSubscriptionCriteriasViewModel subscription)
@@ -33,7 +34,8 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("unsubscribe/{id}")]
+        [Route("unsubscribe/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> UnsubscribeFromJobs([FromRoute] int id)
         {
@@ -47,6 +49,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("unsubscribe/all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> UnsubscribeFromAllJobs()
         {
@@ -60,6 +63,9 @@ namespace JobFinder.Web.Controllers
 
         [HttpGet]
         [Route("mine")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<JobSubscriptionViewModel>))]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetMyJobSubscriptions()
         {
@@ -72,7 +78,10 @@ namespace JobFinder.Web.Controllers
         }
       
         [HttpGet]
-        [Route("new-ads/{recurringTypeId}")]
+        [Route("new-ads/{recurringTypeId:int}")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IDictionary<string, List<JobAdsSubscriptionsViewModel>>))]
         public async Task<IActionResult> GetLatestJobAdsForSubscribers([FromRoute] int recurringTypeId)
         {
             IDictionary<string, List<JobAdsSubscriptionsViewModel>> data = await this.subscriptionsService

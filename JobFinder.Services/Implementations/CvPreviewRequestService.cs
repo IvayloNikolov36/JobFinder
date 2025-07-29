@@ -51,7 +51,7 @@ public class CvPreviewRequestService : ICvPreviewRequestService
         await this.unitOfWork.SaveChanges();
     }
 
-    public async Task AllowCvPreview(int id, string currentUserId)
+    public async Task AcceptCvPreviewRequest(int id, string currentUserId)
     {
         await this.ValidateCvRequest(id, currentUserId);
 

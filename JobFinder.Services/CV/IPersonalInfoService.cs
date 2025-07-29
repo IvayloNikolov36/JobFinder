@@ -2,7 +2,7 @@
 
 namespace JobFinder.Services.CV;
 
-public interface IPersonalInfosService
+public interface IPersonalInfoService
 {
     Task Update(string cvId, PersonalInfoEditModel personalInfo);
 }

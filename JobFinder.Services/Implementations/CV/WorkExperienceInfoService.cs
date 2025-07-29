@@ -9,13 +9,13 @@ using static JobFinder.Services.Constants.CacheConstants;
 
 namespace JobFinder.Services.Implementations.Cv
 {
-    public class WorkExperienceInfosService : IWorkExperienceInfosService
+    public class WorkExperienceInfoService : IWorkExperienceInfoService
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IDistributedCache distributedCache;
 
-        public WorkExperienceInfosService(
+        public WorkExperienceInfoService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
             IDistributedCache distributedCache)

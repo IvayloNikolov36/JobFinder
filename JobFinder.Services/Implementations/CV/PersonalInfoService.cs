@@ -8,13 +8,13 @@ using static JobFinder.Services.Constants.CacheConstants;
 
 namespace JobFinder.Services.Implementations.Cv
 {
-    public class PersonalInfosService : IPersonalInfosService
+    public class PersonalInfoService : IPersonalInfoService
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IDistributedCache distributedCache;
 
-        public PersonalInfosService(
+        public PersonalInfoService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
             IDistributedCache distributedCache) 

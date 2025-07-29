@@ -9,13 +9,13 @@ using static JobFinder.Services.Constants.CacheConstants;
 
 namespace JobFinder.Services.Implementations.Cv;
 
-public class LanguageInfosService : ILanguageInfosService
+public class LanguagesInfoService : ILanguagesInfoService
 {
     private readonly IEntityFrameworkUnitOfWork unitOfWork;
     private readonly IMapper mapper;
     private readonly IDistributedCache distributedCache;
 
-    public LanguageInfosService(
+    public LanguagesInfoService(
         IEntityFrameworkUnitOfWork unitOfWork,
         IMapper mapper,
         IDistributedCache distributedCache)

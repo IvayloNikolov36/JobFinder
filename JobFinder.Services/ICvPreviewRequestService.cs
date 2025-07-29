@@ -9,7 +9,7 @@ public interface ICvPreviewRequestService
 
     Task MakeCvPreviewRequest(CvPreviewRequestCreateViewModel requestModel, string currentUserId);
 
-    Task AllowCvPreview(int id, string currentUserId);
+    Task AcceptCvPreviewRequest(int id, string currentUserId);
 
     Task<IEnumerable<CompanyCvPreviewRequestListingViewModel>> GetAllCompanyCvPreviewRequests(string userId);
 }

@@ -1,7 +1,11 @@
-﻿namespace JobFinder.Transfer.DTOs.JobAd;
+﻿using JobFinder.Transfer.Common;
 
-public class JobAdCreateDTO
+namespace JobFinder.Transfer.DTOs.JobAd;
+
+public class JobAdCreateDTO : IUniquelyIdentified<int>
 {
+    public int Id { get; set; }
+
     public string Position { get; set; }
 
     public string Description { get; set; }
@@ -27,4 +31,6 @@ public class JobAdCreateDTO
     public IEnumerable<int> ITAreas { get; set; }
 
     public IEnumerable<int> TechStacks { get; set; }
+
+    public Guid UniqueIdentificator { get; set; }
 }
