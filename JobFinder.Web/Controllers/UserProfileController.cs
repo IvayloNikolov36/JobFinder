@@ -8,7 +8,7 @@ using static JobFinder.Web.Infrastructure.WebConstants;
 namespace JobFinder.Web.Controllers
 {
     [Authorize]
-    [Route("user-profile")]
+    [Route("api/user-profile")]
     public class UserProfileController : ApiController
     {
         private readonly IUserProfileService userProfileService;
