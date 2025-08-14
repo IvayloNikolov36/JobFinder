@@ -21,8 +21,6 @@ namespace JobFinder.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            AutoMapperConfig.RegisterMappings(AssembliesProvider.AutomapperAssemblies());
-
             services.AddDbContext<JobFinderDbContext>(options => options.Configure(this.configuration));
 
             services.AddIdentity<UserEntity, IdentityRole>()
@@ -42,6 +40,8 @@ namespace JobFinder.Web
             services.AddControllers();
 
             services.AddSwaggerGen(options => options.Configure());
+
+            AutoMapperConfig.RegisterMappings(AssembliesProvider.AutomapperAssemblies());
 
             services.AddServiceFilters()
                 .AddBusinessServices()
