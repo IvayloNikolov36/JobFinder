@@ -1,13 +1,12 @@
-﻿using JobFinder.Business;
+﻿using Hangfire;
+using JobFinder.Business;
 using JobFinder.DataAccess.Generic;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services;
+using JobFinder.Services.Mappings;
+using JobFinder.Services.Messages;
 using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Infrastructure.Models;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace JobFinder.Web.Infrastructure.Extensions
@@ -47,6 +46,32 @@ namespace JobFinder.Web.Infrastructure.Extensions
         {
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
             services.AddScoped<IEntityFrameworkUnitOfWork, EntityFrameworkUnitOfWork>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddAutomapperInstance(this IServiceCollection services)
+        {
+            services.AddSingleton(AutoMapperConfig.MapperInstance);
+
+            return services;
+        }
+
+        public static IServiceCollection AddEmailSender(this IServiceCollection services)
+        {
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddRecurringJobManager(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddHangfire(globalConfig => globalConfig
+                .Set(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddHangfireServer();
 
             return services;
         }

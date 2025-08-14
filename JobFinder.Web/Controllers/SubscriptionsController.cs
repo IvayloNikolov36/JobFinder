@@ -76,7 +76,7 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok(subscriptions);
         }
-      
+
         [HttpGet]
         [Route("new-ads/{recurringTypeId:int}")]
         [ProducesResponseType(

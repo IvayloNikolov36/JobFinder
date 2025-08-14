@@ -1,16 +1,14 @@
-﻿namespace JobFinder.Web.Infrastructure.Extensions
-{
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.IdentityModel.Tokens;
-    using System.Text;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
+namespace JobFinder.Web.Infrastructure.Extensions
+{
     public static class JwtBearerOptionsExtension
     {
         public static void Configure(
             this JwtBearerOptions options,
-            string validAudience,
-            string validIssuer,
-            string jwtSecurityKey)
+            IConfiguration configuration)
         {
             options.SaveToken = true;
             options.RequireHttpsMetadata = false;
@@ -18,9 +16,9 @@
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidAudience = validAudience,
-                ValidIssuer = validIssuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecurityKey))
+                ValidAudience = configuration["JwtAudience"],
+                ValidIssuer = configuration["JwtIssuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]))
             };
         }
     }

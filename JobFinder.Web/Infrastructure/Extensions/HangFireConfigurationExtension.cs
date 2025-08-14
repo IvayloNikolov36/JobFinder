@@ -1,9 +1,8 @@
-﻿namespace JobFinder.Web.Infrastructure.Extensions
-{
-    using Hangfire;
-    using Hangfire.SqlServer;
-    using System;
+﻿using Hangfire;
+using Hangfire.SqlServer;
 
+namespace JobFinder.Web.Infrastructure.Extensions
+{
     public static class HangFireConfigurationExtension
     {
         public static void Set(this IGlobalConfiguration configuration, string connectionString)
@@ -21,6 +20,17 @@
                         UseRecommendedIsolationLevel = true,
                         DisableGlobalLocks = true
                     });
+        }
+
+        public static void ConfigureHangfire(
+            this IApplicationBuilder app,
+            IRecurringJobManager recurringJobManager,
+            IServiceProvider serviceProvider)
+        {
+            app.UseHangfireDashboard();
+            recurringJobManager.RegisterDeactiveJobAdvertisements(serviceProvider);
+            recurringJobManager.RegisterSendLatestCompanyJobAdvertisements(serviceProvider);
+            recurringJobManager.RegisterSendingJobAdvertisementsBySubscriptions(serviceProvider);
         }
     }
 }

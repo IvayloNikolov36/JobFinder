@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace JobFinder.Web.Infrastructure.Models
+﻿namespace JobFinder.Web.Infrastructure.Models
 {
     public class ServiceInfo
     {

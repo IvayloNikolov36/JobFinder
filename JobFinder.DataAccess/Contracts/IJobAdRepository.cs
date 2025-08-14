@@ -22,5 +22,6 @@ public interface IJobAdRepository
     Task<JobAdDetailsForSubscriberDTO> GetDetailsForSubscriber(int jobAdId);
 
     Task<IEnumerable<CompanyJobAdDTO>> GetFilteredCompanyAds(string userId, bool? active);
+
     Task<JobAdCriteriasDTO> GetJobAdCriterias(int jobAdId);
 }
