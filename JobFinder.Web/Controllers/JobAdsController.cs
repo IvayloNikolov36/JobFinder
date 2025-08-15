@@ -83,15 +83,9 @@ namespace JobFinder.Web.Controllers
             StatusCodes.Status201Created,
             Type = typeof(JobAdDetailsViewModel))]
         [Authorize(Roles = CompanyRole)]
-        public async Task<IActionResult> Create(
-            [FromBody] JobAdCreateViewModel model,
-            [FromServices] ICompaniesService companyService)
+        public async Task<IActionResult> Create([FromBody] JobAdCreateViewModel model)
         {
-            string userId = this.User.GetCurrentUserId();
-
-            int companyId = await companyService.GetCompanyId(userId);
-
-            int id = await this.adsService.Create(model, companyId);
+            int id = await this.adsService.Create(model, this.User.GetCurrentUserId());
 
             IdentityViewModel<int> result = new(id);
 

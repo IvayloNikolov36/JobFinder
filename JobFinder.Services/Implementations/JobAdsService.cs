@@ -35,17 +35,23 @@ namespace JobFinder.Services.Implementations
             return this.mapper.Map<JobAdDetailsViewModel>(jobAd);
         }
 
-        public async Task<int> Create(JobAdCreateViewModel jobAd, int companyId)
+        public async Task<int> Create(JobAdCreateViewModel jobAd, string userId)
         {
+            Task<int> companyId = this.unitOfWork.CompanyRepository.GetCompanyId(userId);
+
             SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(jobAd);
 
             this.jobAdsRules.ValidateSalaryProperties(salaryProperties);
 
             this.jobAdsRules.ValidateIntership(jobAd.Intership, jobAd.JobEngagementId);
 
+            JobAdCategoryDTO adCategoryDto = this.mapper.Map<JobAdCategoryDTO>(jobAd);
+
+            this.jobAdsRules.ValidateJobCategoryAndRelatedData(adCategoryDto);
+
             JobAdCreateDTO jobAdDto = this.mapper.Map<JobAdCreateDTO>(jobAd);
 
-            await this.unitOfWork.JobAdRepository.Create(jobAdDto, companyId);
+            await this.unitOfWork.JobAdRepository.Create(jobAdDto, await companyId);
 
             await this.unitOfWork.SaveChanges<JobAdCreateDTO, int>(jobAdDto);
 

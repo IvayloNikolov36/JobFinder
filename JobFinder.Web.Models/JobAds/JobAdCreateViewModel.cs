@@ -7,7 +7,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobFinder.Web.Models.JobAds
 {
-    public class JobAdCreateViewModel : IMapTo<JobAdCreateDTO>, IHaveCustomMappings
+    public class JobAdCreateViewModel : IMapTo<JobAdCreateDTO>,
+        IMapTo<JobAdCategoryDTO>,
+        IHaveCustomMappings
     {
         [Required]
         [StringLength(90, MinimumLength = 6)]

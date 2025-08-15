@@ -1,4 +1,5 @@
 ﻿using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.JobAd;
 
 namespace JobFinder.Business.JobAds
 {
@@ -11,5 +12,7 @@ namespace JobFinder.Business.JobAds
         int GetDaysExpiration();
 
         string GenerateSalaryText(int? minSalary, int? maxSalary, string currencyName);
+
+        void ValidateJobCategoryAndRelatedData(JobAdCategoryDTO adCategoryDto);
     }
 }

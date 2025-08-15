@@ -1,6 +1,7 @@
 ﻿
 using JobFinder.Common.Exceptions;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.JobAd;
 using System.Linq;
 using static JobFinder.Common.MessageConstants;
 
@@ -9,6 +10,7 @@ namespace JobFinder.Business.JobAds
     public class JobAdsRules : IJobAdsRules
     {
         private const int DaysExpiration = 30;
+        private const int ITJobCategory = 3;
 
         public void ValidateSalaryProperties(SalaryPropertiesDTO salaryProperties)
         {
@@ -74,6 +76,30 @@ namespace JobFinder.Business.JobAds
             }
 
             return string.Empty;
+        }
+
+        public void ValidateJobCategoryAndRelatedData(JobAdCategoryDTO adCategoryDto)
+        {
+            if (adCategoryDto.JobCategoryId == ITJobCategory)
+            {
+                if (!adCategoryDto.ITAreas.Any())
+                {
+                    throw new ActionableException("You have to specify at least one IT area!");
+                }
+
+                if (!adCategoryDto.TechStacks.Any())
+                {
+                    throw new ActionableException("You have to specify at least one Tech stack!");
+                }
+            }
+            else
+            {
+                if (adCategoryDto.ITAreas.Any() || adCategoryDto.TechStacks.Any())
+                {
+                    throw new ActionableException(
+                        "If you want to specify IT areas and Tech Stack you have to select IT Software Development as category!");
+                }
+            }
         }
     }
 }
