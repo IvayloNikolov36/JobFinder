@@ -1,10 +1,11 @@
-﻿using JobFinder.Web.Models.CvModels;
+﻿using JobFinder.Web.Models.Common;
+using JobFinder.Web.Models.CvModels;
 
 namespace JobFinder.Services.Cv
 {
     public interface ICvsService
     {
-        Task<string> CreateAsync(CVCreateInputModel cvModel, string userId, bool invalidateCache);
+        Task<IdentityViewModel<string>> CreateAsync(CVCreateInputModel cvModel, string userId, bool invalidateCache);
 
         Task<IEnumerable<CvListingModel>> All(string userId);
 

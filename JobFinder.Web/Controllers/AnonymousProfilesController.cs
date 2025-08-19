@@ -46,10 +46,10 @@ namespace JobFinder.Web.Controllers
         {
             string userId = this.User.GetCurrentUserId();
 
-            string id = await this.anonymousProfilesService
+            IdentityViewModel<string> result = await this.anonymousProfilesService
                 .Create(cvId.ToString(), userId, profile);
 
-            return this.CreatedAtRoute("MyAnonymousProfile", new IdentityViewModel<string>(id));
+            return this.CreatedAtRoute("MyAnonymousProfile", result);
         }
 
         [HttpDelete]

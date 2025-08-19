@@ -6,6 +6,7 @@ using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
 using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.AnonymousProfile;
+using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;
 using Microsoft.Extensions.Caching.Distributed;
 using static JobFinder.Services.Constants.CacheConstants;
@@ -34,7 +35,7 @@ public class AnonymousProfilesService : IAnonymousProfilesService
         this.distributedCache = distributedCache;
     }
 
-    public async Task<string> Create(
+    public async Task<IdentityViewModel<string>> Create(
         string cvId,
         string userId,
         AnonymousProfileCreateViewModel profile)
@@ -75,7 +76,7 @@ public class AnonymousProfilesService : IAnonymousProfilesService
         await this.RemoveCvFromCache(cvId);
         await this.RemoveCVsFromCache(userId);
 
-        return anonymousProfileDto.Id;
+        return new IdentityViewModel<string>(anonymousProfileDto.Id);
     }
 
     public async Task Delete(string anonymousProfileId, string userId)

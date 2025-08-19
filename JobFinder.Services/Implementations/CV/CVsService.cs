@@ -4,6 +4,7 @@ using JobFinder.Common.Exceptions;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services.Cv;
 using JobFinder.Transfer.DTOs.Cv;
+using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.CvModels;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
@@ -58,7 +59,7 @@ namespace JobFinder.Services.Implementations.Cv
                 .Deserialize<IEnumerable<CvListingModel>>(Encoding.UTF8.GetString(cachedData));
         }
 
-        public async Task<string> CreateAsync(CVCreateInputModel cvModel, string userId, bool invalidateCache)
+        public async Task<IdentityViewModel<string>> CreateAsync(CVCreateInputModel cvModel, string userId, bool invalidateCache)
         {
             IEnumerable<CourseCertificateInputDTO> courceCertificateInfoDtos = this.mapper
                 .Map<IEnumerable<CourseCertificateInputDTO>>(cvModel.CourseCertificates);
@@ -76,7 +77,7 @@ namespace JobFinder.Services.Implementations.Cv
                 await this.distributedCache.RemoveAsync(string.Format(CVsCacheKey, userId));
             }
 
-            return cvDataDto.Id;
+            return new IdentityViewModel<string>(cvDataDto.Id);
         }
 
         public async Task<MyCvDataViewModel> GetOwnCvData(string cvId, string userId)

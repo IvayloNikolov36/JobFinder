@@ -28,10 +28,8 @@ namespace JobFinder.Web.Controllers.Cv
         {
             string userId = this.User.GetCurrentUserId();
 
-            string cvId = await this.cvsService
+            IdentityViewModel<string> result = await this.cvsService
                 .CreateAsync(cvModel, userId, invalidateCache: true);
-
-            IdentityViewModel<string> result = new(cvId);
 
             return this.CreatedAtRoute("GetOwnCvData", result, result);
         }

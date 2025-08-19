@@ -85,10 +85,8 @@ namespace JobFinder.Web.Controllers
         [Authorize(Roles = CompanyRole)]
         public async Task<IActionResult> Create([FromBody] JobAdCreateViewModel model)
         {
-            int id = await this.adsService.Create(model, this.User.GetCurrentUserId());
-
-            // TODO: service to return IdentityViewModel and on all other places in the project
-            IdentityViewModel<int> result = new(id);
+            IdentityViewModel<int> result = await this.adsService
+                .Create(model, this.User.GetCurrentUserId());
 
             return this.CreatedAtRoute("Details", result, result);
         }

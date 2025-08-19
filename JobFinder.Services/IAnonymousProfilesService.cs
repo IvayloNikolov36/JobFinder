@@ -1,11 +1,12 @@
 ﻿using JobFinder.Web.Models.AnonymousProfile;
+using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.JobAds;
 
 namespace JobFinder.Services;
 
 public interface IAnonymousProfilesService
 {
-    Task<string> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile);
+    Task<IdentityViewModel<string>> Create(string cvId, string userId, AnonymousProfileCreateViewModel profile);
 
     Task Delete(string anonymousProfileId, string userId);
 

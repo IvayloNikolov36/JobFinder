@@ -35,7 +35,7 @@ namespace JobFinder.Services.Implementations
             return this.mapper.Map<JobAdDetailsViewModel>(jobAd);
         }
 
-        public async Task<int> Create(JobAdCreateViewModel jobAd, string userId)
+        public async Task<IdentityViewModel<int>> Create(JobAdCreateViewModel jobAd, string userId)
         {
             Task<int> companyId = this.unitOfWork.CompanyRepository.GetCompanyId(userId);
 
@@ -55,7 +55,7 @@ namespace JobFinder.Services.Implementations
 
             await this.unitOfWork.SaveChanges<JobAdCreateDTO, int>(jobAdDto);
 
-            return jobAdDto.Id;
+            return new IdentityViewModel<int>(jobAdDto.Id);
         }
 
         public async Task Update(int jobAdId, string userId, JobAdEditModel editModel)
