@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
 using JobFinder.Data.Models;
+using JobFinder.Data.Models.Enums;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
@@ -40,6 +41,7 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
 
         jobAdEntity.PublisherId = companyId;
         jobAdEntity.PublishDate = DateTime.UtcNow;
+        jobAdEntity.LifecycleStatusId = (int)LifecycleStatusEnum.Active;
 
         if (jobAd.SoftSkills.Any())
         {
@@ -84,7 +86,7 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
     {
         IQueryable<JobAdEntity> jobs = this.DbSet
             .AsNoTracking()
-            .Where(ja => ja.IsActive);
+            .Where(ja => ja.LifecycleStatusId == (int)LifecycleStatusEnum.Active);
 
         if (!string.IsNullOrEmpty(filter.SearchText?.Trim()))
         {
@@ -205,19 +207,22 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
     public async Task ExecuteJobAdsDeactivate(DateTime publishDateTreshold)
     {
         await this.DbSet
-            .Where(ja => ja.IsActive && ja.PublishDate <= publishDateTreshold)
+            .Where(ja => ja.LifecycleStatusId == (int)LifecycleStatusEnum.Active
+                && ja.PublishDate <= publishDateTreshold)
             .ExecuteUpdateAsync(s => s
-                .SetProperty(ja => ja.IsActive, ja => !ja.IsActive));
+                .SetProperty(ja => ja.LifecycleStatusId, (int)LifecycleStatusEnum.Retired));
     }
 
-    public async Task<IEnumerable<CompanyJobAdDTO>> GetFilteredCompanyAds(string userId, bool? active)
+    public async Task<IEnumerable<CompanyJobAdDTO>> GetFilteredCompanyAds(
+        string userId,
+        int? lifecycleStatus)
     {
         IQueryable<JobAdEntity> query = this.DbSet.AsNoTracking()
             .Where(ja => ja.Publisher.UserId == userId);
 
-        if (active.HasValue)
+        if (lifecycleStatus.HasValue)
         {
-            query = query.Where(ja => ja.IsActive == active);
+            query = query.Where(ja => ja.LifecycleStatusId == lifecycleStatus);
         }
 
         return await query

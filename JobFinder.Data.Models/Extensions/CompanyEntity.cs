@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JobFinder.Data.Models.Enums;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs.Company;
 using System;
@@ -13,10 +14,10 @@ public partial class CompanyEntity : IMapTo<CompanyBasicDTO>, IHaveCustomMapping
         configuration.CreateMap<CompanyEntity, CompanyProfileDataDTO>()
             .ForMember(dto => dto.Email, o => o.MapFrom(e => e.User.Email))
             .ForMember(dto => dto.ActiveAdsCount, o => o.MapFrom(e => e.JobAds
-                .Where(ja => ja.IsActive)
+                .Where(ja => ja.LifecycleStatusId == (int)LifecycleStatusEnum.Active)
                 .Count()))
             .ForMember(dto => dto.NewApplications, o => o.MapFrom(e => e.JobAds
-                .Where(j => j.IsActive)
+                .Where(j => j.LifecycleStatusId == (int)LifecycleStatusEnum.Active)
                 .Select(j => j.JobAdApplications
                     .Where(a => !a.PreviewDate.HasValue)
                     .Count())
@@ -28,7 +29,7 @@ public partial class CompanyEntity : IMapTo<CompanyBasicDTO>, IHaveCustomMapping
         configuration
             .CreateMap<CompanyEntity, CompanyDetailsUserDTO>()
             .ForMember(dto => dto.ActiveAdsCount, o => o.MapFrom(e => e.JobAds
-                .Where(ja => ja.IsActive)
+                .Where(ja => ja.LifecycleStatusId == (int)LifecycleStatusEnum.Active)
                 .Count()))
             .ForMember(dto => dto.HasSubscription, o => o.MapFrom(e => e.CompanySubscriptions
                 .Any(cs => cs.UserId == currentUserId)));

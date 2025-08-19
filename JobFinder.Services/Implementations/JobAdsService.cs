@@ -67,14 +67,15 @@ namespace JobFinder.Services.Implementations
             await this.unitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId)
+        public async Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(
+            string userId,
+            int? lifecycleStatus = null)
         {
-            return await this.GetFilteredCompanyAds(userId, null);
-        }
+            IEnumerable<CompanyJobAdDTO> jobAds = await this.unitOfWork
+                .JobAdRepository
+                .GetFilteredCompanyAds(userId, lifecycleStatus);
 
-        public async Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string userId, bool active)
-        {
-            return await this.GetFilteredCompanyAds(userId, active);
+            return this.mapper.Map<IEnumerable<CompanyJobAdViewModel>>(jobAds);
         }
 
         public async Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel filter)
@@ -141,15 +142,6 @@ namespace JobFinder.Services.Implementations
                 .GetJobAdCriterias(jobAdId);
 
             return this.mapper.Map<JobAdCriteriasViewModel>(jobAdCriterias);
-        }
-
-        private async Task<IEnumerable<CompanyJobAdViewModel>> GetFilteredCompanyAds(string userId, bool? active)
-        {
-            IEnumerable<CompanyJobAdDTO> jobAds = await this.unitOfWork
-                .JobAdRepository
-                .GetFilteredCompanyAds(userId, active);
-
-            return this.mapper.Map<IEnumerable<CompanyJobAdViewModel>>(jobAds);
         }
     }
 }

@@ -11,9 +11,9 @@ namespace JobFinder.Services
 
         Task<int> Create(JobAdCreateViewModel jobAd, string userId);
 
-        Task<IEnumerable<CompanyJobAdViewModel>> GetAllCompanyAds(string userId);
-
-        Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(string currentUserId, bool active);
+        Task<IEnumerable<CompanyJobAdViewModel>> GetCompanyAds(
+            string currentUserId,
+            int? lifecycleStatus = null);
 
         Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model);
 

@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250819230524_RemoveJobAd_IsActiveColumn")]
+    partial class RemoveJobAd_IsActiveColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6180,9 +6183,9 @@ namespace JobFinder.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.Nomenclature.LifecycleStatusEntity", "LifecycleStatus")
-                        .WithMany("JobAds")
+                        .WithMany()
                         .HasForeignKey("LifecycleStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.Nomenclature.CityEntity", "Location")
@@ -6489,11 +6492,6 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", b =>
                 {
                     b.Navigation("LanguageTypes");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LifecycleStatusEntity", b =>
-                {
-                    b.Navigation("JobAds");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.RecurringTypeEntity", b =>

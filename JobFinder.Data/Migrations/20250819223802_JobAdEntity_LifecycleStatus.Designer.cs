@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250819223802_JobAdEntity_LifecycleStatus")]
+    partial class JobAdEntity_LifecycleStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -740,13 +743,18 @@ namespace JobFinder.Data.Migrations
                     b.Property<bool>("Intership")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<int>("JobCategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("JobEngagementId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LifecycleStatusId")
+                    b.Property<int?>("LifecycleStatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("LocationId")
@@ -6180,10 +6188,8 @@ namespace JobFinder.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("JobFinder.Data.Models.Nomenclature.LifecycleStatusEntity", "LifecycleStatus")
-                        .WithMany("JobAds")
-                        .HasForeignKey("LifecycleStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("LifecycleStatusId");
 
                     b.HasOne("JobFinder.Data.Models.Nomenclature.CityEntity", "Location")
                         .WithMany("JobAdvertisements")
@@ -6489,11 +6495,6 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LanguageTypeEntity", b =>
                 {
                     b.Navigation("LanguageTypes");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.LifecycleStatusEntity", b =>
-                {
-                    b.Navigation("JobAds");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.Nomenclature.RecurringTypeEntity", b =>

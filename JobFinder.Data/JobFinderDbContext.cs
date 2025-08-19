@@ -178,10 +178,6 @@ namespace JobFinder.Data
                 .HasForeignKey<CompanyEntity>(c => c.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            builder.Entity<JobAdEntity>()
-                .Property(j => j.IsActive)
-                .HasDefaultValue(true);
-
             builder.Entity<CompanySubscriptionEntity>()
                 .HasKey(key => new { key.UserId, key.CompanyId });
 
@@ -190,6 +186,12 @@ namespace JobFinder.Data
 
             builder.Entity<JobAdApplicationEntity>()
                 .HasIndex(j => j.JobAdId);
+
+            builder.Entity<JobAdEntity>()
+                .HasOne(ja => ja.LifecycleStatus)
+                .WithMany(ls => ls.JobAds)
+                .HasForeignKey(x => x.LifecycleStatusId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<JobAdEntity>()
                 .ToTable(t => t.HasCheckConstraint("CHK_JobAdvertisements_MinSalary_MaxSalary_Currency",

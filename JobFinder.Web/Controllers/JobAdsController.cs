@@ -45,22 +45,22 @@ namespace JobFinder.Web.Controllers
             string currentUserId = this.User.GetCurrentUserId();
 
             IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService
-                .GetAllCompanyAds(currentUserId);
+                .GetCompanyAds(currentUserId);
 
             return this.Ok(jobAds);
         }
 
         [HttpGet]
-        [Route("company/{active:bool}")]
+        [Route("company/{lifecycleStatus:int?}")]
         [ProducesResponseType(
             StatusCodes.Status200OK,
             Type = typeof(IEnumerable<CompanyJobAdViewModel>))]
-        public async Task<IActionResult> GetCompanyAds([FromRoute] bool active)
+        public async Task<IActionResult> GetCompanyAds([FromRoute] int? lifecycleStatus)
         {
             string currentUserId = this.User.GetCurrentUserId();
 
             IEnumerable<CompanyJobAdViewModel> jobAds = await this.adsService
-                .GetCompanyAds(currentUserId, active);
+                .GetCompanyAds(currentUserId, lifecycleStatus);
 
             return this.Ok(jobAds);
         }
@@ -87,11 +87,13 @@ namespace JobFinder.Web.Controllers
         {
             int id = await this.adsService.Create(model, this.User.GetCurrentUserId());
 
+            // TODO: service to return IdentityViewModel and on all other places in the project
             IdentityViewModel<int> result = new(id);
 
             return this.CreatedAtRoute("Details", result, result);
         }
 
+        // TODO: refactor the update end point and also think about logic for update when the job is in draft status only
         [HttpPut]
         [Route("{jobAdId:int}")]
         [Authorize(Roles = CompanyRole)]

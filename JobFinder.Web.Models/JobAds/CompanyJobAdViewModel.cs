@@ -24,7 +24,7 @@ namespace JobFinder.Web.Models.JobAds
 
         public int NotPreviewedApplications { get; set; }
 
-        public bool IsActive { get; set; }
+        public int LifecycleStatusId { get; set; }
 
         public DateTime PublishDate { get; set; }
     }

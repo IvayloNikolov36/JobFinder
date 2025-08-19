@@ -50,7 +50,9 @@ namespace JobFinder.Data.Models
 
         public DateTime PublishDate { get; set; }
 
-        public bool IsActive { get; set; } = true;
+        public int LifecycleStatusId { get; set; }
+
+        public LifecycleStatusEntity LifecycleStatus { get; set; }
 
         public List<JobAdSoftSkillEntity> JobAdSoftSkills { get; set; }
 
