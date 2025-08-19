@@ -104,6 +104,8 @@ namespace JobFinder.Data
 
         public DbSet<WorkplaceTypeEntity> WorkplaceTypes { get; set; }
 
+        public DbSet<LifecycleStatusEntity> LifecycleStatuses { get; set; }
+
 
         // For VIEWS
 
