@@ -80,6 +80,7 @@ namespace JobFinder.DataAccess.Generic
         {
             if (entity is null)
             {
+                // TODO: create a method to trim Entity and to insert space between words
                 throw new ActionableException($"Entity {entityName} does not exist!");
             }
         }

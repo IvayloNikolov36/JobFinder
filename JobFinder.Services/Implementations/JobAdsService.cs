@@ -30,7 +30,7 @@ namespace JobFinder.Services.Implementations
 
         public async Task<JobAdDetailsViewModel> Get(int id)
         {
-            JobAdDetailsDTO jobAd = await this.unitOfWork.JobAdRepository.Get(id);
+            CompanyJobAdDetailsDTO jobAd = await this.unitOfWork.JobAdRepository.Get(id);
 
             return this.mapper.Map<JobAdDetailsViewModel>(jobAd);
         }
@@ -39,15 +39,7 @@ namespace JobFinder.Services.Implementations
         {
             Task<int> companyId = this.unitOfWork.CompanyRepository.GetCompanyId(userId);
 
-            SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(jobAd);
-
-            this.jobAdsRules.ValidateSalaryProperties(salaryProperties);
-
-            this.jobAdsRules.ValidateIntership(jobAd.Intership, jobAd.JobEngagementId);
-
-            JobAdCategoryDTO adCategoryDto = this.mapper.Map<JobAdCategoryDTO>(jobAd);
-
-            this.jobAdsRules.ValidateJobCategoryAndRelatedData(adCategoryDto);
+            this.ValidateJobAdProperties(jobAd);
 
             JobAdCreateDTO jobAdDto = this.mapper.Map<JobAdCreateDTO>(jobAd);
 
@@ -58,9 +50,11 @@ namespace JobFinder.Services.Implementations
             return new IdentityViewModel<int>(jobAdDto.Id);
         }
 
-        public async Task Update(int jobAdId, string userId, JobAdEditModel editModel)
+        public async Task Update(int jobAdId, string userId, JobAdEditModel jobAd)
         {
-            JobAdEditDTO jobAdDto = this.mapper.Map<JobAdEditDTO>(editModel);
+            this.ValidateJobAdProperties(jobAd);
+
+            JobAdEditDTO jobAdDto = this.mapper.Map<JobAdEditDTO>(jobAd);
 
             await this.unitOfWork.JobAdRepository.Update(jobAdId, jobAdDto);
 
@@ -142,6 +136,19 @@ namespace JobFinder.Services.Implementations
                 .GetJobAdCriterias(jobAdId);
 
             return this.mapper.Map<JobAdCriteriasViewModel>(jobAdCriterias);
+        }
+
+        private void ValidateJobAdProperties<T>(T jobAd) where T : JobAdBaseViewModel
+        {
+            SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(jobAd);
+
+            this.jobAdsRules.ValidateSalaryProperties(salaryProperties);
+
+            this.jobAdsRules.ValidateIntership(jobAd.Intership, jobAd.JobEngagementId);
+
+            JobAdCategoryDTO adCategoryDto = this.mapper.Map<JobAdCategoryDTO>(jobAd);
+
+            this.jobAdsRules.ValidateJobCategoryAndRelatedData(adCategoryDto);
         }
     }
 }

@@ -1,9 +1,16 @@
-﻿namespace JobFinder.Transfer.DTOs.JobAd;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-public class JobAdEditDTO
+namespace JobFinder.Web.Models.JobAds;
+
+public class JobAdBaseViewModel
 {
+    [Required]
+    [StringLength(90, MinimumLength = 6)]
     public string Position { get; set; }
 
+    [Required]
+    [MinLength(20)]
     public string Description { get; set; }
 
     public int LocationId { get; set; }
@@ -27,6 +34,4 @@ public class JobAdEditDTO
     public IEnumerable<int> ITAreas { get; set; }
 
     public IEnumerable<int> TechStacks { get; set; }
-
-    public bool Activate { get; set; }  
 }

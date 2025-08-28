@@ -7,7 +7,7 @@ namespace JobFinder.DataAccess.Contracts;
 
 public interface IJobAdRepository
 {
-    Task<JobAdDetailsDTO> Get(int id);
+    Task<CompanyJobAdDetailsDTO> Get(int id);
 
     Task<DataListingDTO<JobAdListingDTO>> AllActive(JobAdFilterDTO filter);
 

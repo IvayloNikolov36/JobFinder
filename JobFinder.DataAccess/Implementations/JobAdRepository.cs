@@ -21,14 +21,14 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
         this.mapper = mapper;
     }
 
-    public async Task<JobAdDetailsDTO> Get(int id)
+    public async Task<CompanyJobAdDetailsDTO> Get(int id)
     {
-        JobAdDetailsDTO jobAd = await this.DbSet.AsNoTracking()
+        CompanyJobAdDetailsDTO jobAd = await this.DbSet.AsNoTracking()
             .Where(ja => ja.Id == id)
-            .To<JobAdDetailsDTO>()
+            .To<CompanyJobAdDetailsDTO>()
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(jobAd, "JobAdvertisement");
+        base.ValidateForExistence(jobAd, nameof(JobAdEntity));
 
         return jobAd;
     }
@@ -41,7 +41,7 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
 
         jobAdEntity.PublisherId = companyId;
         jobAdEntity.PublishDate = DateTime.UtcNow;
-        jobAdEntity.LifecycleStatusId = (int)LifecycleStatusEnum.Active;
+        jobAdEntity.LifecycleStatusId = (int)LifecycleStatusEnum.Draft;
 
         if (jobAd.SoftSkills.Any())
         {
@@ -66,18 +66,25 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
             .Select(ja => ja.Publisher.UserId)
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(jobAdPublisherId, "JobAdvertisement");
+        base.ValidateForExistence(jobAdPublisherId, nameof(JobAdEntity));
 
         return jobAdPublisherId;
     }
 
     public async Task Update(int id, JobAdEditDTO jobAdDto)
     {
+        // TODO: update the collections data - soft skills and others
+
         JobAdEntity jobAdFromDb = await this.DbSet.FindAsync(id);
 
-        base.ValidateForExistence(jobAdFromDb, "JobAdvertisement");
+        base.ValidateForExistence(jobAdFromDb, nameof(JobAdEntity));
 
         this.mapper.Map(jobAdDto, jobAdFromDb);
+
+        if (jobAdDto.Activate)
+        {
+            jobAdFromDb.LifecycleStatusId = (int)LifecycleStatusEnum.Active;
+        }
 
         this.DbSet.Update(jobAdFromDb);
     }
@@ -160,7 +167,7 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
             .To<JobAdCriteriasDTO>()
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(jobAdCriterias, "JobAdvertisement");
+        base.ValidateForExistence(jobAdCriterias, nameof(JobAdEntity));
 
         return jobAdCriterias;
     }

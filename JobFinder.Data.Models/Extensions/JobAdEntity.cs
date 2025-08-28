@@ -6,7 +6,10 @@ using System.Linq;
 
 namespace JobFinder.Data.Models;
 
-public partial class JobAdEntity : IMapFrom<JobAdCreateDTO>, IHaveCustomMappings
+public partial class JobAdEntity :
+    IMapFrom<JobAdCreateDTO>,
+    IMapFrom<JobAdEditDTO>,
+    IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
     {
@@ -35,6 +38,11 @@ public partial class JobAdEntity : IMapFrom<JobAdCreateDTO>, IHaveCustomMappings
 
         configuration.CreateMap<JobAdEntity, JobAdCriteriasDTO>()
             .ForMember(dto => dto.CityId, o => o.MapFrom(e => e.LocationId))
+            .ForMember(dto => dto.SoftSkills, o => o.MapFrom(e => e.JobAdSoftSkills.Select(jass => jass.SoftSkillId)))
+            .ForMember(dto => dto.ITAreas, o => o.MapFrom(e => e.JobAdITAreas.Select(jass => jass.ItAreaId)))
+            .ForMember(dto => dto.TechStacks, o => o.MapFrom(e => e.JobAdTechStacks.Select(jass => jass.TechStackId)));
+
+        configuration.CreateMap<JobAdEntity, CompanyJobAdDetailsDTO>()
             .ForMember(dto => dto.SoftSkills, o => o.MapFrom(e => e.JobAdSoftSkills.Select(jass => jass.SoftSkillId)))
             .ForMember(dto => dto.ITAreas, o => o.MapFrom(e => e.JobAdITAreas.Select(jass => jass.ItAreaId)))
             .ForMember(dto => dto.TechStacks, o => o.MapFrom(e => e.JobAdTechStacks.Select(jass => jass.TechStackId)));

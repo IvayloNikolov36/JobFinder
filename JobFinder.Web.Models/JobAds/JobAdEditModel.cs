@@ -1,28 +1,20 @@
-﻿using JobFinder.Services.Mappings;
-using System.ComponentModel.DataAnnotations;
+﻿using AutoMapper;
+using JobFinder.Services.Mappings;
+using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.JobAd;
 
-namespace JobFinder.Web.Models.JobAds
-{    
-    public class JobAdEditModel : IMapTo<JobAdEditModel>
+namespace JobFinder.Web.Models.JobAds;
+
+public class JobAdEditModel : JobAdBaseViewModel,
+    IMapTo<JobAdEditDTO>,
+    IMapTo<JobAdCategoryDTO>,
+    IHaveCustomMappings
+{
+    public bool Activate { get; set; }
+
+    public void CreateMappings(IProfileExpression configuration)
     {
-        [Required]
-        [StringLength(90, MinimumLength = 6)]
-        public string Position { get; set; }
-
-        [Required]
-        [MinLength(20)]
-        public string Description { get; set; }
-
-        public int? MinSalary { get; set; }
-
-        public int? MaxSalary { get; set; }
-
-        public int? CurrencyId { get; set; }
-
-        public int JobCategoryId { get; set; }
-
-        public int JobEngagementId { get; set; }
-
-        public int LocationId { get; set; }
+        configuration.CreateMap<JobAdEditModel, SalaryPropertiesDTO>()
+            .ForMember(dto => dto.HasCurrencyType, o => o.MapFrom(vm => vm.CurrencyId.HasValue));
     }
 }

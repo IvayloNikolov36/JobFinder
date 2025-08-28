@@ -21,6 +21,20 @@ namespace JobFinder.Web.Controllers
             this.adsService = adsService;
         }
 
+        [HttpGet]
+        [Route("{jobAdId:int}")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(JobAdDetailsViewModel))]
+        [Authorize(Roles = CompanyRole)]
+        [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
+        public async Task<ActionResult<JobAdDetailsViewModel>> Get([FromRoute] int jobAdId)
+        {
+            JobAdDetailsViewModel jobDetails = await this.adsService.Get(jobAdId);
+
+            return this.Ok(jobDetails);
+        }
+
         [HttpPost]
         [ProducesResponseType(
             StatusCodes.Status200OK,
@@ -65,18 +79,6 @@ namespace JobFinder.Web.Controllers
             return this.Ok(jobAds);
         }
 
-        [HttpGet]
-        [Route("{id:int}", Name = "Details")]
-        [ProducesResponseType(
-            StatusCodes.Status200OK,
-            Type = typeof(JobAdDetailsViewModel))]
-        public async Task<ActionResult<JobAdDetailsViewModel>> GetDetails([FromRoute] int id)
-        {
-            JobAdDetailsViewModel jobDetails = await this.adsService.Get(id);
-
-            return this.Ok(jobDetails);
-        }
-
         [HttpPost]
         [Route("create")]
         [ProducesResponseType(
@@ -88,10 +90,9 @@ namespace JobFinder.Web.Controllers
             IdentityViewModel<int> result = await this.adsService
                 .Create(model, this.User.GetCurrentUserId());
 
-            return this.CreatedAtRoute("Details", result, result);
+            return this.Ok(result);
         }
 
-        // TODO: refactor the update end point and also think about logic for update when the job is in draft status only
         [HttpPut]
         [Route("{jobAdId:int}")]
         [Authorize(Roles = CompanyRole)]
