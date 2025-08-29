@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
+using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
@@ -24,7 +25,7 @@ public class SkillsInfoRepository : EfCoreRepository<SkillsInfoEntity>, ISkillsI
             .Include(x => x.SkillsInfoDrivingCategories)
             .FirstOrDefaultAsync();
 
-        base.ValidateForExistence(skillFromDb, "SkillsInfo");
+        base.ValidateForExistence(skillFromDb, nameof(SkillsInfoEntity));
 
         this.mapper.Map(skillsInfoDto, skillFromDb);
 
@@ -40,7 +41,7 @@ public class SkillsInfoRepository : EfCoreRepository<SkillsInfoEntity>, ISkillsI
         SkillsInfoEntity skillsInfoEntity = await this.DbSet
             .FirstOrDefaultAsync(s => s.CvId == cvId);
 
-        base.ValidateForExistence(skillsInfoEntity, "SkillsInfo");
+        base.ValidateForExistence(skillsInfoEntity, nameof(SkillsInfoEntity));
 
         this.DbSet.Remove(skillsInfoEntity);
     }

@@ -121,7 +121,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         AnonymousProfileEntity entity = await this.DbSet.FindAsync(id);
 
-        base.ValidateForExistence(entity, "AnonymousProfile");
+        base.ValidateForExistence(entity, nameof(AnonymousProfileEntity));
 
         return entity.CvId;
     }
@@ -130,7 +130,7 @@ public class AnonymousProfileRepository : EfCoreRepository<AnonymousProfileEntit
     {
         AnonymousProfileEntity entity = await this.DbSet.FindAsync(id);
 
-        base.ValidateForExistence(entity, "AnonymousProfile");
+        base.ValidateForExistence(entity, nameof(AnonymousProfileEntity));
 
         return entity.UserId;
     }

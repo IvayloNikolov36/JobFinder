@@ -50,7 +50,7 @@ namespace JobFinder.Services.Implementations
             return new IdentityViewModel<int>(jobAdDto.Id);
         }
 
-        public async Task Update(int jobAdId, string userId, JobAdEditModel jobAd)
+        public async Task Update(int jobAdId, JobAdEditModel jobAd)
         {
             this.ValidateJobAdProperties(jobAd);
 

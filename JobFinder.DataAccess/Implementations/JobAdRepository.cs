@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
 using JobFinder.Data.Models;
+using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Enums;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
@@ -155,7 +156,7 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
             .To<JobAdDetailsForSubscriberDTO>()
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(data, "JobAdvertisement");
+        base.ValidateForExistence(data, nameof(JobAdEntity));
 
         return data;
     }

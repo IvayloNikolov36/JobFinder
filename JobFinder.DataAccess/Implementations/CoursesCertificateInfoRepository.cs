@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
+using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
@@ -112,7 +113,7 @@ public class CoursesCertificateInfoRepository
     {
         CourseCertificateEntity courseCertificateFromDb = await this.DbSet.FindAsync(id);
 
-        base.ValidateForExistence(courseCertificateFromDb, "CourseCertificate");
+        base.ValidateForExistence(courseCertificateFromDb, nameof(CourseCertificateEntity));
 
         this.DbSet.Remove(courseCertificateFromDb);
     }

@@ -1,5 +1,6 @@
 ﻿using JobFinder.Data;
 using JobFinder.Data.Models;
+using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
@@ -21,7 +22,7 @@ public class UserRepository : EfCoreRepository<UserEntity>, IUserRepository
             .To<UserProfileDataDTO>()
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(userProfile, "User");
+        base.ValidateForExistence(userProfile, nameof(UserEntity));
 
         return userProfile;
     }

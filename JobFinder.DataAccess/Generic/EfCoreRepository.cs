@@ -1,5 +1,6 @@
 ﻿using JobFinder.Common.Exceptions;
 using JobFinder.Data;
+using JobFinder.DataAccess.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
@@ -80,8 +81,7 @@ namespace JobFinder.DataAccess.Generic
         {
             if (entity is null)
             {
-                // TODO: create a method to trim Entity and to insert space between words
-                throw new ActionableException($"Entity {entityName} does not exist!");
+                throw new ActionableException($"Entity {entityName.Beautify()} does not exist!");
             }
         }
 

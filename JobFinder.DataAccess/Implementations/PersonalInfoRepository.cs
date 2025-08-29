@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
+using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
@@ -20,7 +21,7 @@ public class PersonalInfoRepository : EfCoreRepository<PersonalInfoEntity>, IPer
     {
         PersonalInfoEntity personalInfoFromDb = await this.DbSet.FindAsync(personalInfoDto.Id);
 
-        base.ValidateForExistence(personalInfoFromDb, "PersonalInfo");
+        base.ValidateForExistence(personalInfoFromDb, nameof(PersonalInfoEntity));
 
         this.mapper.Map(personalInfoDto, personalInfoFromDb);
 

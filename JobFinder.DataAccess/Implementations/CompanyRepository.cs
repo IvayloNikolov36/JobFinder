@@ -1,6 +1,7 @@
 ﻿using JobFinder.Common.Exceptions;
 using JobFinder.Data;
 using JobFinder.Data.Models;
+using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
@@ -45,7 +46,7 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
             .To<CompanyDetailsUserDTO>(new { currentUserId })
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(companyDetails, "Company");
+        base.ValidateForExistence(companyDetails, nameof(CompanyEntity));
 
         return companyDetails;
     }

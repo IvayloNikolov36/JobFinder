@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
 using JobFinder.Data.Models;
+using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
@@ -67,7 +68,7 @@ public class JobAdApplicationsRepository : EfCoreRepository<JobAdApplicationEnti
             .SingleOrDefaultAsync(a => a.CvId == cvId
                 && a.JobAdId == jobAdId);
 
-        base.ValidateForExistence(application, "JobAdApplication");
+        base.ValidateForExistence(application, nameof(JobAdApplicationEntity));
 
         DateTime previewDate = DateTime.UtcNow;
         application.PreviewDate = previewDate;
