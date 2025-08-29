@@ -8,6 +8,8 @@ public class CompanyJobAdDetailsDTO
 
     public string Description { get; set; }
 
+    public int LifecycleStatusId { get; set; }
+
     public int LocationId { get; set; }
 
     public int? MinSalary { get; set; }

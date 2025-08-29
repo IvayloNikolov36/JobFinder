@@ -24,4 +24,6 @@ public interface IJobAdRepository
     Task<IEnumerable<CompanyJobAdDTO>> GetFilteredCompanyAds(string userId, int? lifecycleStatus);
 
     Task<JobAdCriteriasDTO> GetJobAdCriterias(int jobAdId);
+
+    Task Retire(int id);
 }

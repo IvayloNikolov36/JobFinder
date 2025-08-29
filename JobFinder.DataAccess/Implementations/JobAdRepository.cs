@@ -238,6 +238,17 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
             .ToListAsync();
     }
 
+    public async Task Retire(int id)
+    {
+        JobAdEntity jobAd = await this.DbSet.FindAsync(id);
+
+        base.ValidateForExistence(jobAd, nameof(JobAdEntity));
+
+        jobAd.LifecycleStatusId = (int)LifecycleStatusEnum.Retired;
+
+        this.DbSet.Update(jobAd);
+    }
+
     private IEnumerable<JobAdTechStackEntity> GetJobAdTechStackEntities(IEnumerable<int> techStacks)
     {
         List<JobAdTechStackEntity> entities = [];

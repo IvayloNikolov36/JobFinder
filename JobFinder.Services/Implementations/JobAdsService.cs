@@ -138,6 +138,13 @@ namespace JobFinder.Services.Implementations
             return this.mapper.Map<JobAdCriteriasViewModel>(jobAdCriterias);
         }
 
+        public async Task Retire(int id)
+        {
+            await this.unitOfWork.JobAdRepository.Retire(id);
+
+            await this.unitOfWork.SaveChanges();
+        }
+
         private void ValidateJobAdProperties<T>(T jobAd) where T : JobAdBaseViewModel
         {
             SalaryPropertiesDTO salaryProperties = this.mapper.Map<SalaryPropertiesDTO>(jobAd);
@@ -149,6 +156,6 @@ namespace JobFinder.Services.Implementations
             JobAdCategoryDTO adCategoryDto = this.mapper.Map<JobAdCategoryDTO>(jobAd);
 
             this.jobAdsRules.ValidateJobCategoryAndRelatedData(adCategoryDto);
-        }
+        }   
     }
 }

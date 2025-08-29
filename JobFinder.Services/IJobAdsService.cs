@@ -17,7 +17,7 @@ namespace JobFinder.Services
 
         Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model);
 
-        Task Update(int jobAdId, string userId, JobAdEditModel editModel);
+        Task Update(int jobAdId, JobAdEditModel editModel);
 
         Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId);
 
@@ -28,5 +28,7 @@ namespace JobFinder.Services
         Task<IEnumerable<AnonymousProfileListingViewModel>> GetRelevantAnonymousProfiles(int jobAdId);
 
         Task<JobAdCriteriasViewModel> GetJobAdCriterias(int jobAdId);
+
+        Task Retire(int id);
     }
 }

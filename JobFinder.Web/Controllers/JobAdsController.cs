@@ -100,11 +100,21 @@ namespace JobFinder.Web.Controllers
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
         public async Task<ActionResult> Update([FromRoute] int jobAdId, [FromBody] JobAdEditModel model)
         {
-            string userId = this.User.GetCurrentUserId();
-
-            await this.adsService.Update(jobAdId, userId, model);
+            await this.adsService.Update(jobAdId, model);
 
             return this.Ok();
+        }
+
+        [HttpGet]
+        [Route("{jobAdId:int}/retire")]
+        [Authorize(Roles = CompanyRole)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
+        public async Task<IActionResult> Retire([FromRoute] int jobAdId)
+        {
+            await this.adsService.Retire(jobAdId);
+
+            return this.NoContent();
         }
 
         [HttpGet]
