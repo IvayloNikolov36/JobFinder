@@ -49,6 +49,19 @@ namespace JobFinder.Web.Controllers
         // TODO: create an endpoint for job seeker to access company ads
 
         [HttpGet]
+        [Route("company-ads/{companyId:int}")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<JobListingModel>))]
+        [Authorize(Roles = JobSeekerRole)]
+        public async Task<IActionResult> GetCompanyActiveAds([FromRoute] int companyId)
+        {
+            IEnumerable<JobListingModel> data = await this.adsService.AllActive(companyId);
+
+            return this.Ok(data);
+        }
+
+        [HttpGet]
         [Route("company/all")]
         [ProducesResponseType(
             StatusCodes.Status200OK,

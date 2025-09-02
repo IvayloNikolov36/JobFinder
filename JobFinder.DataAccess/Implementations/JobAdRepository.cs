@@ -162,6 +162,14 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
         return new DataListingDTO<JobAdListingDTO>(totalCount, jobAds);
     }
 
+    public async Task<IEnumerable<JobAdListingDTO>> AllActive(int companyId)
+    {
+        return await this.DbSet.AsNoTracking()
+            .Where(ja => ja.PublisherId == companyId)
+            .To<JobAdListingDTO>()
+            .ToListAsync();
+    }
+
     public async Task<JobAdDetailsForSubscriberDTO> GetDetailsForSubscriber(int jobAdId)
     {
         JobAdDetailsForSubscriberDTO data = await this.DbSet.AsNoTracking()

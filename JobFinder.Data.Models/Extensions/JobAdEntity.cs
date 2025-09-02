@@ -13,15 +13,18 @@ public partial class JobAdEntity :
 {
     public void CreateMappings(IProfileExpression configuration)
     {
-        configuration.CreateMap<JobAdEntity, JobAdListingDTO>()
-            .ForMember(dto => dto.CompanyId, m => m.MapFrom(e => e.PublisherId))
-            .ForMember(dto => dto.CompanyLogo, m => m.MapFrom(e => e.Publisher.Logo))
-            .ForMember(dto => dto.CompanyName, m => m.MapFrom(e => e.Publisher.Name))
+        configuration.CreateMap<JobAdEntity, JobAdListingConciseDTO>()
             .ForMember(dto => dto.PostedOn, m => m.MapFrom(e => e.CreatedOn.ToString()))
             .ForMember(dto => dto.Currency, m => m.MapFrom(e => e.Currency.Name))
             .ForMember(dto => dto.JobEngagement, m => m.MapFrom(e => e.JobEngagement.Name))
             .ForMember(dto => dto.JobCategory, m => m.MapFrom(e => e.JobCategory.Name))
             .ForMember(dto => dto.Location, m => m.MapFrom(e => e.Location.Name));
+
+        configuration.CreateMap<JobAdEntity, JobAdListingDTO>()
+            .IncludeBase<JobAdEntity, JobAdListingConciseDTO>()
+            .ForMember(dto => dto.CompanyId, m => m.MapFrom(e => e.PublisherId))
+            .ForMember(dto => dto.CompanyLogo, m => m.MapFrom(e => e.Publisher.Logo))
+            .ForMember(dto => dto.CompanyName, m => m.MapFrom(e => e.Publisher.Name));
 
         configuration.CreateMap<JobAdEntity, JobAdDetailsForSubscriberDTO>()
             .ForMember(dto => dto.Location, o => o.MapFrom(e => e.Location.Name))

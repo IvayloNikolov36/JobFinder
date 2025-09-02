@@ -1,28 +1,12 @@
 ﻿namespace JobFinder.Transfer.DTOs.JobAd;
 
-public class JobAdListingDTO
+public class JobAdListingDTO : JobAdListingConciseDTO
 {
-    public int Id { get; set; }
+    // TODO: use a nested DTO instead of these 3 props
 
     public int CompanyId { get; set; }
 
     public string CompanyLogo { get; set; }
 
     public string CompanyName { get; set; }
-
-    public string Position { get; set; }
-
-    public string PostedOn { get; set; }
-
-    public string JobCategory { get; set; }
-
-    public string JobEngagement { get; set; }
-
-    public int? MinSalary { get; set; }
-
-    public int? MaxSalary { get; set; }
-
-    public string Currency { get; set; }
-
-    public string Location { get; set; }
 }

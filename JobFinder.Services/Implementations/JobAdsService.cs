@@ -85,6 +85,14 @@ namespace JobFinder.Services.Implementations
                 this.mapper.Map<IEnumerable<JobListingModel>>(result.Data));
         }
 
+        public async Task<IEnumerable<JobListingModel>> AllActive(int companyId)
+        {
+            IEnumerable<JobAdListingDTO> data = await this.unitOfWork.JobAdRepository
+                .AllActive(companyId);
+
+            return this.mapper.Map<IEnumerable<JobListingModel>>(data);
+        }
+
         public async Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId)
         {
             JobAdDetailsForSubscriberDTO detailsDto = await this.unitOfWork
