@@ -98,7 +98,9 @@ namespace JobFinder.Web.Controllers
         [Authorize(Roles = CompanyRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
-        public async Task<ActionResult> Update([FromRoute] int jobAdId, [FromBody] JobAdEditModel model)
+        public async Task<ActionResult> Update(
+            [FromRoute] int jobAdId,
+            [FromBody] JobAdEditModel model)
         {
             await this.adsService.Update(jobAdId, model);
 

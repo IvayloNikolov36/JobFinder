@@ -1,6 +1,5 @@
 ﻿using JobFinder.Data;
 using JobFinder.Data.Models;
-using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;

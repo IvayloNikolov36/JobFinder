@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
 using JobFinder.Data.Models;
-using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.Data.Models.Enums;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
@@ -46,15 +45,20 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
 
         if (jobAd.SoftSkills.Any())
         {
-            jobAdEntity.JobAdSoftSkills.AddRange(this.GetJobAdSoftSkillsEntities(jobAd.SoftSkills));
+            jobAdEntity.JobAdSoftSkills
+                .AddRange(this.GetJobAdSoftSkillsEntities(jobAd.SoftSkills));
         }
+
         if (jobAd.ITAreas.Any())
         {
-            jobAdEntity.JobAdITAreas.AddRange(this.GetJobAdITAreasEntities(jobAd.ITAreas));
+            jobAdEntity.JobAdITAreas
+                .AddRange(this.GetJobAdITAreasEntities(jobAd.ITAreas));
         }
+
         if (jobAd.TechStacks.Any())
         {
-            jobAdEntity.JobAdTechStacks.AddRange(this.GetJobAdTechStackEntities(jobAd.TechStacks));
+            jobAdEntity.JobAdTechStacks
+                .AddRange(this.GetJobAdTechStackEntities(jobAd.TechStacks));
         }
 
         await this.DbSet.AddAsync(jobAdEntity);
@@ -74,9 +78,12 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
 
     public async Task Update(int id, JobAdEditDTO jobAdDto)
     {
-        // TODO: update the collections data - soft skills and others
-
-        JobAdEntity jobAdFromDb = await this.DbSet.FindAsync(id);
+        JobAdEntity jobAdFromDb = await this.DbSet
+            .Include(ja => ja.JobAdSoftSkills)
+            .Include(ja => ja.JobAdITAreas)
+            .Include(ja => ja.JobAdTechStacks)
+            .Where(ja => ja.Id == id)
+            .SingleOrDefaultAsync();
 
         base.ValidateForExistence(jobAdFromDb, nameof(JobAdEntity));
 
@@ -86,6 +93,12 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
         {
             jobAdFromDb.LifecycleStatusId = (int)LifecycleStatusEnum.Active;
         }
+
+        this.UpdateSoftSkills(jobAdDto.SoftSkills, jobAdFromDb);
+
+        this.UpdateItAreas(jobAdDto.ITAreas, jobAdFromDb);
+
+        this.UpdateTechStack(jobAdDto.TechStacks, jobAdFromDb);
 
         this.DbSet.Update(jobAdFromDb);
     }
@@ -171,6 +184,81 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
         base.ValidateForExistence(jobAdCriterias, nameof(JobAdEntity));
 
         return jobAdCriterias;
+    }
+
+    private void UpdateItAreas(IEnumerable<int> itAreaIds, JobAdEntity adEntity)
+    {
+        var itAreasFromDb = adEntity.JobAdITAreas;
+
+        List<int> itAreasToAdd = itAreaIds
+            .Where(id => !itAreasFromDb.Any(a => a.ItAreaId == id))
+            .ToList();
+
+        itAreasToAdd.ForEach(id => adEntity.JobAdITAreas
+            .Add(new JobAdItAreaEntity
+            {
+                ItAreaId = id
+            }));
+
+        List<JobAdItAreaEntity> itAreaEntitiesToRemove = itAreasFromDb
+            .Where(a => !itAreaIds.Contains(a.ItAreaId))
+            .ToList();
+
+        if (itAreaEntitiesToRemove.Count > 0)
+        {
+            itAreaEntitiesToRemove.ForEach(e => adEntity.JobAdITAreas.Remove(e));
+        }
+    }
+
+    private void UpdateTechStack(IEnumerable<int> techStackIds, JobAdEntity adEntity)
+    {
+        List<JobAdTechStackEntity> teckStackFromDb = adEntity.JobAdTechStacks;
+
+        List<int> techStackToAdd = techStackIds
+            .Where(id => !teckStackFromDb.Any(ts => ts.TechStackId == id))
+            .ToList();
+
+        techStackToAdd.ForEach(id => adEntity.JobAdTechStacks
+            .Add(new JobAdTechStackEntity
+            {
+                TechStackId = id,
+            }));
+
+        List<JobAdTechStackEntity> techStackEntitiesToRemove = teckStackFromDb
+            .Where(x => !techStackIds.Contains(x.TechStackId))
+            .ToList();
+
+        if (techStackEntitiesToRemove.Count > 0)
+        {
+            techStackEntitiesToRemove.ForEach(e => adEntity.JobAdTechStacks.Remove(e));
+        }
+    }
+
+    private void UpdateSoftSkills(IEnumerable<int> softSkillIds, JobAdEntity adEntity)
+    {
+        List<JobAdSoftSkillEntity> adSoftskillsFromDB = adEntity.JobAdSoftSkills;
+
+        IEnumerable<int> softSkillsFromDb = adSoftskillsFromDB
+            .Select(ss => ss.SoftSkillId);
+
+        List<int> softSkillsIdsToAdd = softSkillIds
+            .Where(ss => !softSkillsFromDb.Contains(ss))
+            .ToList();
+
+        softSkillsIdsToAdd.ForEach(id => adEntity.JobAdSoftSkills
+            .Add(new JobAdSoftSkillEntity()
+            {
+                SoftSkillId = id
+            }));
+
+        List<JobAdSoftSkillEntity> softSkillsToRemove = adSoftskillsFromDB
+            .Where(jass => !softSkillIds.Contains(jass.SoftSkillId))
+            .ToList();
+
+        if (softSkillsToRemove.Count > 0)
+        {
+            softSkillsToRemove.ForEach(ss => adEntity.JobAdSoftSkills.Remove(ss));
+        }
     }
 
     private IQueryable<JobAdEntity> FilteredByCategory(
