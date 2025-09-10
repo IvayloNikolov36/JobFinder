@@ -23,8 +23,8 @@ public class CvPreviewRequestController : ApiController
 
     [HttpGet]
     [ProducesResponseType(
-            StatusCodes.Status200OK,
-            Type = typeof(IEnumerable<CvPreviewRequestListingViewModel>))]
+        StatusCodes.Status200OK,
+        Type = typeof(IEnumerable<CvPreviewRequestListingViewModel>))]
     [Authorize(Roles = JobSeekerRole)]
     public async Task<IActionResult> GetMyCvsPreviewRequests()
     {

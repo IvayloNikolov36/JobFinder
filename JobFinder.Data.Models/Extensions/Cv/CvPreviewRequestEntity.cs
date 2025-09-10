@@ -10,9 +10,7 @@ public partial class CvPreviewRequestEntity : IMapFrom<CvPreviewRequestDTO>,
     public void CreateMappings(IProfileExpression configuration)
     {
         configuration.CreateMap<CvPreviewRequestEntity, CvPreviewRequestListingDTO>()
-            .ForMember(dto => dto.CompanyName, o => o.MapFrom(e => e.JobAd.Publisher.Name))
-            .ForMember(dto => dto.CompanyLogoUrl, o => o.MapFrom(e => e.JobAd.Publisher.Logo))
-            .ForMember(dto => dto.Position, o => o.MapFrom(e => e.JobAd.Position));
+            .ForMember(dto => dto.Company, o => o.MapFrom(e => e.JobAd.Publisher));
 
         configuration.CreateMap<CvPreviewRequestEntity, CompanyCvPreviewRequestListingDTO>()
             .ForMember(dto => dto.Position, o => o.MapFrom(e => e.JobAd.Position))

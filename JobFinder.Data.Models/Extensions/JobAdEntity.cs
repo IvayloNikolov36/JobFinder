@@ -9,6 +9,7 @@ namespace JobFinder.Data.Models;
 public partial class JobAdEntity :
     IMapFrom<JobAdCreateDTO>,
     IMapFrom<JobAdEditDTO>,
+    IMapTo<JobAdBasicDetailsDTO>,
     IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)

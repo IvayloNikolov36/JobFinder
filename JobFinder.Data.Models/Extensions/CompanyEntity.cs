@@ -7,7 +7,9 @@ using System.Linq;
 
 namespace JobFinder.Data.Models;
 
-public partial class CompanyEntity : IMapTo<CompanyBasicDTO>, IHaveCustomMappings
+public partial class CompanyEntity : IMapTo<CompanyBasicDTO>,
+    IMapTo<CompanyBasicDetailsDTO>,
+    IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
     {
