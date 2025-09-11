@@ -1,25 +1,22 @@
-﻿namespace JobFinder.Transfer.DTOs
+﻿using JobFinder.Transfer.DTOs.Company;
+
+namespace JobFinder.Transfer.DTOs;
+
+public class CompanyJobAdsForSubscribersDTO
 {
-    public class CompanyJobAdsForSubscribersDTO
-    {
-        public int CompanyId { get; set; }
+    public CompanyBasicDetailsDTO Company { get; set; }
 
-        public string CompanyName { get; set; }
+    public string JobAdIds { get; set; }
 
-        public string CompanyLogo { get; set; }
+    public string Positions { get; set; }
 
-        public string JobAdIds { get; set; }
+    public string Locations { get; set; }
 
-        public string Positions { get; set; }
+    public string JobCategories { get; set; }
 
-        public string Locations { get; set; }
+    public string JobEngagements { get; set; }
 
-        public string JobCategories { get; set; }
+    public string Salaries { get; set; }
 
-        public string JobEngagements { get; set; }
-
-        public string Salaries { get; set; }
-
-        public string Subscribers { get; set; }
-    }
+    public string Subscribers { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿namespace JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
+﻿using JobFinder.Transfer.DTOs.JobAd;
+
+namespace JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 
 public class CompanyCvPreviewRequestListingDTO
 {
@@ -6,9 +8,7 @@ public class CompanyCvPreviewRequestListingDTO
 
     public string CvId { get; set; }
 
-    // TODO: use DTO
-    public int JobAdId { get; set; }
-    public string Position { get; set; }
+    public JobAdBasicDetailsDTO JobAd { get; set; }
 
     public DateTime RequestDate { get; set; }
 

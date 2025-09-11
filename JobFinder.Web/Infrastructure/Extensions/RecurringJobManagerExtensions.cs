@@ -2,15 +2,14 @@
 using JobFinder.Services;
 using JobFinder.Services.Messages;
 using JobFinder.Web.Models.Common;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
 
 namespace JobFinder.Web.Infrastructure.Extensions
 {
     public static class RecurringJobManagerExtensions
     {
-        public static void RegisterDeactiveJobAdvertisements(this IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
+        public static void RegisterDeactiveJobAdvertisements(
+            this IRecurringJobManager recurringJobManager,
+            IServiceProvider serviceProvider)
         {
             recurringJobManager.AddOrUpdate(
             "deactivating_JobAdvertisements_Published_MoreThan_30_DaysAgo",
@@ -18,7 +17,9 @@ namespace JobFinder.Web.Infrastructure.Extensions
                 WebConstants.DailyCronExpression);
         }
 
-        public static void RegisterSendLatestCompanyJobAdvertisements(this IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
+        public static void RegisterSendLatestCompanyJobAdvertisements(
+            this IRecurringJobManager recurringJobManager,
+            IServiceProvider serviceProvider)
         {
             recurringJobManager.AddOrUpdate(
                 $"sending_Latest_CompanyJobAds",
@@ -26,7 +27,9 @@ namespace JobFinder.Web.Infrastructure.Extensions
                 WebConstants.DailyCronExpression);
         }
 
-        public static void RegisterSendingJobAdvertisementsBySubscriptions(this IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
+        public static void RegisterSendingJobAdvertisementsBySubscriptions(
+            this IRecurringJobManager recurringJobManager,
+            IServiceProvider serviceProvider)
         {
             string[] cronExpressions =
             [
@@ -48,7 +51,8 @@ namespace JobFinder.Web.Infrastructure.Extensions
 
                 recurringJobManager.AddOrUpdate(
                     $"sending_{recurringType.Name}_JobAdsByCriterias",
-                    () => serviceProvider.GetService<IDataSender>().SendLatestJobAdsForJobSubscriptions(recurringType.Id),
+                    () => serviceProvider.GetService<IDataSender>()
+                        .SendLatestJobAdsForJobSubscriptions(recurringType.Id),
                     cronExpression);
             }
         }

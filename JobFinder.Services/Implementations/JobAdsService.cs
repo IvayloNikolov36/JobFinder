@@ -72,7 +72,7 @@ namespace JobFinder.Services.Implementations
             return this.mapper.Map<IEnumerable<CompanyJobAdViewModel>>(jobAds);
         }
 
-        public async Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel filter)
+        public async Task<DataListingsModel<JobListingViewModel>> AllActiveAsync(JobAdsFilterModel filter)
         {
             JobAdFilterDTO filterDto = this.mapper.Map<JobAdFilterDTO>(filter);
 
@@ -80,17 +80,17 @@ namespace JobFinder.Services.Implementations
                 .JobAdRepository
                 .AllActive(filterDto);
 
-            return new DataListingsModel<JobListingModel>(
+            return new DataListingsModel<JobListingViewModel>(
                 result.TotalCount,
-                this.mapper.Map<IEnumerable<JobListingModel>>(result.Data));
+                this.mapper.Map<IEnumerable<JobListingViewModel>>(result.Data));
         }
 
-        public async Task<IEnumerable<JobListingModel>> AllActive(int companyId)
+        public async Task<IEnumerable<JobListingViewModel>> AllActive(int companyId)
         {
             IEnumerable<JobAdListingDTO> data = await this.unitOfWork.JobAdRepository
                 .AllActive(companyId);
 
-            return this.mapper.Map<IEnumerable<JobListingModel>>(data);
+            return this.mapper.Map<IEnumerable<JobListingViewModel>>(data);
         }
 
         public async Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId)

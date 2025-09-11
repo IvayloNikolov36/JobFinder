@@ -13,7 +13,6 @@ public partial class CvPreviewRequestEntity : IMapFrom<CvPreviewRequestDTO>,
             .ForMember(dto => dto.Company, o => o.MapFrom(e => e.JobAd.Publisher));
 
         configuration.CreateMap<CvPreviewRequestEntity, CompanyCvPreviewRequestListingDTO>()
-            .ForMember(dto => dto.Position, o => o.MapFrom(e => e.JobAd.Position))
             .ForMember(dto => dto.CvId, o => o.MapFrom(e => e.AcceptedDate.HasValue
                 ? e.CvId
                 : null));

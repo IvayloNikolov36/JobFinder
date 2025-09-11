@@ -72,13 +72,13 @@ namespace JobFinder.Services.Implementations
                     sb.AppendLine(@$"<tr style=""border-bottom:1px solid black"">
                                       <td><a href=""{JobAdDetailsLink}{jobId}"" style=""text-decoration:none"">{position}</a></td>
                                       <td>{location}</td>
-                                      <td><a href=""{CompanyDetailsUrl}{item.CompanyId}"" style=""text-decoration:none"">{item.CompanyName}</a></td>
-                                      <td style=""text-align:right;""><img src=""{item.CompanyLogo}"" alt=""CompanyLogo"" width=""90"" height=""90""></td>
+                                      <td><a href=""{CompanyDetailsUrl}{item.Company.Id}"" style=""text-decoration:none"">{item.Company.Name}</a></td>
+                                      <td style=""text-align:right;""><img src=""{item.Company.Logo}"" alt=""CompanyLogo"" width=""90"" height=""90""></td>
                                     </tr>");
                 }
                 sb.AppendLine("</table>");
 
-                string subject = $"New job ads from company '{item.CompanyName}'";
+                string subject = $"New job ads from company '{item.Company.Name}'";
                 foreach (string userEmail in subscribers)
                 {
                     await this.emailSender

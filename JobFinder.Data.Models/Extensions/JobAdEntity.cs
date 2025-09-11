@@ -23,9 +23,7 @@ public partial class JobAdEntity :
 
         configuration.CreateMap<JobAdEntity, JobAdListingDTO>()
             .IncludeBase<JobAdEntity, JobAdListingConciseDTO>()
-            .ForMember(dto => dto.CompanyId, m => m.MapFrom(e => e.PublisherId))
-            .ForMember(dto => dto.CompanyLogo, m => m.MapFrom(e => e.Publisher.Logo))
-            .ForMember(dto => dto.CompanyName, m => m.MapFrom(e => e.Publisher.Name));
+            .ForMember(dto => dto.Company, m => m.MapFrom(e => e.Publisher));
 
         configuration.CreateMap<JobAdEntity, JobAdDetailsForSubscriberDTO>()
             .ForMember(dto => dto.Location, o => o.MapFrom(e => e.Location.Name))

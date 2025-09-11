@@ -38,25 +38,23 @@ namespace JobFinder.Web.Controllers
         [HttpPost]
         [ProducesResponseType(
             StatusCodes.Status200OK,
-            Type = typeof(DataListingsModel<JobListingModel>))]
+            Type = typeof(DataListingsModel<JobListingViewModel>))]
         public async Task<IActionResult> GetAllActive([FromBody] JobAdsFilterModel paramsModel)
         {
-            DataListingsModel<JobListingModel> ads = await this.adsService.AllActiveAsync(paramsModel);
+            DataListingsModel<JobListingViewModel> ads = await this.adsService.AllActiveAsync(paramsModel);
 
             return this.Ok(ads);
         }
-
-        // TODO: create an endpoint for job seeker to access company ads
 
         [HttpGet]
         [Route("company-ads/{companyId:int}")]
         [ProducesResponseType(
             StatusCodes.Status200OK,
-            Type = typeof(IEnumerable<JobListingModel>))]
+            Type = typeof(IEnumerable<JobListingViewModel>))]
         [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> GetCompanyActiveAds([FromRoute] int companyId)
         {
-            IEnumerable<JobListingModel> data = await this.adsService.AllActive(companyId);
+            IEnumerable<JobListingViewModel> data = await this.adsService.AllActive(companyId);
 
             return this.Ok(data);
         }

@@ -15,9 +15,9 @@ namespace JobFinder.Services
             string currentUserId,
             int? lifecycleStatus = null);
 
-        Task<DataListingsModel<JobListingModel>> AllActiveAsync(JobAdsFilterModel model);
+        Task<DataListingsModel<JobListingViewModel>> AllActiveAsync(JobAdsFilterModel model);
 
-        Task<IEnumerable<JobListingModel>> AllActive(int companyId);
+        Task<IEnumerable<JobListingViewModel>> AllActive(int companyId);
 
         Task Update(int jobAdId, JobAdEditModel editModel);
 

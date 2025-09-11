@@ -1,9 +1,11 @@
-﻿using JobFinder.Services.Mappings;
+﻿using AutoMapper;
+using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Transfer.DTOs.Company;
 
 namespace JobFinder.Data.Models.ViewsModels
 {
-    public class CompanyJobAdsForSubscribersViewData : IMapTo<CompanyJobAdsForSubscribersDTO>
+    public class CompanyJobAdsForSubscribersViewData : IHaveCustomMappings
     {
         public int CompanyId { get; set; }
 
@@ -24,5 +26,17 @@ namespace JobFinder.Data.Models.ViewsModels
         public string Salaries { get; set; }
 
         public string Subscribers { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration
+                .CreateMap<CompanyJobAdsForSubscribersViewData, CompanyJobAdsForSubscribersDTO>()
+                .ForMember(dto => dto.Company, o => o.MapFrom(vd => new CompanyBasicDetailsDTO
+                {
+                    Id = vd.CompanyId,
+                    Name = vd.CompanyName,
+                    Logo = vd.CompanyLogo
+                }));
+        }
     }
 }
