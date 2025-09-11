@@ -1,4 +1,6 @@
-﻿namespace JobFinder.Transfer.DTOs.JobAd;
+﻿using JobFinder.Transfer.DTOs.Cv;
+
+namespace JobFinder.Transfer.DTOs.JobAd;
 
 public class JobAdApplicationInfoDTO
 {
@@ -8,12 +10,7 @@ public class JobAdApplicationInfoDTO
 
     public string Applicant { get; set; }
 
-    // TODO: use a DTO
-    public string CvId { get; set; }
-
-    public string CvName { get; set; }
-
-    public string CvPictureUrl { get; set; }
+    public CvBasicDetailsDTO Cv { get; set; }
 
     public string Email { get; set; }
 

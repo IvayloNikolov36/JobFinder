@@ -3,13 +3,13 @@ using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
 using JobFinder.Transfer.DTOs.Cv;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Linq;
 
 namespace JobFinder.Data.Models.Cv;
 
 public partial class CurriculumVitaeEntity :
     IMapTo<CvPreviewDataDTO>,
+    IMapTo<CvBasicDetailsDTO>,
     IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)
