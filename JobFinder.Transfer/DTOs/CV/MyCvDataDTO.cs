@@ -23,4 +23,8 @@ public class MyCvDataDTO
     public SkillsInfoDTO Skills { get; set; }
 
     public IEnumerable<CourseCertificateDTO> CourseCertificates { get; set; }
+
+    public bool ApplicationForActiveAd { get; set; }
+
+    public bool ApprovedCvPreviewForActiveAd { get; set; }
 }

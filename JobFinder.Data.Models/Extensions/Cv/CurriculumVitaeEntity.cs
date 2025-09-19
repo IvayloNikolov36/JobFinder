@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JobFinder.Data.Models.Enums;
 using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
@@ -44,6 +45,12 @@ public partial class CurriculumVitaeEntity :
             .ForMember(dto => dto.AnonymousProfileActivated, o => o.MapFrom(e => e.AnonymousProfile != null));
 
         configuration.CreateMap<CurriculumVitaeEntity, MyCvDataDTO>()
-            .ForMember(dto => dto.AnonymousProfileId, o => o.MapFrom(e => e.AnonymousProfile.Id));
+            .ForMember(dto => dto.AnonymousProfileId, o => o.MapFrom(e => e.AnonymousProfile.Id))
+            .ForMember(dto => dto.ApplicationForActiveAd, o => o.MapFrom(e => e.JobAdApplications
+                .Any(a => a.JobAd.LifecycleStatusId == (int)LifecycleStatusEnum.Active)))
+            .ForMember(dto => dto.ApprovedCvPreviewForActiveAd, o => o.MapFrom(e => e.CvPreviewRequests
+                .Any(r => r.AcceptedDate.HasValue
+                    && r.JobAd.LifecycleStatusId == (int)LifecycleStatusEnum.Active))
+            );
     }
 }

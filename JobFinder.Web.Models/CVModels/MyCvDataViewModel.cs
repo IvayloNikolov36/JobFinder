@@ -30,4 +30,8 @@ public class MyCvDataViewModel : IMapFrom<MyCvDataDTO>
     public SkillsViewModel Skills { get; set; }
 
     public IEnumerable<CourseInfoViewModel> CourseCertificates { get; set; }
+
+    public bool ApplicationForActiveAd { get; set; }
+
+    public bool ApprovedCvPreviewForActiveAd { get; set; }
 }

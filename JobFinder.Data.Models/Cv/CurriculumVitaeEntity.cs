@@ -11,11 +11,12 @@ namespace JobFinder.Data.Models.Cv
         public CurriculumVitaeEntity()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.WorkExperiences = new List<WorkExperienceInfoEntity>();
-            this.Educations = new List<EducationInfoEntity>();
-            this.LanguagesInfo = new List<LanguageInfoEntity>();
-            this.CourseCertificates = new List<CourseCertificateEntity>();
-            this.CvPreviewRequests = new List<CvPreviewRequestEntity>();
+            this.WorkExperiences = [];
+            this.Educations = [];
+            this.LanguagesInfo = [];
+            this.CourseCertificates = [];
+            this.CvPreviewRequests = [];
+            this.JobAdApplications = [];
         }
 
         public string UserId { get; set; }
@@ -44,5 +45,7 @@ namespace JobFinder.Data.Models.Cv
         public ICollection<CourseCertificateEntity> CourseCertificates { get; set; }
 
         public ICollection<CvPreviewRequestEntity> CvPreviewRequests { get; set; }
+
+        public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
     }
 }
