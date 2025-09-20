@@ -1,10 +1,13 @@
 ﻿using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs.Cv;
-using JobFinder.Web.Models.Common;
 
 namespace JobFinder.Web.Models.CvModels;
 
-public class CvBasicDetailsViewModel : BasicViewModel, IMapFrom<CvBasicDetailsDTO>
+public class CvBasicDetailsViewModel : IMapFrom<CvBasicDetailsDTO>
 {
+    public string Id { get; set; }
+
+    public string Name { get; set; }
+
     public string PictureUrl { get; set; }
 }
