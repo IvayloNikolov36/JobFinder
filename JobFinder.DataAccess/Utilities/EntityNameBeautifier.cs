@@ -6,7 +6,11 @@ public static class EntityNameBeautifier
 {
     public static string Beautify(this string entityName)
     {
-        string truncated = entityName.TrimEnd("Entity".ToCharArray());
+        const string EntitySuffix = "Entity";
+
+        string truncated = entityName.EndsWith(EntitySuffix)
+            ? entityName[..^EntitySuffix.Length]
+            : entityName;
 
         Regex rgx = new Regex(@"[A-Z]+[a-z]+");
 
