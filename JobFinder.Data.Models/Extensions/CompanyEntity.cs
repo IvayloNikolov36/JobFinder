@@ -34,6 +34,14 @@ public partial class CompanyEntity : IMapTo<CompanyBasicDTO>,
                 .Where(ja => ja.LifecycleStatusId == (int)LifecycleStatusEnum.Active)
                 .Count()))
             .ForMember(dto => dto.HasSubscription, o => o.MapFrom(e => e.CompanySubscriptions
-                .Any(cs => cs.UserId == currentUserId)));
+                .Any(cs => cs.UserId == currentUserId))
+            );
+
+        configuration.CreateMap<CompanyEntity, CompanyJobAdsListingDTO>()
+            .ForMember(dto => dto.CompanyDetails, o => o.MapFrom(e => e))
+            .ForMember(dto => dto.Ads, o => o.MapFrom(e => e.JobAds
+                .Where(a => a.LifecycleStatusId == (int)LifecycleStatusEnum.Active)
+                .OrderByDescending(a => a.PublishDate))
+            );
     }
 }

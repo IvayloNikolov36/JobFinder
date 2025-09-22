@@ -9,4 +9,6 @@ public interface ICompanyRepository
     Task<int> GetCompanyId(string userId);
 
     Task<CompanyDetailsUserDTO> GetDetails(int companyId, string currentUserId);
+
+    Task<CompanyJobAdsListingDTO> AllActiveAds(int companyId);
 }

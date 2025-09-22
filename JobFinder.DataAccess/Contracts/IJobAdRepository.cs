@@ -11,8 +11,6 @@ public interface IJobAdRepository
 
     Task<DataListingDTO<JobAdListingDTO>> AllActive(JobAdFilterDTO filter);
 
-    Task<IEnumerable<JobAdListingDTO>> AllActive(int companyId);
-
     Task Create(JobAdCreateDTO jobAd, int companyId);
 
     Task Update(int id, JobAdEditDTO jobAdDto);

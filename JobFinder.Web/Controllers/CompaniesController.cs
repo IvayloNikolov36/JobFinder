@@ -1,8 +1,10 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.Company;
+using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static JobFinder.Web.Infrastructure.WebConstants;
 
 namespace JobFinder.Web.Controllers
 {
@@ -20,12 +22,24 @@ namespace JobFinder.Web.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyDetailsUserViewModel))]
+        [Authorize(Roles = JobSeekerRole)]
         public async Task<IActionResult> Details([FromRoute] int id)
         {
             CompanyDetailsUserViewModel details = await this.companiesService
                 .Details(id, this.User.GetCurrentUserId());
 
             return this.Ok(details);
+        }
+
+        [HttpGet]
+        [Route("{id:int}/ads")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyJobAdsListingViewModel))]
+        [Authorize(Roles = JobSeekerRole)]
+        public async Task<IActionResult> GetCompanyActiveAds([FromRoute] int id)
+        {
+            CompanyJobAdsListingViewModel data = await this.companiesService.AllActiveAds(id);
+
+            return this.Ok(data);
         }
     }
 }

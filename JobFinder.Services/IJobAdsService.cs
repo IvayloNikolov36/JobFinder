@@ -17,8 +17,6 @@ namespace JobFinder.Services
 
         Task<DataListingsModel<JobListingViewModel>> AllActiveAsync(JobAdsFilterModel model);
 
-        Task<IEnumerable<JobListingViewModel>> AllActive(int companyId);
-
         Task Update(int jobAdId, JobAdEditModel editModel);
 
         Task<JobAdDetailsForSubscriber> GetDetails(int jobAdId);

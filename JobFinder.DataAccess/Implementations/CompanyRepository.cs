@@ -1,7 +1,6 @@
 ﻿using JobFinder.Common.Exceptions;
 using JobFinder.Data;
 using JobFinder.Data.Models;
-using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
@@ -49,5 +48,17 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
         base.ValidateForExistence(companyDetails, nameof(CompanyEntity));
 
         return companyDetails;
+    }
+
+    public async Task<CompanyJobAdsListingDTO> AllActiveAds(int companyId)
+    {
+        CompanyJobAdsListingDTO companyAds = await this.DbSet.AsNoTracking()
+            .Where(c => c.Id == companyId)
+            .To<CompanyJobAdsListingDTO>()
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(companyAds, nameof(CompanyEntity));
+
+        return companyAds;
     }
 }

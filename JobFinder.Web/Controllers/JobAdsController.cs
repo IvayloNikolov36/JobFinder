@@ -47,19 +47,6 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
-        [Route("company-ads/{companyId:int}")]
-        [ProducesResponseType(
-            StatusCodes.Status200OK,
-            Type = typeof(IEnumerable<JobListingViewModel>))]
-        [Authorize(Roles = JobSeekerRole)]
-        public async Task<IActionResult> GetCompanyActiveAds([FromRoute] int companyId)
-        {
-            IEnumerable<JobListingViewModel> data = await this.adsService.AllActive(companyId);
-
-            return this.Ok(data);
-        }
-
-        [HttpGet]
         [Route("company/all")]
         [ProducesResponseType(
             StatusCodes.Status200OK,
