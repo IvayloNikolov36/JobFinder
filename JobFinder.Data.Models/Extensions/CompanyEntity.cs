@@ -44,7 +44,12 @@ public partial class CompanyEntity : IMapTo<CompanyBasicDTO>,
                 .OrderByDescending(a => a.PublishDate))
             );
 
+        string userId = null;
+
         configuration.CreateMap<CompanyEntity, CompanyListingDTO>()
-            .ForMember(dto => dto.Ads, o => o.MapFrom(e => e.JobAds.Count()));
+            .ForMember(dto => dto.Ads, o => o.MapFrom(e => e.JobAds.Count()))
+            .ForMember(dto => dto.Subscription, o => o.MapFrom(e => e.CompanySubscriptions
+                .Any(cs => cs.UserId == userId))
+            );
     }
 }

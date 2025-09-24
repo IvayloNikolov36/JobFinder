@@ -12,5 +12,5 @@ public interface ICompanyRepository
 
     Task<CompanyJobAdsListingDTO> AllActiveAds(int companyId);
 
-    Task<IEnumerable<CompanyListingDTO>> GetAll();
+    Task<IEnumerable<CompanyListingDTO>> GetAll(string userId);
 }

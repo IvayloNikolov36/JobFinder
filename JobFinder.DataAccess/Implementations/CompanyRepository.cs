@@ -62,10 +62,10 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
         return companyAds;
     }
 
-    public async Task<IEnumerable<CompanyListingDTO>> GetAll()
+    public async Task<IEnumerable<CompanyListingDTO>> GetAll(string userId)
     {
         return await this.DbSet.AsNoTracking()
-            .To<CompanyListingDTO>()
+            .To<CompanyListingDTO>( new { userId })
             .ToListAsync();
     }
 }

@@ -50,7 +50,7 @@ namespace JobFinder.Web.Controllers
         public async Task<IActionResult> GetAll()
         {
             IEnumerable<CompanyListingViewModel> companiesData = await this.companiesService
-                .GetAll();
+                .GetAll(this.User.GetCurrentUserId());
 
             return this.Ok(companiesData);
         }

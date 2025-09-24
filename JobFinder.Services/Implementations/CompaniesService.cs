@@ -37,11 +37,11 @@ namespace JobFinder.Services.Implementations
             return this.mapper.Map<CompanyJobAdsListingViewModel>(data);
         }
 
-        public async Task<IEnumerable<CompanyListingViewModel>> GetAll()
+        public async Task<IEnumerable<CompanyListingViewModel>> GetAll(string userId)
         {
             IEnumerable<CompanyListingDTO> companiesData = await this.unitOfWork
                 .CompanyRepository
-                .GetAll();
+                .GetAll(userId);
 
             return this.mapper.Map<IEnumerable<CompanyListingViewModel>>(companiesData);
         }

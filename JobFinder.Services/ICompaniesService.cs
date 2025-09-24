@@ -10,6 +10,6 @@ namespace JobFinder.Services
 
         Task<CompanyJobAdsListingViewModel> AllActiveAds(int companyId);
 
-        Task<IEnumerable<CompanyListingViewModel>> GetAll();
+        Task<IEnumerable<CompanyListingViewModel>> GetAll(string userId);
     }
 }

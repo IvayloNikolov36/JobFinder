@@ -7,4 +7,6 @@ public class CompanyListingDTO : BasicDTO
     public int Employees { get; set; }
 
     public int Ads { get; set; }
+
+    public bool Subscription { get; set; }
 }

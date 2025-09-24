@@ -11,4 +11,6 @@ public class CompanyListingViewModel : BasicViewModel, IMapFrom<CompanyListingDT
     public int Employees { get; set; }
 
     public int Ads { get; set; }
+
+    public bool Subscription { get; set; }
 }
