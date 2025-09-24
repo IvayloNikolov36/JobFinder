@@ -61,4 +61,11 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
 
         return companyAds;
     }
+
+    public async Task<IEnumerable<CompanyListingDTO>> GetAll()
+    {
+        return await this.DbSet.AsNoTracking()
+            .To<CompanyListingDTO>()
+            .ToListAsync();
+    }
 }

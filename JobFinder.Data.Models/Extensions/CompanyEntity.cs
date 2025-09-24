@@ -43,5 +43,8 @@ public partial class CompanyEntity : IMapTo<CompanyBasicDTO>,
                 .Where(a => a.LifecycleStatusId == (int)LifecycleStatusEnum.Active)
                 .OrderByDescending(a => a.PublishDate))
             );
+
+        configuration.CreateMap<CompanyEntity, CompanyListingDTO>()
+            .ForMember(dto => dto.Ads, o => o.MapFrom(e => e.JobAds.Count()));
     }
 }

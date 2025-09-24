@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs.Company;
-using JobFinder.Transfer.DTOs.JobAd;
 using JobFinder.Web.Models.Company;
-using JobFinder.Web.Models.JobAds;
 
 namespace JobFinder.Services.Implementations
 {
@@ -37,6 +35,15 @@ namespace JobFinder.Services.Implementations
                 .AllActiveAds(companyId);
 
             return this.mapper.Map<CompanyJobAdsListingViewModel>(data);
+        }
+
+        public async Task<IEnumerable<CompanyListingViewModel>> GetAll()
+        {
+            IEnumerable<CompanyListingDTO> companiesData = await this.unitOfWork
+                .CompanyRepository
+                .GetAll();
+
+            return this.mapper.Map<IEnumerable<CompanyListingViewModel>>(companiesData);
         }
     }
 }

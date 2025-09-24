@@ -1,5 +1,4 @@
 ﻿using JobFinder.Web.Models.Company;
-using JobFinder.Web.Models.JobAds;
 
 namespace JobFinder.Services
 {
@@ -10,5 +9,7 @@ namespace JobFinder.Services
         Task<CompanyDetailsUserViewModel> Details(int companyId, string currentUserId);
 
         Task<CompanyJobAdsListingViewModel> AllActiveAds(int companyId);
+
+        Task<IEnumerable<CompanyListingViewModel>> GetAll();
     }
 }

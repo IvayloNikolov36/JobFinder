@@ -1,7 +1,6 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Models.Company;
-using JobFinder.Web.Models.JobAds;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static JobFinder.Web.Infrastructure.WebConstants;
@@ -40,6 +39,20 @@ namespace JobFinder.Web.Controllers
             CompanyJobAdsListingViewModel data = await this.companiesService.AllActiveAds(id);
 
             return this.Ok(data);
+        }
+
+        [HttpGet]
+        [Route("all")]
+        [ProducesResponseType(
+            StatusCodes.Status200OK,
+            Type = typeof(IEnumerable<CompanyListingViewModel>))
+        ]
+        public async Task<IActionResult> GetAll()
+        {
+            IEnumerable<CompanyListingViewModel> companiesData = await this.companiesService
+                .GetAll();
+
+            return this.Ok(companiesData);
         }
     }
 }
