@@ -10,8 +10,6 @@ public class JobAdEditModel : JobAdBaseViewModel,
     IMapTo<JobAdCategoryDTO>,
     IHaveCustomMappings
 {
-    public bool Activate { get; set; }
-
     public void CreateMappings(IProfileExpression configuration)
     {
         configuration.CreateMap<JobAdEditModel, SalaryPropertiesDTO>()

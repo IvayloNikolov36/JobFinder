@@ -29,6 +29,8 @@ namespace JobFinder.Services
 
         Task<JobAdCriteriasViewModel> GetJobAdCriterias(int jobAdId);
 
+        Task Activate(int jobAdId);
+
         Task Retire(int id);
     }
 }

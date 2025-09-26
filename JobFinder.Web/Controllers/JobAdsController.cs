@@ -106,6 +106,17 @@ namespace JobFinder.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{jobAdId:int}/activate")]
+        [Authorize(Roles = CompanyRole)]
+        [ServiceFilter(typeof(ValidateJobAdBelongsToUser))]
+        public async Task<IActionResult> Activate([FromRoute] int jobAdId)
+        {
+            await this.adsService.Activate(jobAdId);
+
+            return this.Ok();
+        }
+
+        [HttpGet]
         [Route("{jobAdId:int}/retire")]
         [Authorize(Roles = CompanyRole)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

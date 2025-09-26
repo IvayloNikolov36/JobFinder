@@ -1,4 +1,5 @@
-﻿using JobFinder.Transfer.DTOs;
+﻿using JobFinder.Data.Models.Enums;
+using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.JobAd;
 
 namespace JobFinder.Business.JobAds
@@ -14,5 +15,7 @@ namespace JobFinder.Business.JobAds
         string GenerateSalaryText(int? minSalary, int? maxSalary, string currencyName);
 
         void ValidateJobCategoryAndRelatedData(JobAdCategoryDTO adCategoryDto);
+
+        bool CanActivateAd(LifecycleStatusEnum status);
     }
 }

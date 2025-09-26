@@ -1,5 +1,6 @@
 ﻿
 using JobFinder.Common.Exceptions;
+using JobFinder.Data.Models.Enums;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.JobAd;
 using System.Linq;
@@ -100,6 +101,11 @@ namespace JobFinder.Business.JobAds
                         "If you want to specify IT areas and Tech Stack you have to select IT Software Development as category!");
                 }
             }
+        }
+
+        public bool CanActivateAd(LifecycleStatusEnum status)
+        {
+            return status == LifecycleStatusEnum.Draft;
         }
     }
 }

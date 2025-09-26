@@ -1,4 +1,5 @@
 ﻿
+using JobFinder.Data.Models.Enums;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.Company;
 using JobFinder.Transfer.DTOs.JobAd;
@@ -25,5 +26,9 @@ public interface IJobAdRepository
 
     Task<JobAdCriteriasDTO> GetJobAdCriterias(int jobAdId);
 
+    Task Activate(int id);
+
     Task Retire(int id);
+
+    Task<LifecycleStatusEnum> GetLifecycleStatus(int id);
 }

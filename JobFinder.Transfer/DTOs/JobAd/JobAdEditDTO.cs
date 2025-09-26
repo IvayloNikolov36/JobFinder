@@ -26,7 +26,5 @@ public class JobAdEditDTO
 
     public IEnumerable<int> ITAreas { get; set; }
 
-    public IEnumerable<int> TechStacks { get; set; }
-
-    public bool Activate { get; set; }  
+    public IEnumerable<int> TechStacks { get; set; } 
 }

@@ -89,11 +89,6 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
 
         this.mapper.Map(jobAdDto, jobAdFromDb);
 
-        if (jobAdDto.Activate)
-        {
-            jobAdFromDb.LifecycleStatusId = (int)LifecycleStatusEnum.Active;
-        }
-
         this.UpdateSoftSkills(jobAdDto.SoftSkills, jobAdFromDb);
 
         this.UpdateItAreas(jobAdDto.ITAreas, jobAdFromDb);
@@ -325,6 +320,25 @@ public class JobAdRepository : EfCoreRepository<JobAdEntity>, IJobAdRepository
             .OrderByDescending(j => j.PublishDate)
             .To<CompanyJobAdDTO>()
             .ToListAsync();
+    }
+
+    public async Task<LifecycleStatusEnum> GetLifecycleStatus(int id)
+    {
+        int? status = await this.DbSet.Where(a => a.Id == id)
+            .Select(a => (int?)a.LifecycleStatusId)
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(status, nameof(JobAdEntity));
+
+        return (LifecycleStatusEnum)status.Value;
+    }
+
+    public async Task Activate(int id)
+    {
+        JobAdEntity ad = await this.DbSet.FindAsync(id);
+        base.ValidateForExistence(ad, nameof(JobAdEntity));
+        ad.LifecycleStatusId = (int)LifecycleStatusEnum.Active;
+        this.DbSet.Update(ad);
     }
 
     public async Task Retire(int id)

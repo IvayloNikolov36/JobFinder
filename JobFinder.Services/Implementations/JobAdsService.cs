@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using JobFinder.Business.JobAds;
+using JobFinder.Common.Exceptions;
+using JobFinder.Data.Models.Enums;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs;
 using JobFinder.Transfer.DTOs.AnonymousProfile;
@@ -138,6 +140,22 @@ namespace JobFinder.Services.Implementations
             return this.mapper.Map<JobAdCriteriasViewModel>(jobAdCriterias);
         }
 
+        public async Task Activate(int id)
+        {
+            LifecycleStatusEnum status = await this.unitOfWork.JobAdRepository.GetLifecycleStatus(id);
+
+            bool canActivate = this.jobAdsRules.CanActivateAd(status);
+
+            if (!canActivate)
+            {
+                throw new ActionableException("You can activate only ads in Draft status.");
+            }
+
+            await this.unitOfWork.JobAdRepository.Activate(id);
+
+            await this.unitOfWork.SaveChanges();
+        }
+
         public async Task Retire(int id)
         {
             await this.unitOfWork.JobAdRepository.Retire(id);
@@ -156,6 +174,6 @@ namespace JobFinder.Services.Implementations
             JobAdCategoryDTO adCategoryDto = this.mapper.Map<JobAdCategoryDTO>(jobAd);
 
             this.jobAdsRules.ValidateJobCategoryAndRelatedData(adCategoryDto);
-        }   
+        }
     }
 }
