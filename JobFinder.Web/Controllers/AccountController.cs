@@ -174,5 +174,15 @@ namespace JobFinder.Web.Controllers
 
             return this.Ok();
         }
+
+        [HttpPost]
+        [Route("forgotten-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgottenPassword([FromBody] ForgottenPasswordModel model) 
+        {
+            await this.accountService.SendPasswordResetLink(model);
+
+            return this.Ok();
+        }
     }
 }

@@ -1,16 +1,9 @@
-﻿namespace JobFinder.Services.Messages
-{
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services.Messaging.Models;
+using System.Threading.Tasks;
 
-    public interface IEmailSender
-    {
-        Task SendEmailAsync(
-            string from,
-            string fromName,
-            string to,
-            string subject,
-            string htmlContent,
-            IEnumerable<EmailAttachment> attachments = null);
-    }
+namespace JobFinder.Services.Messaging;
+
+public interface IEmailSender
+{
+    Task SendEmailAsync(EmailProps properties);
 }

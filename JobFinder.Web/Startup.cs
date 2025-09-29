@@ -2,6 +2,7 @@ using Hangfire;
 using JobFinder.Data;
 using JobFinder.Data.Models;
 using JobFinder.Services.Mappings;
+using JobFinder.Transfer.Options;
 using JobFinder.Web.Infrastructure;
 using JobFinder.Web.Infrastructure.Extensions;
 using JobFinder.Web.Infrastructure.Middlewares;
@@ -24,13 +25,18 @@ namespace JobFinder.Web
             services.AddDbContext<JobFinderDbContext>(options => options.Configure(this.configuration));
 
             services.AddIdentity<UserEntity, IdentityRole>()
-                .AddEntityFrameworkStores<JobFinderDbContext>();
+                .AddEntityFrameworkStores<JobFinderDbContext>()
+                .AddTokenProvider<DataProtectorTokenProvider<UserEntity>>(TokenOptions.DefaultProvider);
 
             services.Configure<IdentityOptions>(options => options.Configure());
 
             services
                 .AddAuthentication(options => options.Configure())
                 .AddJwtBearer(options => options.Configure(this.configuration));
+
+            services
+                .Configure<RequestUrlOptions>(options => configuration
+                    .GetSection("RequestUrl").Bind(options));
 
             services.AddResponseCaching();
             services.AddDistributedMemoryCache();

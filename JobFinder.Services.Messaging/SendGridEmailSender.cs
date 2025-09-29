@@ -1,13 +1,13 @@
-﻿namespace JobFinder.Services.Messages
-{
-    using Microsoft.Extensions.Configuration;
-    using SendGrid;
-    using SendGrid.Helpers.Mail;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+﻿using JobFinder.Services.Messaging.Models;
+using Microsoft.Extensions.Configuration;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
+namespace JobFinder.Services.Messaging
+{
     public class SendGridEmailSender : IEmailSender
     {
         private readonly SendGridClient client;
@@ -15,25 +15,33 @@
         public SendGridEmailSender(IConfiguration configuration)
         {
             string apiKey = configuration.GetSection("SendGrid:apiKey").Value;
-            this.client = new SendGridClient(apiKey);            
+            this.client = new SendGridClient(apiKey);
         }
 
-        public async Task SendEmailAsync(string from, string fromName, string to, string subject, string htmlContent, IEnumerable<EmailAttachment> attachments = null)
+        public async Task SendEmailAsync(EmailProps properties)
         {
-            if (string.IsNullOrWhiteSpace(subject) && string.IsNullOrWhiteSpace(htmlContent))
+            if (string.IsNullOrWhiteSpace(properties.Subject)
+                && string.IsNullOrWhiteSpace(properties.HtmlContent))
             {
                 throw new ArgumentException("Subject and message should be provided.");
             }
 
-            EmailAddress fromAddress = new EmailAddress(from, fromName);
-            EmailAddress toAddress = new EmailAddress(to);
-            SendGridMessage message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, null, htmlContent);
+            EmailAddress fromAddress = new EmailAddress(properties.SenderEmail, properties.Sender);
+            EmailAddress toAddress = new EmailAddress(properties.RecipientEmail);
 
-            if (attachments?.Any() == true)
+            SendGridMessage message = MailHelper.CreateSingleEmail(
+                fromAddress,
+                toAddress,
+                properties.Subject,
+                plainTextContent: null,
+                properties.HtmlContent);
+
+            if (properties.Attachments != null && properties.Attachments.Any())
             {
-                foreach (EmailAttachment attachment in attachments)
+                foreach (EmailAttachment attachment in properties.Attachments)
                 {
-                    message.AddAttachment(attachment.FileName,
+                    message.AddAttachment(
+                        attachment.FileName,
                         Convert.ToBase64String(attachment.Content),
                         attachment.MimeType);
                 }
