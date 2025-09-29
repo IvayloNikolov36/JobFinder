@@ -160,6 +160,7 @@ namespace JobFinder.Web.Controllers
 
         [HttpPost]
         [Route("change-password")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
         {
             string userId = this.User.GetCurrentUserId();
