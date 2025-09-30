@@ -1,4 +1,5 @@
-﻿using JobFinder.Services.Messages;
+﻿using JobFinder.Services.Messaging;
+using JobFinder.Services.Messaging.Models;
 using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.Subscriptions;
 using JobFinder.Web.Models.Subscriptions.CompanySubscriptions;
@@ -79,10 +80,19 @@ namespace JobFinder.Services.Implementations
                 sb.AppendLine("</table>");
 
                 string subject = $"New job ads from company '{item.Company.Name}'";
+
                 foreach (string userEmail in subscribers)
                 {
-                    await this.emailSender
-                        .SendEmailAsync(this.sentFromEmail, this.sentFromName, userEmail, subject, sb.ToString());
+                    EmailProps emailProps = new EmailProps
+                    {
+                        SenderEmail = this.sentFromEmail,
+                        Sender = this.sentFromName,
+                        RecipientEmail = userEmail,
+                        Subject = subject,
+                        HtmlContent = sb.ToString()
+                    };
+
+                    await this.emailSender.SendEmailAsync(emailProps);
                 }
             }
         }
@@ -119,12 +129,16 @@ namespace JobFinder.Services.Implementations
                     sb.AppendLine("</table>");
                 }
 
-                await this.emailSender.SendEmailAsync(
-                    from: this.sentFromEmail,
-                    fromName: this.sentFromName,
-                    to: subscriber,
-                    subject: title,
-                    htmlContent: sb.ToString());
+                EmailProps emailProps = new EmailProps
+                {
+                    SenderEmail = this.sentFromEmail,
+                    Sender = this.sentFromName,
+                    RecipientEmail = subscriber,
+                    Subject = subscriber,
+                    HtmlContent = sb.ToString()
+                };
+
+                await this.emailSender.SendEmailAsync(emailProps);
             }
         }
 

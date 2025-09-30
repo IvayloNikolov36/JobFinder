@@ -1,6 +1,5 @@
 ﻿using Hangfire;
 using JobFinder.Services;
-using JobFinder.Services.Messages;
 using JobFinder.Web.Models.Common;
 
 namespace JobFinder.Web.Infrastructure.Extensions

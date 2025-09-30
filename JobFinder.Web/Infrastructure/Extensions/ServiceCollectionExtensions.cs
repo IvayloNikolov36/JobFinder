@@ -4,7 +4,7 @@ using JobFinder.DataAccess.Generic;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services;
 using JobFinder.Services.Mappings;
-using JobFinder.Services.Messages;
+using JobFinder.Services.Messaging;
 using JobFinder.Web.Infrastructure.Filters;
 using JobFinder.Web.Infrastructure.Models;
 using System.Reflection;
