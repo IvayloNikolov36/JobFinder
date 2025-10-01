@@ -1,17 +1,17 @@
-﻿using JobFinder.Data.Models;
-using JobFinder.Web.Models.Account;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using JobFinder.Data.Models;
+using JobFinder.Services;
+using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Models.Account;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using static JobFinder.Web.Infrastructure.WebConstants;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using JobFinder.Web.Infrastructure.Extensions;
-using JobFinder.Services;
 
 namespace JobFinder.Web.Controllers
 {
@@ -178,9 +178,19 @@ namespace JobFinder.Web.Controllers
         [HttpPost]
         [Route("forgotten-password")]
         [AllowAnonymous]
-        public async Task<IActionResult> ForgottenPassword([FromBody] ForgottenPasswordModel model) 
+        public async Task<IActionResult> ForgottenPassword([FromBody] ForgottenPasswordModel model)
         {
             await this.accountService.SendPasswordResetLink(model);
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            await this.accountService.ResetPassword(model, this.User.GetCurrentUserId());
 
             return this.Ok();
         }
