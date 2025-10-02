@@ -69,17 +69,20 @@ public class AccountService : IAccountService
             ?? throw new ActionableException("Unable to generate token for the link");
 
         string encodedToken = HttpUtility.UrlEncode(token);
-        string callBackUrl = $"{this.requestUrl}/forgotten-password/reset-password?token={encodedToken}&email={model.Email}";
+        string callBackUrl = $"{this.requestUrl}/reset-password?email={model.Email}&token={encodedToken}";
 
         return callBackUrl;
     }
 
-    public async Task ResetPassword(ResetPasswordModel model, string currentUserId)
+    public async Task ResetPassword(ResetPasswordModel model)
     {
-        UserEntity user = await this.userManager.FindByIdAsync(currentUserId);
+        UserEntity user = await this.userManager.FindByEmailAsync(model.Email);
 
-        bool isTokenValid = await this.userManager
-            .VerifyUserTokenAsync(user, "Default", "PasswordReset", model.Token);
+        bool isTokenValid = await this.userManager.VerifyUserTokenAsync(
+            user,
+            userManager.Options.Tokens.PasswordResetTokenProvider,
+            "ResetPassword",
+            model.Token);
 
         if (!isTokenValid)
         {

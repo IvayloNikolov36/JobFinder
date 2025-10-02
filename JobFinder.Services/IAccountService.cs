@@ -11,5 +11,5 @@ public interface IAccountService
 
     Task<string> GeneratePasswordResetLink(ForgottenPasswordModel model);
 
-    Task ResetPassword(ResetPasswordModel model, string currentUserId);
+    Task ResetPassword(ResetPasswordModel model);
 }

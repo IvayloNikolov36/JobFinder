@@ -190,7 +190,7 @@ namespace JobFinder.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
         {
-            await this.accountService.ResetPassword(model, this.User.GetCurrentUserId());
+            await this.accountService.ResetPassword(model);
 
             return this.Ok();
         }
