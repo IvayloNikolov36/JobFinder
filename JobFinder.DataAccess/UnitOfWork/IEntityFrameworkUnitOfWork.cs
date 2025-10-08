@@ -39,6 +39,8 @@ namespace JobFinder.DataAccess.UnitOfWork
 
         ICvPreviewRequestRepository CvPreviewRequestRepository { get; }
 
+        ICloudImageRepository CloudImageRepository { get;  }
+
         Task SaveChanges();
 
         Task SaveChanges<DTO, IdType>(DTO dtoToPopulateId) where DTO : IUniquelyIdentified<IdType>;

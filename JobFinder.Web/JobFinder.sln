@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobFinder.DataAccess", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobFinder.Transfer", "..\JobFinder.Transfer\JobFinder.Transfer.csproj", "{57FEA2D2-C17F-40D7-9079-FAFBB0EEEA9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobFinder.Services.CloudImages", "..\JobFinder.Services.ImageUpload\JobFinder.Services.CloudImages.csproj", "{E3411731-A777-4C28-BB14-439B24254D61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{57FEA2D2-C17F-40D7-9079-FAFBB0EEEA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57FEA2D2-C17F-40D7-9079-FAFBB0EEEA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57FEA2D2-C17F-40D7-9079-FAFBB0EEEA9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3411731-A777-4C28-BB14-439B24254D61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3411731-A777-4C28-BB14-439B24254D61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3411731-A777-4C28-BB14-439B24254D61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3411731-A777-4C28-BB14-439B24254D61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

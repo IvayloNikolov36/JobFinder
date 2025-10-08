@@ -2,6 +2,7 @@
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs.Company;
 using JobFinder.Web.Models.Company;
+using Microsoft.AspNetCore.Http;
 
 namespace JobFinder.Services.Implementations
 {
@@ -9,11 +10,16 @@ namespace JobFinder.Services.Implementations
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IImageManagementService imageManagementService;
 
-        public CompaniesService(IEntityFrameworkUnitOfWork unitOfWork, IMapper mapper)
+        public CompaniesService(
+            IEntityFrameworkUnitOfWork unitOfWork,
+            IMapper mapper,
+            IImageManagementService imageManagementService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.imageManagementService = imageManagementService;
         }
 
         public async Task<int> GetCompanyId(string userId)
@@ -44,6 +50,15 @@ namespace JobFinder.Services.Implementations
                 .GetAll(userId);
 
             return this.mapper.Map<IEnumerable<CompanyListingViewModel>>(companiesData);
+        }
+
+        public async Task SetLogo(int id, string userId, IFormFile logo)
+        {
+            int imageId = await this.imageManagementService.UploadImage(logo, userId);
+
+            await this.unitOfWork.CompanyRepository.SetLogoImageId(id, imageId);
+
+            await this.unitOfWork.SaveChanges();
         }
     }
 }

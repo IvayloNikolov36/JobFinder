@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobFinder.Data.Models;
 using JobFinder.Services.Mappings;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using static JobFinder.Common.Constants;
 using static JobFinder.Common.MessageConstants;
@@ -18,8 +19,7 @@ namespace JobFinder.Web.Models.Account
         public string Bulstat { get; set; }
 
         [Required]
-        [Url]
-        public string Logo { get; set; }
+        public IFormFile Logo { get; set; }
 
         public new void CreateMappings(IProfileExpression configuration)
         {

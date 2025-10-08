@@ -23,19 +23,22 @@ namespace JobFinder.Web.Controllers
         private readonly UserManager<UserEntity> userManager;
         private readonly IMapper mapper;
         private readonly IAccountService accountService;
+        private readonly ICompaniesService companiesService;
 
         public AccountController(
             IConfiguration configuration,
             SignInManager<UserEntity> signInManager,
             UserManager<UserEntity> userManager,
             IMapper mapper,
-            IAccountService accountService)
+            IAccountService accountService,
+            ICompaniesService companiesService)
         {
             this.configuration = configuration;
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.mapper = mapper;
             this.accountService = accountService;
+            this.companiesService = companiesService;
         }
 
         [HttpPost]
@@ -125,7 +128,7 @@ namespace JobFinder.Web.Controllers
         [Route("register-company")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccountResult))]
-        public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyModel model)
+        public async Task<IActionResult> RegisterCompany([FromForm] RegisterCompanyModel model)
         {
             CompanyEntity newCompany = this.mapper.Map<CompanyEntity>(model);
 
@@ -154,6 +157,8 @@ namespace JobFinder.Web.Controllers
             {
                 return this.BadRequest(new AccountResult([CanNotAddCompanyRole]));
             }
+           
+            await this.companiesService.SetLogo(newCompany.Id, newUser.Id, model.Logo);
 
             return this.Ok(new AccountResult(RegisterSuccess));
         }

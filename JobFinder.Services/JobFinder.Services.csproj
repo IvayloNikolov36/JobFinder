@@ -14,6 +14,8 @@
     <ProjectReference Include="..\JobFinder.Common\JobFinder.Common.csproj" />
     <ProjectReference Include="..\JobFinder.DataAccess\JobFinder.DataAccess.csproj" />
     <ProjectReference Include="..\JobFinder.Data\JobFinder.Data.csproj" />
+    <ProjectReference Include="..\JobFinder.Services.ImageUpload\JobFinder.Services.CloudImages.csproj" />
+    <ProjectReference Include="..\JobFinder.Services.ImageUpload\JobFinder.Services.ImageUpload.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Mappings\JobFinder.Services.Mappings.csproj" />
     <ProjectReference Include="..\JobFinder.Services.Messaging\JobFinder.Services.Messaging.csproj" />
     <ProjectReference Include="..\JobFinder.Web.Models\JobFinder.Web.Models.csproj" />

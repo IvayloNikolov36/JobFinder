@@ -49,6 +49,8 @@ namespace JobFinder.Web
 
             AutoMapperConfig.RegisterMappings(AssembliesProvider.AutomapperAssemblies());
 
+            services.AddCloudinary(this.configuration);
+           
             services.AddServiceFilters()
                 .AddBusinessServices()
                 .AddRepositories()

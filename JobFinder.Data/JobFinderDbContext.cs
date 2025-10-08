@@ -178,6 +178,12 @@ namespace JobFinder.Data
                 .HasForeignKey<CompanyEntity>(c => c.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
+            builder.Entity<CompanyEntity>()
+                .HasOne(c => c.LogoImage)
+                .WithOne(ci => ci.CompanyLogo)
+                .HasForeignKey<CompanyEntity>(c => c.LogoImageId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<CompanySubscriptionEntity>()
                 .HasKey(key => new { key.UserId, key.CompanyId });
 

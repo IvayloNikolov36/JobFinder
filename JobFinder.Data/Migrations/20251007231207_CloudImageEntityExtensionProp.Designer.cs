@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251007231207_CloudImageEntityExtensionProp")]
+    partial class CloudImageEntityExtensionProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -290,8 +293,9 @@ namespace JobFinder.Data.Migrations
                     b.Property<int>("Employees")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LogoImageId")
-                        .HasColumnType("int");
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -302,7 +306,6 @@ namespace JobFinder.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -310,15 +313,12 @@ namespace JobFinder.Data.Migrations
                     b.HasIndex("Bulstat")
                         .IsUnique();
 
-                    b.HasIndex("LogoImageId")
-                        .IsUnique()
-                        .HasFilter("[LogoImageId] IS NOT NULL");
-
                     b.HasIndex("Name")
                         .IsUnique();
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Companies");
                 });
@@ -6002,17 +6002,9 @@ namespace JobFinder.Data.Migrations
 
             modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>
                 {
-                    b.HasOne("JobFinder.Data.Models.CloudImageEntity", "LogoImage")
-                        .WithOne("CompanyLogo")
-                        .HasForeignKey("JobFinder.Data.Models.CompanyEntity", "LogoImageId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("JobFinder.Data.Models.UserEntity", "User")
                         .WithOne("Company")
-                        .HasForeignKey("JobFinder.Data.Models.CompanyEntity", "UserId")
-                        .IsRequired();
-
-                    b.Navigation("LogoImage");
+                        .HasForeignKey("JobFinder.Data.Models.CompanyEntity", "UserId");
 
                     b.Navigation("User");
                 });
@@ -6477,11 +6469,6 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.AnonymousProfile.AnonymousProfileEntity", b =>
                 {
                     b.Navigation("Appearance");
-                });
-
-            modelBuilder.Entity("JobFinder.Data.Models.CloudImageEntity", b =>
-                {
-                    b.Navigation("CompanyLogo");
                 });
 
             modelBuilder.Entity("JobFinder.Data.Models.CompanyEntity", b =>

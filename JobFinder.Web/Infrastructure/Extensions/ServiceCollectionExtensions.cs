@@ -1,8 +1,11 @@
-﻿using Hangfire;
+﻿using CloudinaryDotNet;
+using Hangfire;
 using JobFinder.Business;
 using JobFinder.DataAccess.Generic;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services;
+using JobFinder.Services.CloudImages;
+using JobFinder.Services.Implementations;
 using JobFinder.Services.Mappings;
 using JobFinder.Services.Messaging;
 using JobFinder.Web.Infrastructure.Filters;
@@ -18,6 +21,9 @@ namespace JobFinder.Web.Infrastructure.Extensions
         {
             GetServiceTypes(GetAssemblyOf(typeof(IService)))
                 .ForEach(s => services.AddScoped(s.Interface, s.Implementation));
+
+            services.AddScoped<IImageManagementService, CloudImageManagementService>();
+            services.AddScoped<ICloudImageService, CloudinaryImageService>();
 
             return services;
         }
@@ -62,6 +68,21 @@ namespace JobFinder.Web.Infrastructure.Extensions
             services.AddTransient<IEmailSender, SendGridEmailSender>();
 
             return services;
+        }
+
+        public static void AddCloudinary(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            Account cloudinaryCredentials = new(
+                configuration["Cloudinary:CloudName"],
+                configuration["Cloudinary:ApiKey"],
+                configuration["Cloudinary:ApiSecret"]
+            );
+
+            Cloudinary cloudinaryUtility = new(cloudinaryCredentials);
+
+            services.AddSingleton(cloudinaryUtility);
         }
 
         public static IServiceCollection AddRecurringJobManager(

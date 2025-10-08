@@ -68,4 +68,13 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
             .To<CompanyListingDTO>( new { userId })
             .ToListAsync();
     }
+
+    public async Task SetLogoImageId(int id, int imageId)
+    {
+        CompanyEntity company = await this.DbSet.FindAsync(id);
+
+        company.LogoImageId = imageId;
+
+        this.DbSet.Update(company);
+    }
 }

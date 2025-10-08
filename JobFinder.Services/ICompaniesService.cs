@@ -1,4 +1,5 @@
 ﻿using JobFinder.Web.Models.Company;
+using Microsoft.AspNetCore.Http;
 
 namespace JobFinder.Services
 {
@@ -11,5 +12,7 @@ namespace JobFinder.Services
         Task<CompanyJobAdsListingViewModel> AllActiveAds(int companyId);
 
         Task<IEnumerable<CompanyListingViewModel>> GetAll(string userId);
+
+        Task SetLogo(int id, string userId, IFormFile logo);
     }
 }
