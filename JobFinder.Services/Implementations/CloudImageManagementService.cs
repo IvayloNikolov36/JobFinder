@@ -1,40 +1,45 @@
 ﻿
+using AutoMapper;
 using CloudinaryDotNet.Actions;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Services.CloudImages;
 using JobFinder.Transfer.DTOs;
+using JobFinder.Web.Models.CloudImage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace JobFinder.Services.Implementations;
 
-public class CloudImageManagementService : IImageManagementService
+public class CloudImageManagementService : ICloudImageManagementService
 {
     private readonly ICloudImageService cloudImageService;
     private readonly IEntityFrameworkUnitOfWork unitOfWork;
+    private readonly IMapper mapper;
 
     private readonly string imagePath;
 
     public CloudImageManagementService(
         IEntityFrameworkUnitOfWork unitOfWork, 
         ICloudImageService cloudImageService,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IMapper mapper)
     {
         this.unitOfWork = unitOfWork;
         this.cloudImageService = cloudImageService;
+        this.mapper = mapper;
         this.imagePath = configuration.GetSection("Cloudinary:ImagePath").Value;
     }
 
-    public async Task<int> UploadImage(IFormFile imageFile, string userId)
+    public async Task<CloudImageViewModel> UploadImage(IFormFile imageFile, string userId)
     {
+        // TODO: change the name of the image to newly generated guid
+
         ImageUploadResult imageResult = await this.cloudImageService
             .UploadImageAsync(imageFile);
 
-        string imageExtension = this.GetExtension(imageFile.ContentType);
-
         (string url, string thumbnailUrl) = this.GetImageUrls(
             imageResult.PublicId,
-            imageExtension);
+            GetExtension(imageFile.FileName));
 
         CloudImageDTO imageDto = new()
         {
@@ -42,16 +47,34 @@ public class CloudImageManagementService : IImageManagementService
             PublicId = imageResult.PublicId,
             Url = url,
             ThumbnailUrl = thumbnailUrl,
-            Extension = imageExtension,
             Size = imageFile.Length,
-            UploaderId = userId
+            UserId = userId
         };
 
         await this.unitOfWork.CloudImageRepository.Add(imageDto);
 
         await this.unitOfWork.SaveChanges<CloudImageDTO, int>(imageDto);
 
-        return imageDto.Id;
+        return this.mapper.Map<CloudImageViewModel>(imageDto);
+    }
+
+    public async Task<string> GetUrl(int pictureId)
+    {
+        string url = await this.unitOfWork.CloudImageRepository.GetUrl(pictureId);
+        string fullUrl = $"{this.imagePath}{url}";
+
+        return fullUrl;
+    }
+
+    public async Task<string> GetThumbnailUrl(int pictureId)
+    {
+        string url = await this.unitOfWork
+            .CloudImageRepository
+            .GetThumbnailUrl(pictureId);
+
+        string fullUrl = $"{this.imagePath}{url}";
+
+        return fullUrl;
     }
 
     private (string, string) GetImageUrls(string publicId, string imageExtension)
@@ -67,10 +90,10 @@ public class CloudImageManagementService : IImageManagementService
         return (imageUrl, imageThumbnailUrl);
     }
 
-    private string GetExtension(string contentType)
+    private static string GetExtension(string fileName)
     {
-        int index = contentType.LastIndexOf('/');
-        string imageExtension = contentType[(index + 1)..];
-        return imageExtension;
+        int index = fileName.LastIndexOf('.');
+
+        return fileName[(index + 1)..];
     }
 }

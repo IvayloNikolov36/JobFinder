@@ -12,11 +12,9 @@ public class CloudImageDTO : IUniquelyIdentified<int>
 
     public required string ThumbnailUrl { get; set; }
 
-    public required string Extension { get; set; }
-
     public required long Size { get; set; }
 
-    public required string UploaderId { get; set; }
+    public required string UserId { get; set; }
 
     public Guid UniqueIdentificator { get; set; }
 }

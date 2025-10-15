@@ -8,11 +8,11 @@ public class UserProfileDataDTO
 
     public string Phone { get; set; }
 
-    public string PictureUrl { get; set; }
-
     public int CVsCount { get; set; }
 
     public int SubscriptionsCount { get; set; }
 
     public int ApplicationsCount { get; set; }
+
+    public int ProfilePictureId { get; set; }
 }

@@ -5,4 +5,6 @@ namespace JobFinder.DataAccess.Contracts;
 public interface IUserRepository
 {
     Task<UserProfileDataDTO> GetProfileData(string userId);
+
+    Task SetProfilePicture(string userId, int pictureId);
 }

@@ -1,5 +1,7 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Models.CloudImage;
+using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.UserProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +29,23 @@ namespace JobFinder.Web.Controllers
             string userId = this.User.GetCurrentUserId();
 
             UserProfileDataViewModel profileData = await this.userProfileService
-                .GetNyProfileData(userId);
+                .GetMyProfile(userId);
 
             return this.Ok(profileData);
+        }
+
+        [HttpPost]
+        [Route("change-picture")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CloudImageViewModel))]
+        [Authorize(Roles = JobSeekerRole)]
+        public async Task<IActionResult> ChangeProfilePicture([FromForm] FileUploadViewModel model)
+        {
+            string userId = this.User.GetCurrentUserId();
+
+            CloudImageViewModel imageData = await this.userProfileService
+                .ChangeProfilePicture(userId, model.File);
+
+            return this.Ok(imageData);
         }
     }
 }

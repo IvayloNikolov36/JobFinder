@@ -4,6 +4,7 @@ using JobFinder.Data.Models;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Transfer.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobFinder.DataAccess.Implementations;
 
@@ -25,5 +26,29 @@ public class CloudImageRepository : EfCoreRepository<CloudImageEntity>, ICloudIm
         this.mapper.Map(image, cloudImageEntity);
 
         await this.DbSet.AddAsync(cloudImageEntity);
+    }
+
+    public async Task<string> GetUrl(int pictureId)
+    {
+        string url = await this.DbSet
+            .Where(ci => ci.Id == pictureId)
+            .Select(ci => ci.Url)
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(url, nameof(CloudImageEntity));
+
+        return url;
+    }
+
+    public async Task<string> GetThumbnailUrl(int pictureId)
+    {
+        string url = await this.DbSet
+            .Where(ci => ci.Id == pictureId)
+            .Select(ci => ci.ThumbnailUrl)
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(url, nameof(CloudImageEntity));
+
+        return url;
     }
 }

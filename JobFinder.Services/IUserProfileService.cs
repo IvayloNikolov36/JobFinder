@@ -1,10 +1,13 @@
-﻿using JobFinder.Web.Models.UserProfile;
-using System.Threading.Tasks;
+﻿using JobFinder.Web.Models.CloudImage;
+using JobFinder.Web.Models.UserProfile;
+using Microsoft.AspNetCore.Http;
 
 namespace JobFinder.Services
 {
     public interface IUserProfileService : IService
     {
-        Task<UserProfileDataViewModel> GetNyProfileData(string userId);
+        Task<UserProfileDataViewModel> GetMyProfile(string userId);
+
+        Task<CloudImageViewModel> ChangeProfilePicture(string userId, IFormFile file);
     }
 }

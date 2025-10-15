@@ -9,7 +9,7 @@ public interface ICloudImageService
 
     Task DeleteImagesAsync(params string[] publicIds);
 
-    string GetImageUrl(string imagePublicId, string extension);
+    string GetImageUrl(string publicId, string extension);
 
-    string GetImageThumbnailUrl(string imageThumbnailPublicId, string extension);
+    string GetImageThumbnailUrl(string publicId, string extension);
 }

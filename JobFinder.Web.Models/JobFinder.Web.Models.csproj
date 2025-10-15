@@ -11,8 +11,4 @@
     <ProjectReference Include="..\JobFinder.Transfer\JobFinder.Transfer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CloudImage\" />
-  </ItemGroup>
-
 </Project>

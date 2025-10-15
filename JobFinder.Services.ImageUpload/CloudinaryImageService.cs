@@ -59,13 +59,13 @@ public class CloudinaryImageService : ICloudImageService
         return pictureUrl;
     }
 
-    public string GetImageThumbnailUrl(string imagePublicId, string extension)
+    public string GetImageThumbnailUrl(string publicId, string extension)
     {
         string pictureUrl = cloudinary
             .Api
             .UrlImgUp
             .Transform(GetThumbnailTransformation())
-            .BuildUrl(string.Format(ImageUrl, imagePublicId, extension));
+            .BuildUrl(string.Format(ImageUrl, publicId, extension));
 
         return pictureUrl;
     }

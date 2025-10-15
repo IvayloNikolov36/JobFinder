@@ -11,10 +11,7 @@ public partial class UserEntity : IHaveCustomMappings
     {
         configuration.CreateMap<UserEntity, UserProfileDataDTO>()
             .ForMember(dto => dto.FullName, o => o.MapFrom(e => e.FirstName + " " + e.LastName))
-            // TODO: think about for picture url in user profile table
-            .ForMember(dto => dto.PictureUrl, o => o.MapFrom(e => e.Cvs
-                .Select(c => c.PictureUrl)
-                .FirstOrDefault()))
+            // TODO: set the phoneNumber in userEntity table and get it from there
             .ForMember(dto => dto.Phone, o => o.MapFrom(e => e.Cvs
                 .Select(c => c.PersonalInfo.Phone)
                 .FirstOrDefault()))

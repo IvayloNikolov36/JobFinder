@@ -14,7 +14,6 @@ namespace JobFinder.Data.Models
             this.JobCategorySubscriptions = new List<JobsSubscriptionEntity>();
             this.CompanySubscriptions = new List<CompanySubscriptionEntity>();
             this.JobAdApplications = new List<JobAdApplicationEntity>();
-            this.UploadedImages = new List<CloudImageEntity>();
         }
 
         [Required]
@@ -38,6 +37,9 @@ namespace JobFinder.Data.Models
             MinimumLength = 2)]
         public string LastName { get; set; }
 
+        public int? ProfilePictureId { get; set; }
+        public CloudImageEntity ProfilePicture { get; set; }
+
         public CompanyEntity Company { get; set; }
 
         public ICollection<CurriculumVitaeEntity> Cvs { get; set; }
@@ -47,7 +49,5 @@ namespace JobFinder.Data.Models
         public ICollection<JobsSubscriptionEntity> JobCategorySubscriptions { get; set; }
 
         public ICollection<JobAdApplicationEntity> JobAdApplications { get; set; }
-
-        public ICollection<CloudImageEntity> UploadedImages { get; set; }
     }
 }

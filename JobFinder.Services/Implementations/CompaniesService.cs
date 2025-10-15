@@ -10,12 +10,12 @@ namespace JobFinder.Services.Implementations
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly IImageManagementService imageManagementService;
+        private readonly ICloudImageManagementService imageManagementService;
 
         public CompaniesService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
-            IImageManagementService imageManagementService)
+            ICloudImageManagementService imageManagementService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
@@ -54,7 +54,9 @@ namespace JobFinder.Services.Implementations
 
         public async Task SetLogo(int id, string userId, IFormFile logo)
         {
-            int imageId = await this.imageManagementService.UploadImage(logo, userId);
+            int imageId = (await this.imageManagementService
+                .UploadImage(logo, userId))
+                .Id;
 
             await this.unitOfWork.CompanyRepository.SetLogoImageId(id, imageId);
 

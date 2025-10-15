@@ -25,4 +25,15 @@ public class UserRepository : EfCoreRepository<UserEntity>, IUserRepository
 
         return userProfile;
     }
+
+    public async Task SetProfilePicture(string userId, int pictureId)
+    {
+        UserEntity user = await this.DbSet.FindAsync(userId);
+
+        base.ValidateForExistence(user, nameof(UserEntity));
+
+        user.ProfilePictureId = pictureId;
+
+        this.DbSet.Update(user);
+    }
 }

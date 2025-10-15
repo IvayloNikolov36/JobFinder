@@ -4,6 +4,7 @@ using JobFinder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobFinder.Data.Migrations
 {
     [DbContext(typeof(JobFinderDbContext))]
-    partial class JobFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015221535_CloudImageColumnsChanges")]
+    partial class CloudImageColumnsChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,8 +264,7 @@ namespace JobFinder.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("CloudImageEntity");
                 });
@@ -5600,9 +5602,6 @@ namespace JobFinder.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProfilePictureId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -5989,8 +5988,9 @@ namespace JobFinder.Data.Migrations
             modelBuilder.Entity("JobFinder.Data.Models.CloudImageEntity", b =>
                 {
                     b.HasOne("JobFinder.Data.Models.UserEntity", "User")
-                        .WithOne("ProfilePicture")
-                        .HasForeignKey("JobFinder.Data.Models.CloudImageEntity", "UserId")
+                        .WithMany("UploadedImages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -6580,7 +6580,7 @@ namespace JobFinder.Data.Migrations
 
                     b.Navigation("JobCategorySubscriptions");
 
-                    b.Navigation("ProfilePicture");
+                    b.Navigation("UploadedImages");
                 });
 #pragma warning restore 612, 618
         }

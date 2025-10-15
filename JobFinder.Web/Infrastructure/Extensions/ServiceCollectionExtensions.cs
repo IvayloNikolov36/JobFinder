@@ -22,7 +22,7 @@ namespace JobFinder.Web.Infrastructure.Extensions
             GetServiceTypes(GetAssemblyOf(typeof(IService)))
                 .ForEach(s => services.AddScoped(s.Interface, s.Implementation));
 
-            services.AddScoped<IImageManagementService, CloudImageManagementService>();
+            services.AddScoped<ICloudImageManagementService, CloudImageManagementService>();
             services.AddScoped<ICloudImageService, CloudinaryImageService>();
 
             return services;
