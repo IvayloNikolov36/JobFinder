@@ -30,10 +30,11 @@ public class CloudImageManagementService : ICloudImageManagementService
         this.imagePath = configuration.GetSection("Cloudinary:ImagePath").Value;
     }
 
-    public async Task<CloudImageViewModel> UploadImage(IFormFile imageFile, string userId)
+    public async Task<CloudImageViewModel> UploadImage(
+        IFormFile imageFile,
+        string userId,
+        bool replaceCurrent = false)
     {
-        // TODO: change the name of the image to newly generated guid
-
         ImageUploadResult imageResult = await this.cloudImageService
             .UploadImageAsync(imageFile);
 
@@ -51,11 +52,22 @@ public class CloudImageManagementService : ICloudImageManagementService
             UserId = userId
         };
 
-        await this.unitOfWork.CloudImageRepository.Add(imageDto);
+        if (replaceCurrent)
+        {
+            await this.unitOfWork.CloudImageRepository
+                .Update(userId, imageDto);
+        }
+        else
+        {
+            await this.unitOfWork.CloudImageRepository
+                .Add(imageDto);
+        }
 
-        await this.unitOfWork.SaveChanges<CloudImageDTO, int>(imageDto);
+        await this.unitOfWork
+            .SaveChanges<CloudImageDTO, int>(imageDto);
 
-        return this.mapper.Map<CloudImageViewModel>(imageDto);
+        return this.mapper
+            .Map<CloudImageViewModel>(imageDto);
     }
 
     public async Task<string> GetUrl(int pictureId)
@@ -84,7 +96,7 @@ public class CloudImageManagementService : ICloudImageManagementService
             .Replace(this.imagePath, string.Empty);
 
         string imageThumbnailUrl = this.cloudImageService
-            .GetImageUrl(publicId, imageExtension)
+            .GetImageThumbnailUrl(publicId, imageExtension)
             .Replace(this.imagePath, string.Empty);
 
         return (imageUrl, imageThumbnailUrl);

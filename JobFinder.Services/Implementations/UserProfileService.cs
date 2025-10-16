@@ -39,7 +39,7 @@ public class UserProfileService : IUserProfileService
     public async Task<CloudImageViewModel> ChangeProfilePicture(string userId, IFormFile file)
     {
         CloudImageViewModel imageData = await this.imageManagementService
-            .UploadImage(file, userId);
+            .UploadImage(file, userId, replaceCurrent: true);
 
         await this.unitOfWork.UserRepository.SetProfilePicture(userId, imageData.Id);
 

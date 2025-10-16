@@ -5,7 +5,10 @@ namespace JobFinder.Services;
 
 public interface ICloudImageManagementService
 {
-    Task<CloudImageViewModel> UploadImage(IFormFile imageFile, string userId);
+    Task<CloudImageViewModel> UploadImage(
+        IFormFile imageFile,
+        string userId,
+        bool replaceCurrent = false);
 
     Task<string> GetUrl(int pictureId);
 

@@ -28,6 +28,19 @@ public class CloudImageRepository : EfCoreRepository<CloudImageEntity>, ICloudIm
         await this.DbSet.AddAsync(cloudImageEntity);
     }
 
+    public async Task Update(string userId, CloudImageDTO imageDto)
+    {
+        CloudImageEntity image = await this.DbSet
+            .Where(ci => ci.UserId == userId)
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(image, nameof(CloudImageEntity));
+
+        this.mapper.Map(imageDto, image);
+
+        this.DbSet.Update(image);
+    }
+
     public async Task<string> GetUrl(int pictureId)
     {
         string url = await this.DbSet
