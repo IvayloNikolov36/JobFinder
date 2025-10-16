@@ -13,6 +13,8 @@ public class MyCvDataViewModel : IMapFrom<MyCvDataDTO>
 
     public string PictureUrl { get; set; }
 
+    public string PictureThumbnailUrl { get; set; }
+
     public DateTime CreatedOn { get; set; }
 
     public string AnonymousProfileId { get; set; }

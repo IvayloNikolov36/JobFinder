@@ -13,10 +13,6 @@ namespace JobFinder.Web.Models.CvModels
         public string Name { get; set; }
 
         [Required]
-        [Url]
-        public string PictureUrl { get; set; }
-
-        [Required]
         public PersonalInfoInputModel PersonalInfo { get; set; }
 
         [Required]

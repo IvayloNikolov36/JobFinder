@@ -6,7 +6,7 @@ public class MyCvDataDTO
 
     public string Name { get; set; }
 
-    public string PictureUrl { get; set; }
+    public int PictureId { get; set; }
 
     public DateTime CreatedOn { get; set; }
 

@@ -8,8 +8,6 @@ public class CVCreateDTO : IUniquelyIdentified<string>
 
     public string Name { get; set; }
 
-    public string PictureUrl { get; set; }
-
     public PersonalInfoInputDTO PersonalInfo { get; set; }
 
     public IEnumerable<EducationInfoInputDTO> Educations { get; set; }

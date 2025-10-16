@@ -18,6 +18,7 @@ namespace JobFinder.Services.Implementations.Cv
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IDistributedCache distributedCache;
+        private readonly ICloudImageManagementService cloudImageManagementService;
         private readonly IPdfGenerator pdfGenerator;
         private readonly ICourseCertificateInfoRules courceCertificateInfoRules;
 
@@ -25,11 +26,13 @@ namespace JobFinder.Services.Implementations.Cv
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
             IDistributedCache distributedCache,
+            ICloudImageManagementService cloudImageManagementService,
             IPdfGenerator pdfGenerator,
             ICourseCertificateInfoRules courceCertificateInfoRules)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.cloudImageManagementService = cloudImageManagementService;
             this.distributedCache = distributedCache;
             this.pdfGenerator = pdfGenerator;
             this.courceCertificateInfoRules = courceCertificateInfoRules;
@@ -59,12 +62,15 @@ namespace JobFinder.Services.Implementations.Cv
                 .Deserialize<IEnumerable<CvListingModel>>(Encoding.UTF8.GetString(cachedData));
         }
 
-        public async Task<IdentityViewModel<string>> CreateAsync(CVCreateInputModel cvModel, string userId, bool invalidateCache)
+        public async Task<IdentityViewModel<string>> CreateAsync(
+            CVCreateInputModel cvModel,
+            string userId,
+            bool invalidateCache)
         {
-            IEnumerable<CourseCertificateInputDTO> courceCertificateInfoDtos = this.mapper
+            var coursesDtos = this.mapper
                 .Map<IEnumerable<CourseCertificateInputDTO>>(cvModel.CourseCertificates);
 
-            this.courceCertificateInfoRules.ValidateData(courceCertificateInfoDtos);
+            this.courceCertificateInfoRules.ValidateData(coursesDtos);
 
             CVCreateDTO cvDataDto = this.mapper.Map<CVCreateDTO>(cvModel);
 
@@ -74,7 +80,8 @@ namespace JobFinder.Services.Implementations.Cv
 
             if (invalidateCache)
             {
-                await this.distributedCache.RemoveAsync(string.Format(CVsCacheKey, userId));
+                await this.distributedCache
+                    .RemoveAsync(string.Format(CVsCacheKey, userId));
             }
 
             return new IdentityViewModel<string>(cvDataDto.Id);
@@ -84,23 +91,35 @@ namespace JobFinder.Services.Implementations.Cv
         {
             string cacheKey = string.Format(CvCacheKey, cvId);
 
-            byte[] cachedCv = await this.distributedCache.GetAsync(cacheKey);
+            byte[] cachedCv = await this.distributedCache
+                .GetAsync(cacheKey);
 
             if (cachedCv == null)
             {
-                MyCvDataDTO cvDataDto = await this.unitOfWork.CvRepository
-                .GetCvData<MyCvDataDTO>(cvId);
+                MyCvDataDTO cvDataDto = await this.unitOfWork
+                    .CvRepository
+                    .GetCvData<MyCvDataDTO>(cvId);
 
-                MyCvDataViewModel cvData = this.mapper.Map<MyCvDataViewModel>(cvDataDto);
+                var cvData = this.mapper.Map<MyCvDataViewModel>(cvDataDto);
 
-                bool hasAnyAnonymousProfileActivated = await this.unitOfWork.AnonymousProfileRepository
+                bool hasAnyAnonymousProfileActivated = await this.unitOfWork
+                    .AnonymousProfileRepository
                     .HasAnonymousProfile(userId);
 
                 cvData.CanActivateAnonymousProfile = !hasAnyAnonymousProfileActivated;
 
+                cvData.PictureUrl = await this.cloudImageManagementService
+                    .GetUrl(cvDataDto.PictureId);
+
+                cvData.PictureThumbnailUrl = await this.cloudImageManagementService
+                    .GetThumbnailUrl(cvDataDto.PictureId);
+
                 string serializedCvData = JsonSerializer.Serialize(cvData);
 
-                await this.distributedCache.SetAsync(cacheKey, Encoding.UTF8.GetBytes(serializedCvData));
+                await this.distributedCache.SetAsync(
+                    cacheKey,
+                    Encoding.UTF8.GetBytes(serializedCvData)
+                );
 
                 return cvData;
             }

@@ -31,7 +31,9 @@ namespace JobFinder.Web.Controllers.Cv
             IdentityViewModel<string> result = await this.cvsService
                 .CreateAsync(cvModel, userId, invalidateCache: true);
 
-            return this.CreatedAtRoute("GetOwnCvData", result, result);
+            object routeValue = new { cvId = result.Id };
+
+            return this.CreatedAtRoute("GetOwnCvData", routeValue, routeValue);
         }
 
         [HttpGet]

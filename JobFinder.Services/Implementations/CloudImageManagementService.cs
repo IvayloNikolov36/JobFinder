@@ -70,6 +70,8 @@ public class CloudImageManagementService : ICloudImageManagementService
             .Map<CloudImageViewModel>(imageDto);
     }
 
+     // TODO: create a method for both urls
+
     public async Task<string> GetUrl(int pictureId)
     {
         string url = await this.unitOfWork.CloudImageRepository.GetUrl(pictureId);

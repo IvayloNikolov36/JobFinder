@@ -26,10 +26,6 @@ namespace JobFinder.Data.Models.Cv
         [StringLength(20, MinimumLength = 5)]
         public string Name { get; set; }
 
-        [Required]
-        [Url]
-        public string PictureUrl { get; set; }
-
         public AnonymousProfileEntity AnonymousProfile { get; set; }
 
         public PersonalInfoEntity PersonalInfo { get; set; }
