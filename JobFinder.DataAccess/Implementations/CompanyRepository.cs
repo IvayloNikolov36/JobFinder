@@ -69,9 +69,9 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
             .ToListAsync();
     }
 
-    public async Task SetLogoImageId(int id, int imageId)
+    public async Task SetLogoImageId(int companyId, int imageId)
     {
-        CompanyEntity company = await this.DbSet.FindAsync(id);
+        CompanyEntity company = await this.DbSet.FindAsync(companyId);
 
         company.LogoImageId = imageId;
 

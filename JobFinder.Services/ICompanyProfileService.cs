@@ -1,10 +1,12 @@
-﻿using JobFinder.Web.Models.CompanyProfile;
-using System.Threading.Tasks;
+﻿using JobFinder.Web.Models.CloudImage;
+using JobFinder.Web.Models.CompanyProfile;
+using Microsoft.AspNetCore.Http;
 
-namespace JobFinder.Services
+namespace JobFinder.Services;
+
+public interface ICompanyProfileService
 {
-    public interface ICompanyProfileService
-    {
-        Task<CompanyProfileDataViewModel> GetProfileData(string userId);
-    }
+    Task<CompanyProfileDataViewModel> GetProfileData(string userId);
+
+    Task<CloudImageViewModel> ChangeLogo(string userId, IFormFile file);
 }

@@ -34,7 +34,10 @@ public class CloudImageRepository : EfCoreRepository<CloudImageEntity>, ICloudIm
             .Where(ci => ci.UserId == userId)
             .SingleOrDefaultAsync();
 
-        base.ValidateForExistence(image, nameof(CloudImageEntity));
+        if (image is null)
+        {
+            return;
+        }
 
         this.mapper.Map(imageDto, image);
 

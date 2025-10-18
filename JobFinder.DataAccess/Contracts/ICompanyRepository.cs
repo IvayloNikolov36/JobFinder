@@ -14,5 +14,5 @@ public interface ICompanyRepository
 
     Task<IEnumerable<CompanyListingDTO>> GetAll(string userId);
 
-    Task SetLogoImageId(int id, int imageId);
+    Task SetLogoImageId(int companyId, int imageId);
 }

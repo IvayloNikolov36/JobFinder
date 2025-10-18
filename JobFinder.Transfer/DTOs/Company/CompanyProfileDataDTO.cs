@@ -2,7 +2,7 @@
 
 public class CompanyProfileDataDTO
 {
-    public string Logo { get; set; }
+    public int? LogoImageId { get; set; }
 
     public string Name { get; set; }
 

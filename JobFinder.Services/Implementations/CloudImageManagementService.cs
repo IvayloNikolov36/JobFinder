@@ -91,6 +91,11 @@ public class CloudImageManagementService : ICloudImageManagementService
         return fullUrl;
     }
 
+    public string GetUrl(string thumbnailUrlSegment)
+    {
+        return $"{this.imagePath}{thumbnailUrlSegment}";
+    }
+
     private (string, string) GetImageUrls(string publicId, string imageExtension)
     {        
         string imageUrl = this.cloudImageService

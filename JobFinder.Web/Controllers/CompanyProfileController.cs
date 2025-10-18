@@ -1,5 +1,7 @@
 ﻿using JobFinder.Services;
 using JobFinder.Web.Infrastructure.Extensions;
+using JobFinder.Web.Models.CloudImage;
+using JobFinder.Web.Models.Common;
 using JobFinder.Web.Models.CompanyProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +31,20 @@ namespace JobFinder.Web.Controllers
                 .GetProfileData(userId);
 
             return this.Ok(profileData);
+        }
+
+        [HttpPost]
+        [Route("change-logo")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CloudImageViewModel))]
+        [Authorize(Roles = CompanyRole)]
+        public async Task<IActionResult> ChangeLogo([FromForm] FileUploadViewModel model)
+        {
+            string userId = this.User.GetCurrentUserId();
+
+            CloudImageViewModel result = await this.companyProfileService
+                .ChangeLogo(userId, model.File);
+
+            return this.Ok(result);
         }
     }
 }

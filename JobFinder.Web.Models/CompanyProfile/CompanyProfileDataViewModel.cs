@@ -7,7 +7,7 @@ namespace JobFinder.Web.Models.CompanyProfile;
 
 public class CompanyProfileDataViewModel : IHaveCustomMappings
 {
-    public string Logo { get; set; }
+    public string LogoThumbnailUrl { get; set; }
 
     public string Name { get; set; }
 

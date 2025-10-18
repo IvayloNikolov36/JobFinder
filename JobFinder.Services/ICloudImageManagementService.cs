@@ -10,6 +10,8 @@ public interface ICloudImageManagementService
         string userId,
         bool replaceCurrent = false);
 
+    string GetUrl(string thumbnailUrlSegment);
+
     Task<string> GetUrl(int pictureId);
 
     Task<string> GetThumbnailUrl(int pictureId);
