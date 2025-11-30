@@ -19,15 +19,18 @@ namespace JobFinder.Services.Implementations
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IJobAdsRules jobAdsRules;
         private readonly IMapper mapper;
+        private readonly ICloudImageManagementService cloudImageService;
 
         public JobAdsService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IJobAdsRules jobAdsRules,
-            IMapper mapper)
+            IMapper mapper,
+            ICloudImageManagementService cloudImageService)
         {
             this.unitOfWork = unitOfWork;
             this.jobAdsRules = jobAdsRules;
             this.mapper = mapper;
+            this.cloudImageService = cloudImageService;
         }
 
         public async Task<JobAdDetailsViewModel> Get(int id)
@@ -81,6 +84,15 @@ namespace JobFinder.Services.Implementations
             DataListingDTO<JobAdListingDTO> result = await this.unitOfWork
                 .JobAdRepository
                 .AllActive(filterDto);
+
+            foreach (JobAdListingDTO jobDto in result.Data)
+            {
+                if (jobDto.Company.LogoImageId.HasValue)
+                {
+                    jobDto.Company.Logo = await this.cloudImageService
+                        .GetThumbnailUrl(jobDto.Company.LogoImageId.Value);
+                }
+            }
 
             return new DataListingsModel<JobListingViewModel>(
                 result.TotalCount,

@@ -14,7 +14,7 @@ public class JobAdApplicationDTO
 
     public string CompanyName { get; set; }
 
-    public string CompanyLogo { get; set; }
+    public int? CompanyLogoId { get; set; }
 
     public DateTime AppliedOn { get; set; }
 

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using JobFinder.Data;
 using JobFinder.Data.Models;
-using JobFinder.Data.Models.AnonymousProfile;
 using JobFinder.DataAccess.Contracts;
 using JobFinder.DataAccess.Generic;
 using JobFinder.Services.Mappings;
@@ -38,13 +37,13 @@ public class JobAdApplicationsRepository : EfCoreRepository<JobAdApplicationEnti
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<JobAdApplicationDTO>> GetUserApplications(string userId)
+    public IAsyncEnumerable<JobAdApplicationDTO> GetUserApplications(string userId)
     {
-        return await this.DbSet.AsNoTracking()
+        return this.DbSet.AsNoTracking()
             .Where(j => j.ApplicantId == userId)
             .OrderByDescending(j => j.AppliedOn)
             .To<JobAdApplicationDTO>()
-            .ToListAsync();
+            .AsAsyncEnumerable();
     }
 
     public async Task<bool> HasAlreadyApplied(string applicantId, int jobAdId)

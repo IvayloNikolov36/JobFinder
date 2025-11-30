@@ -2,7 +2,7 @@
 
 public class CompanyListingDTO : BasicDTO
 {
-    public string Logo { get; set; }
+    public int? LogoId { get; set; }
 
     public int Employees { get; set; }
 

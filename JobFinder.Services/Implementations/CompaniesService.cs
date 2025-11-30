@@ -45,11 +45,26 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<CompanyListingViewModel>> GetAll(string userId)
         {
-            IEnumerable<CompanyListingDTO> companiesData = await this.unitOfWork
+            IAsyncEnumerable<CompanyListingDTO> companiesData = this.unitOfWork
                 .CompanyRepository
                 .GetAll(userId);
 
-            return this.mapper.Map<IEnumerable<CompanyListingViewModel>>(companiesData);
+            Queue<CompanyListingViewModel> models = new();
+
+            await foreach (CompanyListingDTO companyDto in companiesData)
+            {
+                CompanyListingViewModel model = this.mapper.Map<CompanyListingViewModel>(companyDto);
+
+                if (companyDto.LogoId.HasValue)
+                {
+                    model.Logo = await this.imageManagementService
+                        .GetThumbnailUrl(companyDto.LogoId.Value);
+                }
+                
+                models.Enqueue(model);
+            }
+
+            return models;
         }
 
         public async Task SetLogo(int id, string userId, IFormFile logo)

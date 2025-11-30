@@ -9,8 +9,7 @@ public partial class JobAdApplicationEntity : IMapFrom<JobAddApplicationInputDTO
     public void CreateMappings(IProfileExpression configuration)
     {
         configuration.CreateMap<JobAdApplicationEntity, JobAdApplicationDTO>()
-            // TODO: get the logo
-            //.ForMember(dto => dto.CompanyLogo, o => o.MapFrom(e => e.JobAd.Publisher.Logo))
+            .ForMember(dto => dto.CompanyLogoId, o => o.MapFrom(e => e.JobAd.Publisher.LogoImageId))
             .ForMember(dto => dto.CompanyName, o => o.MapFrom(e => e.JobAd.Publisher.Name))
             .ForMember(dto => dto.JobTitle, o => o.MapFrom(e => e.JobAd.Position));
 

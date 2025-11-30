@@ -10,13 +10,16 @@ namespace JobFinder.Services.Implementations
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly ICloudImageManagementService cloudImageService;
 
         public JobAdsApplicationsService(
             IEntityFrameworkUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            ICloudImageManagementService cloudImageService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.cloudImageService = cloudImageService;
         }
 
         public async Task Create(JobAdApplicationInputModel jobAdApplication)
@@ -67,10 +70,26 @@ namespace JobFinder.Services.Implementations
 
         public async Task<IEnumerable<JobAdApplicationViewModel>> GetAllMine(string userId)
         {
-            IEnumerable<JobAdApplicationDTO> applications = await this.unitOfWork.JobAdApplicationsRepository
+            IAsyncEnumerable<JobAdApplicationDTO> applications = this.unitOfWork
+                .JobAdApplicationsRepository
                 .GetUserApplications(userId);
 
-            return this.mapper.Map<IEnumerable<JobAdApplicationViewModel>>(applications);
+            Queue<JobAdApplicationViewModel> models = new();
+
+            await foreach (JobAdApplicationDTO application in applications)
+            {
+                JobAdApplicationViewModel model = this.mapper.Map<JobAdApplicationViewModel>(application);
+
+                if (application.CompanyLogoId.HasValue)
+                {
+                    model.CompanyLogo = await this.cloudImageService
+                        .GetThumbnailUrl(application.CompanyLogoId.Value);
+                }
+
+                models.Enqueue(model);
+            }
+
+            return models;
         }
 
         public async Task<PreviewInfoViewModel> SetPreviewInfo(string cvId, int jobAdId)

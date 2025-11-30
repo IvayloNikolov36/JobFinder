@@ -12,7 +12,7 @@ public interface ICompanyRepository
 
     Task<CompanyJobAdsListingDTO> AllActiveAds(int companyId);
 
-    Task<IEnumerable<CompanyListingDTO>> GetAll(string userId);
+    IAsyncEnumerable<CompanyListingDTO> GetAll(string userId);
 
     Task SetLogoImageId(int companyId, int imageId);
 }

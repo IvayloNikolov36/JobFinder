@@ -1,7 +1,5 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using JobFinder.Common.Exceptions;
-using JobFinder.Data.Models.Cv;
 using JobFinder.DataAccess.UnitOfWork;
 using JobFinder.Transfer.DTOs.Cv.CvPreviewRequest;
 using JobFinder.Web.Models.CvModels;
@@ -12,13 +10,16 @@ public class CvPreviewRequestService : ICvPreviewRequestService
 {
     private readonly IEntityFrameworkUnitOfWork unitOfWork;
     private readonly IMapper mapper;
+    private readonly ICloudImageManagementService cloudImageService;
 
     public CvPreviewRequestService(
         IEntityFrameworkUnitOfWork unitOfWork,
-        IMapper mapper)
+        IMapper mapper,
+        ICloudImageManagementService cloudImageService)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.cloudImageService = cloudImageService;
     }
 
     public async Task<IEnumerable<CvPreviewRequestListingViewModel>> GetAllCvPreviewRequests(
@@ -27,6 +28,15 @@ public class CvPreviewRequestService : ICvPreviewRequestService
         IEnumerable<CvPreviewRequestListingDTO> cvRequests = await this.unitOfWork
             .CvPreviewRequestRepository
             .GetAllCvPreviewRequests(userId);
+
+        foreach (var cvRequest in cvRequests)
+        {
+            int? imageId = cvRequest.Company.LogoImageId;
+            if (imageId.HasValue)
+            {
+                cvRequest.Company.Logo = await this.cloudImageService.GetThumbnailUrl(imageId.Value);
+            }
+        }
 
         return this.mapper.Map<IEnumerable<CvPreviewRequestListingViewModel>>(cvRequests);
     }

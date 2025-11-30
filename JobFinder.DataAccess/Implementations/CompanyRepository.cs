@@ -62,11 +62,11 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
         return companyAds;
     }
 
-    public async Task<IEnumerable<CompanyListingDTO>> GetAll(string userId)
+    public IAsyncEnumerable<CompanyListingDTO> GetAll(string userId)
     {
-        return await this.DbSet.AsNoTracking()
+        return this.DbSet.AsNoTracking()
             .To<CompanyListingDTO>( new { userId })
-            .ToListAsync();
+            .AsAsyncEnumerable();
     }
 
     public async Task SetLogoImageId(int companyId, int imageId)

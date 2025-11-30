@@ -1,5 +1,4 @@
-﻿
-using JobFinder.Transfer.DTOs.JobAd;
+﻿using JobFinder.Transfer.DTOs.JobAd;
 
 namespace JobFinder.DataAccess.Contracts;
 
@@ -9,7 +8,7 @@ public interface IJobAdApplicationsRepository
 
     Task<IEnumerable<T>> GetJobAdApplications<T>(int jobAdId);
 
-    Task<IEnumerable<JobAdApplicationDTO>> GetUserApplications(string userId);
+    IAsyncEnumerable<JobAdApplicationDTO> GetUserApplications(string userId);
 
     Task<bool> HasAlreadyApplied(string applicantId, int jobAdId);
 

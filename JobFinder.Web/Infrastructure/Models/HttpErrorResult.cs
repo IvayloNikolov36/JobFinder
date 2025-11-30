@@ -1,8 +1,5 @@
 ﻿using JobFinder.Common.Enums;
 using JobFinder.Common.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace JobFinder.Web.Infrastructure.Models
 {
