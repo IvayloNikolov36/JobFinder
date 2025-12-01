@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.Reflection;
 
 namespace JobFinder.Services.Mappings
@@ -47,7 +48,9 @@ namespace JobFinder.Services.Mappings
                     }
                 });
 
-            MapperInstance = new Mapper(new MapperConfiguration(config));
+            MapperConfiguration mapperConfig = new(config, NullLoggerFactory.Instance);
+
+            MapperInstance = new Mapper(mapperConfig);
         }
 
         private static IEnumerable<TypesMap> GetFromMaps(IEnumerable<Type> types)
