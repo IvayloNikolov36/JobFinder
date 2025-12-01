@@ -111,6 +111,7 @@
             builder.Sql("DROP VIEW [dbo].[view_JobSubscriptions]");
         }
 
+        [Obsolete]
         public static void Create_View_LatestCompanyJobsForSubscribers(MigrationBuilder builder)
         {
             builder.Sql(@"
@@ -157,6 +158,61 @@
 				GROUP BY x.[CompanyId]
 						,x.[CompanyName]
 						,x.[CompanyLogo]
+						,x.[Positions]
+						,x.[Locations]
+						,x.[JobCategories]
+						,x.[JobEngagements]
+						,x.[Salaries]
+						,x.[JobAdIds]"
+            );
+        }
+
+        public static void Create_View_LatestCompanyJobAdsForSubscribers(MigrationBuilder builder)
+        {
+            builder.Sql(@"
+				CREATE OR ALTER VIEW [dbo].[view_latestCompanyJobsForSubscribers] AS
+				SELECT  x.[CompanyId]
+					,x.[CompanyName]
+					,x.[LogoImageId]
+					,x.[JobAdIds]
+					,x.[Positions]
+					,x.[Locations]
+					,x.[JobCategories]
+					,x.[JobEngagements]
+					,x.[Salaries]
+					,STRING_AGG(u.[Email], ';') AS [Subscribers]
+				FROM
+					(SELECT r.[CompanyId]
+							,r.[CompanyName]
+							,r.[LogoImageId]
+							,STRING_AGG(r.[JobId], ';') AS [JobAdIds]
+							,STRING_AGG(r.[Position], ';') AS [Positions]
+							,STRING_AGG(r.[LocationId], ';') AS [Locations]
+							,STRING_AGG(r.[JobCategoryId], ';') AS [JobCategories]
+							,STRING_AGG(r.[JobEngagementId], ';') AS [JobEngagements]
+							,STRING_AGG(r.[Salary], ';') AS [Salaries]
+					FROM 
+						(SELECT c.[Id] AS [CompanyId]
+								,c.[Name] AS [CompanyName]
+								,c.[LogoImageId] AS [LogoImageId]
+								,ja.[Id] AS [JobId]
+								,ja.[Position]
+								,ja.[JobCategoryId]
+								,ja.[JobEngagementId]
+								,ja.[LocationId]
+								,CONCAT(ja.[MinSalary], '-', ja.[MaxSalary], ' ', cu.[Name]) AS [Salary]
+						FROM JobAdvertisements AS ja
+						LEFT JOIN Currencies AS cu ON ja.[CurrencyId] = cu.[Id]
+						JOIN Companies AS c ON ja.[PublisherId] = c.[Id]
+						WHERE DATEDIFF(DAY, ja.[PublishDate], GETUTCDATE()) = 1
+						) as r
+					GROUP BY r.[CompanyId], r.[CompanyName], r.[LogoImageId]
+					) as x
+				JOIN CompanySubscriptions AS cs ON cs.[CompanyId] = x.[CompanyId]
+				JOIN AspNetUsers AS u ON cs.[UserId] = u.Id
+				GROUP BY x.[CompanyId]
+						,x.[CompanyName]
+						,x.[LogoImageId]
 						,x.[Positions]
 						,x.[Locations]
 						,x.[JobCategories]

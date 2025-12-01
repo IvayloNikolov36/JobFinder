@@ -11,7 +11,7 @@ namespace JobFinder.Data.Models.ViewsModels
 
         public string CompanyName { get; set; }
 
-        public string CompanyLogo { get; set; }
+        public int? CompanyLogoId { get; set; }
 
         public string JobAdIds { get; set; }
 
@@ -35,7 +35,7 @@ namespace JobFinder.Data.Models.ViewsModels
                 {
                     Id = vd.CompanyId,
                     Name = vd.CompanyName,
-                    Logo = vd.CompanyLogo
+                    LogoImageId = vd.CompanyLogoId
                 }));
         }
     }

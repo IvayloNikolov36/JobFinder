@@ -9,7 +9,6 @@ using System.Linq;
 namespace JobFinder.Data.Models.Cv;
 
 public partial class CurriculumVitaeEntity :
-    IMapTo<CvPreviewDataDTO>,
     IMapTo<CvBasicDetailsDTO>,
     IHaveCustomMappings
 {
@@ -55,7 +54,9 @@ public partial class CurriculumVitaeEntity :
             .ForMember(dto => dto.ApprovedCvPreviewForActiveAd, o => o
                 .MapFrom(e => e.CvPreviewRequests
                     .Any(r => r.AcceptedDate.HasValue
-                        && r.JobAd.LifecycleStatusId == (int)LifecycleStatusEnum.Active))
-            );
+                        && r.JobAd.LifecycleStatusId == (int)LifecycleStatusEnum.Active)));
+
+        configuration.CreateMap<CurriculumVitaeEntity, CvPreviewDataDTO>()
+            .ForMember(dto => dto.PictureId, o => o.MapFrom(e => e.User.ProfilePictureId));
     }
 }

@@ -1,5 +1,4 @@
-﻿using JobFinder.Data.Models.Cv;
-using JobFinder.Services.Mappings;
+﻿using JobFinder.Services.Mappings;
 using JobFinder.Transfer.DTOs.Cv;
 using System.Collections.Generic;
 

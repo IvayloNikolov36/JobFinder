@@ -2,7 +2,7 @@
 
 public class CvPreviewDataDTO
 {
-    public string PictureUrl { get; set; }
+    public int? PictureId { get; set; }
 
     public PersonalInfoDTO PersonalInfo { get; set; }
 

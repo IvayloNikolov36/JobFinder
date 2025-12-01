@@ -151,7 +151,14 @@ namespace JobFinder.Services.Implementations.Cv
                 .CvRepository
                 .GetRequestedCvData(cvRequestId);
 
-            return this.mapper.Map<CvPreviewDataViewModel>(cvData);
+            var model = this.mapper.Map<CvPreviewDataViewModel>(cvData);
+
+            if (cvData.PictureId.HasValue)
+            {
+                model.PictureUrl = await this.cloudImageManagementService.GetThumbnailUrl(cvData.PictureId.Value);
+            }
+
+            return model;
         }
 
         public async Task Delete(string cvId, string userId)
