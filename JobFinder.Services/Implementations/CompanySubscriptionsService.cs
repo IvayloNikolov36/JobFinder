@@ -14,15 +14,18 @@ namespace JobFinder.Services.Implementations
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IDistributedCache distributedCache;
+        private readonly ICloudImageManagementService cloudImageService;
 
         public CompanySubscriptionsService(
             IEntityFrameworkUnitOfWork unitOfWork,
             IMapper mapper,
-            IDistributedCache distributedCache)
+            IDistributedCache distributedCache,
+            ICloudImageManagementService cloudImageService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.distributedCache = distributedCache;
+            this.cloudImageService = cloudImageService;
         }
 
         public async Task<IEnumerable<CompanyJobAdsForSubscribersViewModel>> GetLatesJobAds()
@@ -78,6 +81,15 @@ namespace JobFinder.Services.Implementations
                 IEnumerable<CompanySubscriptionDTO> subscriptions = await this.unitOfWork
                     .CompanySubscriptionsRepository
                     .GetMySubscriptions(userId);
+
+                foreach (CompanySubscriptionDTO subscription in subscriptions)
+                {
+                    if (subscription.CompanyLogoImageId.HasValue)
+                    {
+                        subscription.CompanyLogo = await this.cloudImageService
+                            .GetThumbnailUrl(subscription.CompanyLogoImageId.Value);
+                    }
+                }
 
                 var subscriptionModels = this.mapper
                     .Map<IEnumerable<CompanySubscriptionViewModel>>(subscriptions);

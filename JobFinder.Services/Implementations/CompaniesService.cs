@@ -10,7 +10,7 @@ namespace JobFinder.Services.Implementations
     {
         private readonly IEntityFrameworkUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly ICloudImageManagementService imageManagementService;
+        private readonly ICloudImageManagementService cloudImageService;
 
         public CompaniesService(
             IEntityFrameworkUnitOfWork unitOfWork,
@@ -19,7 +19,7 @@ namespace JobFinder.Services.Implementations
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.imageManagementService = imageManagementService;
+            this.cloudImageService = imageManagementService;
         }
 
         public async Task<int> GetCompanyId(string userId)
@@ -40,6 +40,12 @@ namespace JobFinder.Services.Implementations
             CompanyJobAdsListingDTO data = await this.unitOfWork.CompanyRepository
                 .AllActiveAds(companyId);
 
+            int? logoImageId = data.CompanyDetails.LogoImageId;
+            if (data.CompanyDetails.LogoImageId.HasValue)
+            {
+                data.CompanyDetails.Logo = await this.cloudImageService.GetThumbnailUrl(logoImageId.Value);
+            }
+            
             return this.mapper.Map<CompanyJobAdsListingViewModel>(data);
         }
 
@@ -57,7 +63,7 @@ namespace JobFinder.Services.Implementations
 
                 if (companyDto.LogoId.HasValue)
                 {
-                    model.Logo = await this.imageManagementService
+                    model.Logo = await this.cloudImageService
                         .GetThumbnailUrl(companyDto.LogoId.Value);
                 }
                 
@@ -69,7 +75,7 @@ namespace JobFinder.Services.Implementations
 
         public async Task SetLogo(int id, string userId, IFormFile logo)
         {
-            int imageId = (await this.imageManagementService
+            int imageId = (await this.cloudImageService
                 .UploadImage(logo, userId))
                 .Id;
 
