@@ -7,6 +7,8 @@ namespace JobFinder.Services
     {
         Task<int> GetCompanyId(string userId);
 
+        Task<string> GetUserId(int companyId);
+
         Task<CompanyDetailsUserViewModel> Details(int companyId, string currentUserId);
 
         Task<CompanyJobAdsListingViewModel> AllActiveAds(int companyId);
@@ -14,5 +16,7 @@ namespace JobFinder.Services
         Task<IEnumerable<CompanyListingViewModel>> GetAll(string userId);
 
         Task SetLogo(int id, string userId, IFormFile logo);
+
+        Task Update(int id, CompanyEditViewModel company);
     }
 }

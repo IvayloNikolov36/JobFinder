@@ -9,6 +9,7 @@ namespace JobFinder.Data.Models;
 
 public partial class CompanyEntity : IMapTo<CompanyBasicDTO>,
     IMapTo<CompanyBasicDetailsDTO>,
+    IMapFrom<CompanyEditDTO>,
     IHaveCustomMappings
 {
     public void CreateMappings(IProfileExpression configuration)

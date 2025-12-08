@@ -1,4 +1,5 @@
-﻿using JobFinder.Common.Exceptions;
+﻿using AutoMapper;
+using JobFinder.Common.Exceptions;
 using JobFinder.Data;
 using JobFinder.Data.Models;
 using JobFinder.DataAccess.Contracts;
@@ -11,8 +12,12 @@ namespace JobFinder.DataAccess.Implementations;
 
 public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyRepository
 {
-    public CompanyRepository(JobFinderDbContext context) : base(context)
+    private readonly IMapper mapper;
+
+    public CompanyRepository(JobFinderDbContext context, IMapper mapper)
+        : base(context)
     {
+        this.mapper = mapper;
     }
 
     public async Task<CompanyProfileDataDTO> Get(string userId)
@@ -36,6 +41,18 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
         }
 
         return companyId.Value;
+    }
+
+    public async Task<string> GetUserId(int companyId)
+    {
+        string companyUserId = await this.DbSet
+            .Where(c => c.Id == companyId)
+            .Select(c => c.UserId)
+            .SingleOrDefaultAsync();
+
+        base.ValidateForExistence(companyUserId, nameof(CompanyEntity));
+
+        return companyUserId;
     }
 
     public async Task<CompanyDetailsUserDTO> GetDetails(int companyId, string currentUserId)
@@ -74,6 +91,17 @@ public class CompanyRepository : EfCoreRepository<CompanyEntity>, ICompanyReposi
         CompanyEntity company = await this.DbSet.FindAsync(companyId);
 
         company.LogoImageId = imageId;
+
+        this.DbSet.Update(company);
+    }
+
+    public async Task Update(int id, CompanyEditDTO companyDto)
+    {
+        CompanyEntity company = await this.DbSet.FindAsync(id);
+
+        base.ValidateForExistence(company, nameof(CompanyEntity));
+
+        this.mapper.Map(companyDto, company);
 
         this.DbSet.Update(company);
     }

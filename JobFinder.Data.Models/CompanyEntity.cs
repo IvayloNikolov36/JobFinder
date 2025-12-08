@@ -2,6 +2,7 @@
 using JobFinder.Data.Models.Subscriptions;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static JobFinder.Transfer.Constants.ValidationConstants;
 
 namespace JobFinder.Data.Models
 {
@@ -14,14 +15,20 @@ namespace JobFinder.Data.Models
         }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(
+            CompanyNameMaxLen,
+            ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+            MinimumLength = CompanyNameMinLen)]
         public string Name { get; set; }
 
         public int? LogoImageId { get; set; }
         public CloudImageEntity LogoImage { get; set; }
 
         [Required]
-        [StringLength(13, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 9)]
+        [StringLength(
+            CompanyBulstatMaxLen, 
+            ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+            MinimumLength = CompanyBulstatMinLen)]
         public string Bulstat { get; set; }
 
         [MinLength(0)]

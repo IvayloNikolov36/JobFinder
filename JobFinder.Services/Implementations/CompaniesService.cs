@@ -27,6 +27,11 @@ namespace JobFinder.Services.Implementations
             return await this.unitOfWork.CompanyRepository.GetCompanyId(userId);
         }
 
+        public async Task<string> GetUserId(int companyId)
+        {
+            return await this.unitOfWork.CompanyRepository.GetUserId(companyId);
+        }
+
         public async Task<CompanyDetailsUserViewModel> Details(int companyId, string currentUserId)
         {
             CompanyDetailsUserDTO companyDetails = await this.unitOfWork.CompanyRepository
@@ -80,6 +85,15 @@ namespace JobFinder.Services.Implementations
                 .Id;
 
             await this.unitOfWork.CompanyRepository.SetLogoImageId(id, imageId);
+
+            await this.unitOfWork.SaveChanges();
+        }
+
+        public async Task Update(int id, CompanyEditViewModel company)
+        {
+            CompanyEditDTO companyDto = this.mapper.Map<CompanyEditDTO>(company);
+
+            await this.unitOfWork.CompanyRepository.Update(id, companyDto);
 
             await this.unitOfWork.SaveChanges();
         }

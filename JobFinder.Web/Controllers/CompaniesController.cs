@@ -30,6 +30,20 @@ namespace JobFinder.Web.Controllers
             return this.Ok(details);
         }
 
+        [HttpPut]
+        [Route("update")]
+        [Authorize(Roles = CompanyRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Update([FromBody] CompanyEditViewModel company)
+        {
+            int companyId = await this.companiesService
+                .GetCompanyId(this.User.GetCurrentUserId());
+
+            await this.companiesService.Update(companyId, company);
+
+            return this.Ok();
+        }
+
         [HttpGet]
         [Route("{id:int}/ads")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyJobAdsListingViewModel))]
