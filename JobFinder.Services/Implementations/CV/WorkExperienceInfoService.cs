@@ -25,7 +25,7 @@ namespace JobFinder.Services.Implementations.Cv
             this.distributedCache = distributedCache;
         }
 
-        public async Task<UpdateResult> UpdateAsync(
+        public async Task<UpdateResult<int>> UpdateAsync(
             string cvId,
             IEnumerable<WorkExperienceEditModel> workExperienceModels)
         {
@@ -42,7 +42,7 @@ namespace JobFinder.Services.Implementations.Cv
 
             await this.distributedCache.RemoveAsync(cacheKey);
 
-            return new UpdateResult(addedItems);
+            return new UpdateResult<int>(addedItems);
         }
     }
 }

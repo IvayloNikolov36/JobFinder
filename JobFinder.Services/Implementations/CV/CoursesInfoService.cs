@@ -33,7 +33,7 @@ namespace JobFinder.Services.Implementations.Cv
             return this.mapper.Map<IEnumerable<CourseInfoViewModel>>(coursesData);
         }
 
-        public async Task<UpdateResult> Update(
+        public async Task<UpdateResult<int>> Update(
             string cvId,
             IEnumerable<CourseSertificateEditModel> coursesInfoModels)
         {
@@ -44,13 +44,13 @@ namespace JobFinder.Services.Implementations.Cv
                 .CoursesCertificateInfoRepository
                 .Update(cvId, courcesInfo);
 
-            await this.unitOfWork.SaveChanges();
+            await this.unitOfWork.SaveChanges<CourseCertificateSimpleDTO, int>(newItems);
 
             string cvCacheKey = string.Format(CvCacheKey, cvId);
 
             await this.distributedCache.RemoveAsync(cvCacheKey);
 
-            return new UpdateResult(newItems);
+            return new UpdateResult<int>(newItems);
         }
 
         public async Task Delete(int id)

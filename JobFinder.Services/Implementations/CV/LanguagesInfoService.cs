@@ -25,7 +25,7 @@ public class LanguagesInfoService : ILanguagesInfoService
         this.distributedCache = distributedCache;
     }
 
-    public async Task<UpdateResult> Update(
+    public async Task<UpdateResult<int>> Update(
         string cvId,
         IEnumerable<LanguageInfoEditModel> languageInfoModels)
     {
@@ -42,6 +42,6 @@ public class LanguagesInfoService : ILanguagesInfoService
 
         await this.distributedCache.RemoveAsync(cacheKey);
 
-        return new UpdateResult(addedItems);
+        return new UpdateResult<int>(addedItems);
     }
 }

@@ -5,6 +5,6 @@ namespace JobFinder.Services.Cv
 {
     public interface ILanguagesInfoService
     {
-        Task<UpdateResult> Update(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfo);
+        Task<UpdateResult<int>> Update(string cvId, IEnumerable<LanguageInfoEditModel> languagesInfo);
     }
 }

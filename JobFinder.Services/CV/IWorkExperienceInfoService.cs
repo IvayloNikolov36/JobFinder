@@ -5,6 +5,6 @@ namespace JobFinder.Services.CV
 {
     public interface IWorkExperienceInfoService
     {
-        Task<UpdateResult> UpdateAsync(string cvId, IEnumerable<WorkExperienceEditModel> workExperienceModels);
+        Task<UpdateResult<int>> UpdateAsync(string cvId, IEnumerable<WorkExperienceEditModel> workExperienceModels);
     }
 }

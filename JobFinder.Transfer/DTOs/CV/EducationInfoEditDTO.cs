@@ -2,7 +2,7 @@
 
 namespace JobFinder.Transfer.DTOs.Cv;
 
-public class EducationInfoEditDTO : IIdentity
+public class EducationInfoEditDTO : IUniquelyIdentified<int>
 {
     public int Id { get; set; }
 
@@ -19,4 +19,6 @@ public class EducationInfoEditDTO : IIdentity
     public string Major { get; set; }
 
     public string MainSubjects { get; set; }
+
+    public Guid UniqueIdentificator { get; set; }
 }

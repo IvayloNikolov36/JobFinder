@@ -21,14 +21,14 @@ public class WorkExperiencesController : ApiController
 
     [HttpPut]
     [Route("{cvId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult<int>))]
     [Authorize(Roles = JobSeekerRole)]
     [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
     public async Task<IActionResult> Update(
         [FromRoute] Guid cvId,
         [FromBody] IEnumerable<WorkExperienceEditModel> workExperience)
     {
-        UpdateResult result = await this.workExperienceService
+        UpdateResult<int> result = await this.workExperienceService
             .UpdateAsync(cvId.ToString(), workExperience);
 
         return this.Ok(result);

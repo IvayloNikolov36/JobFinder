@@ -22,13 +22,13 @@ namespace JobFinder.Web.Controllers.Cv
         [HttpPut]
         [Route("{cvId:guid}")]
         [Authorize(Roles = JobSeekerRole)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult<int>))]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update(
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<CourseSertificateEditModel> coursesInfo)
         {
-            UpdateResult result = await this.coursesService.Update(
+            UpdateResult<int> result = await this.coursesService.Update(
                 cvId.ToString(),
                 coursesInfo);
 

@@ -2,7 +2,7 @@
 
 namespace JobFinder.Transfer.DTOs.Cv;
 
-public class LanguageInfoEditDTO : IIdentity
+public class LanguageInfoEditDTO : IUniquelyIdentified<int>
 {
     public int Id { get; set; }
 
@@ -13,4 +13,6 @@ public class LanguageInfoEditDTO : IIdentity
     public int SpeakingLevelId { get; set; }
 
     public int WritingLevelId { get; set; }
+
+    public Guid UniqueIdentificator { get; set; }
 }

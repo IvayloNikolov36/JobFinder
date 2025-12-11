@@ -21,14 +21,14 @@ namespace JobFinder.Web.Controllers.Cv
       
         [HttpPut]
         [Route("{cvId:guid}/update")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateResult<int>))]
         [Authorize(Roles = JobSeekerRole)]
         [ServiceFilter(typeof(ValidateCvIdBelongsToUser))]
         public async Task<IActionResult> Update(
             [FromRoute] Guid cvId,
             [FromBody] IEnumerable<LanguageInfoEditModel> languagesInfo)
         {
-            UpdateResult result = await this.languagesInfoService.Update(
+            UpdateResult<int> result = await this.languagesInfoService.Update(
                 cvId.ToString(),
                 languagesInfo);
 

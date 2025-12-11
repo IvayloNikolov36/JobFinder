@@ -25,7 +25,7 @@ public class EducationsInfoService : IEducationsInfoService
         this.distributedCache = distributedCache;
     }
     
-    public async Task<UpdateResult> Update(string cvId, IEnumerable<EducationEditModel> educationModels)
+    public async Task<UpdateResult<int>> Update(string cvId, IEnumerable<EducationEditModel> educationModels)
     {
         IEnumerable<EducationInfoEditDTO> educationDtos = this.mapper
             .Map<IEnumerable<EducationInfoEditDTO>>(educationModels);
@@ -40,6 +40,6 @@ public class EducationsInfoService : IEducationsInfoService
 
         await this.distributedCache.RemoveAsync(cacheKey);
 
-        return new UpdateResult(itemsAdded);
+        return new UpdateResult<int>(itemsAdded);
     }
 }

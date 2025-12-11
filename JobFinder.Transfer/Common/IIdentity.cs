@@ -1,6 +1,6 @@
 ﻿namespace JobFinder.Transfer.Common;
 
-public interface IIdentity
+public interface IUniquelyIdentified
 {
     public int Id { get; set; }
 }

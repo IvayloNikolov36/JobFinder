@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace JobFinder.Web.Models.Common;
 
-public class UpdateResult
+public class UpdateResult<T>
 {
-    public UpdateResult(IEnumerable<IIdentity> entities)
+    public UpdateResult(IEnumerable<IUniquelyIdentified<T>> entities)
     {
         this.NewItemsIds = entities == null
             ? []
             : [..entities.Select(x => x.Id)];
     }
 
-    public IEnumerable<int> NewItemsIds { get; }
+    public IEnumerable<T> NewItemsIds { get; }
 }

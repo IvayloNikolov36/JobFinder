@@ -7,7 +7,7 @@ public interface ICoursesInfoService
 {
     Task<IEnumerable<CourseInfoViewModel>> All(string cvId);
 
-    Task<UpdateResult> Update(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfo);
+    Task<UpdateResult<int>> Update(string cvId, IEnumerable<CourseSertificateEditModel> coursesInfo);
 
     Task Delete(int id);
 }

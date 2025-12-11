@@ -5,6 +5,6 @@ namespace JobFinder.Services.CV
 {
     public interface IEducationsInfoService
     {
-        Task<UpdateResult> Update(string cvId, IEnumerable<EducationEditModel> educationsModel);
+        Task<UpdateResult<int>> Update(string cvId, IEnumerable<EducationEditModel> educationsModel);
     }
 }
